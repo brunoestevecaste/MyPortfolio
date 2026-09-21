@@ -10,12 +10,12 @@ export function EducationSection() {
     >
       <SectionHeading className="heading-text" id="education-title" title="Educación" />
 
-      <div className="mt-12 md:mt-18">
+      <div className="mt-8 md:mt-12">
         {education.map((entry) => (
           <article
             key={entry.id}
             aria-labelledby={`${entry.id}-title`}
-            className="grid grid-cols-1 gap-6 border-t border-line py-8 md:grid-cols-12 md:gap-x-[var(--grid-gutter)] md:py-12 last:pb-0"
+            className="grid grid-cols-1 gap-6 py-8 md:grid-cols-12 md:gap-x-[var(--grid-gutter)] md:py-12 last:pb-0"
           >
             <p className="text-sm leading-relaxed text-muted tabular-nums md:col-span-4">
               <time dateTime={entry.start.date}>{entry.start.label}</time>

@@ -15,7 +15,7 @@ export function ExperienceSection() {
       />
 
       <article
-        className="mt-12 grid grid-cols-1 gap-6 border-t border-line pt-8 md:mt-18 md:grid-cols-12 md:gap-x-[var(--grid-gutter)] md:pt-12"
+        className="mt-8 grid grid-cols-1 gap-6 pt-8 md:mt-12 md:grid-cols-12 md:gap-x-[var(--grid-gutter)] md:pt-12"
         aria-labelledby="experience-role"
       >
         <div className="text-sm leading-relaxed text-muted md:col-span-4">

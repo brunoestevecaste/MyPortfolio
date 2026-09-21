@@ -18,11 +18,11 @@ const links = [
 export function SiteFooter() {
   return (
     <footer className="site-container mt-auto" id="contact">
-      <div className="editorial-grid items-end border-t border-line pt-8 pb-8 md:pt-12 md:pb-10">
+      <div className="editorial-grid items-end pt-8 pb-8 md:pt-12 md:pb-10">
         <div className="col-span-4 md:col-span-12">
           <SectionHeading className="font-display text-[clamp(3.75rem,13vw,11.5rem)] leading-[1.05] font-normal tracking-[-0.09em]" title="Hablemos." />
         </div>
-        <p className="col-span-4 mt-4 text-sm text-muted md:col-span-6 md:self-center">
+        <p className="col-span-4 mt-3 text-sm text-muted md:col-span-6 md:self-center">
           Bruno Esteve Castellano
         </p>
         <nav

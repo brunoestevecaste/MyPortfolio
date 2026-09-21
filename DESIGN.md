@@ -38,7 +38,7 @@ Interpretación:
   conserva los titulares y el texto destacado.
 - El hero se compone en tres unidades de lectura en desktop, con escala fluida
   hasta 128px. Los cortes se liberan en móvil para evitar desbordamientos.
-- Los titulares de sección usan mayúsculas y hasta 88px: el contraste con
+- Los titulares de sección usan mayúsculas y hasta 112px: el contraste con
   las mayúsculas del hero distingue apertura y capítulos.
 - El cuerpo en Space Mono baja a 14-16px; Archivo reserva más contraste
   para titulares y textos destacados.
@@ -155,7 +155,7 @@ Reglas:
 - Display: `clamp(3.25rem, 8.9vw, 8rem)`, tres unidades de lectura en desktop,
   interlineado 0.98. En móvil escala desde 2.375rem y permite más líneas sin recortes.
 - H1 interior: `clamp(3rem, 6vw, 6rem)`.
-- H2: `clamp(2.75rem, 6.5vw, 5.5rem)`, mayúsculas e interlineado 1.02.
+- H2: `clamp(3rem, 8vw, 7rem)`, mayúsculas e interlineado 1.02.
 - H3: `clamp(1.35rem, 2vw, 2rem)`.
 - Body large: `clamp(1.125rem, 1.4vw, 1.375rem)`.
 - Body: `clamp(0.875rem, 1vw, 1rem)` en escritorio y `0.9375rem` en móvil,

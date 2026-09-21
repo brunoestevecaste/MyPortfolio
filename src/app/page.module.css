@@ -69,7 +69,7 @@
 
 .sectionCopy {
   max-width: 38ch;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   font-size: clamp(0.875rem, 1vw, 1rem);
   line-height: 1.55;
   text-wrap: pretty;
