@@ -1,3 +1,5 @@
+import { EducationSection } from "@/components/sections/education";
+import { SectionHeading } from "@/components/ui/section-heading";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -35,15 +37,15 @@ export default function Home() {
         </div>
       </section>
 
+      <EducationSection />
+
       <section
         className={`site-container ${styles.work}`}
         id="work"
         aria-labelledby="work-title"
       >
         <div className={styles.workIntroduction}>
-          <h2 className="heading-text" id="work-title">
-            Proyectos seleccionados
-          </h2>
+          <SectionHeading className="heading-text" id="work-title" title="Proyectos seleccionados" />
           <p className={styles.sectionCopy}>
             Una selección de proyectos donde el análisis, la arquitectura y el
             resultado se explican con contexto.
@@ -57,9 +59,7 @@ export default function Home() {
         aria-labelledby="about-title"
       >
         <div className={styles.profileIntroduction}>
-          <h2 className="heading-text" id="about-title">
-            Datos, IA y negocio
-          </h2>
+          <SectionHeading className="heading-text" id="about-title" title="Datos, IA y negocio" />
           <p className={styles.sectionCopy}>
             Un perfil híbrido centrado en convertir complejidad técnica en
             decisiones comprensibles y útiles.
