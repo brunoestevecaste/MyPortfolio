@@ -124,8 +124,11 @@ Reglas:
 
 ### Familias
 
-- Display y titulares: `Space Grotesk`, mediante `next/font/google`.
-- Texto, navegación y metadatos: `Archivo`, mediante `next/font/google`.
+- Una sola familia: `Archivo`, mediante `next/font/google`, para acercarse a la
+  grotesca neutra de las referencias. No cargar Space Grotesk.
+- Display y titulares: peso 400, mayúsculas y tracking de aproximadamente
+  `-0.055em`. Evitar el peso semibold y el interlineado excesivamente comprimido.
+- Texto, navegación y metadatos: peso 400; la escala y la posición crean jerarquía.
 
 No añadir una tercera familia monoespaciada en la primera versión. Los datos
 técnicos usarán `font-variant-numeric: tabular-nums`, mayúsculas restringidas y
@@ -133,12 +136,14 @@ tracking moderado con Archivo.
 
 ### Escala orientativa
 
-- Display: `clamp(3.5rem, 8vw, 7.5rem)`, máximo dos líneas.
+- Display: `clamp(3.25rem, 7.1vw, 7.5rem)`, dos o tres líneas naturales en desktop,
+  interlineado 0.98. En móvil escala desde 2.25rem y permite más líneas sin recortes.
 - H1 interior: `clamp(3rem, 6vw, 6rem)`.
 - H2: `clamp(2rem, 4vw, 4.5rem)`.
 - H3: `clamp(1.35rem, 2vw, 2rem)`.
 - Body large: `clamp(1.125rem, 1.4vw, 1.375rem)`.
-- Body: `1rem`, con interlineado mínimo de `1.55`.
+- Body: `1rem`, con interlineado mínimo de `1.55`; columnas breves del hero entre
+  14 y 16px con interlineado 1.55.
 - Metadata: `0.75rem` a `0.875rem`, nunca menos de `12px`.
 
 Reglas:
@@ -195,6 +200,8 @@ jerarquía tipográfica débil.
 - `Bruno Esteve Castellano` funciona como wordmark tipográfico y enlace a la Home
   en la esquina superior izquierda.
 - `Work`, `About` y `Contact` como máximo.
+- En la versión española: `Proyectos`, `Perfil` y `Contacto`.
+- Nombre y navegación en mayúsculas de peso normal, sin línea bajo la cabecera.
 - LinkedIn y GitHub pueden vivir en el footer.
 
 ### Hero
@@ -205,16 +212,24 @@ jerarquía tipográfica débil.
   de navegación.
 - Una declaración profesional de gran escala ocupa la franja superior y expresa
   con claridad a qué se dedica Bruno.
+- El titular empieza inmediatamente bajo la cabecera (16px en desktop), ocupa
+  todo el ancho y se compone en mayúsculas. No anclar el conjunto al fondo del
+  viewport ni introducir un gran vacío por encima del titular.
 - La franja inferior se divide en tres áreas: párrafo de presentación, párrafo de
   enfoque profesional y retrato.
 - Los dos párrafos deben ser breves, tener un ancho de lectura controlado y formar
   dos columnas alineadas por la base en desktop.
-- El retrato real ocupa la zona inferior derecha, con relación de aspecto 4:5 o
-  cercana y tratamiento monocromo o de saturación reducida.
+- El retrato ocupa cinco de las doce columnas, a la derecha. Encuadre 5:4 en
+  desktop como `style-ref3.webp` y 4:5 en móvil, con tratamiento monocromo.
+- Los textos ocupan tres columnas cada uno; una columna libre los separa del
+  retrato. Su tamaño es equivalente, sin un primer párrafo sobredimensionado.
+- Hasta recibir el original, reservar la superficie con una indicación discreta.
+  No sustituir la identidad de Bruno por una persona de stock o generada.
 - El hero no incluye botones. `Work`, `About` y `Contact` en la navegación y la
   proximidad del índice de proyectos proporcionan las rutas necesarias.
-- En pantallas amplias debe ocupar aproximadamente el primer viewport mediante
-  `min-height: 100dvh`, sin recortar texto ni fotografía.
+- En pantallas amplias, cabecera y hero ocupan aproximadamente el primer viewport;
+  el hero resta los 72px de cabecera a `100svh`. La altura puede crecer si el
+  contenido lo necesita. La imagen mantiene su proporción y nunca se recorta texto.
 - En móvil el orden será: nombre y navegación, declaración, retrato, párrafo 1 y
   párrafo 2. El contenido puede superar el viewport y debe conservar un orden DOM
   equivalente al orden de lectura.
@@ -289,7 +304,7 @@ Tratamiento:
 
 - Blanco y negro o saturación contenida.
 - Encuadres amplios, documentales y con espacio negativo.
-- Relación de aspecto dominante 4:5 para retrato y 16:10 para proyectos.
+- Retrato 5:4 en desktop y 4:5 en móvil; proyectos 16:10.
 - No usar stock genérico, blobs, renders 3D gratuitos ni capturas falsas.
 
 El retrato incrustado en el CV sirve como referencia, pero debe solicitarse el

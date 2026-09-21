@@ -1,0 +1,156 @@
+.hero {
+  display: flex;
+  min-height: calc(100svh - 4.5rem);
+  flex-direction: column;
+  padding-top: 1rem;
+  padding-bottom: 3rem;
+}
+
+.heroComposition {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--grid-gutter);
+  align-items: end;
+  margin-top: clamp(2rem, 4vw, 4rem);
+}
+
+.portrait {
+  position: relative;
+  grid-column: 8 / -1;
+  grid-row: 1;
+  margin: 0;
+}
+
+.portraitSurface {
+  aspect-ratio: 5 / 4;
+  background: var(--surface);
+}
+
+.portraitCaption {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.introduction,
+.approach {
+  grid-row: 1;
+  max-width: 34ch;
+  margin: 0 0 1.875rem;
+  font-size: clamp(0.875rem, 1.1vw, 1rem);
+  line-height: 1.55;
+  letter-spacing: -0.015em;
+}
+
+.introduction {
+  grid-column: 1 / 4;
+}
+
+.approach {
+  grid-column: 4 / 7;
+}
+
+.work {
+  padding-block: var(--section-space);
+}
+
+.workIntroduction {
+  max-width: 44rem;
+}
+
+.sectionCopy {
+  max-width: 42ch;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.about {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter);
+  padding-top: 1rem;
+  padding-bottom: var(--section-space);
+}
+
+.profileIntroduction {
+  grid-column: 6 / -1;
+}
+
+@media (min-width: 48rem) and (max-width: 63.999rem) {
+  .hero {
+    min-height: auto;
+  }
+
+  .heroComposition {
+    row-gap: 2rem;
+  }
+
+  .portrait {
+    grid-column: 7 / -1;
+    grid-row: 1 / 3;
+  }
+
+  .introduction,
+  .approach {
+    grid-column: 1 / 6;
+    margin-bottom: 0;
+  }
+
+  .introduction {
+    align-self: end;
+  }
+
+  .approach {
+    grid-row: 2;
+    align-self: start;
+  }
+}
+
+@media (max-width: 47.999rem) {
+  .hero {
+    min-height: auto;
+    padding-top: 1.5rem;
+    padding-bottom: 0;
+  }
+
+  .heroComposition {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .portrait,
+  .introduction,
+  .approach {
+    grid-column: 1;
+    grid-row: auto;
+    margin: 0;
+  }
+
+  .portrait {
+    width: 100%;
+    max-width: 26rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .portraitSurface {
+    aspect-ratio: 4 / 5;
+  }
+
+  .introduction,
+  .approach {
+    max-width: 40ch;
+    font-size: 1rem;
+  }
+
+  .about {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .profileIntroduction {
+    grid-column: 1;
+  }
+}
