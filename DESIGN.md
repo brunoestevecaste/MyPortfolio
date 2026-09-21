@@ -1,0 +1,358 @@
+# DESIGN.md
+
+## Dirección seleccionada
+
+**Editorial Systems**
+
+Una identidad editorial de precisión para presentar proyectos de datos e IA como
+sistemas comprensibles, visuales y útiles. La web debe sentirse más cercana a una
+publicación contemporánea y a un dossier técnico bien dirigido que a una plantilla
+de portfolio de desarrollador.
+
+Este documento es la fuente de verdad visual. Cualquier cambio de dirección debe
+actualizarse aquí antes de propagarse a componentes y páginas.
+
+## Design read
+
+Portfolio híbrido para recruiters, responsables de innovación y colaboradores,
+con lenguaje editorial-tecnológico, composición asimétrica, fotografía monocroma
+y una implementación propia basada en Tailwind, sin adoptar un kit visual externo.
+
+## Design dials
+
+- `DESIGN_VARIANCE: 8/10`
+- `MOTION_INTENSITY: 5/10`
+- `VISUAL_DENSITY: 3/10`
+
+Interpretación:
+
+- La composición puede ser atrevida y desplazada, pero debe conservar una lectura
+  inmediata.
+- El movimiento ayuda a revelar jerarquía y relaciones; nunca protagoniza por sí
+  solo.
+- El espacio negativo es estructural. La web no debe parecer un dashboard.
+
+## Cómo influyen las referencias
+
+### `refs/style-ref1.webp`
+
+Conservar:
+
+- Superficie clara con textura sutil de papel.
+- Inventario de proyectos distribuido en una retícula amplia.
+- Jerarquía creada mediante escala, posición y espacio.
+- Fotografía en blanco y negro.
+- Sensación de dossier editorial.
+
+Adaptar:
+
+- Los textos monoespaciados pequeños solo se usarán para metadatos técnicos.
+- Los proyectos deberán ser más fáciles de escanear y activar.
+
+### `refs/style-ref2.webp`
+
+Conservar:
+
+- Marco editorial superpuesto a una imagen real de gran escala.
+- Contraste entre imagen inmersiva e información precisa.
+- Navegación horizontal mínima.
+- Tipografía grotesca con cambios fuertes de escala.
+
+Descartar:
+
+- El solapamiento no debe comprometer la lectura móvil.
+- No se copiará el lenguaje de portfolio de moda.
+
+### `refs/style-ref3.webp`
+
+Esta es la referencia principal para la composición del hero.
+
+Conservar:
+
+- Nombre situado en la esquina superior izquierda.
+- Titular protagonista alineado a la izquierda.
+- Imagen monocroma con función narrativa.
+- Dos columnas editoriales breves para la presentación personal.
+- Márgenes generosos y pequeños datos de contexto.
+
+Adaptar:
+
+- La biografía será concreta y profesional, sin tono de propuesta de agencia.
+- El retrato ocupará el bloque inferior derecho y equilibrará las dos columnas de
+  texto situadas en la zona inferior izquierda.
+- Los datos de página solo aparecerán si ayudan a navegar un case study.
+
+## Síntesis visual
+
+La combinación elegida es:
+
+- Precisión suiza en retícula y tipografía.
+- Escala editorial para la narrativa.
+- Señalética técnica para tecnologías, roles y resultados.
+- Imágenes reales tratadas en monocromo o color muy controlado.
+- Un único azul petróleo como señal de interacción y dato relevante.
+
+La búsqueda de `ui-ux-pro-max` devolvió una base monocroma, azul de acento,
+tipografía Archivo y Space Grotesk y composición asimétrica. Su clasificación
+brutalista y su propuesta de animación con GSAP se descartaron por no encajar con
+las referencias. Se conservan únicamente los resultados que sí están respaldados
+por el brief y el material visual.
+
+## Paleta
+
+### Tokens principales
+
+| Token | Valor | Uso |
+|---|---:|---|
+| `--color-canvas` | `#F4F3EF` | Fondo editorial principal |
+| `--color-surface` | `#E9EAE7` | Superficies secundarias y bloques de imagen |
+| `--color-ink` | `#121416` | Texto principal |
+| `--color-muted` | `#5C6268` | Texto secundario y metadatos |
+| `--color-line` | `#CFD1CE` | Divisores estructurales |
+| `--color-signal` | `#0A6C8A` | Enlaces, foco, CTA y datos clave |
+| `--color-on-signal` | `#F8FAFA` | Texto sobre el color de señal |
+
+Reglas:
+
+- Un solo color de acento para toda la experiencia.
+- Nada de degradados morados, brillos neón o cambios arbitrarios de paleta.
+- El color de señal se usa para interacción o significado, no como decoración.
+- La primera versión es light-only porque la dirección imita una publicación
+  impresa y todas las referencias aportadas son claras. No mezclar secciones dark.
+
+## Tipografía
+
+### Familias
+
+- Display y titulares: `Space Grotesk`, mediante `next/font/google`.
+- Texto, navegación y metadatos: `Archivo`, mediante `next/font/google`.
+
+No añadir una tercera familia monoespaciada en la primera versión. Los datos
+técnicos usarán `font-variant-numeric: tabular-nums`, mayúsculas restringidas y
+tracking moderado con Archivo.
+
+### Escala orientativa
+
+- Display: `clamp(3.5rem, 8vw, 7.5rem)`, máximo dos líneas.
+- H1 interior: `clamp(3rem, 6vw, 6rem)`.
+- H2: `clamp(2rem, 4vw, 4.5rem)`.
+- H3: `clamp(1.35rem, 2vw, 2rem)`.
+- Body large: `clamp(1.125rem, 1.4vw, 1.375rem)`.
+- Body: `1rem`, con interlineado mínimo de `1.55`.
+- Metadata: `0.75rem` a `0.875rem`, nunca menos de `12px`.
+
+Reglas:
+
+- Titulares cortos, concretos y alineados a la izquierda.
+- El hero admite un máximo de cuatro elementos textuales.
+- No introducir serif como recurso automático de sofisticación.
+- No mezclar familias dentro de una misma frase para enfatizar una palabra.
+- El ancho de lectura del cuerpo no debe superar `65ch`.
+
+## Retícula y espacio
+
+### Desktop
+
+- Contenedor máximo: `1440px`.
+- Retícula: 12 columnas.
+- Margen exterior: `clamp(24px, 4vw, 72px)`.
+- Gutter: `clamp(16px, 2vw, 32px)`.
+
+### Tablet
+
+- Retícula: 6 columnas.
+- Margen exterior: `32px`.
+
+### Mobile
+
+- Retícula: 4 columnas.
+- Margen exterior: `18px`.
+- Toda composición asimétrica debe resolver en una sola columna legible por
+  debajo de `768px`.
+
+### Espaciado
+
+Base de 4px con una escala recomendada de 8, 12, 16, 24, 32, 48, 72, 96, 144 y
+192px. Los grandes vacíos deben separar capítulos; no deben compensar una
+jerarquía tipográfica débil.
+
+## Forma y materialidad
+
+- Layout, imágenes y bloques editoriales con esquinas rectas.
+- Botones compactos con radio máximo de `2px` o enlaces textuales subrayados.
+- Sin tarjetas genéricas para agrupar contenido que puede organizarse con espacio.
+- Divisores finos solo donde expresen estructura real.
+- Sombras casi inexistentes. Si se requieren, serán amplias, suaves y teñidas con
+  el tono del fondo.
+- Puede utilizarse una textura de grano extremadamente sutil como capa fija,
+  siempre que no afecte al rendimiento ni a la legibilidad.
+
+## Arquitectura visual de la Home
+
+### Navegación
+
+- Una sola línea en desktop y altura máxima de 72px.
+- `Bruno Esteve Castellano` funciona como wordmark tipográfico y enlace a la Home
+  en la esquina superior izquierda.
+- `Work`, `About` y `Contact` como máximo.
+- LinkedIn y GitHub pueden vivir en el footer.
+
+### Hero
+
+- `refs/style-ref3.webp` es la referencia compositiva directa, sin copiar su copy
+  ni su identidad de portfolio de moda.
+- El nombre aparece en la esquina superior izquierda, integrado en la primera fila
+  de navegación.
+- Una declaración profesional de gran escala ocupa la franja superior y expresa
+  con claridad a qué se dedica Bruno.
+- La franja inferior se divide en tres áreas: párrafo de presentación, párrafo de
+  enfoque profesional y retrato.
+- Los dos párrafos deben ser breves, tener un ancho de lectura controlado y formar
+  dos columnas alineadas por la base en desktop.
+- El retrato real ocupa la zona inferior derecha, con relación de aspecto 4:5 o
+  cercana y tratamiento monocromo o de saturación reducida.
+- El hero no incluye botones. `Work`, `About` y `Contact` en la navegación y la
+  proximidad del índice de proyectos proporcionan las rutas necesarias.
+- En pantallas amplias debe ocupar aproximadamente el primer viewport mediante
+  `min-height: 100dvh`, sin recortar texto ni fotografía.
+- En móvil el orden será: nombre y navegación, declaración, retrato, párrafo 1 y
+  párrafo 2. El contenido puede superar el viewport y debe conservar un orden DOM
+  equivalente al orden de lectura.
+- No añadir etiquetas de versión, indicadores de scroll, disponibilidad ficticia
+  ni tiras decorativas de palabras.
+
+### Selected Work
+
+- Índice editorial numerado, no rejilla de tarjetas iguales.
+- Cada fila muestra un número de dos dígitos, título, resumen de una o dos frases
+  y metadatos confirmados como papel, año o tecnologías.
+- La numeración `01`, `02`, `03` identifica proyectos concretos. Es una excepción
+  funcional a la regla de evitar números decorativos y no se usa en encabezados
+  de sección, imágenes o paginación falsa.
+- Toda la fila funciona como enlace a `/projects/[slug]`, con nombre accesible,
+  indicador de foco de al menos 2px y orden de tabulación equivalente al visual.
+- La imagen de proyecto puede aparecer en hover o focus en desktop, pero el título
+  y el resumen deben bastar para comprender y abrir el proyecto.
+- En móvil, cada fila apila número, título, resumen y metadatos. Si se muestra una
+  imagen, aparece dentro del flujo y no depende del hover.
+- Baleària ocupa la primera posición, AEPD la segunda y los proyectos posteriores
+  solo se incorporan cuando existe contenido verificable.
+- La Home no desarrolla proceso, arquitectura ni resultados extensos. Esa
+  información pertenece exclusivamente a la página del case study.
+
+### Perfil
+
+- Retrato real en blanco y negro o con saturación reducida.
+- La presentación personal vive en los dos párrafos del hero. Esta sección se
+  centra en experiencia y formación seleccionadas sin repetir ese texto.
+- No trasladar el CV completo a la Home.
+
+### Capacidades
+
+- Agrupadas por problemas que Bruno puede resolver.
+- Sin barras de progreso, porcentajes subjetivos ni nubes de logos.
+- Las tecnologías aparecen vinculadas a proyectos y decisiones reales.
+
+### Contacto
+
+- Una única intención: contactar.
+- Correo, LinkedIn y GitHub.
+- No publicar teléfono sin autorización explícita.
+
+## Case studies
+
+- Cada proyecto tiene una ruta independiente bajo `/projects/[slug]`.
+- El encabezado incluye título, resumen, papel, periodo y tecnologías confirmadas.
+- Cada proyecto funciona como un capítulo editorial.
+- Alternar bloques de texto, imágenes, arquitectura y resultados.
+- No repetir el patrón imagen izquierda y texto derecha más de dos veces seguidas.
+- Las métricas deben tener fuente y contexto.
+- Los diagramas técnicos usan la misma retícula y paleta, sin apariencia de
+  dashboard independiente.
+- Las capturas de producto se mostrarán como imágenes reales, no como interfaces
+  falsas construidas con `div`.
+- La página termina con navegación accesible al proyecto anterior y siguiente.
+- Cada ruta debe definir metadata, título, descripción, Open Graph y URL canónica
+  propios.
+
+## Fotografía y recursos visuales
+
+Prioridad:
+
+1. Fotografías y capturas reales de los proyectos.
+2. Retrato original en alta resolución.
+3. Diagramas técnicos creados a partir de arquitectura verificable.
+4. Imágenes generadas únicamente como material atmosférico claramente separado
+   de la evidencia del proyecto.
+
+Tratamiento:
+
+- Blanco y negro o saturación contenida.
+- Encuadres amplios, documentales y con espacio negativo.
+- Relación de aspecto dominante 4:5 para retrato y 16:10 para proyectos.
+- No usar stock genérico, blobs, renders 3D gratuitos ni capturas falsas.
+
+El retrato incrustado en el CV sirve como referencia, pero debe solicitarse el
+archivo original antes de implementarlo en la web.
+
+## Motion
+
+Nivel 5: visible, fluido y subordinado a la narrativa.
+
+### Permitido
+
+- Entrada inicial de titular, imagen y navegación mediante opacidad y traslación.
+- Revelado escalonado breve del índice de proyectos.
+- Cambio de imagen o recorte en hover de un proyecto.
+- Transiciones de página discretas si aportan continuidad.
+- Duraciones aproximadas de 180ms para feedback, 360ms para reveals y 600ms para
+  transiciones narrativas puntuales.
+
+### No permitido
+
+- Scroll hijacking.
+- Parallax continuo.
+- Marquees decorativos.
+- Cursores personalizados.
+- Animaciones infinitas sin información.
+- GSAP en la primera versión; CSS y Motion son suficientes.
+
+Toda animación debe explicar jerarquía, feedback o continuidad. Debe existir una
+versión estática equivalente bajo `prefers-reduced-motion`.
+
+## Responsive y accesibilidad
+
+- Diseñar y revisar en 375, 768, 1024 y 1440px.
+- Objetivos táctiles de al menos 44 por 44px.
+- Contraste WCAG AA como mínimo.
+- Estados de foco visibles con el color de señal y separación suficiente.
+- Navegación y case studies completamente utilizables con teclado.
+- Orden del DOM independiente de la composición visual.
+- Imágenes con dimensiones reservadas para evitar CLS.
+- Texto nunca inferior a 12px.
+
+## Anti-patrones del proyecto
+
+- Hero centrado sobre un degradado oscuro.
+- Tres tarjetas idénticas para proyectos o capacidades.
+- Glassmorphism, sombras grandes y píldoras por defecto.
+- Morado de IA, glow azul o estética de terminal como identidad.
+- Secciones numeradas como recurso decorativo.
+- Etiquetas pequeñas en mayúsculas sobre cada titular.
+- Listas de tecnologías sin relación con un problema.
+- Métricas inventadas o precisión falsa.
+- Lenguaje como `innovador`, `revolucionario`, `seamless` o `next-gen` sin prueba.
+- Cambios de tema entre secciones.
+- Copiar literalmente la estética de moda de las referencias.
+
+## Criterios de aceptación visual
+
+- La propuesta se entiende como datos e IA antes de leer el segundo bloque.
+- La Home utiliza al menos cuatro familias de composición diferentes.
+- Ninguna sección depende de tarjetas genéricas para crear jerarquía.
+- El color de señal conserva la misma función en toda la web.
+- El contenido se puede recorrer y entender sin animaciones.
+- Las imágenes son reales o están identificadas como material conceptual.
+- La versión móvil conserva identidad sin provocar scroll horizontal.
+- El resultado se siente editorial y técnico, no brutalista, SaaS ni generado por
+  una plantilla.

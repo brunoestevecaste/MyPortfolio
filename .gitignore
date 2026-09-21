@@ -120,6 +120,14 @@ crash.*.log
 next-env.d.ts
 .eslintcache
 .stylelintcache
+__pycache__/
+*.py[cod]
+
+# Local analysis and generated scratch files
+/tmp/
+
+# Private source documents. Publish only a deliberately redacted copy.
+/BrunoEsteve_CV_Tech.pdf
 
 # Local editor and workspace state
 .vscode/

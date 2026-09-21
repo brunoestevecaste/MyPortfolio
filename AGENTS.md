@@ -22,9 +22,10 @@ Prioritize real content, typography, composition, imagery, and clarity over
 decoration. Avoid developer-portfolio clichés, SaaS-dashboard aesthetics, and
 anything that looks like an unedited AI template.
 
-The detailed product and workflow brief lives in
-`guia-portfolio-web-con-codex.md`. Treat it as context, but follow this file when
-the two documents differ.
+The verified product and content source of truth is `PRODUCT.md`. The approved
+visual source of truth is `DESIGN.md`. The broader workflow brief lives in
+`guia-portfolio-web-con-codex.md`. Treat the workflow brief as context, but follow
+`PRODUCT.md`, `DESIGN.md`, and this file when documents differ.
 
 ## Stack and package policy
 
