@@ -18,7 +18,7 @@ export function SiteFooter() {
     <footer className="site-container mt-auto" id="contact">
       <div className="editorial-grid items-end border-t border-line pt-8 pb-8 md:pt-12 md:pb-10">
         <div className="col-span-4 md:col-span-12">
-          <h2 className="font-display text-[clamp(3.75rem,13vw,11.5rem)] leading-[1.05] font-normal tracking-[-0.065em]">
+          <h2 className="font-display text-[clamp(3.75rem,13vw,11.5rem)] leading-[1.05] font-normal tracking-[-0.08em]">
             Hablemos.
           </h2>
         </div>
