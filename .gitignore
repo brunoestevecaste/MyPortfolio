@@ -1,0 +1,149 @@
+# Dependencies and package-manager state
+/node_modules/
+/.pnp/
+.pnp.*
+.yarn/*
+!.yarn/patches/
+!.yarn/plugins/
+!.yarn/releases/
+!.yarn/versions/
+
+# Framework output and build artifacts
+/.next/
+/out/
+/build/
+/dist/
+/.turbo/
+/.swc/
+/.cache/
+/.parcel-cache/
+
+# Tests, coverage and browser-test artifacts
+/coverage/
+/playwright-report/
+/test-results/
+/blob-report/
+/.nyc_output/
+
+# Logs and diagnostic output
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+lerna-debug.log*
+
+# Environment files may contain passwords, tokens and API keys.
+# Commit only deliberately sanitized examples.
+.env
+.env.*
+!.env.example
+!.env.*.example
+.envrc
+.direnv/
+
+# Package registries and services commonly store access tokens here
+.npmrc
+.yarnrc
+.yarnrc.yml
+.pnpmrc
+.sentryclirc
+.netrc
+_netrc
+
+# Private keys, SSH identities and certificate stores
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.ppk
+id_rsa
+id_rsa.*
+id_dsa
+id_dsa.*
+id_ecdsa
+id_ecdsa.*
+id_ed25519
+id_ed25519.*
+
+# Cloud, deployment and local authentication credentials
+.aws/
+.azure/
+.gcloud/
+.kube/
+.docker/
+.vercel/
+.netlify/
+**/credentials.json
+**/credentials.*.json
+**/service-account*.json
+**/service_account*.json
+**/firebase-adminsdk*.json
+**/client_secret*.json
+!**/credentials.example.json
+!**/service-account.example.json
+!**/service_account.example.json
+!**/client_secret.example.json
+
+# Local secret stores
+.secrets/
+secrets.json
+secrets.yaml
+secrets.yml
+secrets.toml
+*.secret
+*.secrets
+
+# Infrastructure state and variable files often contain credentials
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.terraformrc
+terraform.rc
+crash.log
+crash.*.log
+
+# Local databases and data dumps
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+*.sqlite-journal
+*.dump
+
+# TypeScript and tooling caches
+*.tsbuildinfo
+next-env.d.ts
+.eslintcache
+.stylelintcache
+
+# Local editor and workspace state
+.vscode/
+.idea/
+*.code-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.history/
+
+# Operating-system metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Temporary, backup and patch files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*~
