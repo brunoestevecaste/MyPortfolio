@@ -8,8 +8,9 @@
   --color-line: var(--line);
   --color-signal: var(--signal);
   --color-on-signal: var(--on-signal);
-  --font-sans: var(--font-archivo);
+  --font-sans: var(--font-space-mono);
   --font-display: var(--font-archivo);
+  --font-mono: var(--font-space-mono);
 }
 
 :root {
@@ -58,7 +59,7 @@ body {
   margin: 0;
   background: var(--canvas);
   color: var(--ink);
-  font-family: var(--font-archivo), Arial, Helvetica, sans-serif;
+  font-family: var(--font-space-mono), monospace;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
