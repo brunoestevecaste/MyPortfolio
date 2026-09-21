@@ -21,7 +21,7 @@ y una implementación propia basada en Tailwind, sin adoptar un kit visual exter
 ## Design dials
 
 - `DESIGN_VARIANCE: 8/10`
-- `MOTION_INTENSITY: 5/10`
+- `MOTION_INTENSITY: 3/10`
 - `VISUAL_DENSITY: 3/10`
 
 Interpretación:
@@ -31,6 +31,20 @@ Interpretación:
 - El movimiento ayuda a revelar jerarquía y relaciones; nunca protagoniza por sí
   solo.
 - El espacio negativo es estructural. La web no debe parecer un dashboard.
+
+## Refinamiento tipográfico · septiembre de 2026
+
+- Space Mono pasa a ser la voz de navegación, cuerpo y metadatos. Archivo
+  conserva los titulares y el texto destacado.
+- El hero se compone en tres unidades de lectura en desktop, con escala fluida
+  hasta 128px. Los cortes se liberan en móvil para evitar desbordamientos.
+- Los titulares de sección usan mayúsculas y hasta 88px: el contraste con
+  las mayúsculas del hero distingue apertura y capítulos.
+- El cuerpo en Space Mono baja a 14-16px; Archivo reserva más contraste
+  para titulares y textos destacados.
+- El contacto cierra con una palabra de gran escala y una línea de enlaces.
+- Se mantienen paleta, anclas, textos y reserva del retrato original. Este pase
+  refina la Home existente; no incorpora case studies ni contenido sin verificar.
 
 ## Cómo influyen las referencias
 
@@ -46,7 +60,7 @@ Conservar:
 
 Adaptar:
 
-- Los textos monoespaciados pequeños solo se usarán para metadatos técnicos.
+- Space Mono se reserva para lectura continua, navegación y metadatos.
 - Los proyectos deberán ser más fáciles de escanear y activar.
 
 ### `refs/style-ref2.webp`
@@ -124,26 +138,27 @@ Reglas:
 
 ### Familias
 
-- Una sola familia: `Archivo`, mediante `next/font/google`, para acercarse a la
-  grotesca neutra de las referencias. No cargar Space Grotesk.
-- Display y titulares: peso 400, mayúsculas y tracking de aproximadamente
-  `-0.055em`. Evitar el peso semibold y el interlineado excesivamente comprimido.
-- Texto, navegación y metadatos: peso 400; la escala y la posición crean jerarquía.
-
-No añadir una tercera familia monoespaciada en la primera versión. Los datos
-técnicos usarán `font-variant-numeric: tabular-nums`, mayúsculas restringidas y
-tracking moderado con Archivo.
+- `Archivo`, con `next/font/google`, se reserva para titulares y texto
+  destacado.
+- `Space Mono`, también cargada con `next/font/google`, se aplica al cuerpo,
+  navegación, enlaces y metadatos.
+- Display: Archivo 400, mayúsculas y tracking aproximado de `-0.055em`. Los
+  encabezados de sección también van en mayúsculas.
+- El texto destacado usa Archivo; el texto de lectura continua usa Space Mono,
+  con interlineado amplio y tracking natural.
+- Los metadatos usan Space Mono con `font-variant-numeric: tabular-nums` y
+  mayúsculas restringidas.
 
 ### Escala orientativa
 
-- Display: `clamp(3.25rem, 7.1vw, 7.5rem)`, dos o tres líneas naturales en desktop,
-  interlineado 0.98. En móvil escala desde 2.25rem y permite más líneas sin recortes.
+- Display: `clamp(3.25rem, 8.9vw, 8rem)`, tres unidades de lectura en desktop,
+  interlineado 0.98. En móvil escala desde 2.375rem y permite más líneas sin recortes.
 - H1 interior: `clamp(3rem, 6vw, 6rem)`.
-- H2: `clamp(2rem, 4vw, 4.5rem)`.
+- H2: `clamp(2.75rem, 6.5vw, 5.5rem)`, mayúsculas e interlineado 1.02.
 - H3: `clamp(1.35rem, 2vw, 2rem)`.
 - Body large: `clamp(1.125rem, 1.4vw, 1.375rem)`.
-- Body: `1rem`, con interlineado mínimo de `1.55`; columnas breves del hero entre
-  14 y 16px con interlineado 1.55.
+- Body: `clamp(0.875rem, 1vw, 1rem)` en escritorio y `0.9375rem` en móvil,
+  con interlineado `1.55`.
 - Metadata: `0.75rem` a `0.875rem`, nunca menos de `12px`.
 
 Reglas:
@@ -312,7 +327,7 @@ archivo original antes de implementarlo en la web.
 
 ## Motion
 
-Nivel 5: visible, fluido y subordinado a la narrativa.
+Nivel 3: composición estática, con feedback discreto en enlaces y foco.
 
 ### Permitido
 

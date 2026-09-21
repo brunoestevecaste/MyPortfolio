@@ -16,16 +16,20 @@ const links = [
 export function SiteFooter() {
   return (
     <footer className="site-container mt-auto" id="contact">
-      <div className="editorial-grid items-end border-t border-line py-8 md:py-12">
-        <div className="col-span-4 md:col-span-6">
-          <h2 className="heading-text">Hablemos.</h2>
-          <p className="mt-5 text-sm">Bruno Esteve Castellano</p>
+      <div className="editorial-grid items-end border-t border-line pt-8 pb-8 md:pt-12 md:pb-10">
+        <div className="col-span-4 md:col-span-12">
+          <h2 className="font-display text-[clamp(3.75rem,13vw,11.5rem)] leading-[1.05] font-normal tracking-[-0.065em]">
+            Hablemos.
+          </h2>
         </div>
+        <p className="col-span-4 mt-4 text-sm text-muted md:col-span-6 md:self-center">
+          Bruno Esteve Castellano
+        </p>
         <nav
           aria-label="Contacto y perfiles"
-          className="col-span-4 mt-8 md:col-span-4 md:col-start-9 md:mt-0"
+          className="col-span-4 mt-2 md:col-span-6 md:mt-4"
         >
-          <ul className="flex flex-wrap gap-x-8 gap-y-2 text-sm md:justify-end">
+          <ul className="flex flex-wrap gap-x-8 gap-y-2 text-base md:justify-end text-sm md:gap-x-12">
             {links.map((link) => (
               <li key={link.href}>
                 <a

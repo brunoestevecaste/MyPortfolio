@@ -7,8 +7,10 @@ export default function Home() {
         aria-labelledby="foundation-title"
         className={`site-container ${styles.hero}`}
       >
-        <h1 className="display-text" id="foundation-title">
-          Diseño sistemas de datos e IA para decisiones reales.
+        <h1 className={`display-text ${styles.heroTitle}`} id="foundation-title">
+          <span>Diseño sistemas</span>{" "}
+          <span>de datos e IA para</span>{" "}
+          <span>decisiones reales.</span>
         </h1>
 
         <div className={styles.heroComposition}>

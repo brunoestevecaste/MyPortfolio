@@ -6,13 +6,21 @@
   padding-bottom: 3rem;
 }
 
+.heroTitle {
+  margin: 0;
+}
+
+.heroTitle span {
+  display: block;
+}
+
 .heroComposition {
   display: grid;
   flex: 1;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--grid-gutter);
   align-items: end;
-  margin-top: clamp(2rem, 4vw, 4rem);
+  margin-top: clamp(2.5rem, 4vw, 4rem);
 }
 
 .portrait {
@@ -39,9 +47,8 @@
   grid-row: 1;
   max-width: 34ch;
   margin: 0 0 1.875rem;
-  font-size: clamp(0.875rem, 1.1vw, 1rem);
+  font-size: clamp(0.875rem, 1vw, 1rem);
   line-height: 1.55;
-  letter-spacing: -0.015em;
 }
 
 .introduction {
@@ -57,14 +64,15 @@
 }
 
 .workIntroduction {
-  max-width: 44rem;
+  max-width: 62rem;
 }
 
 .sectionCopy {
-  max-width: 42ch;
-  margin-top: 1.5rem;
-  font-size: 1rem;
+  max-width: 38ch;
+  margin-top: 2rem;
+  font-size: clamp(0.875rem, 1vw, 1rem);
   line-height: 1.55;
+  text-wrap: pretty;
 }
 
 .about {
@@ -76,7 +84,7 @@
 }
 
 .profileIntroduction {
-  grid-column: 6 / -1;
+  grid-column: 5 / -1;
 }
 
 @media (min-width: 48rem) and (max-width: 63.999rem) {
@@ -110,6 +118,14 @@
 }
 
 @media (max-width: 47.999rem) {
+  .heroTitle span {
+    display: inline;
+  }
+
+  .heroTitle {
+    text-wrap: balance;
+  }
+
   .hero {
     min-height: auto;
     padding-top: 1.5rem;
@@ -143,7 +159,7 @@
   .introduction,
   .approach {
     max-width: 40ch;
-    font-size: 1rem;
+    font-size: 0.9375rem;
   }
 
   .about {

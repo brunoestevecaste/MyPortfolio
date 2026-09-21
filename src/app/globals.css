@@ -9,8 +9,8 @@
   --color-signal: var(--signal);
   --color-on-signal: var(--on-signal);
   --font-sans: var(--font-space-mono);
-  --font-display: var(--font-archivo);
   --font-mono: var(--font-space-mono);
+  --font-display: var(--font-archivo);
 }
 
 :root {
@@ -113,7 +113,7 @@ svg {
 
   .display-text {
     font-family: var(--font-archivo), Arial, Helvetica, sans-serif;
-    font-size: clamp(3.25rem, 7.1vw, 7.5rem);
+    font-size: clamp(3.25rem, 8.9vw, 8rem);
     font-weight: 400;
     line-height: 0.98;
     letter-spacing: -0.055em;
@@ -123,7 +123,7 @@ svg {
 
   .heading-text {
     font-family: var(--font-archivo), Arial, Helvetica, sans-serif;
-    font-size: clamp(2rem, 3.8vw, 3.75rem);
+    font-size: clamp(2.75rem, 6.5vw, 5.5rem);
     font-weight: 400;
     line-height: 1.02;
     letter-spacing: -0.045em;
@@ -193,7 +193,7 @@ svg {
   }
 
   .display-text {
-    font-size: clamp(2.25rem, 8.7vw, 4.5rem);
+    font-size: clamp(2.375rem, 9.8vw, 4.75rem);
     line-height: 1.02;
   }
 }

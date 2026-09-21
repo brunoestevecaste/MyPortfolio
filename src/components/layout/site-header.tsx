@@ -11,7 +11,7 @@ export function SiteHeader() {
     <header className="site-container" data-site-header>
       <div className="flex min-h-18 flex-wrap items-center justify-between gap-x-6 py-3 md:py-0">
         <Link
-          className="inline-flex min-h-11 items-center text-sm font-normal tracking-[-0.025em] uppercase hover:text-signal"
+          className="inline-flex min-h-11 items-center text-xs font-normal tracking-[-0.025em] uppercase hover:text-signal"
           href="/"
         >
           Bruno Esteve Castellano
@@ -21,7 +21,7 @@ export function SiteHeader() {
           aria-label="Navegación principal"
           className="w-full md:w-auto"
         >
-          <ul className="flex items-center justify-between gap-5 text-xs uppercase md:justify-end md:gap-10 md:text-sm">
+          <ul className="flex items-center justify-between gap-5 text-xs uppercase md:justify-end md:gap-10 md:text-xs">
             {navigation.map((item) => (
               <li key={item.href}>
                 <Link
