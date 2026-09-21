@@ -1,4 +1,5 @@
 import { EducationSection } from "@/components/sections/education";
+import { ExperienceSection } from "@/components/sections/experience";
 import { SectionHeading } from "@/components/ui/section-heading";
 import styles from "./page.module.css";
 
@@ -38,6 +39,7 @@ export default function Home() {
       </section>
 
       <EducationSection />
+      <ExperienceSection />
 
       <section
         className={`site-container ${styles.work}`}

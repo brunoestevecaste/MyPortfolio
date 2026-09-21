@@ -13,8 +13,8 @@ export const education: readonly Education[] = [
     id: "edem",
     institution: "EDEM Escuela de Empresarios",
     qualification: "Máster en Inteligencia Artificial",
-    start: { date: "2025-09", label: "Sept. 2025" },
-    end: { date: "2026-07", label: "Jul. 2026" },
+    start: { date: "2025-09", label: "sept. 2025" },
+    end: { date: "2026-07", label: "jul. 2026" },
     summary:
       "Diseño, desarrollo y despliegue de soluciones de IA para problemas reales, con foco en la IA responsable y el impacto en negocio.",
     details: [
@@ -26,8 +26,8 @@ export const education: readonly Education[] = [
     id: "universitat-de-valencia",
     institution: "Universitat de València",
     qualification: "Grado en Inteligencia y Analítica de Negocios",
-    start: { date: "2021", label: "2021" },
-    end: { date: "2025", label: "2025" },
+    start: { date: "2021-09", label: "sept. 2021" },
+    end: { date: "2025-06", label: "jun. 2025" },
     summary:
       "Datos y tecnología al servicio de la gestión empresarial. Una visión integral del negocio para transformar información en decisiones.",
     details: [
