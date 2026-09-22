@@ -440,3 +440,23 @@ Conservar el foco accesible y los trazos que representan datos en los gráficos.
   de Recharts están desactivadas, también en los tooltips.
 - La interacción de teclado se activa en los gráficos de los casos. Las vistas
   previas dentro de los enlaces de la Home no añaden paradas de foco.
+
+## Dashboard AEPD · referencia visual SYSTEM
+
+Por indicación de Bruno, el dashboard adopta la referencia gráfica facilitada:
+blanco puro, negro, grises neutros y una retícula continua de líneas finas.
+Esta excepción a la separación sin líneas y a las superficies claras uniformes
+se limita al dashboard AEPD; no se extiende al resto del portfolio.
+
+- Cabecera compacta, etiquetas funcionales en mayúsculas y Archivo como voz
+  principal. Space Mono permanece en escalas, fechas y valores de los gráficos.
+- Tres indicadores existentes en una franja continua, con cifras grandes y
+  gruesas. El bloque de descargas se invierte a blanco sobre negro.
+- Predicciones como gráfico principal, anillo a la derecha y tabla de solicitudes
+  a todo el ancho debajo. Los demás análisis continúan en una retícula inferior.
+- Paneles unidos sin separación entre tarjetas, sin sombras ni radios añadidos;
+  divisores suaves y cabecera de tabla con una línea negra más marcada.
+- Se preservan todos los datos, fórmulas, filtros, etiquetas y tipos de gráfico.
+  No se incorporan las métricas, numeraciones ni estados ficticios de la imagen.
+- En contenedores estrechos la lectura sigue el mismo orden en una columna,
+  con filtros y valores legibles, sin depender de interacción por hover.

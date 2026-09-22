@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import {
   Bar,
   BarChart,
+  CartesianGrid,
   LabelList,
   Line,
   LineChart,
@@ -119,7 +120,7 @@ export function HorizontalBars({ data }: { data: ChartDatum[] }) {
             dataKey="value"
             name="Total"
             fill="var(--signal)"
-            barSize={14}
+            barSize={10}
             isAnimationActive={false}
           >
             <LabelList
@@ -164,7 +165,7 @@ export function VerticalBars({ data }: { data: ChartDatum[] }) {
             dataKey="value"
             name="Visitas"
             fill="var(--signal)"
-            maxBarSize={32}
+            maxBarSize={18}
             isAnimationActive={false}
           >
             <LabelList
@@ -192,7 +193,7 @@ export function DownloadDonut({ data }: { data: ChartDatum[] }) {
   return (
     <div className={styles.donutLayout}>
       <ChartFrame
-        height={208}
+        height={260}
         label={`Distribución de ${formatCount(total)} descargas por categoría`}
       >
         <PieChart accessibilityLayer>
@@ -200,7 +201,7 @@ export function DownloadDonut({ data }: { data: ChartDatum[] }) {
             data={colored}
             dataKey="value"
             nameKey="label"
-            innerRadius="62%"
+            innerRadius="78%"
             outerRadius="88%"
             startAngle={90}
             endAngle={-270}
@@ -300,7 +301,7 @@ export function PredictionChart({ series }: { series: HourlyPoint[] }) {
         </span>
       </div>
       <ChartFrame
-        height={280}
+        height={340}
         label="Comparación de visitas por hora y predicción del modelo seleccionado"
       >
         <LineChart
@@ -309,6 +310,11 @@ export function PredictionChart({ series }: { series: HourlyPoint[] }) {
           accessibilityLayer
         >
           <XAxis hide dataKey="date" />
+          <CartesianGrid
+            vertical={false}
+            stroke="var(--line)"
+            strokeDasharray="3 4"
+          />
           <YAxis
             {...axisStyle}
             domain={[0, "auto"]}

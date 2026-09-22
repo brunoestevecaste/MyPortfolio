@@ -143,77 +143,6 @@ export function AepdDashboard() {
             </dl>
             <div className={styles.chartGrid}>
               <Panel
-                title="Nº de visitas totales por tipo de solicitud"
-                className={styles.visits}
-              >
-                <HorizontalBars
-                  data={data.requests.map((request) => ({
-                    label: request.label,
-                    value: request.visits,
-                  }))}
-                />
-              </Panel>
-              <Panel
-                title="Informe de visitas por tipo de solicitud"
-                className={styles.requestTable}
-              >
-                <table>
-                  <caption className="sr-only">
-                    Visitas y visitantes únicos por tipo de solicitud
-                  </caption>
-                  <thead>
-                    <tr>
-                      <th scope="col">Tipo de solicitud</th>
-                      <th scope="col">Visitas</th>
-                      <th scope="col" aria-label="Visitantes únicos">
-                        Únicos
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[...data.requests]
-                      .sort((a, b) => b.visits - a.visits)
-                      .map((request) => (
-                        <tr key={request.label}>
-                          <th scope="row">{request.label}</th>
-                          <td>{formatCount(request.visits)}</td>
-                          <td>{formatCount(request.unique)}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <th scope="row">Total</th>
-                      <td>{formatCount(data.visits)}</td>
-                      <td>{formatCount(data.unique)}</td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </Panel>
-              <Panel
-                title="Nº de visitantes únicos por tipo de solicitud"
-                className={styles.uniques}
-              >
-                <HorizontalBars
-                  data={data.requests.map((request) => ({
-                    label: request.label,
-                    value: request.unique,
-                  }))}
-                />
-              </Panel>
-              <Panel title="Nº descargas únicas por categoría">
-                <DownloadDonut data={data.downloadCategories} />
-              </Panel>
-              <Panel title="Top 6 blogs más visitados">
-                <VerticalBars data={data.blogs} />
-              </Panel>
-              <Panel title="Top 6 FAQs más visitadas">
-                <FaqTreemap data={data.faqs} />
-              </Panel>
-              <Panel title="Top 6 notas de prensa más visitadas">
-                <VerticalBars data={data.press} />
-              </Panel>
-              <Panel
                 title="Resultados de las predicciones"
                 className={styles.predictions}
               >
@@ -265,6 +194,81 @@ export function AepdDashboard() {
                     </dl>
                   </div>
                 </div>
+              </Panel>
+              <Panel
+                title="Nº descargas únicas por categoría"
+                className={styles.downloads}
+              >
+                <DownloadDonut data={data.downloadCategories} />
+              </Panel>
+              <Panel
+                title="Informe de visitas por tipo de solicitud"
+                className={styles.requestTable}
+              >
+                <table>
+                  <caption className="sr-only">
+                    Visitas y visitantes únicos por tipo de solicitud
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Tipo de solicitud</th>
+                      <th scope="col">Visitas</th>
+                      <th scope="col" aria-label="Visitantes únicos">
+                        Únicos
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...data.requests]
+                      .sort((a, b) => b.visits - a.visits)
+                      .map((request) => (
+                        <tr key={request.label}>
+                          <th scope="row">{request.label}</th>
+                          <td>{formatCount(request.visits)}</td>
+                          <td>{formatCount(request.unique)}</td>
+                        </tr>
+                      ))}
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th scope="row">Total</th>
+                      <td>{formatCount(data.visits)}</td>
+                      <td>{formatCount(data.unique)}</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </Panel>
+              <Panel
+                title="Nº de visitas totales por tipo de solicitud"
+              >
+                <HorizontalBars
+                  data={data.requests.map((request) => ({
+                    label: request.label,
+                    value: request.visits,
+                  }))}
+                />
+              </Panel>
+              <Panel
+                title="Nº de visitantes únicos por tipo de solicitud"
+              >
+                <HorizontalBars
+                  data={data.requests.map((request) => ({
+                    label: request.label,
+                    value: request.unique,
+                  }))}
+                />
+              </Panel>
+              <Panel title="Top 6 blogs más visitados">
+                <VerticalBars data={data.blogs} />
+              </Panel>
+              <Panel title="Top 6 FAQs más visitadas">
+                <FaqTreemap data={data.faqs} />
+              </Panel>
+              <Panel
+                title="Top 6 notas de prensa más visitadas"
+                className={styles.press}
+              >
+                <VerticalBars data={data.press} />
               </Panel>
             </div>
           </>
