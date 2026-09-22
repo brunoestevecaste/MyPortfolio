@@ -5,14 +5,16 @@
 .dashboard {
   --dashboard-bg: var(--surface);
   --dashboard-panel: var(--canvas);
-  --dashboard-accent: var(--signal);
+  /* Keep the dashboard's data language monochrome even if a parent theme changes. */
+  --signal: #333333;
+  --dashboard-accent: #333333;
   --dashboard-text: var(--ink);
-  --chart-1: var(--signal);
-  --chart-2: #347486;
-  --chart-3: #3d7281;
-  --chart-4: #36788b;
-  --chart-5: #477381;
-  --chart-6: #487786;
+  --chart-1: #333333;
+  --chart-2: #444444;
+  --chart-3: #555555;
+  --chart-4: #666666;
+  --chart-5: #737373;
+  --chart-6: #808080;
   background: var(--dashboard-bg);
   color: var(--dashboard-text);
   font-family: var(--font-space-mono), monospace;
@@ -165,83 +167,12 @@
 .requestTable tbody tr:nth-child(even) {
   background: var(--surface);
 }
-.horizontalBars {
-  display: grid;
-  gap: 0.4rem;
-}
-.horizontalBars li {
-  display: grid;
-  grid-template-columns: minmax(6.5rem, 1fr) minmax(0, 2fr);
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-}
-.barLabel {
-  text-align: right;
-  line-height: 1.2;
-}
-.barMeasure {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding-right: 2.9rem;
-  position: relative;
-  min-height: 1.5rem;
-}
-.horizontalBar {
-  display: block;
-  flex-shrink: 0;
-  height: 1.2rem;
-}
-.barValue {
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  font-size: 0.75rem;
-}
-.verticalBars {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.4rem;
-}
-.verticalBars li {
-  min-width: 0;
-  text-align: center;
-}
-.columnSpace {
-  height: 11rem;
-  display: flex;
-  align-items: end;
-  justify-content: center;
-}
-.column {
-  width: 80%;
-  position: relative;
-  min-height: 2px;
-}
-.column > span {
-  position: absolute;
-  bottom: calc(100% + 0.3rem);
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.75rem;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-.columnLabel {
-  display: block;
-  padding-top: 0.5rem;
-  font-size: 0.75rem;
-}
 .donutLayout {
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
   align-items: center;
   gap: 1rem;
   min-height: 13rem;
-}
-.donutLayout svg {
-  width: 100%;
-  max-width: 14rem;
 }
 .donutLegend {
   display: grid;
@@ -263,30 +194,6 @@
   display: block;
   font-size: 1rem;
   font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-.treemap {
-  display: grid;
-  gap: 0.25rem;
-  min-height: 13rem;
-}
-.treeGroup {
-  display: grid;
-  gap: 0.25rem;
-  min-width: 0;
-}
-.treeCell {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.6rem;
-  min-width: 0;
-  color: var(--on-signal);
-  font-size: 0.75rem;
-}
-.treeCell strong {
-  font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 .predictions {
@@ -318,32 +225,15 @@
 .plotLegend span:last-child i {
   background: repeating-linear-gradient(
     to right,
-    var(--ink) 0 4px,
+    var(--muted) 0 4px,
     transparent 4px 7px
   );
-}
-.forecastPlot {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 0.5rem;
-}
-.forecastPlot svg {
-  width: 100%;
-  height: auto;
-}
-.plotAxis {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding-block: 0.35rem 0.65rem;
-  font-size: 0.75rem;
-  font-variant-numeric: tabular-nums;
 }
 .plotDates {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  margin-left: 2.5rem;
+  margin-left: 46px;
   font-size: 0.75rem;
 }
 .modelPanel h5 {
@@ -463,12 +353,6 @@
   .modelPanel h5 {
     margin-top: 1rem;
   }
-  .treeCell {
-    padding: 0.4rem;
-  }
-  .column > span {
-    font-size: 0.75rem;
-  }
 }
 @container (max-width: 350px) {
   .kpis {
@@ -484,12 +368,6 @@
   }
   .kpis dd {
     margin: 0;
-  }
-  .column > span {
-    font-family: var(--font-archivo), sans-serif;
-  }
-  .columnSpace {
-    height: 11rem;
   }
   .donutLayout {
     gap: 0.5rem;

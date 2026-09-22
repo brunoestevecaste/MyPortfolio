@@ -1,0 +1,58 @@
+.frame {
+  width: 100%;
+  min-width: 0;
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+.frame :global(.recharts-surface):focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 4px;
+}
+.tooltip {
+  background: var(--canvas);
+  color: var(--ink);
+  padding: 0.875rem 1rem;
+  max-width: min(17rem, 75vw);
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+.tooltip p {
+  margin-bottom: 0.5rem;
+  color: var(--muted);
+}
+.tooltip dl,
+.values dl {
+  display: grid;
+  gap: 0.5rem;
+}
+.tooltip dl > div,
+.values dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.tooltip dt,
+.values dt {
+  overflow-wrap: anywhere;
+}
+.tooltip dd,
+.values dd {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.values {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  margin-top: 0.5rem;
+}
+.values summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding-block: 0.75rem;
+  color: var(--muted);
+}
+.values summary:hover {
+  color: var(--ink);
+}

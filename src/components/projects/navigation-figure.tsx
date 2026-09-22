@@ -1,36 +1,8 @@
 import { illustrativeNavigation } from "@/data/balearia";
+import { NavigationPlot } from "@/components/charts/navigation-plot";
 import styles from "./balearia.module.css";
 
 const number = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 1 });
-
-// A step plot represents a constant speed within each fictional segment.
-function speedPath(key: "reference" | "proposal") {
-  return illustrativeNavigation.map((segment, index) => {
-    const x = 48 + index * 64;
-    const y = 164 - (segment[key] - 14) * 38;
-    return `${index === 0 ? "M" : "L"}${x},${y} H${x + 64}`;
-  }).join(" ");
-}
-
-export function NavigationPlot() {
-  return (
-    <div className={styles.plotFrame}>
-    <svg viewBox="0 0 464 208" className={styles.plot} aria-hidden="true">
-      {[14, 16, 18].map((speed) => (
-        <g key={speed}>
-          <path d={`M48 ${164 - (speed - 14) * 38} H432`} stroke="var(--line)" />
-          <text x="30" y={168 - (speed - 14) * 38} textAnchor="end" fill="var(--muted)" fontSize="17">{speed}</text>
-        </g>
-      ))}
-      <path d={speedPath("reference")} fill="none" stroke="var(--muted)" strokeWidth="2.5" strokeDasharray="6 5" />
-      <path d={speedPath("proposal")} fill="none" stroke="var(--signal)" strokeWidth="3" />
-      {illustrativeNavigation.map((segment, index) => (
-        <text key={segment.segment} x={80 + index * 64} y="196" textAnchor="middle" fill="var(--muted)" fontSize="17">{segment.segment}</text>
-      ))}
-    </svg>
-    </div>
-  );
-}
 
 function duration(key: "reference" | "proposal") {
   const minutes = Math.round(illustrativeNavigation.reduce(
@@ -46,7 +18,7 @@ export function NavigationFigure() {
         <p>Una travesía ficticia, dos perfiles</p>
         <span>Velocidad en nudos / tramos A–F</span>
       </div>
-      <NavigationPlot />
+      <NavigationPlot interactive />
       <div className={styles.legend}>
         <span className={styles.reference}>Referencia constante</span>
         <span className={styles.proposal}>Propuesta ilustrativa</span>

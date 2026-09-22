@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { projects } from "@/data/projects";
 import { TrafficPlot } from "./traffic-figure";
-import { NavigationPlot } from "./navigation-figure";
+import { NavigationPlot } from "@/components/charts/navigation-plot";
 import styles from "./projects.module.css";
 
 export function ProjectIndex() {

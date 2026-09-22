@@ -72,13 +72,6 @@
 .preview > span:last-child {
   color: var(--muted);
 }
-.preview .plot {
-  margin-block: 2rem 1rem;
-}
-.plot {
-  width: 100%;
-  height: auto;
-}
 .caseHeader {
   padding-top: 1.5rem;
 }

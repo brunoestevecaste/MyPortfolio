@@ -1,37 +1,41 @@
-import { illustrativeTraffic } from "@/data/projects";
-import styles from "./projects.module.css";
+"use client";
 
-function linePoints(key: "visits" | "estimate") {
-  return illustrativeTraffic
-    .map((point, index) => `${20 + index * 60},${210 - point[key] * 0.38}`)
-    .join(" ");
-}
+import { Line, LineChart, YAxis } from "recharts";
+import { illustrativeTraffic } from "@/data/projects";
+import { ChartFrame } from "@/components/charts/editorial-chart";
 
 export function TrafficPlot() {
   return (
-    <svg
-      viewBox="0 0 700 240"
-      className={styles.plot}
-      role="img"
-      aria-label="La actividad aumenta por la mañana y baja al final del día. La estimación sigue una evolución similar, con diferencias puntuales."
+    <ChartFrame
+      height={240}
+      label="La actividad aumenta por la mañana y baja al final del día. La estimación sigue una evolución similar, con diferencias puntuales."
     >
-      <polyline
-        points={linePoints("visits")}
-        fill="none"
-        stroke="var(--signal)"
-        strokeWidth="3"
-        strokeLinejoin="round"
-        vectorEffect="non-scaling-stroke"
-      />
-      <polyline
-        points={linePoints("estimate")}
-        fill="none"
-        stroke="var(--ink)"
-        strokeWidth="2"
-        strokeDasharray="7 6"
-        strokeLinejoin="round"
-        vectorEffect="non-scaling-stroke"
-      />
-    </svg>
+      <LineChart
+        data={illustrativeTraffic}
+        margin={{ top: 30, right: 4, bottom: 24, left: 4 }}
+        accessibilityLayer={false}
+      >
+        <YAxis hide domain={[0, 500]} />
+        <Line
+          type="linear"
+          dataKey="visits"
+          stroke="var(--signal)"
+          strokeWidth={2.5}
+          dot={false}
+          activeDot={false}
+          isAnimationActive={false}
+        />
+        <Line
+          type="linear"
+          dataKey="estimate"
+          stroke="var(--muted)"
+          strokeWidth={1.5}
+          strokeDasharray="6 5"
+          dot={false}
+          activeDot={false}
+          isAnimationActive={false}
+        />
+      </LineChart>
+    </ChartFrame>
   );
 }

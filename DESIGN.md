@@ -104,9 +104,9 @@ La combinación elegida es:
 - Escala editorial para la narrativa.
 - Señalética técnica para tecnologías, roles y resultados.
 - Imágenes reales tratadas en monocromo o color muy controlado.
-- Un único azul petróleo como señal de interacción y dato relevante.
+- Una única señal monocroma como color de interacción y dato relevante.
 
-La búsqueda de `ui-ux-pro-max` devolvió una base monocroma, azul de acento,
+La búsqueda de `ui-ux-pro-max` devolvió una base monocroma con un color de acento,
 tipografía Archivo y Space Grotesk y composición asimétrica. Su clasificación
 brutalista y su propuesta de animación con GSAP se descartaron por no encajar con
 las referencias. Se conservan únicamente los resultados que sí están respaldados
@@ -123,14 +123,15 @@ por el brief y el material visual.
 | `--color-ink` | `#121416` | Texto principal |
 | `--color-muted` | `#5C6268` | Texto secundario y metadatos |
 | `--color-line` | `#CFD1CE` | Divisores estructurales |
-| `--color-signal` | `#0A6C8A` | Enlaces, foco, CTA y datos clave |
-| `--color-on-signal` | `#F8FAFA` | Texto sobre el color de señal |
+| `--color-signal` | `#333333` | Enlaces, foco, CTA y datos clave |
+| `--color-on-signal` | `#F8F8F8` | Texto sobre el color de señal |
 
 Reglas:
 
 - Un solo color de acento para toda la experiencia.
 - Nada de degradados morados, brillos neón o cambios arbitrarios de paleta.
 - El color de señal se usa para interacción o significado, no como decoración.
+- La señal y los gráficos usan únicamente negros, blancos y grises; no hay azul de acento.
 - La primera versión es light-only porque la dirección imita una publicación
   impresa y todas las referencias aportadas son claras. No mezclar secciones dark.
 
@@ -398,7 +399,7 @@ versión estática equivalente bajo `prefers-reduced-motion`.
   convertido en enlaces en flujo normal en móvil.
 - Demostración interactiva del informe con indicadores, barras, tabla de
   solicitudes, anillo, treemap de FAQs y predicciones. Mantener las visualizaciones
-  de la referencia, adaptadas a Archivo, Space Mono, fondos claros y azul petróleo.
+  de la referencia, adaptadas a Archivo, Space Mono, fondos claros y una paleta monocroma.
 - Aviso de datos ficticios únicamente en el bloque introductorio del caso.
 - Esquema funcional simplificado con etiquetas genéricas, sin infraestructura
   interna ni capturas de los documentos privados.
@@ -422,3 +423,20 @@ Conservar el foco accesible y los trazos que representan datos en los gráficos.
 - Aviso introductorio de confidencialidad y etiqueta de ilustración junto al
   ejemplo; la Home identifica también su vista previa como ficticia.
 - Navegación recíproca entre los dos casos mediante un componente compartido.
+
+## Gráficos con Recharts
+
+- Las barras, el anillo, el treemap y las series temporales utilizan Recharts,
+  incluidas las vistas previas de la Home y los perfiles de velocidad de Baleària.
+- Se conserva la paleta monocroma vigente. Archivo organiza títulos y resultados;
+  Space Mono identifica categorías, escalas, leyendas y valores.
+- Los gráficos se integran en las superficies editoriales existentes, sin marcos,
+  sombras, radios decorativos ni cuadrículas añadidas. Las barras parten de cero.
+- Series observadas con trazo continuo y comparaciones con trazo discontinuo.
+  Los perfiles de velocidad son escalonados: no se suavizan los datos.
+- Etiquetas de al menos 12px, formato numérico español y valores completos
+  disponibles mediante leyendas, tooltips y consultas desplegables.
+- Las dimensiones se adaptan al contenedor con altura reservada. Las animaciones
+  de Recharts están desactivadas, también en los tooltips.
+- La interacción de teclado se activa en los gráficos de los casos. Las vistas
+  previas dentro de los enlaces de la Home no añaden paradas de foco.
