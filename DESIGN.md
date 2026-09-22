@@ -266,8 +266,11 @@ jerarquía tipográfica débil.
   y el resumen deben bastar para comprender y abrir el proyecto.
 - En móvil, cada fila apila número, título, resumen y metadatos. Si se muestra una
   imagen, aparece dentro del flujo y no depende del hover.
-- Por indicación de Bruno el 22/09/2026, AEPD es el primer proyecto publicado.
-  Los proyectos posteriores se incorporarán con un case study completo.
+- Por indicación de Bruno el 22/09/2026, los proyectos se ordenan siempre del
+  más reciente al más antiguo: Baleària (2026), seguido de AEPD (2025).
+  La numeración y la navegación entre casos siguen este mismo orden.
+  Los nuevos proyectos se incorporarán con un case study completo y se situarán
+  según su año.
 - La Home no desarrolla proceso, arquitectura ni resultados extensos. Esa
   información pertenece exclusivamente a la página del case study.
 
@@ -388,7 +391,7 @@ versión estática equivalente bajo `prefers-reduced-motion`.
 - El resultado se siente editorial y técnico, no brutalista, SaaS ni generado por
   una plantilla.
 
-## Primer caso publicado: AEPD
+## Caso de estudio: AEPD
 
 - Extensión de Editorial Systems con los mismos tokens y diales 8/3/3.
 - Resumen en una fila editorial enlazada y detalle con índice lateral en desktop,
@@ -407,3 +410,15 @@ Por indicación de Bruno, la web no utiliza líneas de separación entre seccion
 filas, metadatos o bloques. Utilizar espacio, tipografía y superficies. Esta
 regla sustituye cualquier referencia anterior a divisores o bordes estructurales.
 Conservar el foco accesible y los trazos que representan datos en los gráficos.
+
+## Caso de estudio: Baleària
+
+- Reutiliza el índice editorial, cabecera, metadatos e índice lateral de AEPD.
+- Mismos tokens, tipografías y superficie clara; sin nuevas líneas de separación.
+- Arquitectura funcional con entradas, base compartida y consumidores; no es
+  una captura ni reproduce identificadores internos.
+- Gráfico escalonado de velocidades con valores ficticios, leyenda por trazo y
+  color, y tabla desplegable accesible. No representa un ahorro real.
+- Aviso introductorio de confidencialidad y etiqueta de ilustración junto al
+  ejemplo; la Home identifica también su vista previa como ficticia.
+- Navegación recíproca entre los dos casos mediante un componente compartido.

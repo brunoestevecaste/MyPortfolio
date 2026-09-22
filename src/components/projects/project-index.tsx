@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { projects } from "@/data/projects";
 import { TrafficPlot } from "./traffic-figure";
+import { NavigationPlot } from "./navigation-figure";
 import styles from "./projects.module.css";
 
 export function ProjectIndex() {
@@ -31,9 +32,19 @@ export function ProjectIndex() {
               <span className={styles.readCase}>Ver caso de estudio</span>
             </div>
             <div className={styles.preview} aria-hidden="true">
-              <span>Tráfico web / Predicción</span>
-              <TrafficPlot />
-              <span>Análisis del portal y previsión de visitas</span>
+              {project.slug === "balearia-eficiencia-energetica" ? (
+                <>
+                  <span>Navegación / Velocidad en nudos</span>
+                  <NavigationPlot />
+                  <span>Perfiles ilustrativos · Datos ficticios</span>
+                </>
+              ) : (
+                <>
+                  <span>Tráfico web / Predicción</span>
+                  <TrafficPlot />
+                  <span>Análisis del portal y previsión de visitas</span>
+                </>
+              )}
             </div>
           </Link>
         </li>

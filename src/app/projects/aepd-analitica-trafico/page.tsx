@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CaseSection } from "@/components/projects/case-section";
 import { AepdDashboard } from "@/components/projects/aepd-dashboard";
+import { ProjectPagination } from "@/components/projects/project-pagination";
 import {
   aepdCase,
   aepdEtlSteps,
@@ -153,6 +154,7 @@ export default function AepdCaseStudy() {
               <Link href="/#work" className={styles.backLink}>
                 Volver a proyectos
               </Link>
+              <ProjectPagination slug={aepdProject.slug} />
             </footer>
           </div>
         </div>

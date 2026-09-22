@@ -134,40 +134,52 @@ predictiva, almacenes de datos y Machine Learning aplicado a negocio.
 
 ### Baleària - Eficiencia operativa y energética
 
-**Estado de evidencia:** verificado en el CV y ampliado mediante una publicación
-pública de LinkedIn.
+**Estado de evidencia:** verificado en el CV y ampliado con la memoria y la
+defensa del TFM facilitadas por Bruno el 22/09/2026. Trabajo colectivo de EDEM
+(2026), desarrollado para Baleària y desplegado en Google Cloud Platform.
 
-**Contexto**
+**Publicación y confidencialidad**
 
-Trabajo Fin de Máster desarrollado para Baleària a partir de datos operativos de
-su flota.
+- Posición `01` (2026), en `/projects/balearia-eficiencia-energetica`.
+- Bruno autoriza explicar el proyecto con datos ficticios. El contexto académico,
+  la metodología y las tecnologías son reales; todos los valores ilustrativos
+  se crean desde cero y se identifican como ficticios.
+- No publicar datos originales, nombres de buques o rutas, periodos operativos,
+  volúmenes, costes, métricas, umbrales internos, capturas ni documentos fuente.
+- La gráfica de velocidades es conceptual, no ejecuta el modelo original ni
+  presenta ahorro conseguido. Sus tiempos se calculan sobre el ejemplo ficticio.
+- Los enlaces de GitHub facilitados devolvieron 404 al consultarlos; no se usan
+  como evidencia ni se enlazan públicamente desde el caso.
 
-**Objetivo**
+**Objetivo y contribución**
 
-Monitorizar la flota y recomendar velocidades por tramo que ayuden a reducir el
-consumo energético sin comprometer la hora estimada de llegada.
+Recomendar velocidades por tramo para reducir energía estimada respetando la
+hora de llegada. Bruno trabajó en IA junto a otra integrante del equipo:
+preparación y validación de datos, modelos energéticos y optimización. La
+arquitectura integral, la infraestructura y el dashboard se presentan como
+resultado colectivo, sin atribuir a Bruno su autoría exclusiva.
 
-**Contribución verificada**
+**Sistema documentado**
 
-- Trabajo en el área de Inteligencia Artificial junto a otra integrante del equipo.
-- Diseño e implementación de una plataforma cloud en Google Cloud Platform.
-- Integración y validación de datos operativos.
-- Entrenamiento y evaluación de modelos para estimar el consumo energético.
-- Motor de optimización para recomendar velocidades por tramo.
-- Monitorización de calidad del modelo y activación de reentrenamiento cuando las
-  métricas pierden calidad.
-- Dashboard interactivo para explorar la operación.
+- Históricos en Cloud Storage, streaming sintético con Pub/Sub y Cloud Functions,
+  datos meteorológicos y marítimos externos, y PostgreSQL en Cloud SQL.
+- Transformaciones con dbt, orquestación con Cloud Composer / Airflow,
+  servicios en Cloud Run e infraestructura como código con Terraform.
+- Pipeline de IA con Kubeflow Pipelines / Vertex AI; alineación de GPS y sensores
+  por ventanas temporales y modelado por componentes energéticos.
+- Comparación de modelos, validación temporal por viajes, prevención de leakage,
+  incertidumbre y optimización por programación dinámica con restricciones.
+- Registro versionado y compuertas de calidad; dashboard React con vistas para
+  operaciones y tripulación. El flujo en vivo utiliza telemetría simulada.
 
-**Tecnologías respaldadas por las fuentes**
+**Límites del resultado**
 
-Machine Learning, MLOps, optimización y Google Cloud Platform.
-
-**Información todavía necesaria para el case study**
-
-- Arquitectura concreta y servicios de GCP utilizados.
-- Papel exacto de Bruno frente al resto del equipo.
-- Capturas, diagramas y datos que puedan publicarse.
-- Métricas de rendimiento autorizadas.
+La evidencia respalda un prototipo funcional desplegado en cloud y validación
+técnica con advertencias. No acredita ahorro aplicado a bordo ni adopción
+operativa de las recomendaciones. La memoria detalla monitorización y reglas de
+reentrenamiento, pero también sitúa la automatización completa como evolución:
+no afirmar un ciclo operativo autónomo validado. El piloto a bordo y la expansión
+a otras rutas y buques se presentan como siguientes pasos.
 
 ### AEPD - Analítica y predicción de tráfico web
 
@@ -178,7 +190,7 @@ Bruno. Trabajo de 2025 realizado en el marco de prácticas académicas en IRTIC
 
 **Publicación y confidencialidad**
 
-- Primer proyecto publicado: `01`, en `/projects/aepd-analitica-trafico`.
+- Posición `02` (2025), en `/projects/aepd-analitica-trafico`.
 - La memoria documenta modelado dimensional, ETL, Power BI y experimentación con
   XGBoost, LightGBM e HistGradientBoosting, referencia, búsqueda bayesiana,
   validación temporal y backtesting con MAE, RMSE y MAPE.
@@ -291,11 +303,16 @@ La Home funciona como índice y punto de entrada. Cada proyecto debe mostrar:
 4. Papel de Bruno, año y tecnologías principales cuando estén confirmados.
 5. Enlace completo a la página individual del proyecto.
 
-Orden de publicación actualizado por Bruno el 22/09/2026:
+Orden de presentación actualizado por Bruno el 22/09/2026:
 
-1. `01` - AEPD: analítica y predicción de tráfico web.
-2. Baleària y diseño web se incorporarán cuando sus casos estén preparados.
-   No mostrar enlaces a páginas todavía inexistentes.
+Los proyectos se ordenan siempre del más reciente al más antiguo según su año.
+La Home, la numeración y la navegación entre casos comparten ese orden.
+
+1. `01` - Baleària: optimización energética de rutas navieras (2026).
+2. `02` - AEPD: analítica y predicción de tráfico web (2025).
+
+Diseño web se incorporará cuando su caso esté preparado y ocupará la posición
+que corresponda a su fecha. No mostrar enlaces a páginas todavía inexistentes.
 
 La numeración es funcional y pertenece al índice de trabajo. No debe reutilizarse
 como etiqueta decorativa para las demás secciones.
@@ -328,7 +345,8 @@ Cada página de proyecto debe contener:
 
 - Idioma final: español, inglés o versión bilingüe.
 - Disponibilidad profesional y tipo de oportunidades buscadas.
-- Qué partes del proyecto Baleària pueden mostrarse públicamente.
+- Baleària: resuelto con metodología general e ilustraciones ficticias; los datos
+  y resultados operativos originales no se publican.
 - AEPD: resuelto con ejemplos ficticios; las métricas originales no se publican.
 - Identidad de los proyectos de diseño web.
 - Contexto y evidencias del robot autónomo y `MIRAARRIBA_FILMS`.

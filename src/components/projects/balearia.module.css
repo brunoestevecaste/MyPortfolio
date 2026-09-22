@@ -1,0 +1,257 @@
+.plotFrame {
+  container-type: inline-size;
+}
+
+.plot {
+  width: 100%;
+  height: auto;
+  margin-block: 2rem 1rem;
+}
+
+.plot text {
+  font-size: 15px;
+}
+
+@container (max-width: 25rem) {
+  .plot text {
+    font-size: 23px;
+  }
+}
+
+@container (max-width: 17.5rem) {
+  .plot text {
+    font-size: 28px;
+  }
+}
+
+.decisions {
+  margin-top: 2.5rem;
+}
+
+.decisions li {
+  padding-block: 1.5rem;
+}
+
+.decisions h3 {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 1.375rem;
+  letter-spacing: -0.025em;
+}
+
+.decisions p {
+  max-width: 65ch;
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.85;
+}
+
+.architecture,
+.navigationFigure {
+  margin-top: 2.5rem;
+  padding: clamp(1.125rem, 3vw, 2.5rem);
+  background: var(--surface);
+}
+
+.inputs,
+.consumers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.75rem;
+}
+
+.consumers {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.architecture strong,
+.figureHeader p {
+  display: block;
+  font-family: var(--font-archivo), sans-serif;
+  font-size: clamp(1.125rem, 1.7vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.architecture span {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1.8;
+}
+
+.flowLabel {
+  margin-block: 1.5rem;
+  color: var(--signal);
+  font-size: 0.75rem;
+}
+
+.sharedData {
+  background: var(--canvas);
+  padding: 1.5rem;
+}
+
+.architecture figcaption,
+.navigationFigure figcaption {
+  max-width: 80ch;
+  margin-top: 2rem;
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.figureHeader span {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+
+.legend span {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.legend span::before {
+  content: "";
+  width: 1.5rem;
+  border-top: 2px solid currentColor;
+}
+
+.legend .reference {
+  color: var(--muted);
+}
+
+.legend .reference::before {
+  border-top-style: dashed;
+}
+
+.proposal {
+  color: var(--signal);
+}
+
+.comparison {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.comparison dt {
+  font-size: 0.75rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.comparison dd {
+  margin-top: 0.5rem;
+  font-family: var(--font-archivo), sans-serif;
+  font-size: clamp(1.375rem, 2.3vw, 2rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+
+.figureDetails {
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+
+.figureDetails summary {
+  cursor: pointer;
+  padding-block: 0.875rem;
+  color: var(--signal);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.figureDetails summary:hover {
+  text-decoration-thickness: 2px;
+}
+
+.figureDetails table {
+  width: 100%;
+  margin-top: 1rem;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.figureDetails th,
+.figureDetails td {
+  padding: 0.5rem 0.25rem;
+  font-weight: 400;
+}
+
+.figureDetails thead {
+  color: var(--muted);
+}
+
+.pagination {
+  margin-top: 2.5rem;
+}
+
+.pagination a {
+  display: block;
+  width: fit-content;
+  max-width: 36rem;
+  padding-block: 1rem;
+}
+
+.pagination span {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+
+.pagination strong {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1.2;
+}
+
+.pagination a:hover strong {
+  color: var(--signal);
+}
+
+@media (max-width: 63.999rem) {
+  .inputs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 47.999rem) {
+  .consumers,
+  .comparison {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .comparison {
+    gap: 1.25rem;
+  }
+
+  .comparison > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .comparison dd {
+    flex-shrink: 0;
+    margin-top: 0;
+  }
+}

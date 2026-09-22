@@ -19,7 +19,20 @@ export const aepdProject = {
   technologies: ["Pentaho", "PostgreSQL", "Power BI", "Python", "XGBoost"],
 } as const satisfies ProjectSummary;
 
-export const projects: readonly ProjectSummary[] = [aepdProject];
+export const baleariaProject = {
+  slug: "balearia-eficiencia-energetica",
+  organization: "Baleària",
+  title: "Optimización energética de rutas navieras",
+  summary:
+    "Una plataforma en Google Cloud que conecta datos de navegación, modelos de consumo y recomendaciones de velocidad para reducir la energía estimada sin comprometer la llegada. TFM de Inteligencia Artificial desarrollado en equipo para Baleària.",
+  year: "2026",
+  role: "Inteligencia Artificial y optimización, en equipo",
+  technologies: ["Python", "Google Cloud", "Machine Learning", "MLOps"],
+} as const satisfies ProjectSummary;
+
+// Keep the home index and case-study navigation in newest-first order.
+export const projects: readonly ProjectSummary[] = [aepdProject, baleariaProject]
+  .sort((a, b) => Number(b.year) - Number(a.year));
 
 export type CaseSection = {
   id: string;
