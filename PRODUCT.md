@@ -148,6 +148,10 @@ defensa del TFM facilitadas por Bruno el 22/09/2026. Trabajo colectivo de EDEM
   volúmenes, costes, métricas, umbrales internos, capturas ni documentos fuente.
 - La gráfica de velocidades es conceptual, no ejecuta el modelo original ni
   presenta ahorro conseguido. Sus tiempos se calculan sobre el ejemplo ficticio.
+- La demostración interactiva del dashboard recrea las vistas de operaciones y
+  tripulación con unidades, rutas, viajes, telemetría y recomendaciones creadas
+  desde cero. Conserva los tipos de análisis del prototipo, no sus datos ni su
+  interfaz original.
 - Los enlaces de GitHub facilitados devolvieron 404 al consultarlos; no se usan
   como evidencia ni se enlazan públicamente desde el caso.
 

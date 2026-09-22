@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CaseSection } from "@/components/projects/case-section";
 import { BaleariaArchitecture } from "@/components/projects/balearia-architecture";
+import { BaleariaDashboard } from "@/components/projects/balearia-dashboard";
 import { NavigationFigure } from "@/components/projects/navigation-figure";
 import { ProjectPagination } from "@/components/projects/project-pagination";
 import { baleariaProject } from "@/data/projects";
@@ -72,7 +73,9 @@ export default function BaleariaCaseStudy() {
             <CaseSection section={baleariaCase.optimization}>
               <NavigationFigure />
             </CaseSection>
-            <CaseSection section={baleariaCase.operations} />
+            <CaseSection section={baleariaCase.operations}>
+              <BaleariaDashboard />
+            </CaseSection>
             <CaseSection section={baleariaCase.outcome} />
             <CaseSection section={baleariaCase.learning} />
             <footer className={styles.caseFooter}>

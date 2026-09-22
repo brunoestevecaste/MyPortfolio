@@ -460,3 +460,19 @@ se limita al dashboard AEPD; no se extiende al resto del portfolio.
   No se incorporan las métricas, numeraciones ni estados ficticios de la imagen.
 - En contenedores estrechos la lectura sigue el mismo orden en una columna,
   con filtros y valores legibles, sin depender de interacción por hover.
+
+## Dashboard Baleària
+
+- Adapta la retícula SYSTEM del dashboard AEPD al contexto marítimo: fondo
+  blanco, líneas finas, paneles unidos, tipografía Archivo y valores en Space Mono.
+- Conserva las dos perspectivas del prototipo, operaciones y tripulación, como
+  controles accesibles. Los selectores de unidad y viaje actualizan todos los
+  indicadores con datos ficticios deterministas.
+- La vista de operaciones prioriza el perfil observado frente al recomendado,
+  la estimación energética y el contexto de la recomendación. La vista de
+  tripulación prioriza progreso, telemetría, condiciones y sensores.
+- La visualización no reproduce el mapa, los colores ni las tarjetas SaaS del
+  frontend original. Traduce su arquitectura de información al lenguaje visual
+  del portfolio y mantiene tablas consultables como alternativa a los gráficos.
+- La etiqueta `Datos ficticios` permanece visible en la barra de filtros. Los
+  nombres genéricos de unidades, puertos y rutas evitan sugerir datos reales.

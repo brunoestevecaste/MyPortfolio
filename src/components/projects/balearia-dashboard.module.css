@@ -1,0 +1,702 @@
+.dashboardContainer {
+  container-type: inline-size;
+  margin-top: 2.5rem;
+}
+
+.dashboard {
+  --canvas: #fff;
+  --surface: #f5f5f5;
+  --ink: #080808;
+  --muted: #696969;
+  --line: #dedede;
+  --signal: #080808;
+  --on-signal: #fff;
+  --chart-1: #080808;
+  --chart-2: #292929;
+  --chart-3: #4a4a4a;
+  --chart-4: #626262;
+  --chart-5: #7a7a7a;
+  --panel-padding: clamp(1rem, 2.6cqw, 2rem);
+  border: 1px solid var(--line);
+  background: var(--canvas);
+  color: var(--ink);
+  color-scheme: light;
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.dashboard :focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  padding: 1.25rem var(--panel-padding);
+  border-bottom: 1px solid var(--line);
+}
+
+.toolbar p {
+  margin-bottom: 0.35rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.toolbar h3 {
+  font-size: clamp(1.5rem, 3.2cqw, 2.25rem);
+  font-weight: 750;
+  letter-spacing: -0.055em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.viewSwitch {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--ink);
+}
+
+.viewSwitch button {
+  min-height: 44px;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  background: var(--canvas);
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 650;
+  text-transform: uppercase;
+}
+
+.viewSwitch button + button {
+  border-left: 1px solid var(--ink);
+}
+
+.viewSwitch button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--canvas);
+}
+
+.filterBar,
+.contextBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding-inline: var(--panel-padding);
+  border-bottom: 1px solid var(--line);
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
+.filters label {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.filters select {
+  min-width: 9rem;
+  max-width: 100%;
+  min-height: 44px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  padding: 0.5rem 0.125rem;
+  cursor: pointer;
+  background: var(--canvas);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  text-transform: none;
+}
+
+.filters label:last-child select {
+  min-width: min(19rem, 36cqw);
+}
+
+.filterActions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+}
+
+.filterActions span {
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.filterActions button {
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.filterActions button:hover {
+  text-decoration-thickness: 2px;
+}
+
+.contextBar {
+  min-height: 44px;
+  color: var(--muted);
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.contextBar p:last-child {
+  text-align: right;
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.kpis > div {
+  display: flex;
+  min-width: 0;
+  min-height: clamp(9.5rem, 18cqw, 13rem);
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 1.5rem var(--panel-padding);
+  border-right: 1px solid var(--line);
+}
+
+.kpis > div:last-child {
+  border-right: 0;
+  background: var(--ink);
+  color: var(--canvas);
+}
+
+.kpis dt {
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+}
+
+.kpis dd {
+  font-size: clamp(1.5rem, 3.5cqw, 3.25rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+  letter-spacing: -0.065em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1px;
+  border-top: 1px solid var(--line);
+  background: var(--line);
+}
+
+.panel {
+  min-width: 0;
+  padding: var(--panel-padding);
+  background: var(--canvas);
+}
+
+.panel h4 {
+  margin-bottom: 1.75rem;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  letter-spacing: 0.015em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.profilePanel,
+.routePanel,
+.telemetryPanel,
+.energyPanel {
+  grid-column: span 4;
+}
+
+.recommendationPanel,
+.livePanel,
+.watchPanel,
+.summaryPanel {
+  grid-column: span 2;
+}
+
+.sensorPanel {
+  grid-column: 1 / -1;
+  overflow-x: auto;
+}
+
+.chartLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-bottom: 1.25rem;
+  color: var(--muted);
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.75rem;
+}
+
+.chartLegend span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.chartLegend i {
+  width: 1.5rem;
+  height: 2px;
+  background: var(--chart-1);
+}
+
+.chartLegend .lineDashed,
+.chartLegend .lineMedium {
+  background: repeating-linear-gradient(
+    to right,
+    var(--chart-3) 0 5px,
+    transparent 5px 8px
+  );
+}
+
+.chartLegend .lineDotted {
+  background: repeating-linear-gradient(
+    to right,
+    var(--chart-5) 0 2px,
+    transparent 2px 6px
+  );
+}
+
+.values {
+  margin-top: 0.75rem;
+  overflow-x: auto;
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.75rem;
+}
+
+.values summary {
+  min-height: 44px;
+  padding-block: 0.75rem;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.values summary:hover {
+  color: var(--ink);
+}
+
+.values table,
+.sensorTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.values th,
+.values td,
+.sensorTable th,
+.sensorTable td {
+  padding: 0.7rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.values th:first-child,
+.sensorTable th:first-child,
+.sensorTable td:first-child {
+  padding-left: 0;
+  text-align: left;
+}
+
+.values thead,
+.sensorTable thead {
+  border-bottom: 2px solid var(--ink);
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.values tbody tr:last-child th,
+.values tbody tr:last-child td,
+.sensorTable tbody tr:last-child th,
+.sensorTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.recommendation {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.recommendationHeader {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.recommendationHeader div {
+  min-width: 0;
+}
+
+.recommendationHeader span,
+.recommendationMetrics dt,
+.summaryList dt,
+.routeMeta span,
+.routeConditions dt,
+.watchMetrics dt {
+  display: block;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.recommendationHeader strong {
+  display: block;
+  margin-top: 0.25rem;
+  overflow-wrap: anywhere;
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.recommendationHeader > p {
+  flex-shrink: 0;
+  max-width: 9rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.recommendationMetrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 1rem;
+}
+
+.recommendationMetrics div {
+  min-width: 0;
+}
+
+.recommendationMetrics dd {
+  margin-top: 0.35rem;
+  font-size: clamp(1.05rem, 2.1cqw, 1.5rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.recommendationNote {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.65;
+}
+
+.recommendationNote strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.summaryList,
+.watchMetrics {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.summaryList div,
+.watchMetrics div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.summaryList dd,
+.watchMetrics dd {
+  max-width: 17ch;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  text-align: right;
+}
+
+.routeDiagram {
+  display: grid;
+  gap: 2rem;
+  min-height: 18rem;
+  align-content: center;
+  padding: 1rem 0 0.5rem;
+}
+
+.routeMeta {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end;
+  gap: 1rem;
+}
+
+.routeMeta > div:last-child {
+  text-align: right;
+}
+
+.routeMeta strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: clamp(1.1rem, 2.4cqw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.routeMeta p {
+  color: var(--muted);
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.routeTrack {
+  position: relative;
+  height: 2px;
+  background: var(--line);
+}
+
+.routeTrack span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--ink);
+}
+
+.routeTrack i {
+  position: absolute;
+  top: 50%;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid var(--ink);
+  background: var(--canvas);
+  translate: -50% -50%;
+}
+
+.routeConditions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.routeConditions dd {
+  margin-top: 0.35rem;
+  font-size: 1.125rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.liveResult {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.calculateButton {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 1.25rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  background: var(--ink);
+  color: var(--canvas);
+  font-size: 0.8125rem;
+  font-weight: 650;
+}
+
+.calculateButton:hover {
+  background: #2a2a2a;
+}
+
+.calculateButton:active {
+  translate: 0 1px;
+}
+
+.sensorTable {
+  min-width: 42rem;
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.75rem;
+}
+
+.sensorTable th,
+.sensorTable td {
+  text-align: left;
+}
+
+.sensorTable td:last-child {
+  font-family: var(--font-archivo), sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+@container (max-width: 760px) {
+  .toolbar {
+    align-items: start;
+  }
+
+  .filterBar {
+    align-items: start;
+    flex-direction: column;
+    padding-block: 0.75rem;
+  }
+
+  .filters {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .filters label {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .filters select,
+  .filters label:last-child select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .filterActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .profilePanel,
+  .recommendationPanel,
+  .energyPanel,
+  .summaryPanel,
+  .routePanel,
+  .livePanel,
+  .telemetryPanel,
+  .watchPanel {
+    grid-column: 1 / -1;
+  }
+
+  .routeDiagram {
+    min-height: 15rem;
+  }
+}
+
+@container (max-width: 540px) {
+  .toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .viewSwitch {
+    width: 100%;
+  }
+
+  .viewSwitch button {
+    flex: 1;
+  }
+
+  .filters {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
+  .contextBar {
+    align-items: start;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-block: 0.75rem;
+  }
+
+  .contextBar p:last-child {
+    text-align: left;
+  }
+
+  .kpis {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kpis > div {
+    min-height: 6.5rem;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .kpis > div:last-child {
+    border-bottom: 0;
+  }
+
+  .kpis dd {
+    flex-shrink: 0;
+    font-size: clamp(1.75rem, 8cqw, 2.5rem);
+  }
+
+  .panel h4 {
+    margin-bottom: 1.25rem;
+  }
+
+  .recommendationHeader,
+  .routeMeta {
+    align-items: start;
+  }
+
+  .recommendationHeader {
+    flex-direction: column;
+  }
+
+  .recommendationHeader > p {
+    max-width: none;
+    text-align: left;
+  }
+
+  .routeMeta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .routeMeta p {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    text-align: left;
+  }
+
+  .routeConditions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calculateButton:active {
+    translate: none;
+  }
+}
