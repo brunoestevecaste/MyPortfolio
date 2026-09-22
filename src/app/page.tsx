@@ -48,11 +48,7 @@ export default function Home() {
         aria-labelledby="work-title"
       >
         <div className={styles.workIntroduction}>
-          <SectionHeading className="heading-text" id="work-title" title="Proyectos seleccionados" />
-          <p className={styles.sectionCopy}>
-            Una selección de proyectos donde el análisis, la arquitectura y el
-            resultado se explican con contexto.
-          </p>
+          <SectionHeading className="heading-text" id="work-title" title="Proyectos" />
         </div>
         <ProjectIndex />
       </section>

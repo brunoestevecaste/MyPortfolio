@@ -80,12 +80,6 @@ export default function BaleariaCaseStudy() {
               <ul className={styles.technologies} aria-label="Tecnologías">
                 {baleariaTools.map((tool) => <li key={tool}>{tool}</li>)}
               </ul>
-              <p className={styles.sourceNote}>
-                Caso elaborado a partir de la memoria y la defensa del TFM
-                desarrollado en equipo para Baleària en EDEM (2026). La versión
-                pública resume la metodología y utiliza una ilustración propia;
-                los documentos y materiales internos no se distribuyen.
-              </p>
               <Link href="/#work" className={styles.backLink}>Volver a proyectos</Link>
               <ProjectPagination slug={baleariaProject.slug} />
             </footer>

@@ -147,10 +147,6 @@ export default function AepdCaseStudy() {
                   <li key={technology}>{technology}</li>
                 ))}
               </ul>
-              <p className={styles.sourceNote}>
-                Caso elaborado a partir de la memoria y la defensa del TFG de
-                Bruno Esteve Castellano (2025).
-              </p>
               <Link href="/#work" className={styles.backLink}>
                 Volver a proyectos
               </Link>

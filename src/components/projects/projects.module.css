@@ -290,13 +290,6 @@
   padding-block: 2rem 6rem;
   font-size: 0.8125rem;
 }
-.sourceNote {
-  max-width: 65ch;
-  margin-block: 2rem;
-  color: var(--muted);
-  font-size: 0.75rem;
-  line-height: 1.8;
-}
 @media (max-width: 63.999rem) {
   .projectLink {
     grid-template-columns: 0.5fr 6fr 5fr;

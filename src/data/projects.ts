@@ -24,9 +24,9 @@ export const baleariaProject = {
   organization: "Baleària",
   title: "Optimización energética de rutas navieras",
   summary:
-    "Una plataforma en Google Cloud que conecta datos de navegación, modelos de consumo y recomendaciones de velocidad para reducir la energía estimada sin comprometer la llegada. TFM de Inteligencia Artificial desarrollado en equipo para Baleària.",
+    "Una plataforma en Google Cloud que conecta datos de navegación, modelos de consumo y recomendaciones de velocidad para reducir la energía estimada sin comprometer la llegada. TFM de Inteligencia Artificial para Baleària.",
   year: "2026",
-  role: "Inteligencia Artificial y optimización, en equipo",
+  role: "Inteligencia Artificial y optimización",
   technologies: ["Python", "Google Cloud", "Machine Learning", "MLOps"],
 } as const satisfies ProjectSummary;
 
