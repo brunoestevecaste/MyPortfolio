@@ -118,6 +118,10 @@
 }
 
 @media (max-width: 47.999rem) {
+  .workIntroduction :global(.heading-text) {
+    font-size: clamp(2rem, 9.5vw, 3rem);
+  }
+
   .heroTitle span {
     display: inline;
   }

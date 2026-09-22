@@ -1,0 +1,383 @@
+.projectList {
+  margin-top: 3rem;
+}
+.projectLink {
+  display: grid;
+  grid-template-columns: 0.45fr 5.55fr 5fr;
+  gap: var(--grid-gutter);
+  align-items: start;
+  padding-block: 2rem;
+}
+.projectNumber {
+  font-size: 0.875rem;
+  padding-top: 0.125rem;
+  color: var(--signal);
+}
+.organization,
+.projectMeta {
+  font-size: 0.75rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.projectCopy h3 {
+  max-width: 17ch;
+  margin-block: 1rem 1.5rem;
+  font-family: var(--font-archivo), sans-serif;
+  font-size: clamp(2rem, 3.6vw, 3.5rem);
+  line-height: 1.06;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+.summary {
+  max-width: 52ch;
+  font-size: 0.875rem;
+  line-height: 1.75;
+}
+.projectMeta {
+  margin-top: 1.5rem;
+}
+.technologies {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1.25rem;
+  row-gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+.readCase {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  margin-top: 1.5rem;
+  color: var(--signal);
+  font-size: 0.875rem;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+.projectLink:hover h3,
+.projectLink:focus-visible h3 {
+  color: var(--signal);
+}
+.preview {
+  align-self: center;
+  background: var(--surface);
+  padding: clamp(1rem, 2.4vw, 2.5rem);
+}
+.preview > span {
+  display: block;
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+.preview > span:last-child {
+  color: var(--muted);
+}
+.preview .plot {
+  margin-block: 2rem 1rem;
+}
+.plot {
+  width: 100%;
+  height: auto;
+}
+.caseHeader {
+  padding-top: 1.5rem;
+}
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--signal);
+  font-size: 0.8125rem;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+.backLink:hover {
+  text-decoration-thickness: 2px;
+}
+.caseEyebrow {
+  margin-top: 2.5rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.caseTitle {
+  max-width: 20ch;
+  margin-block: 1.25rem 1.5rem;
+  font-family: var(--font-archivo), sans-serif;
+  font-size: clamp(3rem, 6.5vw, 6rem);
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.07em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.caseLead {
+  max-width: 48ch;
+  font-family: var(--font-archivo), sans-serif;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+}
+.facts {
+  display: grid;
+  grid-template-columns: 1.6fr 1.4fr 1.4fr 1fr;
+  gap: 2rem;
+  margin-top: 3rem;
+  padding-block: 1.75rem;
+}
+.facts dt {
+  margin-bottom: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.facts dd {
+  max-width: 28ch;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+.facts .grade {
+  color: var(--signal);
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 2.75rem;
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+.privacy {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  gap: 2rem;
+  margin-block: 2rem 5rem;
+  font-size: 0.75rem;
+  line-height: 1.8;
+}
+.privacy strong {
+  font-weight: 400;
+  color: var(--signal);
+}
+.privacy p {
+  max-width: 85ch;
+  color: var(--muted);
+}
+.caseLayout {
+  display: grid;
+  grid-template-columns: 2.5fr 9fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+.caseNav {
+  position: sticky;
+  top: 2rem;
+  font-size: 0.75rem;
+}
+.caseNav > p {
+  margin-bottom: 1rem;
+  color: var(--muted);
+}
+.caseNav a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  width: fit-content;
+}
+.caseNav a:hover {
+  color: var(--signal);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.caseBody {
+  min-width: 0;
+}
+.caseSection {
+  padding-bottom: clamp(4rem, 7vw, 7rem);
+  scroll-margin-top: 2rem;
+}
+.caseSection h2 {
+  max-width: 24ch;
+  margin-bottom: 2rem;
+  font-family: var(--font-archivo), sans-serif;
+  font-size: clamp(2rem, 3.6vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+.prose {
+  max-width: 65ch;
+  font-size: 0.875rem;
+  line-height: 1.85;
+}
+.prose p + p {
+  margin-top: 1.25rem;
+}
+.architecture {
+  margin-top: 2.5rem;
+  background: var(--surface);
+  padding: 2rem;
+}
+.architecture ol {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+}
+.architecture li {
+  padding-top: 1rem;
+}
+.architecture strong {
+  display: block;
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+.architecture li span {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+.directConnection {
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
+  line-height: 1.7;
+}
+.architecture figcaption {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.8;
+}
+.etlSteps {
+  counter-reset: etl;
+  margin-top: 2.5rem;
+}
+.etlSteps li {
+  position: relative;
+  padding: 1.5rem 0 1.5rem 3rem;
+  counter-increment: etl;
+}
+.etlSteps li::before {
+  content: counter(etl, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 1.65rem;
+  color: var(--signal);
+  font-size: 0.75rem;
+}
+.etlSteps h3 {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 1.375rem;
+  letter-spacing: -0.025em;
+}
+.etlSteps p {
+  max-width: 65ch;
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.85;
+}
+.methodNote {
+  margin-top: 2rem;
+  padding-left: 1.5rem;
+}
+.methodNote h3 {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 1.375rem;
+}
+.methodNote p {
+  max-width: 60ch;
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.8;
+}
+.caseFooter {
+  padding-block: 2rem 6rem;
+  font-size: 0.8125rem;
+}
+.sourceNote {
+  max-width: 65ch;
+  margin-block: 2rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.8;
+}
+@media (max-width: 63.999rem) {
+  .projectLink {
+    grid-template-columns: 0.5fr 6fr 5fr;
+  }
+  .facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .architecture ol {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .architecture li {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.75rem 0;
+  }
+  .architecture li span {
+    margin: 0;
+  }
+}
+@media (max-width: 47.999rem) {
+  .projectLink,
+  .caseLayout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .projectList {
+    margin-top: 2.5rem;
+  }
+  .projectLink {
+    gap: 1.5rem;
+  }
+  .projectCopy h3 {
+    max-width: 20ch;
+    font-size: 2.5rem;
+  }
+  .summary,
+  .prose {
+    font-size: 0.9375rem;
+  }
+  .preview {
+    margin-top: 0.5rem;
+  }
+  .caseHeader {
+    padding-top: 0.5rem;
+  }
+  .caseTitle {
+    font-size: clamp(2.625rem, 10vw, 4rem);
+  }
+  .caseEyebrow {
+    margin-top: 1.5rem;
+  }
+  .facts {
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .privacy {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .caseNav {
+    position: static;
+    padding-bottom: 1.5rem;
+  }
+  .caseNav ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.5rem;
+  }
+  .caseNav > p {
+    margin-bottom: 0.5rem;
+  }
+  .caseSection h2 {
+    margin-bottom: 1.5rem;
+  }
+  .architecture {
+    padding: 1.25rem;
+  }
+  .architecture li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem;
+  }
+}

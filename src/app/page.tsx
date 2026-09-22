@@ -1,6 +1,7 @@
 import { EducationSection } from "@/components/sections/education";
 import { ExperienceSection } from "@/components/sections/experience";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { ProjectIndex } from "@/components/projects/project-index";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -53,6 +54,7 @@ export default function Home() {
             resultado se explican con contexto.
           </p>
         </div>
+        <ProjectIndex />
       </section>
 
       <section

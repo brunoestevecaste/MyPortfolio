@@ -171,7 +171,32 @@ Machine Learning, MLOps, optimización y Google Cloud Platform.
 
 ### AEPD - Analítica y predicción de tráfico web
 
-**Estado de evidencia:** verificado en el CV.
+**Estado de evidencia:** verificado en el CV y ampliado con la memoria y defensa
+del TFG facilitadas por Bruno el 22/09/2026. Calificación 10/10 confirmada por
+Bruno. Trabajo de 2025 realizado en el marco de prácticas académicas en IRTIC
+(Universitat de València) para la AEPD.
+
+**Publicación y confidencialidad**
+
+- Primer proyecto publicado: `01`, en `/projects/aepd-analitica-trafico`.
+- La memoria documenta modelado dimensional, ETL, Power BI y experimentación con
+  XGBoost, LightGBM e HistGradientBoosting, referencia, búsqueda bayesiana,
+  validación temporal y backtesting con MAE, RMSE y MAPE.
+- Todo dato de tráfico o predicción visible debe ser ficticio, creado desde cero
+  y etiquetado. No publicar cifras originales, periodos de observación, registros,
+  nombres internos, capturas ni documentos fuente.
+- Contexto, año académico, metodología, herramientas y nota son hechos reales.
+- Los gráficos son ilustraciones conceptuales, no resultados de un modelo
+  ejecutado ni réplicas del informe original.
+- Bruno confirma que el proyecto se llevó a producción y actualmente lo utiliza
+  la propia AEPD. Esta confirmación amplía la evidencia de la memoria académica.
+- No afirmar ahorros ni impacto operativo cuantificado sin evidencia adicional.
+- Anomalías y predicción en tiempo real son líneas futuras.
+- La demostración interactiva reproduce los tipos de visualización del informe
+  con datos sintéticos independientes: indicadores, barras, tabla, anillo,
+  treemap y serie de predicciones. Incluye país, periodo y selección de modelo.
+- Mostrar el aviso de datos ficticios una sola vez, en el bloque introductorio
+  «Un caso real, datos ficticios.»; no repetirlo en gráficos, Home ni pies.
 
 **Objetivo**
 
@@ -188,10 +213,9 @@ visitas horarias para apoyar decisiones.
 
 **Información todavía necesaria para el case study**
 
-- Alcance temporal y volumen del conjunto de datos.
-- Métrica de evaluación y mejora obtenida.
-- Capturas del dashboard o una recreación autorizada.
-- Decisiones que el sistema ayudaba a tomar.
+La versión pública utiliza una recreación autorizada por Bruno con datos
+íntegramente ficticios. El alcance temporal, los volúmenes y los errores reales
+se mantienen confidenciales.
 
 ### Diseño y desarrollo web
 
@@ -267,12 +291,11 @@ La Home funciona como índice y punto de entrada. Cada proyecto debe mostrar:
 4. Papel de Bruno, año y tecnologías principales cuando estén confirmados.
 5. Enlace completo a la página individual del proyecto.
 
-Orden inicial:
+Orden de publicación actualizado por Bruno el 22/09/2026:
 
-1. `01` - Baleària: eficiencia operativa y energética.
-2. `02` - AEPD: analítica y predicción de tráfico web.
-3. `03` - Diseño y desarrollo web, cuando existan proyectos identificados y
-   material publicable.
+1. `01` - AEPD: analítica y predicción de tráfico web.
+2. Baleària y diseño web se incorporarán cuando sus casos estén preparados.
+   No mostrar enlaces a páginas todavía inexistentes.
 
 La numeración es funcional y pertenece al índice de trabajo. No debe reutilizarse
 como etiqueta decorativa para las demás secciones.
@@ -306,6 +329,6 @@ Cada página de proyecto debe contener:
 - Idioma final: español, inglés o versión bilingüe.
 - Disponibilidad profesional y tipo de oportunidades buscadas.
 - Qué partes del proyecto Baleària pueden mostrarse públicamente.
-- Métricas y material visual publicable de AEPD.
+- AEPD: resuelto con ejemplos ficticios; las métricas originales no se publican.
 - Identidad de los proyectos de diseño web.
 - Contexto y evidencias del robot autónomo y `MIRAARRIBA_FILMS`.

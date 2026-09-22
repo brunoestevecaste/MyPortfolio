@@ -266,8 +266,8 @@ jerarquía tipográfica débil.
   y el resumen deben bastar para comprender y abrir el proyecto.
 - En móvil, cada fila apila número, título, resumen y metadatos. Si se muestra una
   imagen, aparece dentro del flujo y no depende del hover.
-- Baleària ocupa la primera posición, AEPD la segunda y los proyectos posteriores
-  solo se incorporan cuando existe contenido verificable.
+- Por indicación de Bruno el 22/09/2026, AEPD es el primer proyecto publicado.
+  Los proyectos posteriores se incorporarán con un case study completo.
 - La Home no desarrolla proceso, arquitectura ni resultados extensos. Esa
   información pertenece exclusivamente a la página del case study.
 
@@ -387,3 +387,23 @@ versión estática equivalente bajo `prefers-reduced-motion`.
 - La versión móvil conserva identidad sin provocar scroll horizontal.
 - El resultado se siente editorial y técnico, no brutalista, SaaS ni generado por
   una plantilla.
+
+## Primer caso publicado: AEPD
+
+- Extensión de Editorial Systems con los mismos tokens y diales 8/3/3.
+- Resumen en una fila editorial enlazada y detalle con índice lateral en desktop,
+  convertido en enlaces en flujo normal en móvil.
+- Demostración interactiva del informe con indicadores, barras, tabla de
+  solicitudes, anillo, treemap de FAQs y predicciones. Mantener las visualizaciones
+  de la referencia, adaptadas a Archivo, Space Mono, fondos claros y azul petróleo.
+- Aviso de datos ficticios únicamente en el bloque introductorio del caso.
+- Esquema funcional simplificado con etiquetas genéricas, sin infraestructura
+  interna ni capturas de los documentos privados.
+- La nota 10/10 es académica y no una métrica de rendimiento del sistema.
+
+## Separación sin líneas
+
+Por indicación de Bruno, la web no utiliza líneas de separación entre secciones,
+filas, metadatos o bloques. Utilizar espacio, tipografía y superficies. Esta
+regla sustituye cualquier referencia anterior a divisores o bordes estructurales.
+Conservar el foco accesible y los trazos que representan datos en los gráficos.

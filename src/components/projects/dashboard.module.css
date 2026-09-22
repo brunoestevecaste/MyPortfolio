@@ -1,0 +1,497 @@
+.dashboardContainer {
+  container-type: inline-size;
+  margin-top: 2.5rem;
+}
+.dashboard {
+  --dashboard-bg: var(--surface);
+  --dashboard-panel: var(--canvas);
+  --dashboard-accent: var(--signal);
+  --dashboard-text: var(--ink);
+  --chart-1: var(--signal);
+  --chart-2: #347486;
+  --chart-3: #3d7281;
+  --chart-4: #36788b;
+  --chart-5: #477381;
+  --chart-6: #487786;
+  background: var(--dashboard-bg);
+  color: var(--dashboard-text);
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  padding: 1.25rem;
+  color-scheme: light;
+}
+.dashboard :focus-visible {
+  outline-color: var(--dashboard-accent);
+}
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.toolbar h3 {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: clamp(1.75rem, 3cqw, 2.5rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.dashboard label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+}
+.dashboard select,
+.dashboard input[type="date"] {
+  border: 0;
+  border-radius: 0;
+  min-height: 44px;
+  padding: 0.6rem;
+  background: var(--canvas);
+  color: var(--ink);
+  font-size: 0.8125rem;
+  width: 100%;
+  min-width: 0;
+}
+.dashboard select {
+  cursor: pointer;
+}
+.filters label {
+  min-width: 8rem;
+}
+.dashboardActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  flex-wrap: wrap;
+  padding-block: 0.75rem;
+  font-size: 0.75rem;
+}
+.dashboardActions button {
+  cursor: pointer;
+  min-height: 44px;
+  color: var(--dashboard-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.dashboardActions button:hover {
+  color: var(--ink);
+}
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1.5rem 0.5rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+.kpis dt {
+  font-size: 0.8125rem;
+}
+.kpis dd {
+  color: var(--dashboard-accent);
+  font-family: var(--font-archivo), sans-serif;
+  font-size: clamp(1.625rem, 4cqw, 3rem);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  margin-top: 0.25rem;
+}
+.chartGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.panel {
+  min-width: 0;
+  padding: 1.25rem;
+  background: var(--dashboard-panel);
+}
+.panel h4 {
+  font-family: var(--font-archivo), sans-serif;
+  margin-bottom: 1.25rem;
+  font-size: 1.125rem;
+  line-height: 1.3;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+.visits {
+  grid-column: 1;
+  grid-row: 1;
+}
+.uniques {
+  grid-column: 1;
+  grid-row: 2;
+}
+.requestTable {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+.requestTable table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+.requestTable th,
+.requestTable td {
+  padding: 0.65rem 0.25rem;
+  text-align: right;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+.requestTable th:first-child {
+  width: 44%;
+  text-align: left;
+}
+.requestTable thead,
+.requestTable tfoot {
+  color: var(--dashboard-accent);
+}
+.requestTable thead th,
+.requestTable tfoot th,
+.requestTable tfoot td {
+  font-weight: 600;
+}
+.requestTable tbody tr:nth-child(even) {
+  background: var(--surface);
+}
+.horizontalBars {
+  display: grid;
+  gap: 0.4rem;
+}
+.horizontalBars li {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 1fr) minmax(0, 2fr);
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+.barLabel {
+  text-align: right;
+  line-height: 1.2;
+}
+.barMeasure {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding-right: 2.9rem;
+  position: relative;
+  min-height: 1.5rem;
+}
+.horizontalBar {
+  display: block;
+  flex-shrink: 0;
+  height: 1.2rem;
+}
+.barValue {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  font-size: 0.75rem;
+}
+.verticalBars {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+.verticalBars li {
+  min-width: 0;
+  text-align: center;
+}
+.columnSpace {
+  height: 11rem;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+}
+.column {
+  width: 80%;
+  position: relative;
+  min-height: 2px;
+}
+.column > span {
+  position: absolute;
+  bottom: calc(100% + 0.3rem);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.columnLabel {
+  display: block;
+  padding-top: 0.5rem;
+  font-size: 0.75rem;
+}
+.donutLayout {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  align-items: center;
+  gap: 1rem;
+  min-height: 13rem;
+}
+.donutLayout svg {
+  width: 100%;
+  max-width: 14rem;
+}
+.donutLegend {
+  display: grid;
+  gap: 1rem;
+  font-size: 0.75rem;
+}
+.donutLegend li {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+.donutLegend i {
+  width: 0.65rem;
+  height: 0.65rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+.donutLegend strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.treemap {
+  display: grid;
+  gap: 0.25rem;
+  min-height: 13rem;
+}
+.treeGroup {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+.treeCell {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  min-width: 0;
+  color: var(--on-signal);
+  font-size: 0.75rem;
+}
+.treeCell strong {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.predictions {
+  grid-column: 1 / -1;
+}
+.predictionLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(8rem, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+.plotLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.75rem;
+  margin-bottom: 1rem;
+}
+.plotLegend span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.plotLegend i {
+  width: 1.25rem;
+  height: 2px;
+  background: var(--signal);
+}
+.plotLegend span:last-child i {
+  background: repeating-linear-gradient(
+    to right,
+    var(--ink) 0 4px,
+    transparent 4px 7px
+  );
+}
+.forecastPlot {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.5rem;
+}
+.forecastPlot svg {
+  width: 100%;
+  height: auto;
+}
+.plotAxis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-block: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+.plotDates {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-left: 2.5rem;
+  font-size: 0.75rem;
+}
+.modelPanel h5 {
+  font-family: var(--font-archivo), sans-serif;
+  margin-top: 1rem;
+  font-size: 1.125rem;
+  font-weight: 400;
+}
+.modelPanel select {
+  background: var(--surface);
+}
+.metrics {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.metrics div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.metrics dd {
+  color: var(--dashboard-accent);
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 1.75rem;
+  font-variant-numeric: tabular-nums;
+}
+.metrics dt {
+  color: var(--dashboard-accent);
+  font-size: 0.75rem;
+}
+.metrics abbr {
+  text-decoration: none;
+}
+.pointExplorer {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+}
+.pointExplorer summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding-block: 0.75rem;
+}
+.pointExplorer summary:hover {
+  color: var(--dashboard-accent);
+}
+.pointExplorer input {
+  width: 100%;
+  min-height: 44px;
+  accent-color: var(--dashboard-accent);
+}
+.pointExplorer output {
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+.empty {
+  min-height: 15rem;
+  padding: 2rem;
+  line-height: 1.8;
+  background: var(--dashboard-panel);
+}
+@container (max-width: 660px) {
+  .dashboard {
+    padding: 0.875rem;
+  }
+  .toolbar {
+    gap: 1rem;
+  }
+  .filters {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .filters label {
+    min-width: 0;
+  }
+  .filters label:first-child {
+    grid-column: 1 / -1;
+  }
+  .kpis {
+    gap: 0.75rem;
+    padding: 1rem 0.5rem;
+  }
+  .kpis dt {
+    font-size: 0.75rem;
+  }
+  .kpis dd {
+    font-size: 1.25rem;
+  }
+  .chartGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .visits,
+  .uniques,
+  .requestTable,
+  .predictions {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .visits {
+    order: -3;
+  }
+  .uniques {
+    order: -2;
+  }
+  .requestTable {
+    order: -1;
+  }
+  .panel {
+    padding: 1rem 0.75rem;
+  }
+  .predictionLayout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .modelPanel h5 {
+    margin-top: 1rem;
+  }
+  .treeCell {
+    padding: 0.4rem;
+  }
+  .column > span {
+    font-size: 0.75rem;
+  }
+}
+@container (max-width: 350px) {
+  .kpis {
+    grid-template-columns: minmax(0, 1fr);
+    text-align: left;
+    padding: 1rem;
+  }
+  .kpis div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .kpis dd {
+    margin: 0;
+  }
+  .column > span {
+    font-family: var(--font-archivo), sans-serif;
+  }
+  .columnSpace {
+    height: 11rem;
+  }
+  .donutLayout {
+    gap: 0.5rem;
+  }
+}
