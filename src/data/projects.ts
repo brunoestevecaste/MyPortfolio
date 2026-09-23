@@ -41,9 +41,30 @@ export const alinaProject = {
   technologies: ["Python", "FastAPI", "Google ADK", "Google Gemini", "React", "Selenium"],
 } as const satisfies ProjectSummary;
 
+export const nextplanProject = {
+  slug: "nextplan-recomendacion-eventos",
+  organization: "EDEM Escuela de Empresarios",
+  title: "Plataforma de recomendación de eventos con IA",
+  summary:
+    "Una plataforma integral para descubrir eventos en España: exploración en mapa, swipes de afinidad, asistente conversacional con RAG en Vertex AI y clustering de usuarios para recomendaciones personalizadas. Proyecto de Máster en IA.",
+  year: "2026",
+  role: "Ingeniería de datos, clustering y sistemas de IA",
+  technologies: [
+    "Google Cloud",
+    "BigQuery",
+    "dbt",
+    "Vertex AI",
+    "Google ADK",
+    "Python",
+    "FastAPI",
+    "React",
+  ],
+} as const satisfies ProjectSummary;
+
 // Keep the home index and case-study navigation in newest-first order.
 export const projects: readonly ProjectSummary[] = [
   baleariaProject,
+  nextplanProject,
   alinaProject,
   aepdProject,
 ];

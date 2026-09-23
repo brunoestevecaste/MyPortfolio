@@ -3,6 +3,7 @@ import { projects } from "@/data/projects";
 import { TrafficPlot } from "./traffic-figure";
 import { NavigationPlot } from "@/components/charts/navigation-plot";
 import { AlinaPlot } from "@/components/charts/alina-plot";
+import { NextPlanPlot } from "@/components/charts/nextplan-plot";
 import styles from "./projects.module.css";
 
 export function ProjectIndex() {
@@ -38,6 +39,12 @@ export function ProjectIndex() {
                   <span>Navegación / Velocidad en nudos</span>
                   <NavigationPlot />
                   <span>Perfiles ilustrativos · Datos ficticios</span>
+                </>
+              ) : project.slug === "nextplan-recomendacion-eventos" ? (
+                <>
+                  <span>Clustering K-Means / Expansión de catálogo</span>
+                  <NextPlanPlot />
+                  <span>Clúster propio (100%) · Vecinos (60% · 40% · 25%)</span>
                 </>
               ) : project.slug === "alina-asistente-empleo" ? (
                 <>

@@ -185,6 +185,57 @@ reentrenamiento, pero también sitúa la automatización completa como evolució
 no afirmar un ciclo operativo autónomo validado. El piloto a bordo y la expansión
 a otras rutas y buques se presentan como siguientes pasos.
 
+### NextPlan - Plataforma de recomendación de eventos con IA
+
+**Estado de evidencia:** verificado en el repositorio público de GitHub (`Data_IA_Project_3`),
+código de Dataflow, dbt, clustering K-Means, Vertex AI Agent Engine y Frontend React. Trabajo
+colectivo de EDEM (mayo – junio de 2026), Máster en Inteligencia Artificial.
+
+**Publicación y alcance**
+
+- Posición `02` (2026), en `/projects/nextplan-recomendacion-eventos`.
+- Plataforma completa desplegada en Google Cloud Platform con arquitectura desacoplada:
+  Apache Beam en Dataflow, BigQuery, dbt, Cloud SQL, Firestore, Pub/Sub, Cloud Run,
+  Vertex AI Gemini, Google ADK y SendGrid.
+- Demostrador interactivo con tres vistas: simulador de swipes y captura telemetría,
+  inspección del motor de clustering K-Means con scoring multivariable explicable, y
+  simulador de consultas al agente conversacional RAG en dos etapas.
+
+**Objetivo y contribución**
+
+Descubrir y planificar eventos en España mediante una experiencia multicanal (mapa,
+swipes y chat con IA). El proyecto se describe de manera integral como sistema de
+producto e ingeniería de datos e IA: ingesta masiva con enriquecimiento semántico de
+Gemini, streaming asíncrono de swipes con Pub/Sub, modelado dimensional y feature
+store con dbt, motor K-Means de clustering y expansión de catálogo por vecindad,
+agente conversacional RAG desacoplado en dos fases con Google ADK y bucle de feedback
+activo post-evento por email bajo cumplimiento estricto del RGPD.
+
+**Sistema documentado**
+
+- Ingesta batch desde Ticketmaster mediante Apache Beam en Dataflow Flex Template.
+- Enriquecimiento de eventos con Gemini 2.5 Flash (taxonomía, vibe, ocasión, horarios,
+  bandas de precio) y generación de embeddings con `gemini-embedding-001` (3.072 dims).
+- Generación de portadas de eventos con Pollinations.ai a partir de prompts de dirección
+  de arte elaborados por Gemini, persistidas en Cloud Storage.
+- Streaming de swipes vía FastAPI y Pub/Sub (`swipe-events`) volcados en tiempo real a
+  BigQuery `swipes_raw`.
+- Modelado dimensional con dbt: `stg_swipes` (con `dwell_ms` y snapshot), modelos
+  intermedios de 30 y 90 días, y marts `fct_swipes` y `dim_user_cluster_features_current`.
+- K-Means propio con estandarización, optimización por silueta y Davies-Bouldin, matriz
+  de distancia entre centroides para clústeres vecinos y materialización de recomendaciones
+  en BigQuery `user_recommendation_candidates`.
+- Fórmula de scoring multivariable que combina afinidad de clúster (1.00 propio, 0.60/0.40/0.25
+  vecinos) con impulsos por coincidencia de ciudad (`home_city_boost`: +0.08) y urgencia
+  temporal (`urgency_boost`), con resolución de cold start y `recommendation_reason`.
+- Agente conversacional RAG en dos fases con Google ADK en Vertex AI Agent Engine:
+  Extractor `LlmAgent` con sanitización defensiva de prompt injection + Ejecutor que invoca
+  la tool `buscar_eventos` con `VECTOR_SEARCH` en BigQuery y filtros exactos por SQL.
+- Loop de valoración por email: Cloud Tasks + Cloud Functions con JWT firmado (HS256)
+  y SendGrid ("Me gustó" / "No me gustó") volcados a BigQuery `valoraciones_eventos`.
+- Cumplimiento RGPD (ROPA, DPIA, Art. 32 audit logs) e infraestructura como código con
+  20 módulos de Terraform y 11 workflows de CI/CD en GitHub Actions con Workload Identity Federation.
+
 ### Alina - Asistente de empleo con agentes de IA
 
 **Estado de evidencia:** verificado en la memoria del proyecto (5 de marzo de 2026)
@@ -194,7 +245,7 @@ Bruno Esteve, Silvia Pla y Clàudia Salgado.
 
 **Publicación y alcance**
 
-- Posición `02` (2026), en `/projects/alina-asistente-empleo`.
+- Posición `03` (2026), en `/projects/alina-asistente-empleo`.
 - Prototipo funcional real desarrollado con backend en FastAPI, Google ADK (Agent
   Development Kit), Google Gemini 2.5 Flash, Selenium y frontend en React.
 - Muestra un demostrador interactivo con tres vistas: calculador de Match Score con
@@ -232,7 +283,7 @@ Bruno. Trabajo de 2025 realizado en el marco de prácticas académicas en IRTIC
 
 **Publicación y confidencialidad**
 
-- Posición `02` (2025), en `/projects/aepd-analitica-trafico`.
+- Posición `04` (2025), en `/projects/aepd-analitica-trafico`.
 - La memoria documenta modelado dimensional, ETL, Power BI y experimentación con
   XGBoost, LightGBM e HistGradientBoosting, referencia, búsqueda bayesiana,
   validación temporal y backtesting con MAE, RMSE y MAPE.
