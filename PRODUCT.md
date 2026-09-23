@@ -185,6 +185,44 @@ reentrenamiento, pero también sitúa la automatización completa como evolució
 no afirmar un ciclo operativo autónomo validado. El piloto a bordo y la expansión
 a otras rutas y buques se presentan como siguientes pasos.
 
+### Alina - Asistente de empleo con agentes de IA
+
+**Estado de evidencia:** verificado en la memoria del proyecto (5 de marzo de 2026)
+y en el repositorio público de GitHub (`ia-project-II`). Trabajo colectivo de EDEM
+(febrero - marzo de 2026), Máster en Inteligencia Artificial, Grupo 3: Adrián Alemany,
+Bruno Esteve, Silvia Pla y Clàudia Salgado.
+
+**Publicación y alcance**
+
+- Posición `02` (2026), en `/projects/alina-asistente-empleo`.
+- Prototipo funcional real desarrollado con backend en FastAPI, Google ADK (Agent
+  Development Kit), Google Gemini 2.5 Flash, Selenium y frontend en React.
+- Muestra un demostrador interactivo con tres vistas: calculador de Match Score con
+  desglose de fórmula en vivo, visor estructurado de los cuatro agentes especializados
+  (Carta, Entrevista, Research y Upskilling), y comparativa de métricas de optimización.
+
+**Objetivo y contribución**
+
+Transformar la búsqueda de empleo resolviendo la asimetría informativa de las ofertas,
+calculando compatibilidad explicable y preparando al candidato sin alucinaciones. Bruno
+trabajó en la arquitectura de IA, diseño de agentes con Google ADK, pipeline de extracción
+y parsing de CV/ofertas, algoritmo de Match Score y optimización de latencia y tokens
+mediante arquitectura de prompts en dos fases.
+
+**Sistema documentado**
+
+- FastAPI + Google ADK con agentes especializados: LlmAgent, SequentialAgent, LoopAgent
+  con `exit_loop()` estricto para evitar alucinaciones.
+- Ingestión dual: búsqueda en Adzuna con scraping Selenium en paralelo + fallback a
+  pegado manual de ofertas para resolver limitaciones de APIs externas.
+- Fórmula determinista de Match Score: ponderación de skills cubiertas y parciales con
+  bonus de modalidad de trabajo (remoto, híbrido, presencial).
+- Optimización de prompts: desacoplamiento en dos fases (razonamiento libre en texto +
+  conversión determinista a JSON) que redujo tokens un 40% (1.500 a 900) y elevó la
+  fiabilidad JSON del 60% al 95%. Paralelización con reducción del 45% en latencia (55s a 30s).
+- Modelo de negocio planteado: Freemium (estudiantes/bootcamps) y Pro/Suscripción
+  (universidades, career centers y reclutamiento).
+
 ### AEPD - Analítica y predicción de tráfico web
 
 **Estado de evidencia:** verificado en el CV y ampliado con la memoria y defensa
@@ -312,8 +350,9 @@ Orden de presentación actualizado por Bruno el 22/09/2026:
 Los proyectos se ordenan siempre del más reciente al más antiguo según su año.
 La Home, la numeración y la navegación entre casos comparten ese orden.
 
-1. `01` - Baleària: optimización energética de rutas navieras (2026).
-2. `02` - AEPD: analítica y predicción de tráfico web (2025).
+1. `01` - Baleària: optimización energética de rutas navieras (2026, TFM).
+2. `02` - Alina: asistente de empleo con agentes de IA (febrero–marzo 2026).
+3. `03` - AEPD: analítica y predicción de tráfico web (2025, TFG).
 
 Diseño web se incorporará cuando su caso esté preparado y ocupará la posición
 que corresponda a su fecha. No mostrar enlaces a páginas todavía inexistentes.
@@ -327,9 +366,10 @@ Cada proyecto publicado debe tener una página independiente bajo
 `/projects/[slug]`. La Home solo contiene el resumen y nunca sustituye al case
 study completo.
 
-Rutas iniciales:
+Rutas publicadas:
 
 - `/projects/balearia-eficiencia-energetica`
+- `/projects/alina-asistente-empleo`
 - `/projects/aepd-analitica-trafico`
 - `/projects/diseno-desarrollo-web`, cuando exista contenido verificable
 

@@ -1,0 +1,450 @@
+.dashboardContainer {
+  margin-top: 3rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.toolbarTitle {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.viewTabs {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--background);
+  padding: 0.25rem;
+  border: 1px solid var(--border);
+}
+
+.tabButton {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 0.75rem;
+  padding: 0.5rem 0.875rem;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.tabButton:hover {
+  color: var(--foreground);
+}
+
+.tabButtonActive {
+  background: var(--surface);
+  color: var(--signal);
+  font-weight: 500;
+}
+
+.contentArea {
+  margin-top: 2rem;
+}
+
+/* Calculador de Match */
+.jobSelectorRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.selectorLabel {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.jobPillGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.jobPill {
+  background: var(--background);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.jobPill:hover {
+  color: var(--foreground);
+  border-color: var(--signal);
+}
+
+.jobPillActive {
+  background: var(--surface);
+  color: var(--signal);
+  border-color: var(--signal);
+  font-weight: 500;
+}
+
+.matchOverview {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 2rem;
+  align-items: start;
+  padding: 1.75rem;
+  background: var(--background);
+  border: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.scoreBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.scoreTag {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.scoreValue {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--signal);
+  letter-spacing: -0.05em;
+}
+
+.scoreUnit {
+  font-size: 1.5rem;
+  margin-left: 0.25rem;
+  color: var(--muted);
+}
+
+.scoreFormula {
+  margin-top: 1rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.6;
+  font-family: monospace;
+}
+
+.jobDetailsBlock h4 {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.jobMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.jobDescription {
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--foreground);
+}
+
+.skillsBreakdownGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.skillsColumn {
+  background: var(--background);
+  border: 1px solid var(--border);
+  padding: 1.25rem;
+}
+
+.skillsColumnHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.skillsColumnTitle {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+
+.skillsCount {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.matchedTitle {
+  color: var(--signal);
+}
+
+.partialTitle {
+  color: #d97706;
+}
+
+.missingTitle {
+  color: var(--muted);
+}
+
+.skillsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.skillItem {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  padding: 0.35rem 0.6rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+/* Agentes Explorer */
+.agentNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.agentNavButton {
+  background: var(--background);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.agentNavButton:hover {
+  color: var(--foreground);
+  border-color: var(--signal);
+}
+
+.agentNavButtonActive {
+  background: var(--surface);
+  color: var(--signal);
+  border-color: var(--signal);
+  font-weight: 500;
+}
+
+.agentCard {
+  background: var(--background);
+  border: 1px solid var(--border);
+  padding: 1.75rem;
+}
+
+.agentHeader {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.agentTitle {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.agentRoleTag {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.letterBody {
+  white-space: pre-line;
+  font-size: 0.8125rem;
+  line-height: 1.8;
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.agentExtraList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.agentExtraItem {
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--muted);
+  padding-left: 1rem;
+  position: relative;
+}
+
+.agentExtraItem::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--signal);
+}
+
+.dialogueBox {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.questionBubble,
+.answerBubble {
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+}
+
+.questionBubble {
+  background: var(--surface);
+}
+
+.questionBubble strong,
+.answerBubble strong {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.answerBubble {
+  background: var(--background);
+}
+
+.evaluationPanel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+}
+
+.evalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.evalScore {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 1.75rem;
+  color: var(--signal);
+}
+
+/* Métricas de Arquitectura */
+.benchmarkGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metricCard {
+  background: var(--background);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+}
+
+.metricName {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 1rem;
+}
+
+.metricComparison {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.metricBefore {
+  font-size: 1rem;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.metricAfter {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 2rem;
+  color: var(--signal);
+  font-weight: 500;
+}
+
+.metricGain {
+  font-size: 0.75rem;
+  color: var(--signal);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.metricDesc {
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.architectureNarrative {
+  padding: 1.5rem;
+  background: var(--background);
+  border: 1px solid var(--border);
+}
+
+.architectureNarrative h4 {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 1.125rem;
+  margin-bottom: 0.75rem;
+}
+
+.architectureNarrative p {
+  font-size: 0.8125rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+@media (max-width: 63.999rem) {
+  .skillsBreakdownGrid,
+  .benchmarkGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .matchOverview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

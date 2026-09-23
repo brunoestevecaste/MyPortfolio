@@ -268,8 +268,8 @@ jerarquía tipográfica débil.
 - En móvil, cada fila apila número, título, resumen y metadatos. Si se muestra una
   imagen, aparece dentro del flujo y no depende del hover.
 - Por indicación de Bruno el 22/09/2026, los proyectos se ordenan siempre del
-  más reciente al más antiguo: Baleària (2026), seguido de AEPD (2025).
-  La numeración y la navegación entre casos siguen este mismo orden.
+  más reciente al más antiguo: Baleària (2026, TFM), seguido de Alina (febrero–marzo 2026)
+  y AEPD (2025). La numeración (01, 02, 03) y la navegación entre casos siguen este mismo orden.
   Los nuevos proyectos se incorporarán con un case study completo y se situarán
   según su año.
 - La Home no desarrolla proceso, arquitectura ni resultados extensos. Esa

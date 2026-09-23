@@ -2,6 +2,7 @@ import Link from "next/link";
 import { projects } from "@/data/projects";
 import { TrafficPlot } from "./traffic-figure";
 import { NavigationPlot } from "@/components/charts/navigation-plot";
+import { AlinaPlot } from "@/components/charts/alina-plot";
 import styles from "./projects.module.css";
 
 export function ProjectIndex() {
@@ -37,6 +38,12 @@ export function ProjectIndex() {
                   <span>Navegación / Velocidad en nudos</span>
                   <NavigationPlot />
                   <span>Perfiles ilustrativos · Datos ficticios</span>
+                </>
+              ) : project.slug === "alina-asistente-empleo" ? (
+                <>
+                  <span>Agentes IA / Optimización relativa</span>
+                  <AlinaPlot />
+                  <span>Tokens (-40%) · Latencia (-45%) · Fiabilidad (+58%)</span>
                 </>
               ) : (
                 <>

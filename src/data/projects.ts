@@ -30,9 +30,23 @@ export const baleariaProject = {
   technologies: ["Python", "Google Cloud", "Machine Learning", "MLOps"],
 } as const satisfies ProjectSummary;
 
+export const alinaProject = {
+  slug: "alina-asistente-empleo",
+  organization: "EDEM Escuela de Empresarios",
+  title: "Asistente de empleo con agentes de IA",
+  summary:
+    "Un sistema multi-agente con Google ADK y Gemini que transforma la búsqueda de empleo: extracción y matching explicable de habilidades, simulación interactiva de entrevistas y generación personalizada de cartas.",
+  year: "2026",
+  role: "Arquitectura de IA, agentes y backend",
+  technologies: ["Python", "FastAPI", "Google ADK", "Google Gemini", "React", "Selenium"],
+} as const satisfies ProjectSummary;
+
 // Keep the home index and case-study navigation in newest-first order.
-export const projects: readonly ProjectSummary[] = [aepdProject, baleariaProject]
-  .sort((a, b) => Number(b.year) - Number(a.year));
+export const projects: readonly ProjectSummary[] = [
+  baleariaProject,
+  alinaProject,
+  aepdProject,
+];
 
 export type CaseSection = {
   id: string;
