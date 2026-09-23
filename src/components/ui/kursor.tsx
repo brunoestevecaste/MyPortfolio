@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useRef } from "react";
 
 export interface KursorProps {
   /**
@@ -15,14 +16,78 @@ export interface KursorProps {
 }
 
 const INTERACTIVE_SELECTOR =
-  'a, button, [role="button"], input[type="submit"], input[type="button"], input[type="reset"], summary, [data-cursor-hover], .k-hover';
+  'a[href], button, [role="button"], [role="link"], [role="tab"], [role="menuitem"], select, summary, [data-cursor-hover], .k-hover, label, input:not([type="hidden"])';
+
+function isElementClickable(el: Element | null): boolean {
+  if (!el || !(el instanceof Element)) return false;
+
+  const candidate = el.closest(INTERACTIVE_SELECTOR);
+  if (!candidate) return false;
+
+  // Exclude disabled elements or elements marked as aria-disabled
+  if (
+    candidate.hasAttribute("disabled") ||
+    candidate.getAttribute("aria-disabled") === "true" ||
+    candidate.classList.contains("disabled")
+  ) {
+    return false;
+  }
+
+  // Exclude elements with pointer-events: none
+  try {
+    const style = window.getComputedStyle(candidate);
+    if (style.pointerEvents === "none") {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+
+  return true;
+}
 
 export function Kursor({
   color = "18, 20, 22",
   removeDefaultCursor = true,
 }: KursorProps) {
+  const pathname = usePathname();
   const outerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
+  const lastPosRef = useRef<{ x: number; y: number } | null>(null);
+
+  const updateHoverState = useCallback((target: Element | null) => {
+    const isClickable = isElementClickable(target);
+    if (isClickable) {
+      outerRef.current?.classList.add("--hover");
+    } else {
+      outerRef.current?.classList.remove("--hover");
+    }
+  }, []);
+
+  const syncHoverAtCurrentPosition = useCallback(() => {
+    if (!lastPosRef.current) return;
+    const el = document.elementFromPoint(
+      lastPosRef.current.x,
+      lastPosRef.current.y
+    );
+    updateHoverState(el);
+  }, [updateHoverState]);
+
+  // Synchronize cursor state when changing pages via Next.js App Router navigation
+  useEffect(() => {
+    // Immediately clear down and hover states to avoid lingering clickable styles
+    outerRef.current?.classList.remove("kursor--down");
+    outerRef.current?.classList.remove("--hover");
+
+    // After DOM has rendered for the new route, verify if cursor rests on a clickable element
+    const rafId = requestAnimationFrame(() => {
+      syncHoverAtCurrentPosition();
+    });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+    };
+  }, [pathname, syncHoverAtCurrentPosition]);
 
   useEffect(() => {
     // Only activate custom cursor on fine-pointer devices (mouse / trackpad)
@@ -40,6 +105,7 @@ export function Kursor({
 
     const handleMouseMove = (e: MouseEvent) => {
       const { clientX, clientY } = e;
+      lastPosRef.current = { x: clientX, y: clientY };
 
       if (outer) {
         outer.style.left = `${clientX}px`;
@@ -56,6 +122,8 @@ export function Kursor({
           inner.classList.remove("kursorChild--hidden");
         }
       }
+
+      updateHoverState(e.target as Element | null);
     };
 
     const handleMouseDown = () => {
@@ -67,31 +135,46 @@ export function Kursor({
     };
 
     const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (target?.closest(INTERACTIVE_SELECTOR)) {
-        outer?.classList.add("--hover");
-      }
+      updateHoverState(e.target as Element | null);
     };
 
     const handleMouseOut = (e: MouseEvent) => {
-      const target = e.target as HTMLElement | null;
-      const related = e.relatedTarget as HTMLElement | null;
-      const isCurrentInteractive = target?.closest(INTERACTIVE_SELECTOR);
-      const isNextInteractive = related?.closest(INTERACTIVE_SELECTOR);
-
-      if (isCurrentInteractive && !isNextInteractive) {
+      if (!e.relatedTarget) {
         outer?.classList.remove("--hover");
+      } else {
+        updateHoverState(e.relatedTarget as Element | null);
       }
+    };
+
+    const handleScroll = () => {
+      syncHoverAtCurrentPosition();
     };
 
     const handleMouseLeave = () => {
       outer?.classList.add("kursor--hidden");
       inner?.classList.add("kursorChild--hidden");
+      outer?.classList.remove("--hover");
+      outer?.classList.remove("kursor--down");
     };
 
     const handleMouseEnter = () => {
       outer?.classList.remove("kursor--hidden");
       inner?.classList.remove("kursorChild--hidden");
+      syncHoverAtCurrentPosition();
+    };
+
+    const handleBlur = () => {
+      outer?.classList.add("kursor--hidden");
+      inner?.classList.add("kursorChild--hidden");
+      outer?.classList.remove("--hover");
+      outer?.classList.remove("kursor--down");
+    };
+
+    const handlePopStateOrHash = () => {
+      outer?.classList.remove("kursor--down");
+      requestAnimationFrame(() => {
+        syncHoverAtCurrentPosition();
+      });
     };
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
@@ -99,6 +182,11 @@ export function Kursor({
     window.addEventListener("mouseup", handleMouseUp, { passive: true });
     document.addEventListener("mouseover", handleMouseOver, { passive: true });
     document.addEventListener("mouseout", handleMouseOut, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("blur", handleBlur);
+    window.addEventListener("focus", syncHoverAtCurrentPosition);
+    window.addEventListener("popstate", handlePopStateOrHash);
+    window.addEventListener("hashchange", handlePopStateOrHash);
     document.documentElement.addEventListener("mouseleave", handleMouseLeave);
     document.documentElement.addEventListener("mouseenter", handleMouseEnter);
 
@@ -111,10 +199,15 @@ export function Kursor({
       window.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mouseover", handleMouseOver);
       document.removeEventListener("mouseout", handleMouseOut);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("blur", handleBlur);
+      window.removeEventListener("focus", syncHoverAtCurrentPosition);
+      window.removeEventListener("popstate", handlePopStateOrHash);
+      window.removeEventListener("hashchange", handlePopStateOrHash);
       document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
       document.documentElement.removeEventListener("mouseenter", handleMouseEnter);
     };
-  }, [removeDefaultCursor]);
+  }, [removeDefaultCursor, syncHoverAtCurrentPosition, updateHoverState]);
 
   return (
     <>
