@@ -102,28 +102,36 @@ export function Kursor({
 
     const outer = outerRef.current;
     const inner = innerRef.current;
+    let moveFrame: number | null = null;
+
+    const renderCursor = () => {
+      moveFrame = null;
+      const position = lastPosRef.current;
+      if (!position) return;
+
+      const transform = `translate3d(${position.x}px, ${position.y}px, 0) translate(-50%, -50%)`;
+      if (outer) {
+        outer.style.transform = transform;
+        outer.classList.remove("kursor--hidden");
+      }
+      if (inner) {
+        inner.style.transform = transform;
+        inner.classList.remove("kursorChild--hidden");
+      }
+    };
+
+    const cancelPendingMove = () => {
+      if (moveFrame !== null) {
+        cancelAnimationFrame(moveFrame);
+        moveFrame = null;
+      }
+    };
 
     const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      lastPosRef.current = { x: clientX, y: clientY };
-
-      if (outer) {
-        outer.style.left = `${clientX}px`;
-        outer.style.top = `${clientY}px`;
-        if (outer.classList.contains("kursor--hidden")) {
-          outer.classList.remove("kursor--hidden");
-        }
+      lastPosRef.current = { x: e.clientX, y: e.clientY };
+      if (moveFrame === null) {
+        moveFrame = requestAnimationFrame(renderCursor);
       }
-
-      if (inner) {
-        inner.style.left = `${clientX}px`;
-        inner.style.top = `${clientY}px`;
-        if (inner.classList.contains("kursorChild--hidden")) {
-          inner.classList.remove("kursorChild--hidden");
-        }
-      }
-
-      updateHoverState(e.target as Element | null);
     };
 
     const handleMouseDown = () => {
@@ -151,6 +159,7 @@ export function Kursor({
     };
 
     const handleMouseLeave = () => {
+      cancelPendingMove();
       outer?.classList.add("kursor--hidden");
       inner?.classList.add("kursorChild--hidden");
       outer?.classList.remove("--hover");
@@ -164,6 +173,7 @@ export function Kursor({
     };
 
     const handleBlur = () => {
+      cancelPendingMove();
       outer?.classList.add("kursor--hidden");
       inner?.classList.add("kursorChild--hidden");
       outer?.classList.remove("--hover");
@@ -191,6 +201,7 @@ export function Kursor({
     document.documentElement.addEventListener("mouseenter", handleMouseEnter);
 
     return () => {
+      cancelPendingMove();
       if (removeDefaultCursor) {
         document.body.classList.remove("notCursor");
       }

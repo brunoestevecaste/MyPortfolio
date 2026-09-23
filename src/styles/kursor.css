@@ -20,10 +20,12 @@ body.notCursor [contenteditable="true"] {
 /* Base cursor containers */
 div[class*='kursor'] {
   position: fixed;
+  left: 0;
+  top: 0;
   pointer-events: none;
-  transform: translate(-50%, -50%);
+  transform: translate3d(0, 0, 0) translate(-50%, -50%);
   z-index: 10000;
-  will-change: transform, left, top;
+  will-change: transform;
 }
 
 div[class*='kursor'].kursor--hidden {
@@ -34,12 +36,14 @@ div[class*='kursor'].kursor--hidden {
 
 div[class*='kursorChild'] {
   position: fixed;
+  left: 0;
+  top: 0;
   pointer-events: none;
-  transform: translate(-50%, -50%);
+  transform: translate3d(0, 0, 0) translate(-50%, -50%);
   display: none;
   overflow: hidden;
   z-index: 10001;
-  will-change: transform, left, top;
+  will-change: transform;
 }
 
 div[class*='kursorChild'].kursorChild[class*='--hidden'] {
@@ -63,13 +67,13 @@ div[class*='kursorChild'].kursorChild:after {
 
 /* Kursor Type 4 - Outer Ring */
 div[class*='kursor'].kursor--4 {
-  left: 0px;
-  top: 0px;
   width: 50px;
   height: 50px;
   border: 1px solid rgba(var(--k-color, 18, 20, 22), 0.35);
   border-radius: 50%;
-  transition: all 0.2s ease, top 0.2s ease-out, left 0.2s ease-out;
+  transition: transform 0.2s ease-out, width 0.2s ease, height 0.2s ease,
+    background-color 0.2s ease, border-color 0.2s ease, border-width 0.2s ease,
+    opacity 0.2s ease;
 }
 
 /* Kursor Type 4 - Inner Dot */
@@ -79,7 +83,8 @@ div[class*='kursor'].kursor--4 + .kursorChild {
   height: 6px;
   background: rgba(var(--k-color, 18, 20, 22), 1);
   border-radius: 50%;
-  transition: all 0.2s ease, top 0.03s ease-out, left 0.03s ease-out;
+  transition: transform 0.03s ease-out, width 0.2s ease, height 0.2s ease,
+    background-color 0.2s ease, opacity 0.2s ease;
 }
 
 /* Kursor Type 4 - Hover state on interactive elements */
