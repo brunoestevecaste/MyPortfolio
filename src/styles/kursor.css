@@ -1,0 +1,138 @@
+/*!
+ * Kursor v0.1.5 - Type 4 Adaptation for Next.js
+ * Original library by Luis Daniel Rovira (lusaxweb/kursor)
+ * Optimized for React 19, App Router, Accessibility and Touch Devices
+ */
+
+/* Hide default cursor on fine-pointer devices when kursor is active */
+body.notCursor,
+body.notCursor * {
+  cursor: none;
+}
+
+/* Preserve native text selection and I-beam cursor for typing in forms */
+body.notCursor input,
+body.notCursor textarea,
+body.notCursor [contenteditable="true"] {
+  cursor: text !important;
+}
+
+/* Base cursor containers */
+div[class*='kursor'] {
+  position: fixed;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  will-change: transform, left, top;
+}
+
+div[class*='kursor'].kursor--hidden {
+  opacity: 0;
+  width: 0px;
+  height: 0px;
+}
+
+div[class*='kursorChild'] {
+  position: fixed;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: none;
+  overflow: hidden;
+  z-index: 10001;
+  will-change: transform, left, top;
+}
+
+div[class*='kursorChild'].kursorChild[class*='--hidden'] {
+  opacity: 0;
+  width: 0px;
+  height: 0px;
+}
+
+div[class*='kursorChild'].kursorChild:after {
+  content: '';
+  pointer-events: none;
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  opacity: 1;
+  border: 0px solid rgba(var(--k-color, 18, 20, 22), 0.5);
+  transform: translate(-50%, -50%);
+}
+
+/* Kursor Type 4 - Outer Ring */
+div[class*='kursor'].kursor--4 {
+  left: 0px;
+  top: 0px;
+  width: 50px;
+  height: 50px;
+  border: 1px solid rgba(var(--k-color, 18, 20, 22), 0.35);
+  border-radius: 50%;
+  transition: all 0.2s ease, top 0.2s ease-out, left 0.2s ease-out;
+}
+
+/* Kursor Type 4 - Inner Dot */
+div[class*='kursor'].kursor--4 + .kursorChild {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: rgba(var(--k-color, 18, 20, 22), 1);
+  border-radius: 50%;
+  transition: all 0.2s ease, top 0.03s ease-out, left 0.03s ease-out;
+}
+
+/* Kursor Type 4 - Hover state on interactive elements */
+div[class*='kursor'].kursor--4.--hover {
+  width: 32px;
+  height: 32px;
+  background: rgba(var(--k-color, 18, 20, 22), 0.08);
+  border: 2px solid rgba(var(--k-color, 18, 20, 22), 0.2);
+}
+
+div[class*='kursor'].kursor--4.--hover + .kursorChild {
+  width: 24px;
+  height: 24px;
+  background: rgba(var(--k-color, 18, 20, 22), 0.15);
+}
+
+/* Kursor Type 4 - Down/Click state with ripple */
+div[class*='kursor'].kursor--4.kursor--down {
+  width: 6px;
+  height: 6px;
+}
+
+div[class*='kursor'].kursor--4.kursor--down + .kursorChild {
+  width: 12px;
+  height: 12px;
+}
+
+div[class*='kursor'].kursor--4.kursor--down + .kursorChild:after {
+  width: 44px !important;
+  height: 44px !important;
+  opacity: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--k-color, 18, 20, 22), 0.8);
+  transition: all 0.4s ease;
+}
+
+/* Touch & Mobile Guard: Always restore native cursor and hide custom elements */
+@media (pointer: coarse), (max-width: 768px) {
+  body.notCursor,
+  body.notCursor * {
+    cursor: auto !important;
+  }
+
+  div[class*='kursor'],
+  div[class*='kursorChild'] {
+    display: none !important;
+  }
+}
+
+/* Accessibility: Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  div[class*='kursor'].kursor--4,
+  div[class*='kursor'].kursor--4 + .kursorChild {
+    transition: none !important;
+  }
+}

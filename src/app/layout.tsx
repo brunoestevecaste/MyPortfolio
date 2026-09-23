@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Archivo, Space_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { Kursor } from "@/components/ui/kursor";
 import "./globals.css";
+import "@/styles/kursor.css";
 
 const archivo = Archivo({
   subsets: ["latin"],
@@ -30,6 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" className={`${archivo.variable} ${spaceMono.variable}`}>
       <body className="flex min-h-dvh flex-col antialiased">
+        <Kursor />
         <a className="skip-link" href="#main-content">
           Saltar al contenido
         </a>
