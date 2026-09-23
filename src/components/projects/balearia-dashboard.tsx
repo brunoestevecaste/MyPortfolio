@@ -4,8 +4,9 @@ import { useMemo, useState, type ReactNode } from "react";
 import {
   baleariaDashboardVessels,
   baleariaDashboardVoyages,
+  formatDashboardDate,
   formatDashboardDuration,
-  formatDashboardNumber,
+  formatDashboardMeasure,
   type BaleariaDashboardVoyage,
   type DashboardView,
 } from "@/data/balearia-dashboard";
@@ -52,8 +53,8 @@ function ValuesTable({ voyage }: { voyage: BaleariaDashboardVoyage }) {
           {voyage.speedProfile.map((point) => (
             <tr key={point.segment}>
               <th scope="row">{point.segment}</th>
-              <td>{formatDashboardNumber(point.observed)} kn</td>
-              <td>{formatDashboardNumber(point.recommended)} kn</td>
+              <td>{formatDashboardMeasure(point.observed, "kn")}</td>
+              <td>{formatDashboardMeasure(point.recommended, "kn")}</td>
             </tr>
           ))}
         </tbody>
@@ -75,26 +76,26 @@ function Recommendation({
       <div className={styles.recommendationHeader}>
         <div>
           <span>Modelo de demostración</span>
-          <strong>{voyage.model}</strong>
+          <strong translate="no">{voyage.model}</strong>
         </div>
         <p>{recommendation.action}</p>
       </div>
       <dl className={styles.recommendationMetrics}>
         <div>
           <dt>Velocidad actual</dt>
-          <dd>{formatDashboardNumber(recommendation.currentSpeedKn)} kn</dd>
+          <dd>{formatDashboardMeasure(recommendation.currentSpeedKn, "kn")}</dd>
         </div>
         <div>
           <dt>Velocidad recomendada</dt>
-          <dd>{formatDashboardNumber(recommendation.recommendedSpeedKn)} kn</dd>
+          <dd>{formatDashboardMeasure(recommendation.recommendedSpeedKn, "kn")}</dd>
         </div>
         <div>
           <dt>Energía estimada</dt>
-          <dd>{formatDashboardNumber(recommendation.estimatedEnergyMwh)} MWh</dd>
+          <dd>{formatDashboardMeasure(recommendation.estimatedEnergyMwh, "MWh")}</dd>
         </div>
         <div>
           <dt>Margen ETA</dt>
-          <dd>{voyage.etaMarginMinutes} min</dd>
+          <dd>{`${voyage.etaMarginMinutes}\u00a0min`}</dd>
         </div>
       </dl>
       <div className={styles.recommendationNote}>
@@ -137,9 +138,9 @@ function OperationsView({ voyage }: { voyage: BaleariaDashboardVoyage }) {
               {voyage.energySeries.map((point) => (
                 <tr key={point.time}>
                   <th scope="row">{point.time}</th>
-                  <td>{formatDashboardNumber(point.propulsion)} MWh</td>
-                  <td>{formatDashboardNumber(point.auxiliary)} MWh</td>
-                  <td>{formatDashboardNumber(point.shaft)} MWh</td>
+                  <td>{formatDashboardMeasure(point.propulsion, "MWh")}</td>
+                  <td>{formatDashboardMeasure(point.auxiliary, "MWh")}</td>
+                  <td>{formatDashboardMeasure(point.shaft, "MWh")}</td>
                 </tr>
               ))}
             </tbody>
@@ -188,11 +189,7 @@ function CrewView({
   return (
     <div className={styles.dashboardGrid}>
       <Panel title="Posición y progreso del viaje" className={styles.routePanel}>
-        <div
-          className={styles.routeDiagram}
-          role="img"
-          aria-label={`${voyage.progress} por ciento del recorrido completado entre ${voyage.origin} y ${voyage.destination}`}
-        >
+        <div className={styles.routeDiagram}>
           <div className={styles.routeMeta}>
             <div>
               <span>Origen</span>
@@ -211,11 +208,11 @@ function CrewView({
           <dl className={styles.routeConditions}>
             <div>
               <dt>Viento</dt>
-              <dd>{voyage.windKn} kn</dd>
+              <dd>{`${voyage.windKn}\u00a0kn`}</dd>
             </div>
             <div>
               <dt>Oleaje</dt>
-              <dd>{formatDashboardNumber(voyage.swellM)} m</dd>
+              <dd>{formatDashboardMeasure(voyage.swellM, "m")}</dd>
             </div>
             <div>
               <dt>Beaufort</dt>
@@ -231,7 +228,7 @@ function CrewView({
       <Panel title="Recomendación en navegación" className={styles.livePanel}>
         <Recommendation voyage={voyage} compact />
         <p className={styles.liveResult} aria-live="polite">
-          Simulación {calculationRound + 1}: velocidad propuesta {formatDashboardNumber(recalculatedSpeed)} kn.
+          Simulación {calculationRound + 1}: velocidad propuesta {formatDashboardMeasure(recalculatedSpeed, "kn")}.
         </p>
         <button type="button" className={styles.calculateButton} onClick={onCalculate}>
           Recalcular simulación
@@ -248,11 +245,11 @@ function CrewView({
           </div>
           <div>
             <dt>Velocidad media</dt>
-            <dd>{formatDashboardNumber(voyage.averageSpeedKn)} kn</dd>
+            <dd>{formatDashboardMeasure(voyage.averageSpeedKn, "kn")}</dd>
           </div>
           <div>
             <dt>Margen de llegada</dt>
-            <dd>{voyage.etaMarginMinutes} min</dd>
+            <dd>{`${voyage.etaMarginMinutes}\u00a0min`}</dd>
           </div>
         </dl>
       </Panel>
@@ -359,6 +356,8 @@ export function BaleariaDashboard() {
               Buque
               <select
                 id="balearia-vessel"
+                name="balearia-vessel"
+                autoComplete="off"
                 value={vesselId}
                 onChange={(event) => changeVessel(event.target.value)}
               >
@@ -374,6 +373,8 @@ export function BaleariaDashboard() {
               Viaje
               <select
                 id="balearia-voyage"
+                name="balearia-voyage"
+                autoComplete="off"
                 value={voyage.id}
                 onChange={(event) => {
                   setVoyageId(event.target.value);
@@ -382,7 +383,7 @@ export function BaleariaDashboard() {
               >
                 {availableVoyages.map((item) => (
                   <option key={item.id} value={item.id}>
-                    {item.date} / {item.route}
+                    {formatDashboardDate(item.date)} / {item.route}
                   </option>
                 ))}
               </select>
@@ -400,25 +401,25 @@ export function BaleariaDashboard() {
           <p>
             {voyage.vessel} / {voyage.origin} a {voyage.destination}
           </p>
-          <p>{voyage.date}</p>
+          <p>{formatDashboardDate(voyage.date)}</p>
         </div>
 
         <dl className={styles.kpis} aria-label="Indicadores del viaje seleccionado">
           <div>
             <dt>Distancia</dt>
-            <dd>{formatDashboardNumber(voyage.distanceNm)} nm</dd>
+            <dd>{formatDashboardMeasure(voyage.distanceNm, "nm")}</dd>
           </div>
           <div>
             <dt>Velocidad media</dt>
-            <dd>{formatDashboardNumber(voyage.averageSpeedKn)} kn</dd>
+            <dd>{formatDashboardMeasure(voyage.averageSpeedKn, "kn")}</dd>
           </div>
           <div>
             <dt>Energía estimada</dt>
-            <dd>{formatDashboardNumber(voyage.energyMwh)} MWh</dd>
+            <dd>{formatDashboardMeasure(voyage.energyMwh, "MWh")}</dd>
           </div>
           <div>
             <dt>Margen ETA</dt>
-            <dd>{voyage.etaMarginMinutes} min</dd>
+            <dd>{`${voyage.etaMarginMinutes}\u00a0min`}</dd>
           </div>
         </dl>
 

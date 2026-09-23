@@ -68,7 +68,7 @@ export function SpeedProfileChart({ data }: { data: SpeedPoint[] }) {
             tickFormatter={(value) => `${value}`}
           />
           <Tooltip
-            content={(props) => <EditorialTooltip {...props} unit=" kn" />}
+            content={(props) => <EditorialTooltip {...props} unit="\u00a0kn" />}
             cursor={{ stroke: "var(--muted)", strokeDasharray: "2 4" }}
             isAnimationActive={false}
           />
@@ -123,7 +123,7 @@ export function EnergySeriesChart({ data }: { data: EnergyPoint[] }) {
           <XAxis {...axisStyle} dataKey="time" interval={1} />
           <YAxis {...axisStyle} width={46} domain={[0, "auto"]} />
           <Tooltip
-            content={(props) => <EditorialTooltip {...props} unit=" MWh" />}
+            content={(props) => <EditorialTooltip {...props} unit="\u00a0MWh" />}
             cursor={{ stroke: "var(--muted)", strokeDasharray: "2 4" }}
             isAnimationActive={false}
           />
@@ -185,7 +185,7 @@ export function TelemetryChart({ data }: { data: TelemetryPoint[] }) {
           <XAxis {...axisStyle} dataKey="time" interval={1} />
           <YAxis {...axisStyle} width={42} domain={[0, "auto"]} />
           <Tooltip
-            content={(props) => <EditorialTooltip {...props} unit=" MW" />}
+            content={(props) => <EditorialTooltip {...props} unit="\u00a0MW" />}
             cursor={{ stroke: "var(--muted)", strokeDasharray: "2 4" }}
             isAnimationActive={false}
           />

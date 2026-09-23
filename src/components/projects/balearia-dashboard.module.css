@@ -1,6 +1,7 @@
 .dashboardContainer {
   container-type: inline-size;
   margin-top: 2.5rem;
+  scroll-margin-top: 2rem;
 }
 
 .dashboard {
@@ -81,6 +82,10 @@
 .viewSwitch button[aria-pressed="true"] {
   background: var(--ink);
   color: var(--canvas);
+}
+
+.viewSwitch button:hover:not([aria-pressed="true"]) {
+  background: var(--surface);
 }
 
 .filterBar,

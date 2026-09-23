@@ -140,7 +140,7 @@ export const baleariaDashboardVoyages = [
     id: "demo-01-a",
     vesselId: "unit-01",
     vessel: "Unidad 01",
-    date: "14 may 2026",
+    date: "2026-05-14",
     route: "Ruta sintética A",
     origin: "Puerto A",
     destination: "Puerto B",
@@ -172,7 +172,7 @@ export const baleariaDashboardVoyages = [
     id: "demo-01-b",
     vesselId: "unit-01",
     vessel: "Unidad 01",
-    date: "21 may 2026",
+    date: "2026-05-21",
     route: "Ruta sintética B",
     origin: "Puerto C",
     destination: "Puerto A",
@@ -204,7 +204,7 @@ export const baleariaDashboardVoyages = [
     id: "demo-02-a",
     vesselId: "unit-02",
     vessel: "Unidad 02",
-    date: "29 may 2026",
+    date: "2026-05-29",
     route: "Ruta sintética C",
     origin: "Puerto B",
     destination: "Puerto D",
@@ -245,8 +245,22 @@ export const formatDashboardNumber = (value: number, digits = 1) =>
     maximumFractionDigits: digits,
   }).format(value);
 
+export const formatDashboardDate = (value: string) =>
+  new Intl.DateTimeFormat("es-ES", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${value}T00:00:00Z`));
+
+export const formatDashboardMeasure = (
+  value: number,
+  unit: string,
+  digits = 1,
+) => `${formatDashboardNumber(value, digits)}\u00a0${unit}`;
+
 export function formatDashboardDuration(minutes: number) {
   const hours = Math.floor(minutes / 60);
   const remaining = minutes % 60;
-  return `${hours} h ${String(remaining).padStart(2, "0")} min`;
+  return `${hours}\u00a0h ${String(remaining).padStart(2, "0")}\u00a0min`;
 }
