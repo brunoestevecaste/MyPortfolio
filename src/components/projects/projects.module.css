@@ -165,10 +165,8 @@
     opacity 0.24s var(--ease-out);
 }
 
-.itemTransitioningTarget {
-  opacity: 0 !important;
-  transform: scale(0.985);
-  transition: opacity 0.18s ease;
+.itemTransitioningTarget .imageFrame {
+  visibility: hidden;
 }
 
 .itemOtherFading {
@@ -1025,5 +1023,21 @@
 
   .projectImage {
     transition: none !important;
+  }
+}
+
+/* The real destination supplies layout and copy throughout the handoff. */
+.executiveHeroSection[data-project-entering] [data-project-photo] {
+  visibility: hidden;
+}
+
+.executiveHeroSection[data-project-entering] [data-project-reveal] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .characteristicPhotoCol,
+  .executiveSummaryCol {
+    animation: none;
   }
 }

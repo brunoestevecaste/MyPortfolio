@@ -1,50 +1,39 @@
 "use client";
 
-import React, {
+import Image from "next/image";
+import {
   createContext,
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
+  type ReactNode,
 } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type { ProjectSummary } from "@/data/projects";
-import { ProjectExecutiveHero } from "./project-executive-hero";
+import styles from "./project-transition.module.css";
 
-interface Rect {
-  top: number;
-  left: number;
-  width: number;
-  height: number;
-}
-
-interface FlipStyles {
-  deltaX: number;
-  deltaY: number;
-  scaleX: number;
-  scaleY: number;
-}
-
-interface TransitionState {
-  active: boolean;
-  phase: "initial" | "animating" | "completing";
-  project: ProjectSummary | null;
-  originRect: Rect | null;
+interface ProjectFlight {
+  slug: string;
+  origin: DOMRect;
+  src: string;
+  imageTransform: string;
+  imageFilter: string;
+  destination: Promise<HTMLElement>;
+  arrive: (hero: HTMLElement) => void;
 }
 
 interface ProjectTransitionContextType {
-  transitionToProject: (
-    project: ProjectSummary,
-    originElement: HTMLElement
-  ) => void;
+  transitionToProject: (project: ProjectSummary, origin: HTMLElement) => void;
+  registerHero: (slug: string, hero: HTMLElement) => void;
   isTransitioning: boolean;
   activeProjectSlug: string | null;
 }
 
 const ProjectTransitionContext = createContext<ProjectTransitionContextType>({
   transitionToProject: () => {},
+  registerHero: () => {},
   isTransitioning: false,
   activeProjectSlug: null,
 });
@@ -53,244 +42,172 @@ export function useProjectTransition() {
   return useContext(ProjectTransitionContext);
 }
 
-function TransitionOverlay({
-  project,
-  originRect,
-  phase,
-  onPhaseChange,
-}: {
-  project: ProjectSummary;
-  originRect: Rect;
-  phase: "initial" | "animating" | "completing";
-  onPhaseChange: (nextPhase: "animating" | "completing" | "done") => void;
-}) {
-  const photoRef = useRef<HTMLDivElement>(null);
-  const [flipStyles, setFlipStyles] = useState<FlipStyles | null>(null);
+const flightTiming = { duration: 480, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "both" } as const;
 
-  useLayoutEffect(() => {
-    if (!photoRef.current) return;
-    const target = photoRef.current.getBoundingClientRect();
-    if (target.width > 0 && target.height > 0) {
-      const deltaX = originRect.left - target.left;
-      const deltaY = originRect.top - target.top;
-      const scaleX = originRect.width / target.width;
-      const scaleY = originRect.height / target.height;
-      setFlipStyles({ deltaX, deltaY, scaleX, scaleY });
-    }
-  }, [originRect]);
+function TransitionOverlay({ flight, navigate, finish }: {
+  flight: ProjectFlight;
+  navigate: (slug: string) => void;
+  finish: () => void;
+}) {
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const photoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!flipStyles || phase !== "initial") return;
+    const backdrop = backdropRef.current;
+    const photo = photoRef.current;
+    if (!backdrop || !photo) return;
 
-    // Trigger animation in next frame once initial FLIP transform is registered
-    const r1 = requestAnimationFrame(() => {
-      const r2 = requestAnimationFrame(() => {
-        onPhaseChange("animating");
-      });
-      return () => cancelAnimationFrame(r2);
-    });
+    let cancelled = false;
+    const animations: Animation[] = [];
+    const animate = (element: Element, frames: Keyframe[], timing: KeyframeAnimationOptions) => {
+      const animation = element.animate(frames, timing);
+      animations.push(animation);
+      return animation;
+    };
+    // The overlay receives pointer/touch input; also keep keyboard and wheel
+    // scrolling from changing either endpoint while the photo is in flight.
+    const preventScroll = (event: Event) => event.preventDefault();
+    const preventScrollKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") finish();
+      if (["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " ", "Tab"].includes(event.key)) event.preventDefault();
+    };
+    window.addEventListener("wheel", preventScroll, { passive: false });
+    window.addEventListener("touchmove", preventScroll, { passive: false });
+    window.addEventListener("keydown", preventScrollKey);
+    // A failed navigation must never leave an invisible input-blocking layer.
+    const watchdog = window.setTimeout(finish, 10000);
+    window.addEventListener("popstate", finish);
+    window.addEventListener("resize", finish);
 
-    return () => cancelAnimationFrame(r1);
-  }, [flipStyles, phase, onPhaseChange]);
+    async function run() {
+      try {
+        // Dissolve the index while keeping the exact clicked image on screen.
+        await animate(backdrop!, [{ opacity: 0 }, { opacity: 1 }], {
+          duration: 180, easing: "ease-out", fill: "both",
+        }).finished;
+        if (cancelled) return;
+        navigate(flight.slug);
+        const hero = await flight.destination;
+        if (cancelled) return;
+        const target = hero.querySelector<HTMLElement>("[data-project-photo]");
+        const targetImage = target?.querySelector("img");
+        if (!target || !targetImage) { finish(); return; }
+        // Keep the source bitmap until the real, responsive destination is ready.
+        await targetImage.decode().catch(() => {});
+        if (cancelled) return;
+        const rect = target.getBoundingClientRect();
+        const destinationFilter = getComputedStyle(targetImage).filter;
+        const image = photo!.querySelector("img")!;
 
-  const isAnimating = phase === "animating";
-  const isCompleting = phase === "completing";
-
-  const photoInnerStyle: React.CSSProperties = flipStyles
-    ? {
-        transform:
-          isAnimating || isCompleting
-            ? "translate3d(0, 0, 0) scale(1, 1)"
-            : `translate3d(${flipStyles.deltaX}px, ${flipStyles.deltaY}px, 0) scale(${flipStyles.scaleX}, ${flipStyles.scaleY})`,
-        transformOrigin: "top left",
-        transition:
-          isAnimating || isCompleting
-            ? "transform 0.48s cubic-bezier(0.16, 1, 0.3, 1)"
-            : "none",
-        willChange: "transform",
-        visibility: "visible",
+        const movement = animate(photo!, [
+          { transform: "translate3d(0, 0, 0) scale(1, 1)" },
+          { transform: `translate3d(${rect.left - flight.origin.left}px, ${rect.top - flight.origin.top}px, 0) scale(${rect.width / flight.origin.width}, ${rect.height / flight.origin.height})` },
+        ], flightTiming);
+        animate(image, [
+          { transform: flight.imageTransform, filter: flight.imageFilter },
+          { transform: "none", filter: destinationFilter },
+        ], flightTiming);
+        animate(backdrop!, [{ opacity: 1 }, { opacity: 0 }], {
+          duration: 320, easing: "ease-out", fill: "both",
+        });
+        const reveals = Array.from(hero.querySelectorAll<HTMLElement>("[data-project-reveal]"));
+        const textAnimations = reveals.map((element, index) => animate(element, [
+          { opacity: 0, transform: "translateY(20px)" },
+          { opacity: 1, transform: "translateY(0)" },
+        ], { ...flightTiming, duration: 400, delay: 100 + Math.min(index, 5) * 35 }));
+        await Promise.all([movement.finished, ...textAnimations.map((animation) => animation.finished)]);
+        if (cancelled) return;
+        finish();
+        document.getElementById("main-content")?.focus({ preventScroll: true });
+      } catch {
+        // Cancelling an Animation rejects finished; cleanup already restores UI.
+        if (!cancelled) finish();
       }
-    : {
-        visibility: "hidden",
-      };
-
-  const photoImageStyle: React.CSSProperties = {
-    filter: isAnimating || isCompleting ? "grayscale(80%)" : "grayscale(100%)",
-    transition: isAnimating || isCompleting ? "filter 0.48s ease-out" : "none",
-  };
-
-  const summaryColStyle: React.CSSProperties = {
-    opacity: isAnimating || isCompleting ? 1 : 0,
-    transform:
-      isAnimating || isCompleting ? "translateY(0)" : "translateY(24px)",
-    transition:
-      isAnimating || isCompleting
-        ? "opacity 0.44s cubic-bezier(0.16, 1, 0.3, 1) 0.06s, transform 0.44s cubic-bezier(0.16, 1, 0.3, 1) 0.06s"
-        : "none",
-    willChange: "opacity, transform",
-  };
-
-  const topBarStyle: React.CSSProperties = {
-    opacity: isAnimating || isCompleting ? 1 : 0,
-    transform:
-      isAnimating || isCompleting ? "translateY(0)" : "translateY(-6px)",
-    transition:
-      isAnimating || isCompleting
-        ? "opacity 0.36s ease 0.12s, transform 0.36s ease 0.12s"
-        : "none",
-  };
-
-  const captionStyle: React.CSSProperties = {
-    opacity: isAnimating || isCompleting ? 1 : 0,
-    transition:
-      isAnimating || isCompleting ? "opacity 0.36s ease 0.18s" : "none",
-  };
+    }
+    void run();
+    return () => {
+      cancelled = true;
+      animations.forEach((animation) => animation.cancel());
+      window.clearTimeout(watchdog);
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
+      window.removeEventListener("keydown", preventScrollKey);
+      window.removeEventListener("popstate", finish);
+      window.removeEventListener("resize", finish);
+    };
+  }, [flight, navigate, finish]);
 
   return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 9999,
-        pointerEvents: "none",
-        overflowY: "hidden",
-        backgroundColor: "var(--canvas)",
-        opacity: isCompleting ? 0 : 1,
-        transition: isCompleting
-          ? "opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1)"
-          : "none",
-      }}
-    >
-      {/* Spacer matching desktop & mobile header height */}
-      <div className="h-18 md:h-[4.5rem] w-full shrink-0" />
-
-      <div className="site-container flex-1">
-        <ProjectExecutiveHero
-          project={project}
-          isOverlay={true}
-          photoRef={photoRef}
-          photoInnerStyle={photoInnerStyle}
-          photoImageStyle={photoImageStyle}
-          summaryColStyle={summaryColStyle}
-          topBarStyle={topBarStyle}
-          captionStyle={captionStyle}
-        />
+    <div className={styles.overlay} aria-hidden="true" data-project-transition>
+      <div ref={backdropRef} className={styles.backdrop} />
+      <div ref={photoRef} className={styles.photo} style={{
+        top: flight.origin.top, left: flight.origin.left,
+        width: flight.origin.width, height: flight.origin.height,
+      }}>
+        <Image src={flight.src} alt="" fill unoptimized loading="eager" sizes="100vw" style={{
+          objectFit: "cover", transform: flight.imageTransform, filter: flight.imageFilter,
+        }} />
       </div>
     </div>
   );
 }
 
-export function ProjectTransitionProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function ProjectTransitionProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const [transitionState, setTransitionState] = useState<TransitionState>({
-    active: false,
-    phase: "initial",
-    project: null,
-    originRect: null,
-  });
+  const pathname = usePathname();
+  const [flight, setFlight] = useState<ProjectFlight | null>(null);
+  const flightRef = useRef<ProjectFlight | null>(null);
 
-  const transitionToProject = useCallback(
-    (project: ProjectSummary, originElement: HTMLElement) => {
-      // Respect prefers-reduced-motion
-      if (
-        typeof window !== "undefined" &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ) {
-        router.push(`/projects/${project.slug}`);
-        return;
-      }
+  const finish = useCallback(() => {
+    flightRef.current = null;
+    setFlight(null);
+  }, []);
+  const navigate = useCallback((slug: string) => {
+    router.push(`/projects/${slug}`, { scroll: false });
+  }, [router]);
+  const registerHero = useCallback((slug: string, hero: HTMLElement) => {
+    const current = flightRef.current;
+    if (current?.slug !== slug) return;
+    // An instant reset is essential: the site's normal anchor scroll is smooth.
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    current.arrive(hero);
+  }, []);
 
-      const rect = originElement.getBoundingClientRect();
-      const originRect: Rect = {
-        top: rect.top,
-        left: rect.left,
-        width: rect.width,
-        height: rect.height,
-      };
+  useEffect(() => {
+    if (pathname !== "/" && pathname !== `/projects/${flightRef.current?.slug}`) finish();
+  }, [pathname, finish]);
 
-      setTransitionState({
-        active: true,
-        phase: "initial",
-        project,
-        originRect,
-      });
-
-      // Route navigation triggers concurrently during transition flight
-      const navTimer = setTimeout(() => {
-        router.push(`/projects/${project.slug}`);
-      }, 220);
-
-      // Begin overlay fade-out once route navigation lands
-      const completionTimer = setTimeout(() => {
-        setTransitionState((prev) => ({
-          ...prev,
-          phase: "completing",
-        }));
-      }, 580);
-
-      // Fully remove overlay
-      const cleanupTimer = setTimeout(() => {
-        setTransitionState({
-          active: false,
-          phase: "initial",
-          project: null,
-          originRect: null,
-        });
-      }, 820);
-
-      return () => {
-        clearTimeout(navTimer);
-        clearTimeout(completionTimer);
-        clearTimeout(cleanupTimer);
-      };
-    },
-    [router]
-  );
-
-  const handlePhaseChange = useCallback(
-    (nextPhase: "animating" | "completing" | "done") => {
-      if (nextPhase === "done") {
-        setTransitionState({
-          active: false,
-          phase: "initial",
-          project: null,
-          originRect: null,
-        });
-      } else {
-        setTransitionState((prev) => ({
-          ...prev,
-          phase: nextPhase,
-        }));
-      }
-    },
-    []
-  );
+  const transitionToProject = useCallback((project: ProjectSummary, origin: HTMLElement) => {
+    if (flightRef.current) return;
+    const image = origin.querySelector("img");
+    if (!image || !image.complete || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      router.push(`/projects/${project.slug}`);
+      return;
+    }
+    let arrive!: ProjectFlight["arrive"];
+    const destination = new Promise<HTMLElement>((resolve) => { arrive = resolve; });
+    const imageStyle = getComputedStyle(image);
+    const nextFlight: ProjectFlight = {
+      slug: project.slug,
+      origin: origin.getBoundingClientRect(),
+      src: image.currentSrc || image.src,
+      imageTransform: imageStyle.transform,
+      imageFilter: imageStyle.filter,
+      destination,
+      arrive,
+    };
+    flightRef.current = nextFlight;
+    setFlight(nextFlight);
+  }, [router]);
 
   return (
-    <ProjectTransitionContext.Provider
-      value={{
-        transitionToProject,
-        isTransitioning: transitionState.active,
-        activeProjectSlug: transitionState.project?.slug ?? null,
-      }}
-    >
+    <ProjectTransitionContext.Provider value={{
+      transitionToProject, registerHero,
+      isTransitioning: flight !== null,
+      activeProjectSlug: flight?.slug ?? null,
+    }}>
       {children}
-
-      {transitionState.active &&
-        transitionState.project &&
-        transitionState.originRect && (
-          <TransitionOverlay
-            project={transitionState.project}
-            originRect={transitionState.originRect}
-            phase={transitionState.phase}
-            onPhaseChange={handlePhaseChange}
-          />
-        )}
+      {flight && <TransitionOverlay flight={flight} navigate={navigate} finish={finish} />}
     </ProjectTransitionContext.Provider>
   );
 }

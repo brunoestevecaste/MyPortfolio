@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${archivo.variable} ${spaceMono.variable}`}>
+    <html lang="es" data-scroll-behavior="smooth" className={`${archivo.variable} ${spaceMono.variable}`}>
       <body className="flex min-h-dvh flex-col antialiased">
         <Kursor />
         <a className="skip-link" href="#main-content">

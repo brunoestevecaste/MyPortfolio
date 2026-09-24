@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { ProjectSummary } from "@/data/projects";
 import { useProjectTransition } from "./project-transition-context";
@@ -12,14 +13,6 @@ export interface ProjectExecutiveHeroProps {
   academicFramework?: string;
   scope?: string;
   grade?: string;
-  isOverlay?: boolean;
-  photoRef?: React.Ref<HTMLDivElement>;
-  photoColStyle?: React.CSSProperties;
-  photoInnerStyle?: React.CSSProperties;
-  photoImageStyle?: React.CSSProperties;
-  summaryColStyle?: React.CSSProperties;
-  topBarStyle?: React.CSSProperties;
-  captionStyle?: React.CSSProperties;
 }
 
 export function ProjectExecutiveHero({
@@ -28,17 +21,17 @@ export function ProjectExecutiveHero({
   academicFramework,
   scope,
   grade,
-  isOverlay = false,
-  photoRef,
-  photoColStyle,
-  photoInnerStyle,
-  photoImageStyle,
-  summaryColStyle,
-  topBarStyle,
-  captionStyle,
 }: ProjectExecutiveHeroProps) {
-  const { activeProjectSlug } = useProjectTransition();
-  const isTransitionTarget = !isOverlay && activeProjectSlug === project.slug;
+  const { activeProjectSlug, registerHero } = useProjectTransition();
+  const isTransitionTarget = activeProjectSlug === project.slug;
+  const heroRef = useRef<HTMLElement>(null);
+  // Keep this decision for the lifetime of the page so cleanup cannot replay
+  // the normal page-entry animations underneath the shared photo.
+  const [arrivedViaTransition] = useState(isTransitionTarget);
+
+  useLayoutEffect(() => {
+    if (isTransitionTarget && heroRef.current) registerHero(project.slug, heroRef.current);
+  }, [isTransitionTarget, project.slug, registerHero]);
 
   const resolvedEyebrow = eyebrow ?? project.eyebrow;
   const resolvedFramework = academicFramework ?? project.academicFramework;
@@ -49,36 +42,34 @@ export function ProjectExecutiveHero({
     e.preventDefault();
     const caseElement = document.getElementById("case-study");
     if (caseElement) {
-      caseElement.scrollIntoView({ behavior: "smooth" });
+      caseElement.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
     }
   };
 
   const heroClass = `${styles.executiveHeroSection} ${
-    isOverlay || isTransitionTarget ? styles.noEntranceAnimation : ""
+    arrivedViaTransition ? styles.noEntranceAnimation : ""
   }`;
 
   const photoColClass = `${styles.characteristicPhotoCol} ${
-    isOverlay || isTransitionTarget ? styles.noEntranceAnimation : ""
+    arrivedViaTransition ? styles.noEntranceAnimation : ""
   }`;
 
   const summaryColClass = `${styles.executiveSummaryCol} ${
-    isOverlay || isTransitionTarget ? styles.noEntranceAnimation : ""
+    arrivedViaTransition ? styles.noEntranceAnimation : ""
   }`;
 
   return (
     <section
+      ref={heroRef}
+      data-project-entering={isTransitionTarget || undefined}
       className={heroClass}
       aria-label={`Resumen ejecutivo de ${project.title}`}
     >
       {/* Top navigation bar */}
-      <div className={styles.executiveTopBar} style={topBarStyle}>
-        {isOverlay ? (
-          <span className={styles.backLink}>← Volver a proyectos</span>
-        ) : (
-          <Link href="/#work" className={styles.backLink}>
-            ← Volver a proyectos
-          </Link>
-        )}
+      <div className={styles.executiveTopBar} data-project-reveal>
+        <Link href="/#work" className={styles.backLink}>
+          ← Volver a proyectos
+        </Link>
         <span className={styles.executiveIndexNumber}>
           {project.number} / 04
         </span>
@@ -87,46 +78,40 @@ export function ProjectExecutiveHero({
       {/* Split layout: Photo on left, Executive Summary on right */}
       <div className={styles.executiveSplitGrid}>
         {/* Left column: Characteristic project photo */}
-        <div className={photoColClass} style={photoColStyle}>
+        <div className={photoColClass}>
           <figure className={styles.photoContainer}>
             <div
-              ref={photoRef}
+              data-project-photo
               className={styles.photoInner}
-              style={photoInnerStyle}
             >
               <Image
                 src={project.image}
-                alt={
-                  isOverlay
-                    ? ""
-                    : `Fotografía característica del proyecto: ${project.title}`
-                }
+                alt={`Fotografía característica del proyecto: ${project.title}`}
                 width={1200}
                 height={900}
                 className={styles.characteristicImage}
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                style={photoImageStyle}
               />
             </div>
-            <figcaption className={styles.photoCaption} style={captionStyle}>
+            <figcaption className={styles.photoCaption} data-project-reveal>
               {project.number} · {project.organization} — {project.title}
             </figcaption>
           </figure>
         </div>
 
         {/* Right column: Executive Summary */}
-        <div className={summaryColClass} style={summaryColStyle}>
-          <p className={styles.caseEyebrow}>{resolvedEyebrow}</p>
-          <h1 className={styles.caseTitle}>{project.title}</h1>
+        <div className={summaryColClass}>
+          <p className={styles.caseEyebrow} data-project-reveal>{resolvedEyebrow}</p>
+          <h1 className={styles.caseTitle} data-project-reveal>{project.title}</h1>
 
           {/* Lead executive overview */}
-          <p className={styles.executiveLead}>
+          <p className={styles.executiveLead} data-project-reveal>
             {project.executiveSummary.lead}
           </p>
 
           {/* Structured Executive Takeaways */}
-          <div className={styles.executivePointsList}>
+          <div className={styles.executivePointsList} data-project-reveal>
             <div className={styles.executivePointCard}>
               <strong className={styles.executivePointTitle}>01 / Reto de negocio</strong>
               <p className={styles.executivePointText}>
@@ -150,7 +135,7 @@ export function ProjectExecutiveHero({
           </div>
 
           {/* Key Facts Summary */}
-          <dl className={styles.executiveFacts}>
+          <dl className={styles.executiveFacts} data-project-reveal>
             <div>
               <dt>Organización</dt>
               <dd>{project.organization}</dd>
@@ -180,7 +165,7 @@ export function ProjectExecutiveHero({
           </dl>
 
           {/* Technologies used */}
-          <div className={styles.executiveTechRow}>
+          <div className={styles.executiveTechRow} data-project-reveal>
             <span className={styles.executiveTechLabel}>Tecnologías:</span>
             <ul className={styles.technologies} aria-label="Tecnologías destacadas">
               {project.technologies.map((tech) => (
@@ -190,26 +175,17 @@ export function ProjectExecutiveHero({
           </div>
 
           {/* Scroll down prompt to view the full case study */}
-          <div className={styles.caseStudyScrollPrompt}>
-            {isOverlay ? (
-              <div className={styles.scrollDownButton}>
-                <span>Ver caso de estudio completo</span>
-                <span className={styles.scrollArrowIcon} aria-hidden="true">
-                  ↓
-                </span>
-              </div>
-            ) : (
-              <a
-                href="#case-study"
-                onClick={scrollToCaseStudy}
-                className={styles.scrollDownButton}
-              >
-                <span>Ver caso de estudio completo</span>
-                <span className={styles.scrollArrowIcon} aria-hidden="true">
-                  ↓
-                </span>
-              </a>
-            )}
+          <div className={styles.caseStudyScrollPrompt} data-project-reveal>
+            <a
+              href="#case-study"
+              onClick={scrollToCaseStudy}
+              className={styles.scrollDownButton}
+            >
+              <span>Ver caso de estudio completo</span>
+              <span className={styles.scrollArrowIcon} aria-hidden="true">
+                ↓
+              </span>
+            </a>
           </div>
         </div>
       </div>

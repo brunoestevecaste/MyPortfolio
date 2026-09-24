@@ -1,0 +1,22 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10002;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--canvas);
+  opacity: 0;
+}
+
+.photo {
+  position: absolute;
+  overflow: hidden;
+  transform-origin: top left;
+  background: var(--surface);
+  will-change: transform;
+}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { projects, type ProjectSummary } from "@/data/projects";
 import { useProjectTransition } from "./project-transition-context";
@@ -92,6 +93,7 @@ export function ProjectIndex() {
     e: React.MouseEvent<HTMLAnchorElement>,
     project: ProjectSummary
   ) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
     const frame = e.currentTarget.querySelector(
       `.${styles.imageFrame}`
@@ -107,7 +109,7 @@ export function ProjectIndex() {
   const scrollToProject = (index: number) => {
     const targetEl = itemRefs.current[index];
     if (targetEl) {
-      targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      targetEl.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "center" });
     }
   };
 
@@ -180,7 +182,7 @@ export function ProjectIndex() {
                 isTarget ? styles.itemTransitioningTarget : ""
               } ${isOtherFading ? styles.itemOtherFading : ""}`}
             >
-              <a
+              <Link
                 href={`/projects/${project.slug}`}
                 onClick={(e) => handleProjectClick(e, project)}
                 className={styles.staggeredCardLink}
@@ -203,7 +205,9 @@ export function ProjectIndex() {
                     height={600}
                     className={styles.projectImage}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 48vw, 560px"
-                    priority={index < 2}
+                    // This section is below the fold. Native lazy loading also
+                    // avoids React's automatic preloads for eager images.
+                    loading="lazy"
                   />
                   <div className={styles.imageOverlay} aria-hidden="true" />
                 </div>
@@ -215,7 +219,7 @@ export function ProjectIndex() {
                     ↗
                   </span>
                 </div>
-              </a>
+              </Link>
             </article>
           );
         })}
