@@ -1,6 +1,495 @@
+/* =========================================================================
+   PROJECTS SECTION (HOMEPAGE & ARCHIVE)
+   Layout inspired by refs/video_projects.mp4:
+   - Delicate left scroll rail with active position indicator
+   - Alternating staggered 2-column project stream
+   - Prominent editorial numbers
+   - Subtle project titles in body font (Space Mono)
+   - Refined scroll reveals and click transition animations
+   ========================================================================= */
+
+.projectsStreamWrapper {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(1.5rem, 3.5vw, 4rem);
+  margin-top: 3.5rem;
+}
+
+/* Delicate Left Scroll Rail */
+.delicateScrollRail {
+  position: sticky;
+  top: 22vh;
+  flex-shrink: 0;
+  width: 54px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+
+.railInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.railLabel {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.railTrack {
+  position: relative;
+  width: 1px;
+  height: 180px;
+  background: color-mix(in srgb, var(--line) 85%, transparent);
+  margin-block: 0.25rem;
+}
+
+.railThumb {
+  position: absolute;
+  top: 0;
+  left: -0.5px;
+  width: 2px;
+  height: 32px;
+  background: var(--signal);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.railMarkers {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  align-items: center;
+}
+
+.railMarkerBtn {
+  background: transparent;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--muted);
+  transition: color var(--duration-feedback) var(--ease-out);
+}
+
+.markerDot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  transition: transform var(--duration-feedback) var(--ease-out),
+    background-color var(--duration-feedback) var(--ease-out);
+}
+
+.markerText {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  transition: color var(--duration-feedback) var(--ease-out);
+}
+
+.activeRailMarker {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.activeRailMarker .markerDot {
+  transform: scale(1.8);
+  background: var(--signal);
+}
+
+.activeRailMarker .markerText {
+  color: var(--signal);
+}
+
+.railCounter {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.6875rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin-top: 0.5rem;
+}
+
+/* Staggered Alternating Grid */
+.projectsStaggeredGrid {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(2.5rem, 5vw, 6rem);
+  row-gap: clamp(4.5rem, 8vw, 9rem);
+  padding-bottom: 4rem;
+}
+
+.staggeredItem {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.itemRevealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.itemLeft {
+  grid-column: 1;
+}
+
+.itemRight {
+  grid-column: 2;
+  margin-top: clamp(3.5rem, 7vw, 7.5rem);
+}
+
+.itemTransitioning {
+  transform: scale(0.985);
+  opacity: 0.85;
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.24s var(--ease-out);
+}
+
+/* Staggered Card */
+.staggeredCardLink {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  outline-offset: 4px;
+}
+
+.projectNumberHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  padding-inline: 0.125rem;
+}
+
+.prominentNumber {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: clamp(2rem, 3.8vw, 3.75rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: var(--ink);
+}
+
+.prominentMeta {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.6875rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.imageFrame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.projectImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(100%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.6s var(--ease-out);
+}
+
+.staggeredCardLink:hover .projectImage,
+.staggeredCardLink:focus-visible .projectImage {
+  transform: scale(1.035);
+  filter: grayscale(40%);
+}
+
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+  transition: border-color 0.3s var(--ease-out);
+}
+
+.staggeredCardLink:hover .imageOverlay {
+  border-color: color-mix(in srgb, var(--signal) 50%, transparent);
+}
+
+/* Subtle Text on Homepage (body typography, restrained and minimalist) */
+.subtleTextWrapper {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-inline: 0.125rem;
+}
+
+.subtleProjectTitle {
+  font-family: var(--font-space-mono), monospace;
+  font-size: clamp(0.875rem, 1vw, 0.9375rem);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: pretty;
+  transition: color var(--duration-feedback) var(--ease-out);
+}
+
+.staggeredCardLink:hover .subtleProjectTitle,
+.staggeredCardLink:focus-visible .subtleProjectTitle {
+  color: var(--signal);
+}
+
+.subtleArrow {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.9375rem;
+  color: var(--muted);
+  transition: transform var(--duration-feedback) var(--ease-out),
+    color var(--duration-feedback) var(--ease-out);
+  flex-shrink: 0;
+}
+
+.staggeredCardLink:hover .subtleArrow {
+  transform: translate(2px, -2px);
+  color: var(--signal);
+}
+
+/* =========================================================================
+   PROJECT CASE STUDY EXECUTIVE HERO (SPLIT LAYOUT)
+   Layout inspired by refs/video_projects.mp4:
+   - Split 50/50: Characteristic photo on left, Executive Summary on right
+   - Unfolds into complete case study upon scroll
+   ========================================================================= */
+
+.executiveHeroSection {
+  padding-top: 1.5rem;
+  padding-bottom: clamp(3rem, 6vw, 6rem);
+  animation: fadeInHero 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeInHero {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.executiveTopBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.executiveIndexNumber {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.executiveSplitGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2.5rem, 5vw, 6rem);
+  align-items: start;
+}
+
+.characteristicPhotoCol {
+  position: sticky;
+  top: 5rem;
+}
+
+.photoContainer {
+  margin: 0;
+}
+
+.photoInner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.characteristicImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(90%);
+  transition: filter 0.5s var(--ease-out);
+}
+
+.photoContainer:hover .characteristicImage {
+  filter: grayscale(20%);
+}
+
+.photoCaption {
+  margin-top: 0.875rem;
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.6875rem;
+  color: var(--muted);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.executiveSummaryCol {
+  min-width: 0;
+}
+
+.executiveLead {
+  font-family: var(--font-archivo), sans-serif;
+  font-size: clamp(1.25rem, 2vw, 1.625rem);
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  margin-bottom: 2.25rem;
+  color: var(--ink);
+}
+
+.executivePointsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.executivePointCard {
+  border-left: 2px solid var(--signal);
+  padding-left: 1.25rem;
+}
+
+.executivePointTitle {
+  display: block;
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--signal);
+  margin-bottom: 0.35rem;
+}
+
+.executivePointText {
+  font-size: 0.84375rem;
+  line-height: 1.75;
+  color: var(--ink);
+  max-width: 58ch;
+}
+
+.executiveFacts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 2rem;
+  margin-block: 2rem;
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.executiveFacts dt {
+  font-size: 0.6875rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.375rem;
+}
+
+.executiveFacts dd {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.executiveTechRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.executiveTechLabel {
+  font-size: 0.6875rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.caseStudyScrollPrompt {
+  margin-top: 2rem;
+  padding-top: 1rem;
+}
+
+.scrollDownButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.625rem 1.5rem;
+  background: var(--signal);
+  color: var(--on-signal);
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.8125rem;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--signal);
+  transition: background-color var(--duration-feedback) var(--ease-out),
+    color var(--duration-feedback) var(--ease-out),
+    transform var(--duration-feedback) var(--ease-out);
+}
+
+.scrollDownButton:hover {
+  background: var(--ink);
+  transform: translateY(-2px);
+}
+
+.scrollArrowIcon {
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform var(--duration-feedback) var(--ease-out);
+}
+
+.scrollDownButton:hover .scrollArrowIcon {
+  transform: translateY(3px);
+}
+
+.caseStudyFull {
+  padding-top: clamp(3rem, 6vw, 6rem);
+  border-top: 1px solid var(--line);
+}
+
+/* =========================================================================
+   CASE STUDY BODY & SECTIONS (PRESERVED)
+   ========================================================================= */
+
 .projectList {
   margin-top: 3rem;
 }
+
 .projectLink {
   display: grid;
   grid-template-columns: 0.45fr 5.55fr 5fr;
@@ -8,17 +497,20 @@
   align-items: start;
   padding-block: 2rem;
 }
+
 .projectNumber {
   font-size: 0.875rem;
   padding-top: 0.125rem;
   color: var(--signal);
 }
+
 .organization,
 .projectMeta {
   font-size: 0.75rem;
   line-height: 1.7;
   color: var(--muted);
 }
+
 .projectCopy h3 {
   max-width: 17ch;
   margin-block: 1rem 1.5rem;
@@ -28,23 +520,27 @@
   letter-spacing: -0.05em;
   text-wrap: balance;
 }
+
 .summary {
   max-width: 52ch;
   font-size: 0.875rem;
   line-height: 1.75;
 }
+
 .projectMeta {
   margin-top: 1.5rem;
 }
+
 .technologies {
   display: flex;
   flex-wrap: wrap;
   column-gap: 1.25rem;
   row-gap: 0.5rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   font-size: 0.75rem;
   line-height: 1.7;
 }
+
 .readCase {
   display: inline-flex;
   min-height: 44px;
@@ -55,26 +551,32 @@
   text-decoration: underline;
   text-underline-offset: 0.3em;
 }
+
 .projectLink:hover h3,
 .projectLink:focus-visible h3 {
   color: var(--signal);
 }
+
 .preview {
   align-self: center;
   background: var(--surface);
   padding: clamp(1rem, 2.4vw, 2.5rem);
 }
+
 .preview > span {
   display: block;
   font-size: 0.75rem;
   line-height: 1.7;
 }
+
 .preview > span:last-child {
   color: var(--muted);
 }
+
 .caseHeader {
   padding-top: 1.5rem;
 }
+
 .backLink {
   display: inline-flex;
   align-items: center;
@@ -84,25 +586,31 @@
   text-decoration: underline;
   text-underline-offset: 0.3em;
 }
+
 .backLink:hover {
   text-decoration-thickness: 2px;
 }
+
 .caseEyebrow {
-  margin-top: 2.5rem;
+  margin-top: 1.5rem;
   color: var(--muted);
   font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
+
 .caseTitle {
-  max-width: 20ch;
-  margin-block: 1.25rem 1.5rem;
+  max-width: 24ch;
+  margin-block: 1rem 1.5rem;
   font-family: var(--font-archivo), sans-serif;
-  font-size: clamp(3rem, 6.5vw, 6rem);
+  font-size: clamp(2.75rem, 5.5vw, 5rem);
   font-weight: 400;
   line-height: 1.02;
-  letter-spacing: -0.07em;
+  letter-spacing: -0.06em;
   text-transform: uppercase;
   text-wrap: balance;
 }
+
 .caseLead {
   max-width: 48ch;
   font-family: var(--font-archivo), sans-serif;
@@ -110,79 +618,95 @@
   line-height: 1.45;
   letter-spacing: -0.025em;
 }
+
 .facts {
   display: grid;
   grid-template-columns: 1.6fr 1.4fr 1.4fr 1fr;
   gap: 2rem;
-  margin-top: 3rem;
+  margin-top: 2.5rem;
   padding-block: 1.75rem;
 }
+
 .facts dt {
   margin-bottom: 0.75rem;
   font-size: 0.75rem;
   color: var(--muted);
 }
+
 .facts dd {
   max-width: 28ch;
   font-size: 0.8125rem;
   line-height: 1.7;
 }
-.facts .grade {
+
+.facts .grade,
+.grade {
   color: var(--signal);
   font-family: var(--font-archivo), sans-serif;
   font-size: 2.75rem;
   line-height: 1;
   letter-spacing: -0.06em;
 }
+
 .privacy {
   display: grid;
   grid-template-columns: 1fr 2.5fr;
   gap: 2rem;
-  margin-block: 2rem 5rem;
+  margin-block: 2rem 4rem;
   font-size: 0.75rem;
   line-height: 1.8;
 }
+
 .privacy strong {
   font-weight: 400;
   color: var(--signal);
 }
+
 .privacy p {
   max-width: 85ch;
   color: var(--muted);
 }
+
 .caseLayout {
   display: grid;
   grid-template-columns: 2.5fr 9fr;
   gap: clamp(2rem, 5vw, 5rem);
   align-items: start;
 }
+
 .caseNav {
   position: sticky;
   top: 2rem;
   font-size: 0.75rem;
 }
+
 .caseNav > p {
   margin-bottom: 1rem;
   color: var(--muted);
 }
+
 .caseNav a {
   display: flex;
   align-items: center;
   min-height: 44px;
   width: fit-content;
 }
+
 .caseNav a:hover {
   color: var(--signal);
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
+
 .caseBody {
   min-width: 0;
 }
+
 .caseSection {
   padding-bottom: clamp(4rem, 7vw, 7rem);
   scroll-margin-top: 2rem;
 }
+
 .caseSection h2 {
   max-width: 24ch;
   margin-bottom: 2rem;
@@ -193,59 +717,71 @@
   letter-spacing: -0.05em;
   text-wrap: balance;
 }
+
 .prose {
   max-width: 65ch;
   font-size: 0.875rem;
   line-height: 1.85;
 }
+
 .prose p + p {
   margin-top: 1.25rem;
 }
+
 .architecture {
   margin-top: 2.5rem;
   background: var(--surface);
   padding: 2rem;
 }
+
 .architecture ol {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 1rem;
 }
+
 .architecture li {
   padding-top: 1rem;
 }
+
 .architecture strong {
   display: block;
   font-family: var(--font-archivo), sans-serif;
   font-size: 1.125rem;
   font-weight: 500;
 }
+
 .architecture li span {
   display: block;
   margin-top: 0.5rem;
   font-size: 0.75rem;
   line-height: 1.7;
 }
+
 .directConnection {
   margin-top: 1.5rem;
   font-size: 0.75rem;
   line-height: 1.7;
 }
+
 .architecture figcaption {
   margin-top: 1rem;
   color: var(--muted);
   font-size: 0.75rem;
   line-height: 1.8;
 }
+
 .etlSteps {
   counter-reset: etl;
   margin-top: 2.5rem;
 }
+
 .etlSteps li {
   position: relative;
   padding: 1.5rem 0 1.5rem 3rem;
   counter-increment: etl;
 }
+
 .etlSteps li::before {
   content: counter(etl, decimal-leading-zero);
   position: absolute;
@@ -254,45 +790,68 @@
   color: var(--signal);
   font-size: 0.75rem;
 }
+
 .etlSteps h3 {
   font-family: var(--font-archivo), sans-serif;
   font-size: 1.375rem;
   letter-spacing: -0.025em;
 }
+
 .etlSteps p {
   max-width: 65ch;
   margin-top: 0.75rem;
   font-size: 0.8125rem;
   line-height: 1.85;
 }
+
 .methodNote {
   margin-top: 2rem;
   padding-left: 1.5rem;
 }
+
 .methodNote h3 {
   font-family: var(--font-archivo), sans-serif;
   font-size: 1.375rem;
 }
+
 .methodNote p {
   max-width: 60ch;
   margin-top: 0.75rem;
   font-size: 0.8125rem;
   line-height: 1.8;
 }
+
 .caseFooter {
   padding-block: 2rem 6rem;
   font-size: 0.8125rem;
 }
+
+/* =========================================================================
+   RESPONSIVE QUERIES
+   ========================================================================= */
+
 @media (max-width: 63.999rem) {
+  .executiveSplitGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3rem;
+  }
+
+  .characteristicPhotoCol {
+    position: static;
+  }
+
   .projectLink {
     grid-template-columns: 0.5fr 6fr 5fr;
   }
+
   .facts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
   .architecture ol {
     grid-template-columns: minmax(0, 1fr);
   }
+
   .architecture li {
     display: grid;
     grid-template-columns: 1fr 1.5fr;
@@ -300,70 +859,124 @@
     gap: 1rem;
     padding-block: 0.75rem 0;
   }
+
   .architecture li span {
     margin: 0;
   }
 }
+
 @media (max-width: 47.999rem) {
+  .delicateScrollRail {
+    display: none;
+  }
+
+  .projectsStaggeredGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .itemRight {
+    margin-top: 0;
+  }
+
   .projectLink,
   .caseLayout {
     grid-template-columns: minmax(0, 1fr);
   }
+
   .projectList {
     margin-top: 2.5rem;
   }
+
   .projectLink {
     gap: 1.5rem;
   }
+
   .projectCopy h3 {
     max-width: 20ch;
     font-size: 2.5rem;
   }
+
   .summary,
   .prose {
     font-size: 0.9375rem;
   }
+
   .preview {
     margin-top: 0.5rem;
   }
+
   .caseHeader {
     padding-top: 0.5rem;
   }
+
   .caseTitle {
-    font-size: clamp(2.625rem, 10vw, 4rem);
+    font-size: clamp(2.375rem, 9vw, 3.75rem);
   }
+
   .caseEyebrow {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
   }
+
   .facts {
     gap: 1.5rem;
     margin-top: 2rem;
   }
+
   .privacy {
     grid-template-columns: minmax(0, 1fr);
     gap: 0.5rem;
     margin-bottom: 2rem;
   }
+
   .caseNav {
     position: static;
     padding-bottom: 1.5rem;
   }
+
   .caseNav ol {
     display: flex;
     flex-wrap: wrap;
     gap: 0 1.5rem;
   }
+
   .caseNav > p {
     margin-bottom: 0.5rem;
   }
+
   .caseSection h2 {
     margin-bottom: 1.5rem;
   }
+
   .architecture {
     padding: 1.25rem;
   }
+
   .architecture li {
     grid-template-columns: minmax(0, 1fr);
     gap: 0.25rem;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .staggeredItem {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .executiveHeroSection {
+    animation: none !important;
+  }
+
+  .itemTransitioning {
+    transform: none !important;
+  }
+
+  .projectImage {
+    transition: none !important;
   }
 }

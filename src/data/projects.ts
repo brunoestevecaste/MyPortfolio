@@ -1,3 +1,11 @@
+export type ExecutiveSummary = {
+  readonly lead: string;
+  readonly challenge: string;
+  readonly solution: string;
+  readonly impact: string;
+  readonly framework?: string;
+};
+
 export type ProjectSummary = {
   slug: string;
   organization: string;
@@ -6,6 +14,9 @@ export type ProjectSummary = {
   year: string;
   role: string;
   technologies: readonly string[];
+  image: string;
+  number: string;
+  executiveSummary: ExecutiveSummary;
 };
 
 export const aepdProject = {
@@ -17,6 +28,19 @@ export const aepdProject = {
   year: "2025",
   role: "Ingeniería de datos, BI y Machine Learning",
   technologies: ["Pentaho", "PostgreSQL", "Power BI", "Python", "XGBoost"],
+  image: "/projects/aepd.jpg",
+  number: "04",
+  executiveSummary: {
+    lead:
+      "Sistema integral de ingeniería de datos y modelado predictivo para organizar los accesos del portal público de la AEPD, explorar patrones de uso y anticipar visitas horarias para dimensionar recursos.",
+    challenge:
+      "Depurar y estructurar millones de registros brutos de servidores para distinguir consultas de usuarios reales y predecir la demanda horaria con patrones estacionales y festivos.",
+    solution:
+      "Pipeline ETL en Pentaho, almacén dimensional en PostgreSQL, dashboard analítico en Power BI y modelos predictivos en Python comparando XGBoost, LightGBM e HistGradientBoosting evaluados con MAE, RMSE y MAPE en backtesting temporal.",
+    impact:
+      "Calificación de 10/10 en el Grado en Inteligencia y Analítica de Negocios, proyecto transferido a producción y actualmente en uso por la propia AEPD.",
+    framework: "TFG Grado en Inteligencia y Analítica de Negocios · Universitat de València (IRTIC)",
+  },
 } as const satisfies ProjectSummary;
 
 export const baleariaProject = {
@@ -28,6 +52,19 @@ export const baleariaProject = {
   year: "2026",
   role: "Inteligencia Artificial y optimización",
   technologies: ["Python", "Google Cloud", "Machine Learning", "MLOps"],
+  image: "/projects/balearia.jpg",
+  number: "01",
+  executiveSummary: {
+    lead:
+      "Plataforma en Google Cloud que conecta datos de navegación marítima, modelos de consumo de combustible y algoritmos de optimización para recomendar velocidades por tramo y reducir la energía estimada respetando la llegada.",
+    challenge:
+      "Reducir emisiones y consumo energético en rutas de alta frecuencia manteniendo la puntualidad y operando con datos de telemetría y meteorología en tiempo real.",
+    solution:
+      "Pipeline de IA en Kubeflow/Vertex AI con alineación temporal de sensores GPS, modelado de componentes energéticos y optimización mediante programación dinámica con restricciones operativas.",
+    impact:
+      "Validación técnica del prototipo desplegado en GCP con monitorización en vivo y dashboards operacionales deterministas para centros de control en tierra y tripulación a bordo.",
+    framework: "TFM Máster en Inteligencia Artificial · EDEM Escuela de Empresarios",
+  },
 } as const satisfies ProjectSummary;
 
 export const alinaProject = {
@@ -39,6 +76,19 @@ export const alinaProject = {
   year: "2026",
   role: "Arquitectura de IA, agentes y backend",
   technologies: ["Python", "FastAPI", "Google ADK", "Google Gemini", "React", "Selenium"],
+  image: "/projects/alina.jpg",
+  number: "03",
+  executiveSummary: {
+    lead:
+      "Sistema multi-agente con Google ADK y Gemini que transforma la búsqueda de empleo: extracción y matching explicable de habilidades frente al CV, simulación interactiva de entrevistas y generación personalizada de cartas.",
+    challenge:
+      "Eliminar la asimetría informativa en las ofertas de empleo y evitar alucinaciones en la preparación del candidato mediante matching auditable y estructurado.",
+    solution:
+      "Orquestación multi-agente en FastAPI con Google ADK (LlmAgent, SequentialAgent, LoopAgent con parada estricta), parsing dual con Selenium y arquitectura de prompts en dos fases.",
+    impact:
+      "Reducción del 40% en consumo de tokens, disminución del 45% en latencia (55s a 30s) y fiabilidad JSON elevada del 60% al 95%.",
+    framework: "Proyecto de Máster en IA · EDEM Escuela de Empresarios",
+  },
 } as const satisfies ProjectSummary;
 
 export const nextplanProject = {
@@ -59,6 +109,19 @@ export const nextplanProject = {
     "FastAPI",
     "React",
   ],
+  image: "/projects/nextplan.jpg",
+  number: "02",
+  executiveSummary: {
+    lead:
+      "Plataforma integral para descubrir y planificar eventos en España mediante una experiencia multicanal: exploración en mapa, swipes de afinidad, asistente conversacional con RAG en dos fases y clustering K-Means para recomendaciones personalizadas.",
+    challenge:
+      "Superar la dispersión de la oferta cultural y el problema de cold-start mediante un motor de afinidad multivariable explicable bajo estricto cumplimiento del RGPD.",
+    solution:
+      "Ingesta masiva enriquecida con Gemini, streaming de swipes con Pub/Sub a BigQuery, modelado dimensional con dbt, motor K-Means con expansión por vecindad y agente conversacional RAG con Google ADK.",
+    impact:
+      "Arquitectura serverless en GCP con 20 módulos de Terraform, scoring multivariable de recomendación en tiempo real y latencia optimizada.",
+    framework: "Proyecto de Máster en IA · EDEM Escuela de Empresarios",
+  },
 } as const satisfies ProjectSummary;
 
 // Keep the home index and case-study navigation in newest-first order.

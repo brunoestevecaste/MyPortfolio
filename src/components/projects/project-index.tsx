@@ -1,68 +1,216 @@
-import Link from "next/link";
-import { projects } from "@/data/projects";
-import { TrafficPlot } from "./traffic-figure";
-import { NavigationPlot } from "@/components/charts/navigation-plot";
-import { AlinaPlot } from "@/components/charts/alina-plot";
-import { NextPlanPlot } from "@/components/charts/nextplan-plot";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { projects, type ProjectSummary } from "@/data/projects";
 import styles from "./projects.module.css";
 
 export function ProjectIndex() {
+  const router = useRouter();
+  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [transitioningSlug, setTransitioningSlug] = useState<string | null>(null);
+  const [visibleItems, setVisibleItems] = useState<Record<string, boolean>>({});
+
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
+
+  // Track scroll position within the projects section to update the left rail indicator
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const sectionHeight = sectionRef.current.offsetHeight;
+      const windowHeight = window.innerHeight;
+
+      // Calculate how far we've scrolled into the section (0 to 1)
+      const scrolledIntoSection = windowHeight - rect.top;
+      const totalScrollableDistance = sectionHeight + windowHeight * 0.4;
+      const progress = Math.min(
+        Math.max((scrolledIntoSection - windowHeight * 0.3) / totalScrollableDistance, 0),
+        1
+      );
+      setScrollProgress(progress);
+
+      // Determine active item based on viewport proximity
+      let closestIndex = 0;
+      let minDistance = Infinity;
+
+      itemRefs.current.forEach((el, index) => {
+        if (!el) return;
+        const itemRect = el.getBoundingClientRect();
+        const itemCenter = itemRect.top + itemRect.height / 2;
+        const viewportCenter = windowHeight / 2;
+        const distance = Math.abs(itemCenter - viewportCenter);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      setActiveProjectIndex(closestIndex);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // IntersectionObserver for smooth entrance animation on scroll
+  useEffect(() => {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const slug = entry.target.getAttribute("data-slug");
+            if (slug) {
+              setVisibleItems((prev) => ({ ...prev, [slug]: true }));
+            }
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" }
+    );
+
+    itemRefs.current.forEach((el) => {
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleProjectClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    project: ProjectSummary
+  ) => {
+    e.preventDefault();
+    setTransitioningSlug(project.slug);
+
+    // Smooth tactile transition delay matching video feel
+    setTimeout(() => {
+      router.push(`/projects/${project.slug}`);
+    }, 240);
+  };
+
+  const scrollToProject = (index: number) => {
+    const targetEl = itemRefs.current[index];
+    if (targetEl) {
+      targetEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  };
+
   return (
-    <ol className={styles.projectList}>
-      {projects.map((project, index) => (
-        <li key={project.slug}>
-          <Link
-            href={`/projects/${project.slug}`}
-            className={styles.projectLink}
-            aria-labelledby={`${project.slug}-title`}
-          >
-            <span className={styles.projectNumber}>
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <div className={styles.projectCopy}>
-              <p className={styles.organization}>{project.organization}</p>
-              <h3 id={`${project.slug}-title`}>{project.title}</h3>
-              <p className={styles.summary}>{project.summary}</p>
-              <p className={styles.projectMeta}>
-                {project.year} / {project.role}
-              </p>
-              <ul className={styles.technologies} aria-label="Tecnologías">
-                {project.technologies.map((technology) => (
-                  <li key={technology}>{technology}</li>
-                ))}
-              </ul>
-              <span className={styles.readCase}>Ver caso de estudio</span>
-            </div>
-            <div className={styles.preview} aria-hidden="true">
-              {project.slug === "balearia-eficiencia-energetica" ? (
-                <>
-                  <span>Navegación / Velocidad en nudos</span>
-                  <NavigationPlot />
-                  <span>Perfiles ilustrativos · Datos ficticios</span>
-                </>
-              ) : project.slug === "nextplan-recomendacion-eventos" ? (
-                <>
-                  <span>Clustering K-Means / Expansión de catálogo</span>
-                  <NextPlanPlot />
-                  <span>Clúster propio (100%) · Vecinos (60% · 40% · 25%)</span>
-                </>
-              ) : project.slug === "alina-asistente-empleo" ? (
-                <>
-                  <span>Agentes IA / Optimización relativa</span>
-                  <AlinaPlot />
-                  <span>Tokens (-40%) · Latencia (-45%) · Fiabilidad (+58%)</span>
-                </>
-              ) : (
-                <>
-                  <span>Tráfico web / Predicción</span>
-                  <TrafficPlot />
-                  <span>Análisis del portal y previsión de visitas</span>
-                </>
-              )}
-            </div>
-          </Link>
-        </li>
-      ))}
-    </ol>
+    <div ref={sectionRef} className={styles.projectsStreamWrapper}>
+      {/* Delicate left vertical scroll rail */}
+      <aside
+        className={styles.delicateScrollRail}
+        aria-label="Navegación y progreso de proyectos"
+      >
+        <div className={styles.railInner}>
+          <span className={styles.railLabel}>INDEX</span>
+
+          <div className={styles.railTrack} aria-hidden="true">
+            <div
+              className={styles.railThumb}
+              style={{
+                transform: `translateY(${scrollProgress * 180}px)`,
+              }}
+            />
+          </div>
+
+          <ol className={styles.railMarkers}>
+            {projects.map((project, idx) => (
+              <li key={project.slug}>
+                <button
+                  type="button"
+                  onClick={() => scrollToProject(idx)}
+                  className={`${styles.railMarkerBtn} ${
+                    activeProjectIndex === idx ? styles.activeRailMarker : ""
+                  }`}
+                  aria-label={`Ir al proyecto ${project.number}: ${project.title}`}
+                  aria-current={activeProjectIndex === idx ? "true" : undefined}
+                >
+                  <span className={styles.markerDot} />
+                  <span className={styles.markerText}>{project.number}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+
+          <span className={styles.railCounter}>
+            {String(activeProjectIndex + 1).padStart(2, "0")} /{" "}
+            {String(projects.length).padStart(2, "0")}
+          </span>
+        </div>
+      </aside>
+
+      {/* Main alternating staggered project feed */}
+      <div className={styles.projectsStaggeredGrid}>
+        {projects.map((project, index) => {
+          const isEven = index % 2 === 0;
+          const isRevealed = !!visibleItems[project.slug];
+          const isTransitioning = transitioningSlug === project.slug;
+
+          return (
+            <article
+              key={project.slug}
+              ref={(el) => {
+                itemRefs.current[index] = el;
+              }}
+              data-slug={project.slug}
+              className={`${styles.staggeredItem} ${
+                isEven ? styles.itemLeft : styles.itemRight
+              } ${isRevealed ? styles.itemRevealed : ""} ${
+                isTransitioning ? styles.itemTransitioning : ""
+              }`}
+            >
+              <a
+                href={`/projects/${project.slug}`}
+                onClick={(e) => handleProjectClick(e, project)}
+                className={styles.staggeredCardLink}
+                aria-label={`Ver proyecto ${project.number}: ${project.title}`}
+              >
+                {/* Number above/adjacent to image */}
+                <div className={styles.projectNumberHeader}>
+                  <span className={styles.prominentNumber}>{project.number}</span>
+                  <span className={styles.prominentMeta}>
+                    {project.year} · {project.organization}
+                  </span>
+                </div>
+
+                {/* Characteristic project image frame */}
+                <div className={styles.imageFrame}>
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    width={800}
+                    height={600}
+                    className={styles.projectImage}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 48vw, 560px"
+                    priority={index < 2}
+                  />
+                  <div className={styles.imageOverlay} aria-hidden="true" />
+                </div>
+
+                {/* Subtle text: Only project title in site's body typography */}
+                <div className={styles.subtleTextWrapper}>
+                  <h3 className={styles.subtleProjectTitle}>{project.title}</h3>
+                  <span className={styles.subtleArrow} aria-hidden="true">
+                    ↗
+                  </span>
+                </div>
+              </a>
+            </article>
+          );
+        })}
+      </div>
+    </div>
   );
 }

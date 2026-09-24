@@ -253,27 +253,38 @@ jerarquía tipográfica débil.
 - No añadir etiquetas de versión, indicadores de scroll, disponibilidad ficticia
   ni tiras decorativas de palabras.
 
-### Selected Work
+### Selected Work (Layout & Flujo Editorial)
 
-- Índice editorial numerado, no rejilla de tarjetas iguales.
-- Cada fila muestra un número de dos dígitos, título, resumen de una o dos frases
-  y metadatos confirmados como papel, año o tecnologías.
-- La numeración `01`, `02`, `03` identifica proyectos concretos. Es una excepción
-  funcional a la regla de evitar números decorativos y no se usa en encabezados
-  de sección, imágenes o paginación falsa.
-- Toda la fila funciona como enlace a `/projects/[slug]`, con nombre accesible,
-  indicador de foco de al menos 2px y orden de tabulación equivalente al visual.
-- La imagen de proyecto puede aparecer en hover o focus en desktop, pero el título
-  y el resumen deben bastar para comprender y abrir el proyecto.
-- En móvil, cada fila apila número, título, resumen y metadatos. Si se muestra una
-  imagen, aparece dentro del flujo y no depende del hover.
-- Por indicación de Bruno el 22/09/2026, los proyectos se ordenan siempre del
-  más reciente al más antiguo: Baleària (2026, TFM), seguido de Alina (febrero–marzo 2026)
-  y AEPD (2025). La numeración (01, 02, 03) y la navegación entre casos siguen este mismo orden.
-  Los nuevos proyectos se incorporarán con un case study completo y se situarán
-  según su año.
-- La Home no desarrolla proceso, arquitectura ni resultados extensos. Esa
-  información pertenece exclusivamente a la página del case study.
+Por indicación de Bruno en septiembre de 2026 y siguiendo la referencia de `refs/video_projects.mp4`:
+
+- **Composición alternada y escalonada (Staggered Grid):** Los proyectos se disponen
+  en una doble columna asimétrica en desktop. El proyecto `01` abre a la izquierda,
+  el `02` se sitúa a la derecha con un desplazamiento vertical descendente (offset),
+  el `03` continúa a la izquierda y el `04` a la derecha. En pantallas móviles se
+  apilan en una sola columna con espaciado uniforme.
+- **Barra de scroll delicada (Left Scroll Rail):** A la izquierda de la sección de
+  proyectos en desktop se sitúa una guía vertical finísima (1px en `--color-line`)
+  fijada con comportamiento sticky. Cuenta con un deslizador sutil (`railThumb`) que
+  recorre la línea según el progreso de scroll, marcadores numerados (`01` a `04`)
+  que destacan el proyecto en foco y permiten navegación suave directa. En pantallas
+  móviles se oculta para maximizar el área de lectura.
+- **Numeración protagonista:** Cada tarjeta muestra su número de orden (`01`, `02`, etc.)
+  en tipografía de gran escala (`Archivo`), situado limpiamente sobre el marco de imagen.
+- **Fotografía característica:** Cada proyecto incorpora una imagen representativa en
+  blanco y negro de encuadre editorial y proporción 4:3, con esquinas rectas y
+  micro-interacción suave de escala en hover.
+- **Texto sutil en la Home:** Para mantener la pureza visual y el refinamiento de la
+  referencia, la Home no muestra bloques largos de descripción en este índice.
+  Muestra únicamente el título del proyecto en la tipografía de texto normal (`Space Mono`),
+  garantizando una jerarquía limpia y descansada.
+- **Animaciones:**
+  - *Animación de scroll:* Los proyectos emergen suavemente mediante revelado
+    progresivo (opacidad y ligero desplazamiento vertical) al entrar en el viewport,
+    mientras la guía lateral actualiza la posición del indicador.
+  - *Animación de click:* Al pulsar un proyecto, el elemento ofrece respuesta táctil
+    inmediata de apertura y transición fluida hacia la página individual.
+- **Orden cronológico inverso:** Los proyectos se ordenan del más reciente al más
+  antiguo: Baleària (`01`, 2026), NextPlan (`02`, 2026), Alina (`03`, 2026) y AEPD (`04`, 2025).
 
 ### Perfil
 
@@ -297,18 +308,24 @@ jerarquía tipográfica débil.
 ## Case studies
 
 - Cada proyecto tiene una ruta independiente bajo `/projects/[slug]`.
-- El encabezado incluye título, resumen, papel, periodo y tecnologías confirmadas.
-- Cada proyecto funciona como un capítulo editorial.
-- Alternar bloques de texto, imágenes, arquitectura y resultados.
-- No repetir el patrón imagen izquierda y texto derecha más de dos veces seguidas.
-- Las métricas deben tener fuente y contexto.
-- Los diagramas técnicos usan la misma retícula y paleta, sin apariencia de
-  dashboard independiente.
-- Las capturas de producto se mostrarán como imágenes reales, no como interfaces
-  falsas construidas con `div`.
-- La página termina con navegación accesible al proyecto anterior y siguiente.
-- Cada ruta debe definir metadata, título, descripción, Open Graph y URL canónica
-  propios.
+- **Estructura en dos fases (Split Hero + Case Study profundo):**
+  1. *Hero inicial dividido (50 / 50):*
+     - Columna izquierda: fotografía característica a gran escala y alta definición.
+     - Columna derecha: **Resumen ejecutivo** estructurado (numerador `01 / 04`,
+       antetítulo de marco institucional, título en `Archivo`, sinopsis ejecutiva,
+       tres puntos clave: *Reto de negocio*, *Solución técnica e IA*, e *Impacto y validación*,
+       metadatos clave y tecnologías).
+     - Botón / disparador de scroll suave: *«Ver caso de estudio completo ↓»*.
+  2. *Case study completo al hacer scroll:* Al desplazarse hacia abajo (ancla `#case-study`),
+     se despliega la totalidad del case study técnico:
+     - Aviso de confidencialidad o contexto de datos.
+     - Índice lateral sticky de secciones (`Contexto`, `Arquitectura`, `Preparación`,
+       `Predicción`, `Modelos / Clustering / Agentes`, `Demostración interactiva / Dashboard`,
+       `Resultados`, `Aprendizajes`).
+     - Demostradores interactivos completos y dashboards con Recharts (AEPD, Baleària,
+       NextPlan, Alina).
+     - Paginación editorial recíproca al pie entre proyectos.
+- Cada ruta define metadata, título, descripción, Open Graph y URL canónica propios.
 
 ## Fotografía y recursos visuales
 
@@ -317,43 +334,38 @@ Prioridad:
 1. Fotografías y capturas reales de los proyectos.
 2. Retrato original en alta resolución.
 3. Diagramas técnicos creados a partir de arquitectura verificable.
-4. Imágenes generadas únicamente como material atmosférico claramente separado
-   de la evidencia del proyecto.
+4. Imágenes editoriales en blanco y negro con tratamiento tonal monocromo de alta precisión.
 
 Tratamiento:
 
 - Blanco y negro o saturación contenida.
 - Encuadres amplios, documentales y con espacio negativo.
-- Retrato 5:4 en desktop y 4:5 en móvil; proyectos 16:10.
+- Retrato 5:4 en desktop y 4:5 en móvil; proyectos 4:3 y 16:10.
 - No usar stock genérico, blobs, renders 3D gratuitos ni capturas falsas.
-
-El retrato incrustado en el CV sirve como referencia, pero debe solicitarse el
-archivo original antes de implementarlo en la web.
 
 ## Motion
 
-Nivel 3: composición estática, con feedback discreto en enlaces y foco.
+Nivel 4: composición editorial con transiciones motivadas y feedback de navegación.
 
 ### Permitido
 
 - Entrada inicial de titular, imagen y navegación mediante opacidad y traslación.
-- Revelado escalonado breve del índice de proyectos.
-- Cambio de imagen o recorte en hover de un proyecto.
-- Transiciones de página discretas si aportan continuidad.
-- Duraciones aproximadas de 180ms para feedback, 360ms para reveals y 600ms para
-  transiciones narrativas puntuales.
+- Deslizamiento continuo del indicador en la barra vertical de scroll de proyectos.
+- Revelado escalonado en scroll de los proyectos alternados.
+- Transición y retroalimentación táctil al hacer click en una tarjeta de proyecto.
+- Aparición fluida del split hero en la página de caso y scroll suave hacia el case study.
+- Micro-escala (1.03) y filtro tonal en el hover de imágenes.
+- Duraciones de 180ms para feedback, 240-360ms para transiciones y 600-700ms para reveals.
 
 ### No permitido
 
-- Scroll hijacking.
-- Parallax continuo.
-- Marquees decorativos.
-- Cursores personalizados.
-- Animaciones infinitas sin información.
-- GSAP en la primera versión; CSS y Motion son suficientes.
+- Scroll hijacking que bloquee el movimiento natural del usuario.
+- Parallax continuo descontrolado.
+- Marquees decorativos o cursores personalizados.
+- Animaciones infinitas sin valor informativo.
 
-Toda animación debe explicar jerarquía, feedback o continuidad. Debe existir una
-versión estática equivalente bajo `prefers-reduced-motion`.
+Toda animación debe explicar jerarquía, feedback o continuidad. Se desactiva y degrada
+a presentación estática instantánea bajo `prefers-reduced-motion: reduce`.
 
 ## Responsive y accesibilidad
 

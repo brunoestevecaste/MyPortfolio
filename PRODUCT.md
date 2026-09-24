@@ -386,55 +386,53 @@ sin aprobación explícita de Bruno.
 5. Capacidades demostradas mediante evidencia.
 6. Contacto y enlaces externos.
 
-### Índice de proyectos
+### Índice de proyectos (Layout & Flujo Editorial)
 
-La Home funciona como índice y punto de entrada. Cada proyecto debe mostrar:
+La Home funciona como índice visual y punto de entrada inmersivo. Cada proyecto presenta:
 
-1. Número de orden con dos dígitos.
-2. Título del proyecto.
-3. Resumen de una o dos frases.
-4. Papel de Bruno, año y tecnologías principales cuando estén confirmados.
-5. Enlace completo a la página individual del proyecto.
+1. **Numeración destacada:** número de orden con dos dígitos (`01`, `02`, `03`, `04`) en gran escala.
+2. **Fotografía característica:** encuadre editorial en blanco y negro que comunica la identidad del proyecto.
+3. **Texto sutil:** únicamente el título del proyecto en la tipografía de texto normal de la web (`Space Mono`), evitando párrafos extensos en la Home para preservar el refinamiento y la ligereza visual.
+4. **Disposición alternada y escalonada:** los proyectos fluyen uno debajo del otro alternando columnas izquierda y derecha con desplazamiento asimétrico vertical.
+5. **Barra de scroll vertical delicada:** guía fina de 1px a la izquierda con indicador dinámico de avance y marcadores de salto directo a cada proyecto.
+6. **Animaciones integradas:** revelado suave progresivo en scroll y animación de pulsado táctil antes de la transición a la página individual.
 
-Orden de presentación actualizado por Bruno el 22/09/2026:
-
-Los proyectos se ordenan siempre del más reciente al más antiguo según su año.
-La Home, la numeración y la navegación entre casos comparten ese orden.
+Orden de presentación verificado y actualizado:
 
 1. `01` - Baleària: optimización energética de rutas navieras (2026, TFM).
-2. `02` - Alina: asistente de empleo con agentes de IA (febrero–marzo 2026).
-3. `03` - AEPD: analítica y predicción de tráfico web (2025, TFG).
-
-Diseño web se incorporará cuando su caso esté preparado y ocupará la posición
-que corresponda a su fecha. No mostrar enlaces a páginas todavía inexistentes.
-
-La numeración es funcional y pertenece al índice de trabajo. No debe reutilizarse
-como etiqueta decorativa para las demás secciones.
+2. `02` - NextPlan: plataforma de recomendación de eventos con IA (mayo–junio 2026, Máster en IA).
+3. `03` - Alina: asistente de empleo con agentes de IA (febrero–marzo 2026, Máster en IA).
+4. `04` - AEPD: analítica y predicción de tráfico web (2025, TFG, calificación 10/10).
 
 ### Case studies
 
-Cada proyecto publicado debe tener una página independiente bajo
-`/projects/[slug]`. La Home solo contiene el resumen y nunca sustituye al case
-study completo.
+Cada proyecto publicado cuenta con una ruta independiente bajo `/projects/[slug]`, estructurada en dos niveles de lectura:
+
+1. **Nivel 1 — Split Hero (Pantalla superior 50/50):**
+   - Lado izquierdo: fotografía representativa del proyecto a gran escala y alta definición.
+   - Lado derecho: **Resumen ejecutivo** condensado que expone de un vistazo:
+     - Título y antetítulo institucional.
+     - Sinopsis general de valor.
+     - Tres pilares ejecutivos: *Reto de negocio*, *Solución técnica e IA*, e *Impacto y validación*.
+     - Metadatos (rol, tecnologías, marco académico o profesional).
+     - Llamada a continuar: enlace / botón de scroll suave al caso completo.
+2. **Nivel 2 — Case Study completo (al hacer scroll):**
+   - Contexto y problema.
+   - Papel de Bruno y colaboración en equipo.
+   - Restricciones y confidencialidad / notas de datos ficticios.
+   - Proceso y decisiones.
+   - Arquitectura funcional y pipelines de datos.
+   - Demostraciones interactivas y dashboards funcionales con Recharts.
+   - Resultados respaldados por evidencia.
+   - Aprendizajes técnicos.
+   - Navegación accesible recíproca entre casos.
 
 Rutas publicadas:
 
 - `/projects/balearia-eficiencia-energetica`
+- `/projects/nextplan-recomendacion-eventos`
 - `/projects/alina-asistente-empleo`
 - `/projects/aepd-analitica-trafico`
-- `/projects/diseno-desarrollo-web`, cuando exista contenido verificable
-
-Cada página de proyecto debe contener:
-
-1. Contexto y problema.
-2. Papel de Bruno y colaboración.
-3. Restricciones.
-4. Proceso y decisiones.
-5. Arquitectura o sistema.
-6. Resultado respaldado por evidencia.
-7. Aprendizajes.
-8. Material visual real o una recreación claramente identificada.
-9. Enlaces al proyecto anterior y siguiente cuando haya más de un case study.
 
 ## Preguntas editoriales pendientes
 
