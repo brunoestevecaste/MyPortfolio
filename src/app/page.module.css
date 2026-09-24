@@ -31,8 +31,29 @@
 }
 
 .portraitSurface {
+  position: relative;
   aspect-ratio: 5 / 4;
   background: var(--surface);
+  overflow: hidden;
+}
+
+.portraitImage {
+  object-fit: cover;
+  object-position: center 25%;
+  transition: transform 0.44s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portrait:hover .portraitImage {
+    transform: scale(1.02);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portraitImage {
+    transition: none;
+    transform: none;
+  }
 }
 
 .portraitCaption {

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { EducationSection } from "@/components/sections/education";
 import { ExperienceSection } from "@/components/sections/experience";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -19,9 +20,18 @@ export default function Home() {
 
         <div className={styles.heroComposition}>
           <figure className={styles.portrait}>
-            <div className={styles.portraitSurface} aria-hidden="true" />
+            <div className={styles.portraitSurface}>
+              <Image
+                src="/hero/bruno-esteve-hero.webp"
+                alt="Retrato editorial de Bruno Esteve en estilo risograph dither monocromo"
+                fill
+                priority
+                sizes="(min-width: 64rem) 42vw, (min-width: 48rem) 50vw, 100vw"
+                className={styles.portraitImage}
+              />
+            </div>
             <figcaption className={styles.portraitCaption}>
-              Retrato de Bruno · Fotografía pendiente
+              Bruno Esteve · Data Analyst & AI Engineer
             </figcaption>
           </figure>
 
