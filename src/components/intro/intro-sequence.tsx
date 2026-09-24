@@ -155,7 +155,8 @@ export function IntroSequence() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isActive, skipIntro]);
 
-  // Calibrated timeline: each term stays for 0.5s - 0.6s (550ms dwell)
+  // Calibrated timeline: each term stays for 300ms - 400ms (calibrated to 350ms dwell)
+  // Transition duration: 450ms.
   // NOTE: isExiting is intentionally omitted from dependencies so setting isExiting(true)
   // does not re-trigger cleanup and clear the completion timer.
   useEffect(() => {
@@ -169,37 +170,37 @@ export function IntroSequence() {
       return t;
     };
 
-    // 1. Pixelation Resolve (0 - 300ms)
+    // 1. Pixelation Resolve (0 - 220ms)
     addTimer(() => {
       setIsPixelating(false);
-    }, 300);
+    }, 220);
 
-    // 2. Step to Artificial Intelligence at 850ms (dwell on Creativity: 550ms)
+    // 2. Step to Artificial Intelligence at 570ms (dwell on Creativity: 350ms)
     addTimer(() => {
       setCurrentIndex(1);
-    }, 850);
+    }, 570);
 
-    // 3. Step to Data at 2050ms (transition: 650ms, dwell on AI: 550ms)
+    // 3. Step to Data at 1370ms (transition: 450ms, dwell on AI: 350ms)
     addTimer(() => {
       setCurrentIndex(2);
-    }, 2050);
+    }, 1370);
 
-    // 4. Step to Me at 3250ms (transition: 650ms, dwell on Data: 550ms)
+    // 4. Step to Me at 2170ms (transition: 450ms, dwell on Data: 350ms)
     addTimer(() => {
       setCurrentIndex(3);
-    }, 3250);
+    }, 2170);
 
-    // 5. Arrive on Me at 3900ms, lock at 4150ms
+    // 5. Arrive on Me at 2620ms, lock strobe at 2770ms
     addTimer(() => {
       setIsLocked(true);
-    }, 4150);
+    }, 2770);
 
-    // 6. Glitch Parpadeo begins at 4450ms (dwell on Me: 550ms)
+    // 6. Glitch Parpadeo begins at 2970ms (dwell on Me: 350ms)
     addTimer(() => {
       setIsGlitching(true);
-    }, 4450);
+    }, 2970);
 
-    // 7. Curtain dissolve starts at 5250ms
+    // 7. Curtain dissolve starts at 3770ms (800ms of electric glitch)
     addTimer(() => {
       setIsExiting(true);
       document.documentElement.style.removeProperty("overflow");
@@ -209,23 +210,23 @@ export function IntroSequence() {
       } catch {
         // Safe fallback
       }
-    }, 5250);
+    }, 3770);
 
-    // 8. End sequence & unmount at 5650ms
+    // 8. End sequence & unmount at 4170ms
     addTimer(() => {
       setIsActive(false);
       window.scrollTo({ top: 0, behavior: "instant" });
       document.documentElement.style.removeProperty("overflow");
       document.body.style.removeProperty("overflow");
       window.dispatchEvent(new CustomEvent("intro-complete"));
-    }, 5650);
+    }, 4170);
 
     return () => {
       clearAllTimers();
     };
   }, [isActive, clearAllTimers]);
 
-  // Canvas pixelation effect simulation (First 350ms)
+  // Canvas pixelation effect simulation (First 220ms)
   useEffect(() => {
     if (!isActive || !isPixelating) return;
 
@@ -240,7 +241,7 @@ export function IntroSequence() {
 
     const render = (now: number) => {
       const elapsed = now - startTime;
-      const progress = Math.min(elapsed / 350, 1);
+      const progress = Math.min(elapsed / 220, 1);
 
       const dpr = window.devicePixelRatio || 1;
       const width = canvas.clientWidth;

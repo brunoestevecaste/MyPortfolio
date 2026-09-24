@@ -71,9 +71,9 @@
   will-change: transform;
 }
 
-/* 0.65s smooth spring-like cubic-bezier */
+/* 0.45s smooth spring-like cubic-bezier */
 .trackMoving {
-  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .trackInstant {
@@ -138,7 +138,7 @@
 
 /* Lock Strobe / Flicker on "Me" */
 .barSelected {
-  animation: lockStrobe 0.45s steps(2, jump-none) 1;
+  animation: lockStrobe 0.35s steps(2, jump-none) 1;
 }
 
 @keyframes lockStrobe {
@@ -188,7 +188,7 @@
    ========================================================================== */
 
 .glitchingContainer {
-  animation: glitchParpadeo 1.2s steps(2, jump-none) forwards;
+  animation: glitchParpadeo 1s steps(2, jump-none) forwards;
 }
 
 @keyframes glitchParpadeo {
@@ -278,7 +278,7 @@
 
 /* Slice A: Primary horizontal shearing parpadeo */
 .sliceA {
-  animation: sliceParpadeoA 1.2s steps(2, jump-none) forwards;
+  animation: sliceParpadeoA 1s steps(2, jump-none) forwards;
 }
 
 @keyframes sliceParpadeoA {
@@ -341,7 +341,7 @@
 /* Slice B: Inverted contrast counter-displacement parpadeo */
 .sliceB {
   filter: invert(1);
-  animation: sliceParpadeoB 1.2s steps(2, jump-none) forwards;
+  animation: sliceParpadeoB 1s steps(2, jump-none) forwards;
 }
 
 @keyframes sliceParpadeoB {
@@ -395,7 +395,7 @@
 
 /* Slice C: High-density micro-raster cuts with parpadeo */
 .sliceC {
-  animation: sliceParpadeoC 1.2s steps(3, jump-none) forwards;
+  animation: sliceParpadeoC 1s steps(3, jump-none) forwards;
 }
 
 @keyframes sliceParpadeoC {
@@ -468,7 +468,7 @@
   background-size: 100% 6px, 150px 100%;
   opacity: 0;
   mix-blend-mode: difference;
-  animation: dataBarsParpadeo 1.2s steps(3, jump-none) forwards;
+  animation: dataBarsParpadeo 1s steps(3, jump-none) forwards;
 }
 
 @keyframes dataBarsParpadeo {
