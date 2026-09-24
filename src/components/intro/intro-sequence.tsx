@@ -36,11 +36,62 @@ export function IntroSequence() {
       // Ignore storage errors in private/restricted mode
     }
 
-    setTimeout(() => {
+    document.documentElement.style.removeProperty("overflow");
+    document.body.style.removeProperty("overflow");
+
+    const exitTimer = setTimeout(() => {
       setIsActive(false);
+      window.scrollTo({ top: 0, behavior: "instant" });
+      document.documentElement.style.removeProperty("overflow");
+      document.body.style.removeProperty("overflow");
       window.dispatchEvent(new CustomEvent("intro-complete"));
     }, 200);
+    timersRef.current.push(exitTimer);
   }, [clearAllTimers]);
+
+  // Lock scroll completely while intro is actively displaying and not exiting
+  useEffect(() => {
+    if (!isActive || isExiting) {
+      document.documentElement.style.removeProperty("overflow");
+      document.body.style.removeProperty("overflow");
+      return;
+    }
+
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+    const originalBodyOverflow = document.body.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+
+    const preventScroll = (e: Event) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener("wheel", preventScroll, { passive: false });
+    window.addEventListener("touchmove", preventScroll, { passive: false });
+
+    return () => {
+      if (originalHtmlOverflow) {
+        document.documentElement.style.overflow = originalHtmlOverflow;
+      } else {
+        document.documentElement.style.removeProperty("overflow");
+      }
+      if (originalBodyOverflow) {
+        document.body.style.overflow = originalBodyOverflow;
+      } else {
+        document.body.style.removeProperty("overflow");
+      }
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
+    };
+  }, [isActive, isExiting]);
+
+  // Absolute fallback: ensure overflow is removed if IntroSequence unmounts
+  useEffect(() => {
+    return () => {
+      document.documentElement.style.removeProperty("overflow");
+      document.body.style.removeProperty("overflow");
+    };
+  }, []);
 
   // Handle initialization on client mount
   useEffect(() => {
@@ -53,6 +104,8 @@ export function IntroSequence() {
         queueMicrotask(() => {
           setIsActive(false);
         });
+        document.documentElement.style.removeProperty("overflow");
+        document.body.style.removeProperty("overflow");
         return;
       }
 
@@ -61,6 +114,8 @@ export function IntroSequence() {
         queueMicrotask(() => {
           setIsActive(false);
         });
+        document.documentElement.style.removeProperty("overflow");
+        document.body.style.removeProperty("overflow");
         return;
       }
     } catch {
@@ -78,6 +133,7 @@ export function IntroSequence() {
       setIsGlitching(false);
       setIsExiting(false);
       setIsActive(true);
+      window.scrollTo({ top: 0, behavior: "instant" });
     };
 
     window.addEventListener("replay-intro", handleReplay);
@@ -99,9 +155,11 @@ export function IntroSequence() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isActive, skipIntro]);
 
-  // Punto medio animation timeline (balanced, readable, and authentic)
+  // Calibrated timeline: each term stays for 0.5s - 0.6s (550ms dwell)
+  // NOTE: isExiting is intentionally omitted from dependencies so setting isExiting(true)
+  // does not re-trigger cleanup and clear the completion timer.
   useEffect(() => {
-    if (!isActive || isExiting) return;
+    if (!isActive) return;
 
     clearAllTimers();
 
@@ -111,56 +169,61 @@ export function IntroSequence() {
       return t;
     };
 
-    // 1. Pixelation Resolve (0 - 350ms)
+    // 1. Pixelation Resolve (0 - 300ms)
     addTimer(() => {
       setIsPixelating(false);
-    }, 350);
+    }, 300);
 
-    // 2. Step from Creativity (0) -> Artificial Intelligence (1) at 1100ms
+    // 2. Step to Artificial Intelligence at 850ms (dwell on Creativity: 550ms)
     addTimer(() => {
       setCurrentIndex(1);
-    }, 1100);
+    }, 850);
 
-    // 3. Step from Artificial Intelligence (1) -> Data (2) at 2650ms
+    // 3. Step to Data at 2050ms (transition: 650ms, dwell on AI: 550ms)
     addTimer(() => {
       setCurrentIndex(2);
-    }, 2650);
+    }, 2050);
 
-    // 4. Step from Data (2) -> Me (3) at 4200ms
+    // 4. Step to Me at 3250ms (transition: 650ms, dwell on Data: 550ms)
     addTimer(() => {
       setCurrentIndex(3);
-    }, 4200);
+    }, 3250);
 
-    // 5. Arrive & Lock on "Me" at 5300ms
+    // 5. Arrive on Me at 3900ms, lock at 4150ms
     addTimer(() => {
       setIsLocked(true);
-    }, 5300);
+    }, 4150);
 
-    // 6. Authentic Parpadeo Glitch inspired by after_selection.mp4 at 5600ms
+    // 6. Glitch Parpadeo begins at 4450ms (dwell on Me: 550ms)
     addTimer(() => {
       setIsGlitching(true);
-    }, 5600);
+    }, 4450);
 
-    // 7. Curtain dissolve starts at 6400ms
+    // 7. Curtain dissolve starts at 5250ms
     addTimer(() => {
       setIsExiting(true);
+      document.documentElement.style.removeProperty("overflow");
+      document.body.style.removeProperty("overflow");
       try {
         window.sessionStorage.setItem("portfolio_intro_seen", "true");
       } catch {
         // Safe fallback
       }
-    }, 6400);
+    }, 5250);
 
-    // 8. End sequence & unmount at 6850ms
+    // 8. End sequence & unmount at 5650ms
     addTimer(() => {
       setIsActive(false);
+      window.scrollTo({ top: 0, behavior: "instant" });
+      document.documentElement.style.removeProperty("overflow");
+      document.body.style.removeProperty("overflow");
       window.dispatchEvent(new CustomEvent("intro-complete"));
-    }, 6850);
+    }, 5650);
 
     return () => {
       clearAllTimers();
     };
-  }, [isActive, isExiting, clearAllTimers]);
+  }, [isActive, clearAllTimers]);
 
   // Canvas pixelation effect simulation (First 350ms)
   useEffect(() => {
