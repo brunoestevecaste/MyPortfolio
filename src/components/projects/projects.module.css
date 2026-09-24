@@ -165,6 +165,23 @@
     opacity 0.24s var(--ease-out);
 }
 
+.itemTransitioningTarget {
+  opacity: 0 !important;
+  transform: scale(0.985);
+  transition: opacity 0.18s ease;
+}
+
+.itemOtherFading {
+  opacity: 0.12 !important;
+  transform: scale(0.97) !important;
+  transition: opacity 0.35s ease, transform 0.35s ease !important;
+}
+
+.railFading {
+  opacity: 0.15;
+  transition: opacity 0.3s ease;
+}
+
 /* Staggered Card */
 .staggeredCardLink {
   display: flex;
@@ -300,6 +317,12 @@
   }
 }
 
+.noEntranceAnimation {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
 .executiveTopBar {
   display: flex;
   align-items: center;
@@ -324,6 +347,18 @@
 .characteristicPhotoCol {
   position: sticky;
   top: 5rem;
+  animation: photoColEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes photoColEntrance {
+  from {
+    opacity: 0.85;
+    transform: scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .photoContainer {
@@ -362,6 +397,18 @@
 
 .executiveSummaryCol {
   min-width: 0;
+  animation: summaryColEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+
+@keyframes summaryColEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .executiveLead {

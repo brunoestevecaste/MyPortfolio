@@ -3,6 +3,7 @@ import { Archivo, Space_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Kursor } from "@/components/ui/kursor";
+import { ProjectTransitionProvider } from "@/components/projects/project-transition-context";
 import "./globals.css";
 import "@/styles/kursor.css";
 
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
     "Portfolio de Bruno Esteve Castellano, Data Analyst y AI Engineer especializado en analítica, inteligencia artificial y sistemas de datos.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${archivo.variable} ${spaceMono.variable}`}>
       <body className="flex min-h-dvh flex-col antialiased">
@@ -37,7 +38,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Saltar al contenido
         </a>
         <SiteHeader />
-        {children}
+        <ProjectTransitionProvider>{children}</ProjectTransitionProvider>
         <SiteFooter />
       </body>
     </html>

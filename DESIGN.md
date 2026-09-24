@@ -281,10 +281,15 @@ Por indicación de Bruno en septiembre de 2026 y siguiendo la referencia de `ref
   - *Animación de scroll:* Los proyectos emergen suavemente mediante revelado
     progresivo (opacidad y ligero desplazamiento vertical) al entrar en el viewport,
     mientras la guía lateral actualiza la posición del indicador.
-  - *Animación de click:* Al pulsar un proyecto, el elemento ofrece respuesta táctil
-    inmediata de apertura y transición fluida hacia la página individual.
-- **Orden cronológico inverso:** Los proyectos se ordenan del más reciente al más
-  antiguo: Baleària (`01`, 2026), NextPlan (`02`, 2026), Alina (`03`, 2026) y AEPD (`04`, 2025).
+  - *Animación de click y transición compartida (FLIP + texto coordinado):* Al pulsar
+    un proyecto en la Home, se ejecuta una transición continua inspirada en `refs/video_projects.mp4`:
+    la imagen del proyecto se transforma suavemente (mediante FLIP con curva `cubic-bezier(0.16, 1, 0.3, 1)`)
+    desde su coordenada en el feed hasta la columna izquierda del split editorial (50/50).
+    Al mismo tiempo, el texto del resumen ejecutivo (antetítulo, título en `Archivo`, sinopsis,
+    puntos clave y metadatos) aparece al lado de la imagen en la columna derecha mediante un
+    desvanecimiento suave (`opacity: 0 -> 1`) y elevación sutil (`translateY: 24px -> 0`).
+    Al completarse el vuelo visual, la página de destino `/projects/[slug]` asume el control
+    sin saltos, permitiendo explorar el caso completo mediante scroll hacia `#case-study`.
 
 ### Perfil
 
@@ -352,10 +357,16 @@ Nivel 4: composición editorial con transiciones motivadas y feedback de navegac
 - Entrada inicial de titular, imagen y navegación mediante opacidad y traslación.
 - Deslizamiento continuo del indicador en la barra vertical de scroll de proyectos.
 - Revelado escalonado en scroll de los proyectos alternados.
-- Transición y retroalimentación táctil al hacer click en una tarjeta de proyecto.
+- **Transición compartida (*Shared Element Morph Transition* Home → Proyecto):**
+  Al pulsar una tarjeta en la Home, la fotografía seleccionada se despega y expande
+  fluidamente (mecánica FLIP) desde sus coordenadas en el feed hasta la columna
+  izquierda del Split Hero de la página individual (`cubic-bezier(0.16, 1, 0.3, 1)`
+  en ~440ms). Los elementos circundantes de la Home se atenúan (`opacity: 0.12 -> 0`)
+  y, al asentarse en la página de destino, la columna derecha con el resumen ejecutivo
+  emerge en cascada editorial (`translateY: 24px -> 0`, `opacity: 0 -> 1`).
 - Aparición fluida del split hero en la página de caso y scroll suave hacia el case study.
 - Micro-escala (1.03) y filtro tonal en el hover de imágenes.
-- Duraciones de 180ms para feedback, 240-360ms para transiciones y 600-700ms para reveals.
+- Duraciones de 180ms para feedback, 440ms para la transición compartida y 600-700ms para reveals.
 
 ### No permitido
 

@@ -8,7 +8,7 @@ const navigation = [
 
 export function SiteHeader() {
   return (
-    <header className="site-container" data-site-header>
+    <header className="site-container relative z-[10001]" data-site-header>
       <div className="flex min-h-18 flex-wrap items-center justify-between gap-x-6 py-3 md:py-0">
         <Link
           className="inline-flex min-h-11 items-center text-xs font-normal tracking-[-0.025em] uppercase hover:text-signal"

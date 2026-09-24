@@ -4,13 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { projects, type ProjectSummary } from "@/data/projects";
+import { useProjectTransition } from "./project-transition-context";
 import styles from "./projects.module.css";
 
 export function ProjectIndex() {
   const router = useRouter();
+  const { transitionToProject, isTransitioning, activeProjectSlug } =
+    useProjectTransition();
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [transitioningSlug, setTransitioningSlug] = useState<string | null>(null);
   const [visibleItems, setVisibleItems] = useState<Record<string, boolean>>({});
 
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -91,12 +93,15 @@ export function ProjectIndex() {
     project: ProjectSummary
   ) => {
     e.preventDefault();
-    setTransitioningSlug(project.slug);
+    const frame = e.currentTarget.querySelector(
+      `.${styles.imageFrame}`
+    ) as HTMLElement | null;
 
-    // Smooth tactile transition delay matching video feel
-    setTimeout(() => {
+    if (frame) {
+      transitionToProject(project, frame);
+    } else {
       router.push(`/projects/${project.slug}`);
-    }, 240);
+    }
   };
 
   const scrollToProject = (index: number) => {
@@ -110,7 +115,9 @@ export function ProjectIndex() {
     <div ref={sectionRef} className={styles.projectsStreamWrapper}>
       {/* Delicate left vertical scroll rail */}
       <aside
-        className={styles.delicateScrollRail}
+        className={`${styles.delicateScrollRail} ${
+          isTransitioning ? styles.railFading : ""
+        }`}
         aria-label="Navegación y progreso de proyectos"
       >
         <div className={styles.railInner}>
@@ -156,7 +163,9 @@ export function ProjectIndex() {
         {projects.map((project, index) => {
           const isEven = index % 2 === 0;
           const isRevealed = !!visibleItems[project.slug];
-          const isTransitioning = transitioningSlug === project.slug;
+          const isTarget = isTransitioning && activeProjectSlug === project.slug;
+          const isOtherFading =
+            isTransitioning && activeProjectSlug !== project.slug;
 
           return (
             <article
@@ -168,8 +177,8 @@ export function ProjectIndex() {
               className={`${styles.staggeredItem} ${
                 isEven ? styles.itemLeft : styles.itemRight
               } ${isRevealed ? styles.itemRevealed : ""} ${
-                isTransitioning ? styles.itemTransitioning : ""
-              }`}
+                isTarget ? styles.itemTransitioningTarget : ""
+              } ${isOtherFading ? styles.itemOtherFading : ""}`}
             >
               <a
                 href={`/projects/${project.slug}`}

@@ -16,6 +16,10 @@ export type ProjectSummary = {
   technologies: readonly string[];
   image: string;
   number: string;
+  eyebrow: string;
+  academicFramework?: string;
+  scope?: string;
+  grade?: string;
   executiveSummary: ExecutiveSummary;
 };
 
@@ -30,6 +34,11 @@ export const aepdProject = {
   technologies: ["Pentaho", "PostgreSQL", "Power BI", "Python", "XGBoost"],
   image: "/projects/aepd.jpg",
   number: "04",
+  eyebrow: "AEPD / Trabajo de Fin de Grado",
+  academicFramework:
+    "TFG Grado en Inteligencia y Analítica de Negocios · Universitat de València (IRTIC)",
+  scope: "Pipeline ETL, Data Warehouse, BI y modelos predictivos",
+  grade: "10 / 10",
   executiveSummary: {
     lead:
       "Sistema integral de ingeniería de datos y modelado predictivo para organizar los accesos del portal público de la AEPD, explorar patrones de uso y anticipar visitas horarias para dimensionar recursos.",
@@ -54,6 +63,9 @@ export const baleariaProject = {
   technologies: ["Python", "Google Cloud", "Machine Learning", "MLOps"],
   image: "/projects/balearia.jpg",
   number: "01",
+  eyebrow: "Baleària / Trabajo de Fin de Máster",
+  academicFramework: "EDEM Escuela de Empresarios · Máster en IA / 2026",
+  scope: "Prototipo desplegado en Google Cloud Platform",
   executiveSummary: {
     lead:
       "Plataforma en Google Cloud que conecta datos de navegación marítima, modelos de consumo de combustible y algoritmos de optimización para recomendar velocidades por tramo y reducir la energía estimada respetando la llegada.",
@@ -78,6 +90,9 @@ export const alinaProject = {
   technologies: ["Python", "FastAPI", "Google ADK", "Google Gemini", "React", "Selenium"],
   image: "/projects/alina.jpg",
   number: "03",
+  eyebrow: "EDEM / Proyecto de Máster en IA",
+  academicFramework: "EDEM Escuela de Empresarios · Máster en IA / 2026",
+  scope: "Sistema multi-agente con Google ADK y Gemini",
   executiveSummary: {
     lead:
       "Sistema multi-agente con Google ADK y Gemini que transforma la búsqueda de empleo: extracción y matching explicable de habilidades frente al CV, simulación interactiva de entrevistas y generación personalizada de cartas.",
@@ -111,6 +126,9 @@ export const nextplanProject = {
   ],
   image: "/projects/nextplan.jpg",
   number: "02",
+  eyebrow: "EDEM / Proyecto de Máster en IA",
+  academicFramework: "EDEM Escuela de Empresarios · Máster en IA / 2026",
+  scope: "Plataforma integral en GCP (Dataflow + BigQuery + dbt + Vertex AI + React)",
   executiveSummary: {
     lead:
       "Plataforma integral para descubrir y planificar eventos en España mediante una experiencia multicanal: exploración en mapa, swipes de afinidad, asistente conversacional con RAG en dos fases y clustering K-Means para recomendaciones personalizadas.",

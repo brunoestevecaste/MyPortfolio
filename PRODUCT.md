@@ -395,7 +395,7 @@ La Home funciona como índice visual y punto de entrada inmersivo. Cada proyecto
 3. **Texto sutil:** únicamente el título del proyecto en la tipografía de texto normal de la web (`Space Mono`), evitando párrafos extensos en la Home para preservar el refinamiento y la ligereza visual.
 4. **Disposición alternada y escalonada:** los proyectos fluyen uno debajo del otro alternando columnas izquierda y derecha con desplazamiento asimétrico vertical.
 5. **Barra de scroll vertical delicada:** guía fina de 1px a la izquierda con indicador dinámico de avance y marcadores de salto directo a cada proyecto.
-6. **Animaciones integradas:** revelado suave progresivo en scroll y animación de pulsado táctil antes de la transición a la página individual.
+6. **Animaciones integradas:** revelado suave progresivo en scroll y **transición compartida (*Shared Element Morph Transition*)**, donde la imagen seleccionada se expande y viaja fluidamente desde el feed de la Home hasta la columna izquierda del Split Hero de la página individual mientras el resto de la interfaz se disuelve.
 
 Orden de presentación verificado y actualizado:
 
