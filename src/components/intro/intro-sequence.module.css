@@ -1,24 +1,25 @@
 /* ==========================================================================
    Intro Sequence Module
-   Editorial Selection Roller + Glitch Entrance Transition
+   Editorial Selection Roller + Authentic Parpadeo Glitch
    Inspired by:
-     - refs/intro/intro_selection.mp4 (Selection Roller & Pixelate Resolve)
-     - refs/intro/after_selection.mp4 (Scanline Glitch & Slices)
+     - refs/intro/intro_selection.mp4 (Selection Roller)
+     - refs/intro/after_selection.mp4 (Electric Glitch Parpadeo & Scanlines)
    ========================================================================== */
 
 .introOverlay {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 999999; /* Must strictly exceed SiteHeader's z-[10001] */
   background-color: var(--canvas);
   color: var(--ink);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: stretch;
   overflow: hidden;
   user-select: none;
-  cursor: default;
-  transition: opacity 0.45s var(--ease-out), visibility 0.45s ease;
+  cursor: pointer;
+  transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.55s ease;
   will-change: opacity, transform;
 }
 
@@ -28,116 +29,20 @@
   pointer-events: none;
 }
 
-/* Base parameters */
+/* ==========================================================================
+   Tokens: Space Mono Dimensions (Punto Medio)
+   ========================================================================== */
+
 :root {
-  --intro-row-h: clamp(4.25rem, 8.5vw, 6.75rem);
-  --intro-font-size: clamp(2rem, 5.2vw, 4.75rem);
+  --intro-row-h: clamp(4.5rem, 8.5vw, 6.75rem);
+  --intro-font-size: clamp(1.75rem, 3.8vw, 3.25rem);
 }
 
 @media (max-width: 47.999rem) {
   :root {
-    --intro-row-h: clamp(3.25rem, 7vw, 4.5rem);
-    --intro-font-size: clamp(1.25rem, 5.4vw, 2.25rem);
+    --intro-row-h: clamp(3.5rem, 7vw, 4.5rem);
+    --intro-font-size: clamp(1.1rem, 4.4vw, 1.75rem);
   }
-}
-
-/* ==========================================================================
-   Editorial Technical Frame / Corner Metadata
-   ========================================================================== */
-
-.topHeader {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: clamp(1.25rem, 2.5vw, 2.5rem) var(--page-gutter);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 40;
-  pointer-events: none;
-}
-
-.headerTitle {
-  font-family: var(--font-space-mono), monospace;
-  font-size: clamp(0.75rem, 0.85vw, 0.875rem);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.statusDot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  background-color: var(--ink);
-  border-radius: 50%;
-  animation: pulseDot 1s infinite alternate;
-}
-
-@keyframes pulseDot {
-  0% { opacity: 0.3; transform: scale(0.85); }
-  100% { opacity: 1; transform: scale(1.15); }
-}
-
-.skipButton {
-  pointer-events: auto;
-  font-family: var(--font-space-mono), monospace;
-  font-size: clamp(0.75rem, 0.85vw, 0.875rem);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink);
-  background: transparent;
-  border: 1px solid var(--line);
-  padding: 0.5rem 0.875rem;
-  border-radius: 2px;
-  cursor: pointer;
-  transition: all var(--duration-feedback) var(--ease-out);
-}
-
-.skipButton:hover,
-.skipButton:focus-visible {
-  background-color: var(--ink);
-  color: var(--canvas);
-  border-color: var(--ink);
-}
-
-.bottomFooter {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: clamp(1.25rem, 2.5vw, 2.5rem) var(--page-gutter);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 40;
-  pointer-events: none;
-  font-family: var(--font-space-mono), monospace;
-  font-size: clamp(0.75rem, 0.85vw, 0.875rem);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.footerSteps {
-  display: flex;
-  gap: 1.5rem;
-}
-
-@media (max-width: 47.999rem) {
-  .footerSteps {
-    display: none;
-  }
-}
-
-.stepIndicatorActive {
-  color: var(--ink);
-  font-weight: 700;
 }
 
 /* ==========================================================================
@@ -153,7 +58,7 @@
   align-items: center;
 }
 
-/* Base Track: Outside the Highlight Bar (Muted on Canvas) */
+/* Base Track: Outside the Highlight Bar (Muted Space Mono on Canvas) */
 .baseTrack {
   position: absolute;
   left: 0;
@@ -164,64 +69,36 @@
   will-change: transform;
 }
 
+/* Punto Medio: 0.75s smooth spring-like cubic-bezier */
 .trackMoving {
-  transition: transform 0.54s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .trackInstant {
   transition: none !important;
 }
 
-/* Row common styles */
+/* Row Layout: ONLY the Option Text */
 .itemRow {
   height: var(--intro-row-h);
   padding-inline: var(--page-gutter);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
   box-sizing: border-box;
 }
 
-.itemMain {
-  display: flex;
-  align-items: baseline;
-  gap: clamp(1rem, 2.5vw, 2.5rem);
-}
-
-.itemNumber {
-  font-family: var(--font-space-mono), monospace;
-  font-size: clamp(0.85rem, 1.2vw, 1.25rem);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.05em;
-  color: var(--muted);
-  opacity: 0.7;
-}
-
 .itemLabel {
-  font-family: var(--font-archivo), Arial, sans-serif;
+  font-family: var(--font-space-mono), monospace;
   font-size: var(--intro-font-size);
   font-weight: 400;
   line-height: 1;
-  letter-spacing: -0.055em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--ink) 35%, transparent);
-  transition: color 0.3s ease;
-}
-
-.itemCategory {
-  font-family: var(--font-space-mono), monospace;
-  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
-  opacity: 0.5;
-}
-
-@media (max-width: 47.999rem) {
-  .itemCategory {
-    display: none;
-  }
+  letter-spacing: -0.025em;
+  text-transform: none; /* Title case: Creativity, Artificial Intelligence, Data, Me */
+  color: color-mix(in srgb, var(--ink) 28%, transparent);
+  transition: color 0.4s ease;
+  white-space: nowrap;
 }
 
 /* ==========================================================================
@@ -239,10 +116,10 @@
   overflow: hidden;
   pointer-events: none;
   z-index: 20;
-  box-shadow: 0 4px 24px rgba(18, 20, 22, 0.08);
+  box-shadow: 0 4px 28px rgba(18, 20, 22, 0.07);
 }
 
-/* Inverted Track: Nested exactly inside the Highlight Bar */
+/* Inverted Track: Nested inside Highlight Bar */
 .invertedTrack {
   position: absolute;
   left: 0;
@@ -257,61 +134,30 @@
   color: var(--canvas);
 }
 
-.highlightBar .itemNumber {
-  color: var(--canvas);
-  opacity: 0.85;
-}
-
-.highlightBar .itemCategory {
-  color: var(--canvas);
-  opacity: 0.85;
-}
-
-/* Selection Lock state on "Me" */
+/* Lock Strobe / Flicker on "Me" */
 .barSelected {
-  animation: selectionFlash 0.38s steps(2, jump-none) 1;
+  animation: lockStrobe 0.45s steps(2, jump-none) 1;
 }
 
-@keyframes selectionFlash {
+@keyframes lockStrobe {
   0% {
-    background-color: var(--ink);
+    filter: invert(0);
   }
-  25% {
-    background-color: var(--canvas);
+  20% {
+    filter: invert(1);
   }
-  50% {
-    background-color: var(--ink);
+  40% {
+    filter: invert(0);
   }
-  75% {
-    background-color: var(--canvas);
+  60% {
+    filter: invert(1);
+  }
+  80% {
+    filter: invert(0);
   }
   100% {
-    background-color: var(--ink);
+    filter: invert(0);
   }
-}
-
-.barSelected .itemLabel {
-  letter-spacing: -0.04em;
-  transition: letter-spacing 0.2s ease;
-}
-
-.selectedBadge {
-  font-family: var(--font-space-mono), monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  background: var(--canvas);
-  color: var(--ink);
-  padding: 0.2rem 0.5rem;
-  margin-left: 1rem;
-  font-weight: 700;
-  vertical-align: middle;
-  display: inline-block;
-  animation: badgeBlink 0.2s ease-in-out infinite alternate;
-}
-
-@keyframes badgeBlink {
-  0% { opacity: 0.8; }
-  100% { opacity: 1; }
 }
 
 /* ==========================================================================
@@ -326,7 +172,7 @@
   z-index: 30;
   pointer-events: none;
   opacity: 1;
-  transition: opacity 0.2s ease-out;
+  transition: opacity 0.25s ease-out;
 }
 
 .pixelCanvasHidden {
@@ -335,44 +181,90 @@
 }
 
 /* ==========================================================================
-   GLITCH ENTRANCE TRANSITION (Inspired by refs/intro/after_selection.mp4)
+   AUTHENTIC GLITCH PARPADEO (Directly inspired by after_selection.mp4)
+   High-speed strobe bursts, alternating blackouts and displaced slices
    ========================================================================== */
 
 .glitchingContainer {
-  animation: glitchJitter 0.75s steps(2, jump-none) forwards;
+  animation: glitchParpadeo 1.2s steps(2, jump-none) forwards;
 }
 
-@keyframes glitchJitter {
+@keyframes glitchParpadeo {
   0% {
     transform: translate3d(0, 0, 0);
+    opacity: 1;
+    filter: invert(0);
   }
-  12% {
-    transform: translate3d(-3px, 1px, 0);
+  4% {
+    transform: translate3d(-6px, 1px, 0);
+    opacity: 0.15; /* Drop/blackout */
+  }
+  8% {
+    transform: translate3d(8px, -1px, 0);
+    opacity: 1;
+    filter: invert(1); /* Electric inverted flash */
+  }
+  13% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.25;
+    filter: invert(0);
+  }
+  18% {
+    transform: translate3d(-10px, 2px, 0);
+    opacity: 1;
+    filter: invert(0);
   }
   24% {
-    transform: translate3d(4px, -1px, 0);
+    transform: translate3d(6px, -1px, 0);
+    opacity: 0.1;
   }
-  36% {
-    transform: translate3d(-2px, -1px, 0);
+  30% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+    filter: invert(1); /* Inverted burst */
   }
-  48% {
-    transform: translate3d(3px, 1px, 0);
+  38% {
+    transform: translate3d(-7px, 0, 0);
+    opacity: 0.9;
+    filter: invert(0);
   }
-  60% {
-    transform: translate3d(-4px, 0, 0);
+  46% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.15; /* Sudden pause drop like frame 18-22 in video */
+  }
+  54% {
+    transform: translate3d(12px, -2px, 0);
+    opacity: 1;
+    filter: invert(1); /* Second wave */
+  }
+  62% {
+    transform: translate3d(-12px, 1px, 0);
+    opacity: 0.9;
+    filter: invert(0);
   }
   72% {
-    transform: translate3d(2px, -1px, 0);
+    transform: translate3d(8px, 0, 0);
+    opacity: 0.2;
   }
-  85% {
-    transform: translate3d(-1px, 1px, 0);
+  80% {
+    transform: translate3d(-4px, 0, 0);
+    opacity: 1;
+  }
+  88% {
+    transform: translate3d(2px, 0, 0);
+    opacity: 0.4;
+  }
+  96% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.1;
   }
   100% {
     transform: translate3d(0, 0, 0);
+    opacity: 0;
   }
 }
 
-/* Horizontal Slice Displacements */
+/* Horizontal Slice Displacements with Parpadeo */
 .sliceLayer {
   position: absolute;
   inset: 0;
@@ -382,46 +274,61 @@
   opacity: 0;
 }
 
-/* Slice A: Top & Mid horizontal shearing */
+/* Slice A: Primary horizontal shearing parpadeo */
 .sliceA {
-  animation: glitchSliceA 0.7s steps(2, jump-none) forwards;
+  animation: sliceParpadeoA 1.2s steps(2, jump-none) forwards;
 }
 
-@keyframes glitchSliceA {
+@keyframes sliceParpadeoA {
   0% {
     opacity: 0;
     clip-path: inset(0 0 0 0);
     transform: translate3d(0, 0, 0);
   }
-  10% {
+  6% {
     opacity: 1;
     clip-path: inset(14% 0 68% 0);
-    transform: translate3d(-40px, 0, 0);
+    transform: translate3d(-45px, 0, 0);
   }
-  25% {
+  12% {
+    opacity: 0;
+  }
+  18% {
     opacity: 1;
-    clip-path: inset(46% 0 32% 0);
+    clip-path: inset(44% 0 34% 0);
     transform: translate3d(55px, 0, 0);
   }
-  40% {
-    opacity: 0.9;
-    clip-path: inset(28% 0 52% 0);
-    transform: translate3d(-60px, 0, 0);
+  26% {
+    opacity: 0.1;
   }
-  55% {
+  32% {
     opacity: 1;
-    clip-path: inset(72% 0 8% 0);
+    clip-path: inset(26% 0 54% 0);
+    transform: translate3d(-65px, 0, 0);
+  }
+  42% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+    clip-path: inset(62% 0 18% 0);
     transform: translate3d(45px, 0, 0);
   }
-  70% {
+  58% {
+    opacity: 0.15;
+  }
+  66% {
     opacity: 1;
-    clip-path: inset(38% 0 42% 0);
+    clip-path: inset(36% 0 44% 0);
     transform: translate3d(-35px, 0, 0);
   }
-  85% {
+  78% {
     opacity: 0.8;
-    clip-path: inset(8% 0 80% 0);
+    clip-path: inset(10% 0 76% 0);
     transform: translate3d(20px, 0, 0);
+  }
+  88% {
+    opacity: 0.2;
   }
   100% {
     opacity: 0;
@@ -429,42 +336,54 @@
   }
 }
 
-/* Slice B: Inverted contrast counter-displacement */
+/* Slice B: Inverted contrast counter-displacement parpadeo */
 .sliceB {
   filter: invert(1);
-  animation: glitchSliceB 0.7s steps(2, jump-none) forwards;
+  animation: sliceParpadeoB 1.2s steps(2, jump-none) forwards;
 }
 
-@keyframes glitchSliceB {
+@keyframes sliceParpadeoB {
   0% {
     opacity: 0;
     clip-path: inset(0 0 0 0);
     transform: translate3d(0, 0, 0);
   }
-  15% {
+  8% {
     opacity: 0.95;
     clip-path: inset(34% 0 46% 0);
-    transform: translate3d(60px, 0, 0);
+    transform: translate3d(50px, 0, 0);
   }
-  30% {
+  16% {
+    opacity: 0;
+  }
+  24% {
     opacity: 1;
-    clip-path: inset(62% 0 18% 0);
-    transform: translate3d(-50px, 0, 0);
+    clip-path: inset(58% 0 22% 0);
+    transform: translate3d(-45px, 0, 0);
   }
-  45% {
-    opacity: 0.85;
+  34% {
+    opacity: 0.1;
+  }
+  44% {
+    opacity: 0.9;
     clip-path: inset(18% 0 64% 0);
     transform: translate3d(40px, 0, 0);
   }
-  60% {
+  54% {
+    opacity: 0;
+  }
+  62% {
     opacity: 1;
     clip-path: inset(50% 0 30% 0);
-    transform: translate3d(-65px, 0, 0);
+    transform: translate3d(-55px, 0, 0);
   }
-  75% {
-    opacity: 0.9;
-    clip-path: inset(80% 0 4% 0);
+  74% {
+    opacity: 0.8;
+    clip-path: inset(78% 0 6% 0);
     transform: translate3d(30px, 0, 0);
+  }
+  86% {
+    opacity: 0;
   }
   100% {
     opacity: 0;
@@ -472,46 +391,54 @@
   }
 }
 
-/* Slice C: High-density Micro Raster Blocks */
+/* Slice C: High-density micro-raster cuts with parpadeo */
 .sliceC {
-  animation: glitchSliceC 0.7s steps(3, jump-none) forwards;
+  animation: sliceParpadeoC 1.2s steps(3, jump-none) forwards;
 }
 
-@keyframes glitchSliceC {
+@keyframes sliceParpadeoC {
   0% {
     opacity: 0;
   }
-  8% {
+  10% {
     opacity: 1;
     clip-path: inset(22% 0 62% 0);
-    transform: translate3d(-25px, 0, 0);
+    transform: translate3d(-30px, 0, 0);
   }
-  22% {
-    opacity: 0.8;
-    clip-path: inset(58% 0 24% 0);
+  18% {
+    opacity: 0;
+  }
+  28% {
+    opacity: 0.9;
+    clip-path: inset(70% 0 16% 0);
     transform: translate3d(35px, 0, 0);
   }
   38% {
-    opacity: 1;
-    clip-path: inset(82% 0 6% 0);
-    transform: translate3d(-45px, 0, 0);
+    opacity: 0.15;
   }
-  52% {
-    opacity: 0.9;
-    clip-path: inset(10% 0 76% 0);
-    transform: translate3d(30px, 0, 0);
-  }
-  68% {
+  48% {
     opacity: 1;
-    clip-path: inset(44% 0 38% 0);
-    transform: translate3d(-20px, 0, 0);
+    clip-path: inset(42% 0 38% 0);
+    transform: translate3d(-25px, 0, 0);
+  }
+  60% {
+    opacity: 0;
+  }
+  70% {
+    opacity: 0.85;
+    clip-path: inset(16% 0 72% 0);
+    transform: translate3d(20px, 0, 0);
+  }
+  82% {
+    opacity: 0.3;
   }
   100% {
     opacity: 0;
+    transform: translate3d(0, 0, 0);
   }
 }
 
-/* Data Bars: Barcode / Comb scanlines inspired by after_selection.mp4 */
+/* Data Bars: Barcode / Comb scanline bursts flickering on/off */
 .dataBars {
   position: absolute;
   inset: 0;
@@ -539,80 +466,54 @@
   background-size: 100% 6px, 150px 100%;
   opacity: 0;
   mix-blend-mode: difference;
-  animation: glitchDataBars 0.7s steps(3, jump-none) forwards;
+  animation: dataBarsParpadeo 1.2s steps(3, jump-none) forwards;
 }
 
-@keyframes glitchDataBars {
+@keyframes dataBarsParpadeo {
   0% {
     opacity: 0;
   }
-  8% {
-    opacity: 0.85;
+  7% {
+    opacity: 0.9;
     background-position: 0 0, 0 0;
   }
-  24% {
-    opacity: 0.95;
-    background-position: 0 6px, 60px 0;
-  }
-  42% {
-    opacity: 1;
-    background-position: 0 12px, -80px 0;
-  }
-  60% {
-    opacity: 0.9;
-    background-position: 0 4px, 100px 0;
-  }
-  78% {
-    opacity: 0.75;
-    background-position: 0 8px, -40px 0;
-  }
-  100% {
+  14% {
     opacity: 0;
   }
-}
-
-/* Exit Curtain Tear: Overlay breaks into horizontal strips and dissolves */
-.curtainTear {
-  animation: curtainSplit 0.65s 0.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes curtainSplit {
-  0% {
-    opacity: 1;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  22% {
+    opacity: 0.95;
+    background-position: 0 6px, 70px 0;
+  }
+  30% {
+    opacity: 0.1;
   }
   40% {
-    opacity: 0.95;
-    clip-path: polygon(
-      0 0, 100% 0,
-      100% 30%, 96% 30%,
-      96% 50%, 100% 50%,
-      100% 70%, 95% 70%,
-      95% 100%, 0 100%
-    );
+    opacity: 1;
+    background-position: 0 12px, -85px 0;
   }
-  80% {
-    opacity: 0.5;
-    clip-path: polygon(
-      0 0, 100% 0,
-      100% 20%, 90% 20%,
-      90% 60%, 100% 60%,
-      100% 85%, 85% 85%,
-      85% 100%, 0 100%
-    );
+  48% {
+    opacity: 0;
+  }
+  56% {
+    opacity: 0.9;
+    background-position: 0 4px, 110px 0;
+  }
+  66% {
+    opacity: 0.15;
+  }
+  76% {
+    opacity: 0.8;
+    background-position: 0 8px, -45px 0;
+  }
+  86% {
+    opacity: 0.2;
   }
   100% {
     opacity: 0;
-    clip-path: polygon(
-      0 0, 100% 0,
-      100% 0%, 0% 0%,
-      0% 100%, 100% 100%,
-      100% 100%, 0 100%
-    );
   }
 }
 
-/* Reduced motion accessibility */
+/* Accessibility: strictly respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   .introOverlay {
     transition: none !important;

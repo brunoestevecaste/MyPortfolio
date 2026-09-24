@@ -4,14 +4,15 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./intro-sequence.module.css";
 
 export const INTRO_ITEMS = [
-  { id: "creativity", num: "01", label: "Creativity", category: "Vision & Ideas" },
-  { id: "ai", num: "02", label: "Artificial Intelligence", category: "Models & Agents" },
-  { id: "data", num: "03", label: "Data", category: "Analytics & Systems" },
-  { id: "me", num: "04", label: "Me", category: "Bruno Esteve" },
+  { id: "creativity", label: "Creativity" },
+  { id: "ai", label: "Artificial Intelligence" },
+  { id: "data", label: "Data" },
+  { id: "me", label: "Me" },
 ] as const;
 
 export function IntroSequence() {
-  const [isActive, setIsActive] = useState<boolean>(false);
+  // Start as true by default so the overlay covers the header and page from the very first frame
+  const [isActive, setIsActive] = useState<boolean>(true);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isPixelating, setIsPixelating] = useState<boolean>(true);
   const [isLocked, setIsLocked] = useState<boolean>(false);
@@ -38,7 +39,7 @@ export function IntroSequence() {
     setTimeout(() => {
       setIsActive(false);
       window.dispatchEvent(new CustomEvent("intro-complete"));
-    }, 150);
+    }, 200);
   }, [clearAllTimers]);
 
   // Handle initialization on client mount
@@ -49,17 +50,19 @@ export function IntroSequence() {
       const hasSeen = window.sessionStorage.getItem("portfolio_intro_seen");
 
       if (hasSeen && !forceIntro) {
+        queueMicrotask(() => {
+          setIsActive(false);
+        });
         return;
       }
 
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (prefersReducedMotion) {
+        queueMicrotask(() => {
+          setIsActive(false);
+        });
         return;
       }
-
-      requestAnimationFrame(() => {
-        setIsActive(true);
-      });
     } catch {
       // Fallback
     }
@@ -81,7 +84,7 @@ export function IntroSequence() {
     return () => window.removeEventListener("replay-intro", handleReplay);
   }, [clearAllTimers]);
 
-  // Keyboard controls (Esc / Space to skip)
+  // Keyboard controls (Esc / Space / Enter to skip)
   useEffect(() => {
     if (!isActive) return;
 
@@ -96,7 +99,7 @@ export function IntroSequence() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isActive, skipIntro]);
 
-  // Main animation timeline
+  // Punto medio animation timeline (balanced, readable, and authentic)
   useEffect(() => {
     if (!isActive || isExiting) return;
 
@@ -108,37 +111,37 @@ export function IntroSequence() {
       return t;
     };
 
-    // 1. Pixelation Resolve (0 - 450ms)
+    // 1. Pixelation Resolve (0 - 350ms)
     addTimer(() => {
       setIsPixelating(false);
-    }, 450);
+    }, 350);
 
-    // 2. Step from Creativity (0) -> Artificial Intelligence (1) at 700ms
+    // 2. Step from Creativity (0) -> Artificial Intelligence (1) at 1100ms
     addTimer(() => {
       setCurrentIndex(1);
-    }, 700);
+    }, 1100);
 
-    // 3. Step from Artificial Intelligence (1) -> Data (2) at 1350ms
+    // 3. Step from Artificial Intelligence (1) -> Data (2) at 2650ms
     addTimer(() => {
       setCurrentIndex(2);
-    }, 1350);
+    }, 2650);
 
-    // 4. Step from Data (2) -> Me (3) at 2000ms
+    // 4. Step from Data (2) -> Me (3) at 4200ms
     addTimer(() => {
       setCurrentIndex(3);
-    }, 2000);
+    }, 4200);
 
-    // 5. Arrive & Lock on "Me" at 2550ms
+    // 5. Arrive & Lock on "Me" at 5300ms
     addTimer(() => {
       setIsLocked(true);
-    }, 2550);
+    }, 5300);
 
-    // 6. Glitch entrance transition inspired by after_selection.mp4 at 2950ms
+    // 6. Authentic Parpadeo Glitch inspired by after_selection.mp4 at 5600ms
     addTimer(() => {
       setIsGlitching(true);
-    }, 2950);
+    }, 5600);
 
-    // 7. Curtain tear / dissolve starts at 3350ms
+    // 7. Curtain dissolve starts at 6400ms
     addTimer(() => {
       setIsExiting(true);
       try {
@@ -146,20 +149,20 @@ export function IntroSequence() {
       } catch {
         // Safe fallback
       }
-    }, 3350);
+    }, 6400);
 
-    // 8. End sequence & unmount at 3750ms
+    // 8. End sequence & unmount at 6850ms
     addTimer(() => {
       setIsActive(false);
       window.dispatchEvent(new CustomEvent("intro-complete"));
-    }, 3750);
+    }, 6850);
 
     return () => {
       clearAllTimers();
     };
   }, [isActive, isExiting, clearAllTimers]);
 
-  // Canvas pixelation effect simulation (First 450ms)
+  // Canvas pixelation effect simulation (First 350ms)
   useEffect(() => {
     if (!isActive || !isPixelating) return;
 
@@ -174,7 +177,7 @@ export function IntroSequence() {
 
     const render = (now: number) => {
       const elapsed = now - startTime;
-      const progress = Math.min(elapsed / 450, 1);
+      const progress = Math.min(elapsed / 350, 1);
 
       const dpr = window.devicePixelRatio || 1;
       const width = canvas.clientWidth;
@@ -188,11 +191,10 @@ export function IntroSequence() {
       ctx.save();
       ctx.scale(dpr, dpr);
 
-      // Pixel block size steps down: 32 -> 16 -> 8 -> 4 -> 1
-      let blockSize = 32;
-      if (progress > 0.65) blockSize = 6;
-      else if (progress > 0.4) blockSize = 14;
-      else if (progress > 0.2) blockSize = 22;
+      // Pixel block size steps down: 28 -> 14 -> 6 -> 1
+      let blockSize = 24;
+      if (progress > 0.65) blockSize = 5;
+      else if (progress > 0.35) blockSize = 12;
 
       ctx.clearRect(0, 0, width, height);
 
@@ -215,15 +217,14 @@ export function IntroSequence() {
         offCtx.fillStyle = "#121416";
         offCtx.fillRect(0, barY, offW, barH);
 
-        // Text blocks simulation
+        // Text simulation in Space Mono monospace
         offCtx.fillStyle = "#121416";
-        offCtx.font = "bold 9px sans-serif";
-        offCtx.fillText("CREATIVITY", offW * 0.08, barY - barH * 0.4);
-        offCtx.fillText("DATA", offW * 0.08, barY + barH * 1.6);
+        offCtx.font = "8px monospace";
+        offCtx.fillText("Artificial Intelligence", offW * 0.06, barY + barH * 1.6);
 
         // Inside bar
         offCtx.fillStyle = "#F4F3EF";
-        offCtx.fillText("ARTIFICIAL INTELLIGENCE", offW * 0.08, barY + barH * 0.7);
+        offCtx.fillText("Creativity", offW * 0.06, barY + barH * 0.7);
 
         // Draw stretched with nearest neighbor
         ctx.imageSmoothingEnabled = false;
@@ -245,31 +246,16 @@ export function IntroSequence() {
 
   return (
     <aside
-      aria-label="Animación de introducción editorial"
+      aria-label="Animación interactiva de introducción"
       className={`${styles.introOverlay} ${isExiting ? styles.introOverlayHidden : ""} ${
         isGlitching ? styles.glitchingContainer : ""
       }`}
       role="region"
+      onClick={skipIntro}
     >
-      {/* Top Header Information */}
-      <div className={styles.topHeader}>
-        <div className={styles.headerTitle}>
-          <span className={styles.statusDot} aria-hidden="true" />
-          <span>Bruno Esteve // Initial Selection</span>
-        </div>
-        <button
-          type="button"
-          onClick={skipIntro}
-          className={styles.skipButton}
-          aria-label="Saltar animación de introducción"
-        >
-          [ ESC ] Saltar
-        </button>
-      </div>
-
-      {/* Main Center Roller Stage */}
+      {/* Main Center Roller Stage: ONLY the selector with the options */}
       <div className={styles.rollerStage}>
-        {/* Layer 1: Base Track (Outside the Highlight Bar, Muted Ink) */}
+        {/* Layer 1: Base Track (Outside the Highlight Bar, Muted Space Mono on Canvas) */}
         <div
           className={`${styles.baseTrack} ${styles.trackMoving}`}
           style={{
@@ -278,16 +264,12 @@ export function IntroSequence() {
         >
           {INTRO_ITEMS.map((item) => (
             <div key={item.id} className={styles.itemRow}>
-              <div className={styles.itemMain}>
-                <span className={styles.itemNumber}>{item.num}</span>
-                <span className={styles.itemLabel}>{item.label}</span>
-              </div>
-              <span className={styles.itemCategory}>{item.category}</span>
+              <span className={styles.itemLabel}>{item.label}</span>
             </div>
           ))}
         </div>
 
-        {/* Layer 2: Fixed Highlight Bar in the Vertical Center (Inverted Ink) */}
+        {/* Layer 2: Fixed Highlight Bar in the Vertical Center (Inverted Layer) */}
         <div
           className={`${styles.highlightBar} ${isLocked ? styles.barSelected : ""}`}
           aria-hidden="true"
@@ -300,58 +282,28 @@ export function IntroSequence() {
           >
             {INTRO_ITEMS.map((item) => (
               <div key={item.id} className={styles.itemRow}>
-                <div className={styles.itemMain}>
-                  <span className={styles.itemNumber}>{item.num}</span>
-                  <span className={styles.itemLabel}>
-                    {item.label}
-                    {isLocked && item.id === "me" && (
-                      <span className={styles.selectedBadge}>SELECTED</span>
-                    )}
-                  </span>
-                </div>
-                <span className={styles.itemCategory}>
-                  {isLocked && item.id === "me" ? "[ ACCESS GRANTED ]" : item.category}
-                </span>
+                <span className={styles.itemLabel}>{item.label}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Bottom Footer Information */}
-      <div className={styles.bottomFooter}>
-        <div className={styles.footerSteps}>
-          {INTRO_ITEMS.map((item, idx) => (
-            <span
-              key={item.id}
-              className={idx === currentIndex ? styles.stepIndicatorActive : undefined}
-            >
-              {item.num} {item.label}
-            </span>
-          ))}
-        </div>
-        <div>
-          {isLocked
-            ? "STATUS: ME SELECTED // ENTERING SITE"
-            : `INDEX: 0${currentIndex + 1} / 04`}
-        </div>
-      </div>
-
-      {/* Canvas Pixelation Resolve Layer (Active during first 450ms) */}
+      {/* Canvas Pixelation Resolve Layer (Active during first 350ms) */}
       <canvas
         ref={canvasRef}
         className={`${styles.pixelCanvas} ${!isPixelating ? styles.pixelCanvasHidden : ""}`}
         aria-hidden="true"
       />
 
-      {/* Glitch Overlay Slices (Active when Me is selected, inspired by after_selection.mp4) */}
+      {/* Glitch Overlay Slices with Authentic Parpadeo */}
       {isGlitching && (
         <>
           <div className={`${styles.sliceLayer} ${styles.sliceA}`} aria-hidden="true">
             <div
               className={styles.highlightBar}
               style={{
-                transform: "translateY(-50%) translate3d(24px, 0, 0)",
+                transform: "translateY(-50%) translate3d(25px, 0, 0)",
               }}
             >
               <div
@@ -362,10 +314,7 @@ export function IntroSequence() {
               >
                 {INTRO_ITEMS.map((item) => (
                   <div key={item.id} className={styles.itemRow}>
-                    <div className={styles.itemMain}>
-                      <span className={styles.itemNumber}>{item.num}</span>
-                      <span className={styles.itemLabel}>{item.label}</span>
-                    </div>
+                    <span className={styles.itemLabel}>{item.label}</span>
                   </div>
                 ))}
               </div>
@@ -376,7 +325,7 @@ export function IntroSequence() {
             <div
               className={styles.highlightBar}
               style={{
-                transform: "translateY(-50%) translate3d(-32px, 0, 0)",
+                transform: "translateY(-50%) translate3d(-28px, 0, 0)",
               }}
             >
               <div
@@ -387,10 +336,7 @@ export function IntroSequence() {
               >
                 {INTRO_ITEMS.map((item) => (
                   <div key={item.id} className={styles.itemRow}>
-                    <div className={styles.itemMain}>
-                      <span className={styles.itemNumber}>{item.num}</span>
-                      <span className={styles.itemLabel}>{item.label}</span>
-                    </div>
+                    <span className={styles.itemLabel}>{item.label}</span>
                   </div>
                 ))}
               </div>
@@ -401,7 +347,7 @@ export function IntroSequence() {
             <div
               className={styles.highlightBar}
               style={{
-                transform: "translateY(-50%) translate3d(15px, 0, 0)",
+                transform: "translateY(-50%) translate3d(14px, 0, 0)",
               }}
             >
               <div
@@ -412,17 +358,14 @@ export function IntroSequence() {
               >
                 {INTRO_ITEMS.map((item) => (
                   <div key={item.id} className={styles.itemRow}>
-                    <div className={styles.itemMain}>
-                      <span className={styles.itemNumber}>{item.num}</span>
-                      <span className={styles.itemLabel}>{item.label}</span>
-                    </div>
+                    <span className={styles.itemLabel}>{item.label}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Barcode / Comb scanline data bars */}
+          {/* Barcode / Comb scanline data bars with parpadeo */}
           <div className={styles.dataBars} aria-hidden="true" />
         </>
       )}
