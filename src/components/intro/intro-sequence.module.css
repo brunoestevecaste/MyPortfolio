@@ -1,0 +1,633 @@
+/* ==========================================================================
+   Intro Sequence Module
+   Editorial Selection Roller + Glitch Entrance Transition
+   Inspired by:
+     - refs/intro/intro_selection.mp4 (Selection Roller & Pixelate Resolve)
+     - refs/intro/after_selection.mp4 (Scanline Glitch & Slices)
+   ========================================================================== */
+
+.introOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: var(--canvas);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  user-select: none;
+  cursor: default;
+  transition: opacity 0.45s var(--ease-out), visibility 0.45s ease;
+  will-change: opacity, transform;
+}
+
+.introOverlayHidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Base parameters */
+:root {
+  --intro-row-h: clamp(4.25rem, 8.5vw, 6.75rem);
+  --intro-font-size: clamp(2rem, 5.2vw, 4.75rem);
+}
+
+@media (max-width: 47.999rem) {
+  :root {
+    --intro-row-h: clamp(3.25rem, 7vw, 4.5rem);
+    --intro-font-size: clamp(1.25rem, 5.4vw, 2.25rem);
+  }
+}
+
+/* ==========================================================================
+   Editorial Technical Frame / Corner Metadata
+   ========================================================================== */
+
+.topHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: clamp(1.25rem, 2.5vw, 2.5rem) var(--page-gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.headerTitle {
+  font-family: var(--font-space-mono), monospace;
+  font-size: clamp(0.75rem, 0.85vw, 0.875rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.statusDot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: var(--ink);
+  border-radius: 50%;
+  animation: pulseDot 1s infinite alternate;
+}
+
+@keyframes pulseDot {
+  0% { opacity: 0.3; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1.15); }
+}
+
+.skipButton {
+  pointer-events: auto;
+  font-family: var(--font-space-mono), monospace;
+  font-size: clamp(0.75rem, 0.85vw, 0.875rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  padding: 0.5rem 0.875rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all var(--duration-feedback) var(--ease-out);
+}
+
+.skipButton:hover,
+.skipButton:focus-visible {
+  background-color: var(--ink);
+  color: var(--canvas);
+  border-color: var(--ink);
+}
+
+.bottomFooter {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: clamp(1.25rem, 2.5vw, 2.5rem) var(--page-gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 40;
+  pointer-events: none;
+  font-family: var(--font-space-mono), monospace;
+  font-size: clamp(0.75rem, 0.85vw, 0.875rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.footerSteps {
+  display: flex;
+  gap: 1.5rem;
+}
+
+@media (max-width: 47.999rem) {
+  .footerSteps {
+    display: none;
+  }
+}
+
+.stepIndicatorActive {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Center Viewport Stage & Roller Tracks
+   ========================================================================== */
+
+.rollerStage {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+/* Base Track: Outside the Highlight Bar (Muted on Canvas) */
+.baseTrack {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.trackMoving {
+  transition: transform 0.54s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.trackInstant {
+  transition: none !important;
+}
+
+/* Row common styles */
+.itemRow {
+  height: var(--intro-row-h);
+  padding-inline: var(--page-gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.itemMain {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(1rem, 2.5vw, 2.5rem);
+}
+
+.itemNumber {
+  font-family: var(--font-space-mono), monospace;
+  font-size: clamp(0.85rem, 1.2vw, 1.25rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+.itemLabel {
+  font-family: var(--font-archivo), Arial, sans-serif;
+  font-size: var(--intro-font-size);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.055em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ink) 35%, transparent);
+  transition: color 0.3s ease;
+}
+
+.itemCategory {
+  font-family: var(--font-space-mono), monospace;
+  font-size: clamp(0.75rem, 0.9vw, 0.9rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+@media (max-width: 47.999rem) {
+  .itemCategory {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Center Selection Highlight Bar (Inverted Layer)
+   ========================================================================== */
+
+.highlightBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: var(--intro-row-h);
+  background-color: var(--ink);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 20;
+  box-shadow: 0 4px 24px rgba(18, 20, 22, 0.08);
+}
+
+/* Inverted Track: Nested exactly inside the Highlight Bar */
+.invertedTrack {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.highlightBar .itemLabel {
+  color: var(--canvas);
+}
+
+.highlightBar .itemNumber {
+  color: var(--canvas);
+  opacity: 0.85;
+}
+
+.highlightBar .itemCategory {
+  color: var(--canvas);
+  opacity: 0.85;
+}
+
+/* Selection Lock state on "Me" */
+.barSelected {
+  animation: selectionFlash 0.38s steps(2, jump-none) 1;
+}
+
+@keyframes selectionFlash {
+  0% {
+    background-color: var(--ink);
+  }
+  25% {
+    background-color: var(--canvas);
+  }
+  50% {
+    background-color: var(--ink);
+  }
+  75% {
+    background-color: var(--canvas);
+  }
+  100% {
+    background-color: var(--ink);
+  }
+}
+
+.barSelected .itemLabel {
+  letter-spacing: -0.04em;
+  transition: letter-spacing 0.2s ease;
+}
+
+.selectedBadge {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  background: var(--canvas);
+  color: var(--ink);
+  padding: 0.2rem 0.5rem;
+  margin-left: 1rem;
+  font-weight: 700;
+  vertical-align: middle;
+  display: inline-block;
+  animation: badgeBlink 0.2s ease-in-out infinite alternate;
+}
+
+@keyframes badgeBlink {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+/* ==========================================================================
+   Pixelation Resolve Canvas Layer
+   ========================================================================== */
+
+.pixelCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s ease-out;
+}
+
+.pixelCanvasHidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* ==========================================================================
+   GLITCH ENTRANCE TRANSITION (Inspired by refs/intro/after_selection.mp4)
+   ========================================================================== */
+
+.glitchingContainer {
+  animation: glitchJitter 0.75s steps(2, jump-none) forwards;
+}
+
+@keyframes glitchJitter {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  12% {
+    transform: translate3d(-3px, 1px, 0);
+  }
+  24% {
+    transform: translate3d(4px, -1px, 0);
+  }
+  36% {
+    transform: translate3d(-2px, -1px, 0);
+  }
+  48% {
+    transform: translate3d(3px, 1px, 0);
+  }
+  60% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  72% {
+    transform: translate3d(2px, -1px, 0);
+  }
+  85% {
+    transform: translate3d(-1px, 1px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Horizontal Slice Displacements */
+.sliceLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+  opacity: 0;
+}
+
+/* Slice A: Top & Mid horizontal shearing */
+.sliceA {
+  animation: glitchSliceA 0.7s steps(2, jump-none) forwards;
+}
+
+@keyframes glitchSliceA {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 0 0 0);
+    transform: translate3d(0, 0, 0);
+  }
+  10% {
+    opacity: 1;
+    clip-path: inset(14% 0 68% 0);
+    transform: translate3d(-40px, 0, 0);
+  }
+  25% {
+    opacity: 1;
+    clip-path: inset(46% 0 32% 0);
+    transform: translate3d(55px, 0, 0);
+  }
+  40% {
+    opacity: 0.9;
+    clip-path: inset(28% 0 52% 0);
+    transform: translate3d(-60px, 0, 0);
+  }
+  55% {
+    opacity: 1;
+    clip-path: inset(72% 0 8% 0);
+    transform: translate3d(45px, 0, 0);
+  }
+  70% {
+    opacity: 1;
+    clip-path: inset(38% 0 42% 0);
+    transform: translate3d(-35px, 0, 0);
+  }
+  85% {
+    opacity: 0.8;
+    clip-path: inset(8% 0 80% 0);
+    transform: translate3d(20px, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Slice B: Inverted contrast counter-displacement */
+.sliceB {
+  filter: invert(1);
+  animation: glitchSliceB 0.7s steps(2, jump-none) forwards;
+}
+
+@keyframes glitchSliceB {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 0 0 0);
+    transform: translate3d(0, 0, 0);
+  }
+  15% {
+    opacity: 0.95;
+    clip-path: inset(34% 0 46% 0);
+    transform: translate3d(60px, 0, 0);
+  }
+  30% {
+    opacity: 1;
+    clip-path: inset(62% 0 18% 0);
+    transform: translate3d(-50px, 0, 0);
+  }
+  45% {
+    opacity: 0.85;
+    clip-path: inset(18% 0 64% 0);
+    transform: translate3d(40px, 0, 0);
+  }
+  60% {
+    opacity: 1;
+    clip-path: inset(50% 0 30% 0);
+    transform: translate3d(-65px, 0, 0);
+  }
+  75% {
+    opacity: 0.9;
+    clip-path: inset(80% 0 4% 0);
+    transform: translate3d(30px, 0, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Slice C: High-density Micro Raster Blocks */
+.sliceC {
+  animation: glitchSliceC 0.7s steps(3, jump-none) forwards;
+}
+
+@keyframes glitchSliceC {
+  0% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+    clip-path: inset(22% 0 62% 0);
+    transform: translate3d(-25px, 0, 0);
+  }
+  22% {
+    opacity: 0.8;
+    clip-path: inset(58% 0 24% 0);
+    transform: translate3d(35px, 0, 0);
+  }
+  38% {
+    opacity: 1;
+    clip-path: inset(82% 0 6% 0);
+    transform: translate3d(-45px, 0, 0);
+  }
+  52% {
+    opacity: 0.9;
+    clip-path: inset(10% 0 76% 0);
+    transform: translate3d(30px, 0, 0);
+  }
+  68% {
+    opacity: 1;
+    clip-path: inset(44% 0 38% 0);
+    transform: translate3d(-20px, 0, 0);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Data Bars: Barcode / Comb scanlines inspired by after_selection.mp4 */
+.dataBars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      rgba(18, 20, 22, 0.45) 0px,
+      rgba(18, 20, 22, 0.45) 2px,
+      transparent 2px,
+      transparent 6px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 18px,
+      rgba(18, 20, 22, 0.85) 18px,
+      rgba(18, 20, 22, 0.85) 44px,
+      transparent 44px,
+      transparent 76px,
+      rgba(244, 243, 239, 0.95) 76px,
+      rgba(244, 243, 239, 0.95) 110px
+    );
+  background-size: 100% 6px, 150px 100%;
+  opacity: 0;
+  mix-blend-mode: difference;
+  animation: glitchDataBars 0.7s steps(3, jump-none) forwards;
+}
+
+@keyframes glitchDataBars {
+  0% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.85;
+    background-position: 0 0, 0 0;
+  }
+  24% {
+    opacity: 0.95;
+    background-position: 0 6px, 60px 0;
+  }
+  42% {
+    opacity: 1;
+    background-position: 0 12px, -80px 0;
+  }
+  60% {
+    opacity: 0.9;
+    background-position: 0 4px, 100px 0;
+  }
+  78% {
+    opacity: 0.75;
+    background-position: 0 8px, -40px 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Exit Curtain Tear: Overlay breaks into horizontal strips and dissolves */
+.curtainTear {
+  animation: curtainSplit 0.65s 0.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes curtainSplit {
+  0% {
+    opacity: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  40% {
+    opacity: 0.95;
+    clip-path: polygon(
+      0 0, 100% 0,
+      100% 30%, 96% 30%,
+      96% 50%, 100% 50%,
+      100% 70%, 95% 70%,
+      95% 100%, 0 100%
+    );
+  }
+  80% {
+    opacity: 0.5;
+    clip-path: polygon(
+      0 0, 100% 0,
+      100% 20%, 90% 20%,
+      90% 60%, 100% 60%,
+      100% 85%, 85% 85%,
+      85% 100%, 0 100%
+    );
+  }
+  100% {
+    opacity: 0;
+    clip-path: polygon(
+      0 0, 100% 0,
+      100% 0%, 0% 0%,
+      0% 100%, 100% 100%,
+      100% 100%, 0 100%
+    );
+  }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .introOverlay {
+    transition: none !important;
+  }
+  .trackMoving {
+    transition: none !important;
+  }
+  .sliceLayer,
+  .dataBars,
+  .pixelCanvas {
+    display: none !important;
+    animation: none !important;
+  }
+  .glitchingContainer,
+  .barSelected {
+    animation: none !important;
+  }
+}

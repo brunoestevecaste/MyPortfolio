@@ -72,7 +72,16 @@ export function GlitchPortrait({
   );
 
   useEffect(() => {
+    const handleIntroComplete = () => {
+      setIsGlitching(true);
+      setTimeout(() => {
+        setIsGlitching(false);
+      }, 700);
+    };
+
+    window.addEventListener("intro-complete", handleIntroComplete);
     return () => {
+      window.removeEventListener("intro-complete", handleIntroComplete);
       clearTouchTimer();
     };
   }, [clearTouchTimer]);

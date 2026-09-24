@@ -3,11 +3,14 @@ import { EducationSection } from "@/components/sections/education";
 import { ExperienceSection } from "@/components/sections/experience";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ProjectIndex } from "@/components/projects/project-index";
+import { IntroSequence } from "@/components/intro/intro-sequence";
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <main className="flex-1" id="main-content" tabIndex={-1}>
+    <>
+      <IntroSequence />
+      <main className="flex-1" id="main-content" tabIndex={-1}>
       <section
         aria-labelledby="foundation-title"
         className={`site-container ${styles.hero}`}
@@ -70,5 +73,6 @@ export default function Home() {
         </div>
       </section>
     </main>
+    </>
   );
 }

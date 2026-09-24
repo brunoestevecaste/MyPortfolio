@@ -1,4 +1,5 @@
 import { SectionHeading } from "@/components/ui/section-heading";
+import { ReplayIntroButton } from "@/components/intro/replay-intro-button";
 
 const links = [
   {
@@ -40,6 +41,9 @@ export function SiteFooter() {
                 </a>
               </li>
             ))}
+            <li>
+              <ReplayIntroButton />
+            </li>
           </ul>
         </nav>
       </div>
