@@ -20,42 +20,71 @@ export function GlitchPortrait({
   className = "",
 }: GlitchPortraitProps) {
   const [isGlitching, setIsGlitching] = useState(false);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isTouchRef = useRef(false);
+  const touchTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const triggerGlitch = useCallback(() => {
-    if (isGlitching) return;
+  const clearTouchTimer = useCallback(() => {
+    if (touchTimerRef.current) {
+      clearTimeout(touchTimerRef.current);
+      touchTimerRef.current = null;
+    }
+  }, []);
 
+  const handleMouseEnter = useCallback(() => {
+    if (isTouchRef.current) return;
+    clearTouchTimer();
+    setIsGlitching(true);
+  }, [clearTouchTimer]);
+
+  const handleMouseLeave = useCallback(() => {
+    clearTouchTimer();
+    setIsGlitching(false);
+  }, [clearTouchTimer]);
+
+  const handleTouchStart = useCallback(() => {
+    isTouchRef.current = true;
+    clearTouchTimer();
     setIsGlitching(true);
 
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    timeoutRef.current = setTimeout(() => {
+    touchTimerRef.current = setTimeout(() => {
       setIsGlitching(false);
-      timeoutRef.current = null;
-    }, 1500);
-  }, [isGlitching]);
+      touchTimerRef.current = null;
+      setTimeout(() => {
+        isTouchRef.current = false;
+      }, 300);
+    }, 1200);
+  }, [clearTouchTimer]);
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        clearTouchTimer();
+        setIsGlitching(true);
+
+        touchTimerRef.current = setTimeout(() => {
+          setIsGlitching(false);
+          touchTimerRef.current = null;
+        }, 1200);
+      }
+    },
+    [clearTouchTimer]
+  );
 
   useEffect(() => {
     return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+      clearTouchTimer();
     };
-  }, []);
+  }, [clearTouchTimer]);
 
   return (
     <div
       className={`${styles.portraitSurface} ${className}`}
-      onMouseEnter={triggerGlitch}
-      onTouchStart={triggerGlitch}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          triggerGlitch();
-        }
-      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onBlur={handleMouseLeave}
+      onKeyDown={handleKeyDown}
       tabIndex={0}
       role="button"
       aria-label="Retrato interactivo con animación glitch de Bruno Esteve"
@@ -71,7 +100,7 @@ export function GlitchPortrait({
         className={`${styles.portraitImage} ${isGlitching ? styles.baseGlitching : ""}`}
       />
 
-      {/* Glitch Overlay Layers (Active only during the 1.5s glitch window) */}
+      {/* Glitch Overlay Layers (Active while hovered or triggered) */}
       {isGlitching && (
         <>
           {/* Slice A: Primary horizontal block displacement */}

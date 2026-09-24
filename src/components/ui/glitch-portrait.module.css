@@ -30,35 +30,65 @@
 
 /* Base image jitter during glitch */
 .baseGlitching {
-  animation: baseShake 1.5s steps(2, jump-none) forwards;
+  animation: baseShake 1.2s steps(2, jump-none) infinite;
 }
 
 @keyframes baseShake {
-  0%, 100% {
+  0% {
     transform: translate3d(0, 0, 0);
   }
-  6% {
+  4% {
     transform: translate3d(3px, 0, 0);
   }
-  10% {
-    transform: translate3d(-2px, 0, 0);
-  }
-  24% {
+  9% {
     transform: translate3d(-3px, 1px, 0);
   }
-  30% {
-    transform: translate3d(1px, 0, 0);
+  14% {
+    transform: translate3d(2px, -1px, 0);
   }
-  52% {
-    transform: translate3d(4px, -1px, 0);
+  20% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  26% {
+    transform: translate3d(4px, 1px, 0);
+  }
+  32% {
+    transform: translate3d(-3px, 0, 0);
+  }
+  38% {
+    transform: translate3d(2px, -1px, 0);
+  }
+  44% {
+    transform: translate3d(-4px, 1px, 0);
+  }
+  50% {
+    transform: translate3d(3px, 0, 0);
+  }
+  56% {
+    transform: translate3d(-2px, -1px, 0);
   }
   62% {
-    transform: translate3d(-2px, 1px, 0);
+    transform: translate3d(4px, 0, 0);
+  }
+  68% {
+    transform: translate3d(-3px, 1px, 0);
   }
   74% {
+    transform: translate3d(2px, 0, 0);
+  }
+  80% {
+    transform: translate3d(-3px, -1px, 0);
+  }
+  86% {
+    transform: translate3d(3px, 1px, 0);
+  }
+  92% {
+    transform: translate3d(-2px, 0, 0);
+  }
+  96% {
     transform: translate3d(1px, 0, 0);
   }
-  84% {
+  100% {
     transform: translate3d(0, 0, 0);
   }
 }
@@ -74,7 +104,7 @@
 
 /* Slice A: Primary horizontal block shearing inspired by refs/glitch_effect2.mp4 */
 .sliceA {
-  animation: glitchSliceA 1.5s steps(2, jump-none) forwards;
+  animation: glitchSliceA 1.2s steps(2, jump-none) infinite;
 }
 
 @keyframes glitchSliceA {
@@ -83,12 +113,12 @@
     clip-path: inset(0 0 0 0);
     transform: translate3d(0, 0, 0);
   }
-  5% {
+  3% {
     opacity: 1;
     clip-path: inset(14% 0 66% 0);
     transform: translate3d(-12px, 0, 0);
   }
-  11% {
+  10% {
     opacity: 1;
     clip-path: inset(44% 0 34% 0);
     transform: translate3d(16px, 0, 0);
@@ -97,39 +127,56 @@
     opacity: 0;
     transform: translate3d(0, 0, 0);
   }
-  25% {
+  22% {
     opacity: 1;
     clip-path: inset(68% 0 12% 0);
     transform: translate3d(-14px, 0, 0);
   }
-  33% {
+  30% {
     opacity: 1;
     clip-path: inset(26% 0 54% 0);
-    transform: translate3d(10px, 0, 0);
+    transform: translate3d(12px, 0, 0);
   }
-  42% {
+  38% {
     opacity: 0;
   }
-  52% {
+  44% {
     opacity: 1;
-    clip-path: inset(6% 0 74% 0);
-    transform: translate3d(-20px, 0, 0);
+    clip-path: inset(8% 0 72% 0);
+    transform: translate3d(-18px, 0, 0);
   }
-  63% {
+  52% {
     opacity: 1;
     clip-path: inset(50% 0 24% 0);
     transform: translate3d(14px, 0, 0);
   }
-  75% {
+  60% {
+    opacity: 0;
+  }
+  66% {
     opacity: 1;
     clip-path: inset(34% 0 46% 0);
-    transform: translate3d(-8px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
   }
-  86% {
+  74% {
+    opacity: 1;
+    clip-path: inset(78% 0 8% 0);
+    transform: translate3d(16px, 0, 0);
+  }
+  82% {
     opacity: 0;
-    transform: translate3d(0, 0, 0);
   }
-  100% {
+  87% {
+    opacity: 1;
+    clip-path: inset(18% 0 60% 0);
+    transform: translate3d(-14px, 0, 0);
+  }
+  94% {
+    opacity: 1;
+    clip-path: inset(62% 0 16% 0);
+    transform: translate3d(10px, 0, 0);
+  }
+  98%, 100% {
     opacity: 0;
     transform: translate3d(0, 0, 0);
   }
@@ -139,7 +186,7 @@
 .sliceB {
   mix-blend-mode: difference;
   filter: invert(0.9) contrast(1.3);
-  animation: glitchSliceB 1.5s steps(2, jump-none) forwards;
+  animation: glitchSliceB 1.2s steps(2, jump-none) infinite;
 }
 
 @keyframes glitchSliceB {
@@ -148,36 +195,62 @@
     clip-path: inset(0 0 0 0);
     transform: translate3d(0, 0, 0);
   }
-  7% {
+  5% {
     opacity: 0.95;
     clip-path: inset(30% 0 50% 0);
     transform: translate3d(14px, 0, 0);
   }
-  13% {
+  12% {
     opacity: 0;
   }
-  28% {
+  17% {
     opacity: 0.9;
     clip-path: inset(60% 0 18% 0);
     transform: translate3d(-16px, 0, 0);
   }
-  36% {
+  25% {
     opacity: 0;
   }
-  55% {
+  32% {
     opacity: 0.95;
+    clip-path: inset(16% 0 64% 0);
+    transform: translate3d(-12px, 0, 0);
+  }
+  40% {
+    opacity: 0.9;
     clip-path: inset(40% 0 40% 0);
     transform: translate3d(18px, 0, 0);
   }
-  68% {
-    opacity: 0.85;
-    clip-path: inset(82% 0 5% 0);
-    transform: translate3d(-10px, 0, 0);
-  }
-  80% {
+  48% {
     opacity: 0;
   }
-  100% {
+  54% {
+    opacity: 0.85;
+    clip-path: inset(82% 0 5% 0);
+    transform: translate3d(-14px, 0, 0);
+  }
+  63% {
+    opacity: 0;
+  }
+  70% {
+    opacity: 0.95;
+    clip-path: inset(24% 0 56% 0);
+    transform: translate3d(14px, 0, 0);
+  }
+  78% {
+    opacity: 0;
+  }
+  84% {
+    opacity: 0.9;
+    clip-path: inset(52% 0 26% 0);
+    transform: translate3d(-16px, 0, 0);
+  }
+  92% {
+    opacity: 0.85;
+    clip-path: inset(36% 0 44% 0);
+    transform: translate3d(12px, 0, 0);
+  }
+  98%, 100% {
     opacity: 0;
     transform: translate3d(0, 0, 0);
   }
@@ -186,32 +259,56 @@
 /* Slice C: Micro-raster noise block */
 .sliceC {
   filter: contrast(1.6) brightness(1.15);
-  animation: glitchSliceC 1.5s steps(1, jump-none) forwards;
+  animation: glitchSliceC 1.2s steps(1, jump-none) infinite;
 }
 
 @keyframes glitchSliceC {
-  0%, 18% {
+  0% {
     opacity: 0;
   }
-  19% {
+  7% {
     opacity: 0.85;
     clip-path: inset(48% 0 32% 0);
     transform: translate3d(-10px, 2px, 0);
   }
-  26% {
+  14% {
     opacity: 0;
   }
-  57% {
+  27% {
     opacity: 0.9;
     clip-path: inset(18% 0 62% 0);
     transform: translate3d(12px, -2px, 0);
   }
-  70% {
-    opacity: 0.75;
+  35% {
+    opacity: 0;
+  }
+  46% {
+    opacity: 0.8;
     clip-path: inset(72% 0 14% 0);
     transform: translate3d(-12px, 1px, 0);
   }
-  78%, 100% {
+  53% {
+    opacity: 0;
+  }
+  64% {
+    opacity: 0.85;
+    clip-path: inset(32% 0 48% 0);
+    transform: translate3d(14px, -1px, 0);
+  }
+  72% {
+    opacity: 0;
+  }
+  80% {
+    opacity: 0.75;
+    clip-path: inset(64% 0 20% 0);
+    transform: translate3d(-8px, 2px, 0);
+  }
+  89% {
+    opacity: 0.8;
+    clip-path: inset(12% 0 68% 0);
+    transform: translate3d(10px, -2px, 0);
+  }
+  97%, 100% {
     opacity: 0;
   }
 }
@@ -243,39 +340,57 @@
   background-size: 100% 6px, 140px 100%;
   opacity: 0;
   mix-blend-mode: overlay;
-  animation: glitchDataBars 1.5s steps(3, jump-none) forwards;
+  animation: glitchDataBars 1.2s steps(3, jump-none) infinite;
 }
 
 @keyframes glitchDataBars {
   0% {
     opacity: 0;
   }
-  6% {
+  4% {
     opacity: 0.7;
     background-position: 0 0, 0 0;
   }
-  13% {
+  11% {
     opacity: 0;
   }
-  26% {
+  19% {
     opacity: 0.85;
     background-position: 0 6px, 50px 0;
   }
-  36% {
+  28% {
     opacity: 0;
   }
-  53% {
+  37% {
     opacity: 0.95;
     background-position: 0 12px, -70px 0;
   }
-  66% {
-    opacity: 0.65;
-    background-position: 0 4px, 90px 0;
-  }
-  78% {
+  45% {
     opacity: 0;
   }
-  100% {
+  55% {
+    opacity: 0.7;
+    background-position: 0 4px, 90px 0;
+  }
+  65% {
+    opacity: 0;
+  }
+  73% {
+    opacity: 0.85;
+    background-position: 0 8px, -30px 0;
+  }
+  81% {
+    opacity: 0;
+  }
+  88% {
+    opacity: 0.8;
+    background-position: 0 2px, 60px 0;
+  }
+  95% {
+    opacity: 0.6;
+    background-position: 0 10px, -50px 0;
+  }
+  98%, 100% {
     opacity: 0;
   }
 }
