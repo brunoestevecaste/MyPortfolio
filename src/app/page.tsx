@@ -19,7 +19,7 @@ export default function Home() {
         </h1>
 
         <div className={styles.heroComposition}>
-          <figure className={styles.portrait}>
+          <div className={styles.portrait}>
             <div className={styles.portraitSurface}>
               <Image
                 src="/hero/bruno-esteve-hero.webp"
@@ -30,10 +30,7 @@ export default function Home() {
                 className={styles.portraitImage}
               />
             </div>
-            <figcaption className={styles.portraitCaption}>
-              Bruno Esteve · Data Analyst & AI Engineer
-            </figcaption>
-          </figure>
+          </div>
 
           <p className={styles.introduction}>
             Soy Data Analyst y AI Engineer. Trabajo entre negocio, analítica e

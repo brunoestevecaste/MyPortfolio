@@ -56,13 +56,6 @@
   }
 }
 
-.portraitCaption {
-  margin-top: 0.75rem;
-  color: var(--muted);
-  font-size: 0.75rem;
-  line-height: 1.5;
-}
-
 .introduction,
 .approach {
   grid-row: 1;
