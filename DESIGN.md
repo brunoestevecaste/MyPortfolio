@@ -48,7 +48,7 @@ Interpretación:
 
 ## Cómo influyen las referencias
 
-### `refs/style-ref1.webp`
+### `refs/estilo/style-ref1.webp`
 
 Conservar:
 
@@ -63,7 +63,7 @@ Adaptar:
 - Space Mono se reserva para lectura continua, navegación y metadatos.
 - Los proyectos deberán ser más fáciles de escanear y activar.
 
-### `refs/style-ref2.webp`
+### `refs/estilo/style-ref2.webp`
 
 Conservar:
 
@@ -77,7 +77,7 @@ Descartar:
 - El solapamiento no debe comprometer la lectura móvil.
 - No se copiará el lenguaje de portfolio de moda.
 
-### `refs/style-ref3.webp`
+### `refs/estilo/style-ref3.webp`
 
 Esta es la referencia principal para la composición del hero.
 
@@ -223,7 +223,7 @@ jerarquía tipográfica débil.
 
 ### Hero
 
-- `refs/style-ref3.webp` es la referencia compositiva directa, sin copiar su copy
+- `refs/estilo/style-ref3.webp` es la referencia compositiva directa, sin copiar su copy
   ni su identidad de portfolio de moda.
 - El nombre aparece en la esquina superior izquierda, integrado en la primera fila
   de navegación.
@@ -255,7 +255,7 @@ jerarquía tipográfica débil.
 
 ### Selected Work (Layout & Flujo Editorial)
 
-Por indicación de Bruno en septiembre de 2026 y siguiendo la referencia de `refs/video_projects.mp4`:
+Por indicación de Bruno en septiembre de 2026 y siguiendo la referencia de `refs/proyectos/video_projects.mp4`:
 
 - **Composición alternada y escalonada (Staggered Grid):** Los proyectos se disponen
   en una doble columna asimétrica en desktop. El proyecto `01` abre a la izquierda,
@@ -282,7 +282,7 @@ Por indicación de Bruno en septiembre de 2026 y siguiendo la referencia de `ref
     progresivo (opacidad y ligero desplazamiento vertical) al entrar en el viewport,
     mientras la guía lateral actualiza la posición del indicador.
   - *Animación de click y transición compartida (FLIP + texto coordinado):* Al pulsar
-    un proyecto en la Home, se ejecuta una transición continua inspirada en `refs/video_projects.mp4`:
+    un proyecto en la Home, se ejecuta una transición continua inspirada en `refs/proyectos/video_projects.mp4`:
     la imagen del proyecto se transforma suavemente (mediante FLIP con curva `cubic-bezier(0.16, 1, 0.3, 1)`)
     desde su coordenada en el feed hasta la columna izquierda del split editorial (50/50).
     Al mismo tiempo, el texto del resumen ejecutivo (antetítulo, título en `Archivo`, sinopsis,

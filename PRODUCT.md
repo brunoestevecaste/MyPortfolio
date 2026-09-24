@@ -60,7 +60,7 @@ un desarrollador generalista. La fortaleza es unir negocio, datos, IA y producto
 
 ### Hero recomendado
 
-El hero toma `refs/style-ref3.webp` como referencia compositiva principal. Debe
+El hero toma `refs/estilo/style-ref3.webp` como referencia compositiva principal. Debe
 incluir el nombre en la esquina superior izquierda, una declaración profesional
 de gran escala, dos párrafos breves de presentación y un retrato real.
 

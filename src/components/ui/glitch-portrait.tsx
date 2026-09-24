@@ -136,7 +136,7 @@ export function GlitchPortrait({
             />
           </div>
 
-          {/* Binary data bars inspired by refs/glitch_effect.gif */}
+          {/* Binary data bars inspired by refs/glitch/glitch_effect.gif */}
           <div className={styles.dataBars} aria-hidden="true" />
         </>
       )}

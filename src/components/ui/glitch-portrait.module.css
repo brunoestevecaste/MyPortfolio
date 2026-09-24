@@ -102,7 +102,7 @@
   opacity: 0;
 }
 
-/* Slice A: Primary horizontal block shearing inspired by refs/glitch_effect2.mp4 */
+/* Slice A: Primary horizontal block shearing inspired by refs/glitch/glitch_effect2.mp4 */
 .sliceA {
   animation: glitchSliceA 1.2s steps(2, jump-none) infinite;
 }
@@ -313,7 +313,7 @@
   }
 }
 
-/* Data Bars: Horizontal segmented data bars inspired by refs/glitch_effect.gif */
+/* Data Bars: Horizontal segmented data bars inspired by refs/glitch/glitch_effect.gif */
 .dataBars {
   position: absolute;
   inset: 0;
