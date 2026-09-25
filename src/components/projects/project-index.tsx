@@ -12,12 +12,15 @@ export function ProjectIndex() {
   const router = useRouter();
   const { transitionToProject, isTransitioning, activeProjectSlug } =
     useProjectTransition();
-  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [trackHeight, setTrackHeight] = useState(440);
   const [visibleItems, setVisibleItems] = useState<Record<string, boolean>>({});
 
   const sectionRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLElement | null)[]>([]);
+
+  const THUMB_HEIGHT = 56;
 
   // Track scroll position within the projects section to update the left rail indicator
   useEffect(() => {
@@ -27,39 +30,33 @@ export function ProjectIndex() {
       const sectionHeight = sectionRef.current.offsetHeight;
       const windowHeight = window.innerHeight;
 
-      // Calculate how far we've scrolled into the section (0 to 1)
-      const scrolledIntoSection = windowHeight - rect.top;
-      const totalScrollableDistance = sectionHeight + windowHeight * 0.4;
+      // Start when top of section approaches upper portion of viewport
+      const startOffset = windowHeight * 0.2;
+      const totalScrollableDistance = Math.max(1, sectionHeight - windowHeight * 0.5);
+      const scrolled = -rect.top + startOffset;
       const progress = Math.min(
-        Math.max((scrolledIntoSection - windowHeight * 0.3) / totalScrollableDistance, 0),
+        Math.max(scrolled / totalScrollableDistance, 0),
         1
       );
       setScrollProgress(progress);
-
-      // Determine active item based on viewport proximity
-      let closestIndex = 0;
-      let minDistance = Infinity;
-
-      itemRefs.current.forEach((el, index) => {
-        if (!el) return;
-        const itemRect = el.getBoundingClientRect();
-        const itemCenter = itemRect.top + itemRect.height / 2;
-        const viewportCenter = windowHeight / 2;
-        const distance = Math.abs(itemCenter - viewportCenter);
-
-        if (distance < minDistance) {
-          minDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      setActiveProjectIndex(closestIndex);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Update track height dynamically on mount and window resize
+  useEffect(() => {
+    const updateMetrics = () => {
+      if (trackRef.current) {
+        setTrackHeight(trackRef.current.offsetHeight);
+      }
+    };
+    updateMetrics();
+    window.addEventListener("resize", updateMetrics);
+    return () => window.removeEventListener("resize", updateMetrics);
   }, []);
 
   // IntersectionObserver for smooth entrance animation on scroll
@@ -106,12 +103,24 @@ export function ProjectIndex() {
     }
   };
 
-  const scrollToProject = (index: number) => {
-    const targetEl = itemRefs.current[index];
-    if (targetEl) {
-      targetEl.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "center" });
-    }
+  const handleTrackClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!sectionRef.current || !trackRef.current) return;
+    const trackRect = trackRef.current.getBoundingClientRect();
+    const clickY = e.clientY - trackRect.top;
+    const ratio = Math.min(Math.max(clickY / trackRect.height, 0), 1);
+
+    const sectionTop = sectionRef.current.getBoundingClientRect().top + window.scrollY;
+    const sectionHeight = sectionRef.current.offsetHeight;
+    const windowHeight = window.innerHeight;
+    const targetScrollY = sectionTop - windowHeight * 0.15 + ratio * Math.max(0, sectionHeight - windowHeight * 0.6);
+
+    window.scrollTo({
+      top: Math.max(0, targetScrollY),
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    });
   };
+
+  const maxTravel = Math.max(0, trackHeight - THUMB_HEIGHT);
 
   return (
     <div ref={sectionRef} className={styles.projectsStreamWrapper}>
@@ -120,43 +129,23 @@ export function ProjectIndex() {
         className={`${styles.delicateScrollRail} ${
           isTransitioning ? styles.railFading : ""
         }`}
-        aria-label="Navegación y progreso de proyectos"
+        aria-label="Progreso de proyectos"
       >
         <div className={styles.railInner}>
-          <span className={styles.railLabel}>INDEX</span>
-
-          <div className={styles.railTrack} aria-hidden="true">
+          <div
+            ref={trackRef}
+            className={styles.railTrack}
+            onClick={handleTrackClick}
+            aria-hidden="true"
+          >
             <div
               className={styles.railThumb}
               style={{
-                transform: `translateY(${scrollProgress * 180}px)`,
+                height: `${THUMB_HEIGHT}px`,
+                transform: `translateY(${scrollProgress * maxTravel}px)`,
               }}
             />
           </div>
-
-          <ol className={styles.railMarkers}>
-            {projects.map((project, idx) => (
-              <li key={project.slug}>
-                <button
-                  type="button"
-                  onClick={() => scrollToProject(idx)}
-                  className={`${styles.railMarkerBtn} ${
-                    activeProjectIndex === idx ? styles.activeRailMarker : ""
-                  }`}
-                  aria-label={`Ir al proyecto ${project.number}: ${project.title}`}
-                  aria-current={activeProjectIndex === idx ? "true" : undefined}
-                >
-                  <span className={styles.markerDot} />
-                  <span className={styles.markerText}>{project.number}</span>
-                </button>
-              </li>
-            ))}
-          </ol>
-
-          <span className={styles.railCounter}>
-            {String(activeProjectIndex + 1).padStart(2, "0")} /{" "}
-            {String(projects.length).padStart(2, "0")}
-          </span>
         </div>
       </aside>
 
@@ -186,11 +175,11 @@ export function ProjectIndex() {
                 href={`/projects/${project.slug}`}
                 onClick={(e) => handleProjectClick(e, project)}
                 className={styles.staggeredCardLink}
-                aria-label={`Ver proyecto ${project.number}: ${project.title}`}
+                aria-label={`Ver proyecto (${project.number}): ${project.title}`}
               >
                 {/* Number above/adjacent to image */}
                 <div className={styles.projectNumberHeader}>
-                  <span className={styles.prominentNumber}>{project.number}</span>
+                  <span className={styles.prominentNumber}>({project.number})</span>
                   <span className={styles.prominentMeta}>
                     {project.year} · {project.organization}
                   </span>

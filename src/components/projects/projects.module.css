@@ -19,9 +19,9 @@
 /* Delicate Left Scroll Rail */
 .delicateScrollRail {
   position: sticky;
-  top: 22vh;
+  top: clamp(4.5rem, 15vh, 7rem);
   flex-shrink: 0;
-  width: 54px;
+  width: 44px;
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -33,25 +33,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
-}
-
-.railLabel {
-  font-family: var(--font-space-mono), monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.15em;
-  color: var(--muted);
-  text-transform: uppercase;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
+  width: 100%;
 }
 
 .railTrack {
   position: relative;
   width: 1px;
-  height: 180px;
+  height: clamp(380px, 52vh, 480px);
   background: color-mix(in srgb, var(--line) 85%, transparent);
-  margin-block: 0.25rem;
+  cursor: pointer;
+}
+
+.railTrack::before {
+  content: "";
+  position: absolute;
+  inset: 0 -16px;
+  cursor: pointer;
 }
 
 .railThumb {
@@ -59,70 +56,9 @@
   top: 0;
   left: -0.5px;
   width: 2px;
-  height: 32px;
-  background: var(--signal);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.railMarkers {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.875rem;
-  align-items: center;
-}
-
-.railMarkerBtn {
-  background: transparent;
-  border: none;
-  padding: 0.25rem;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-  color: var(--muted);
-  transition: color var(--duration-feedback) var(--ease-out);
-}
-
-.markerDot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: currentColor;
-  transition: transform var(--duration-feedback) var(--ease-out),
-    background-color var(--duration-feedback) var(--ease-out);
-}
-
-.markerText {
-  font-family: var(--font-space-mono), monospace;
-  font-size: 0.6875rem;
-  letter-spacing: 0.05em;
-  transition: color var(--duration-feedback) var(--ease-out);
-}
-
-.activeRailMarker {
-  color: var(--ink);
-  font-weight: 700;
-}
-
-.activeRailMarker .markerDot {
-  transform: scale(1.8);
-  background: var(--signal);
-}
-
-.activeRailMarker .markerText {
-  color: var(--signal);
-}
-
-.railCounter {
-  font-family: var(--font-space-mono), monospace;
-  font-size: 0.6875rem;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-  margin-top: 0.5rem;
+  background: var(--ink);
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
 }
 
 /* Staggered Alternating Grid */
@@ -1039,5 +975,9 @@
   .characteristicPhotoCol,
   .executiveSummaryCol {
     animation: none;
+  }
+
+  .railThumb {
+    transition: none;
   }
 }
