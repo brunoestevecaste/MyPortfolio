@@ -143,8 +143,8 @@ Reglas:
   destacado.
 - `Space Mono`, también cargada con `next/font/google`, se aplica al cuerpo,
   navegación, enlaces y metadatos.
-- Display: Archivo 400 y mayúsculas, con tracking `-0.085em` en el hero y
-  `-0.07em` en los encabezados de sección. Estos también van en mayúsculas.
+- Display: Archivo 400 y mayúsculas, con tracking `-0.115em` en el hero y
+  `-0.12em` en los encabezados de sección. Estos también van en mayúsculas.
 - El texto destacado usa Archivo; el texto de lectura continua usa Space Mono,
   con interlineado amplio y tracking natural. El texto destacado en Archivo usa
   `-0.03em` para una composición más compacta.
