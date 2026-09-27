@@ -106,6 +106,7 @@ export function GlitchPortrait({
         fill
         priority={priority}
         sizes={sizes}
+        unoptimized
         className={`${styles.portraitImage} ${isGlitching ? styles.baseGlitching : ""}`}
       />
 
@@ -119,6 +120,7 @@ export function GlitchPortrait({
               alt=""
               fill
               sizes={sizes}
+              unoptimized
               className={styles.portraitImage}
             />
           </div>
@@ -130,6 +132,7 @@ export function GlitchPortrait({
               alt=""
               fill
               sizes={sizes}
+              unoptimized
               className={styles.portraitImage}
             />
           </div>
@@ -141,6 +144,7 @@ export function GlitchPortrait({
               alt=""
               fill
               sizes={sizes}
+              unoptimized
               className={styles.portraitImage}
             />
           </div>

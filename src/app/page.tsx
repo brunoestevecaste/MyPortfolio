@@ -24,8 +24,8 @@ export default function Home() {
         <div className={styles.heroComposition}>
           <div className={styles.portrait}>
             <GlitchPortrait
-              src="/hero/bruno-esteve-hero.webp"
-              alt="Retrato editorial de Bruno Esteve en estilo risograph dither monocromo"
+              src="/hero/bruno-esteve-hero-umbral-editorial.webp"
+              alt="Retrato editorial de Bruno Esteve con trama de impresión monocroma"
               priority
               sizes="(min-width: 64rem) 42vw, (min-width: 48rem) 50vw, 100vw"
             />
