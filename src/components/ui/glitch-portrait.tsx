@@ -107,7 +107,7 @@ export function GlitchPortrait({
         priority={priority}
         sizes={sizes}
         unoptimized
-        className={`${styles.portraitImage} ${isGlitching ? styles.baseGlitching : ""}`}
+        className={styles.portraitImage}
       />
 
       {/* Glitch Overlay Layers (Active while hovered or triggered) */}

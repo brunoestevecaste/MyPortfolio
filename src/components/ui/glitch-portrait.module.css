@@ -19,78 +19,15 @@
   object-position: center 25%;
   width: 100%;
   height: 100%;
-  transition: transform 0.44s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .portraitSurface:hover .portraitImage {
-    transform: scale(1.02);
-  }
-}
-
-/* Base image jitter during glitch */
-.baseGlitching {
-  animation: baseShake 1.2s steps(2, jump-none) infinite;
-}
-
-@keyframes baseShake {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  4% {
-    transform: translate3d(3px, 0, 0);
-  }
-  9% {
-    transform: translate3d(-3px, 1px, 0);
-  }
-  14% {
-    transform: translate3d(2px, -1px, 0);
-  }
-  20% {
-    transform: translate3d(-1px, 0, 0);
-  }
-  26% {
-    transform: translate3d(4px, 1px, 0);
-  }
-  32% {
-    transform: translate3d(-3px, 0, 0);
-  }
-  38% {
-    transform: translate3d(2px, -1px, 0);
-  }
-  44% {
-    transform: translate3d(-4px, 1px, 0);
-  }
-  50% {
-    transform: translate3d(3px, 0, 0);
-  }
-  56% {
-    transform: translate3d(-2px, -1px, 0);
-  }
-  62% {
-    transform: translate3d(4px, 0, 0);
-  }
-  68% {
-    transform: translate3d(-3px, 1px, 0);
-  }
-  74% {
-    transform: translate3d(2px, 0, 0);
-  }
-  80% {
-    transform: translate3d(-3px, -1px, 0);
-  }
-  86% {
-    transform: translate3d(3px, 1px, 0);
-  }
-  92% {
-    transform: translate3d(-2px, 0, 0);
-  }
-  96% {
-    transform: translate3d(1px, 0, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
+/* Match the portrait crop so every animated layer stays inside the person. */
+.sliceLayer,
+.dataBars {
+  mask-image: url("/hero/bruno-esteve-silhouette.svg");
+  mask-size: cover;
+  mask-position: center 25%;
+  mask-repeat: no-repeat;
 }
 
 /* Slices container and layers */
@@ -401,12 +338,5 @@
   .dataBars {
     display: none !important;
     animation: none !important;
-  }
-  .baseGlitching {
-    animation: none !important;
-  }
-  .portraitImage {
-    transition: none !important;
-    transform: none !important;
   }
 }
