@@ -37,14 +37,8 @@ const SECTION_ITEMS: NavigationItem[] = [
     href: "/#work",
   },
   {
-    id: "about",
-    number: "(05)",
-    label: "Perfil",
-    href: "/#about",
-  },
-  {
     id: "contact",
-    number: "(06)",
+    number: "(05)",
     label: "Contacto",
     href: "/#contact",
   },
@@ -81,15 +75,12 @@ export function SiteHeader() {
       const triggerLine = window.scrollY + Math.min(window.innerHeight * 0.35, 260);
 
       const contactEl = document.getElementById("contact");
-      const aboutEl = document.getElementById("about");
       const workEl = document.getElementById("work");
       const experienceEl = document.getElementById("experience");
       const educationEl = document.getElementById("education");
 
       if (contactEl && triggerLine >= contactEl.offsetTop) {
         setActiveSectionId("contact");
-      } else if (aboutEl && triggerLine >= aboutEl.offsetTop) {
-        setActiveSectionId("about");
       } else if (workEl && triggerLine >= workEl.offsetTop) {
         setActiveSectionId("work");
       } else if (experienceEl && triggerLine >= experienceEl.offsetTop) {

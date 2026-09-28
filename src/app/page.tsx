@@ -58,20 +58,6 @@ export default function Home() {
         </div>
         <ProjectIndex />
       </section>
-
-      <section
-        className={`site-container ${styles.about}`}
-        id="about"
-        aria-labelledby="about-title"
-      >
-        <div className={styles.profileIntroduction}>
-          <SectionHeading className="heading-text" id="about-title" title="Datos, IA y negocio" />
-          <p className={styles.sectionCopy}>
-            Un perfil híbrido centrado en convertir complejidad técnica en
-            decisiones comprensibles y útiles.
-          </p>
-        </div>
-      </section>
     </main>
     </>
   );

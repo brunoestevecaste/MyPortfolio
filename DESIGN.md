@@ -217,11 +217,11 @@ jerarquía tipográfica débil.
 - Una sola línea en desktop y altura máxima de 72px (`min-h-18`), fija en la parte superior (`sticky top-0`) sobre superficie `--color-canvas`, sin línea de división inferior.
 - Estructura en tres columnas (`grid-cols-[1fr_auto_1fr]`):
   - **Esquina superior izquierda:** `Bruno Esteve Castellano` (adaptado a `Bruno Esteve` en móviles muy estrechos) en mayúsculas de peso normal (`Space Mono`), funcionando como enlace y retorno suave a la portada.
-  - **Centro:** indicador dinámico de sección en mayúsculas (`Space Mono`); se inicia como `INICIO` en la portada y se actualiza suavemente según la sección visible en el scroll (`INICIO`, `EDUCACIÓN`, `EXPERIENCIA`, `PROYECTOS`, `PERFIL`, `CONTACTO`), enlazado con desplazamiento suave a cada apartado.
+  - **Centro:** indicador dinámico de sección en mayúsculas (`Space Mono`); se inicia como `INICIO` en la portada y se actualiza suavemente según la sección visible en el scroll (`INICIO`, `EDUCACIÓN`, `EXPERIENCIA`, `PROYECTOS`, `CONTACTO`), enlazado con desplazamiento suave a cada apartado.
   - **Esquina superior derecha:** símbolo minimalista de menú (dos líneas horizontales suizas que transicionan a cruz de cierre al abrirse) con objetivo táctil accesible (44x44px).
 - **Menú desplegable de apartados:**
   - Panel flotante anclado a la derecha sobre superficie secundaria `--color-surface` (`#E9EAE7`), con esquinas rectas (`rounded-none`), sombra ambiental muy suave y sin líneas divisorias internas («Separación sin líneas»).
-  - Enfoque purista y arquitectónico: muestra exclusivamente el número con paréntesis y el título de cada apartado en gran escala con `Archivo` en mayúsculas (`(01) INICIO`, `(02) EDUCACIÓN`, `(03) EXPERIENCIA`, `(04) PROYECTOS`, `(05) PERFIL`, `(06) CONTACTO`), prescindiendo de metadatos, flechas o enlaces secundarios.
+  - Enfoque purista y arquitectónico: muestra exclusivamente el número con paréntesis y el título de cada apartado en gran escala con `Archivo` en mayúsculas (`(01) INICIO`, `(02) EDUCACIÓN`, `(03) EXPERIENCIA`, `(04) PROYECTOS`, `(05) CONTACTO`), prescindiendo de metadatos, flechas o enlaces secundarios.
   - Cierre accesible con tecla `Escape`, clic exterior sobre backdrop y retorno automático del foco.
 
 ### Hero
@@ -296,9 +296,9 @@ Por indicación de Bruno en septiembre de 2026 y siguiendo la referencia de `ref
 
 ### Perfil
 
-- Retrato real en blanco y negro o con saturación reducida.
-- La presentación personal vive en los dos párrafos del hero. Esta sección se
-  centra en experiencia y formación seleccionadas sin repetir ese texto.
+- La presentación personal vive en los dos párrafos y el retrato del hero. La sección dedicada
+  independiente en la Home fue retirada para mantener la máxima concisión editorial y evitar redundancias
+  con la trayectoria detallada en Educación y Experiencia.
 - No trasladar el CV completo a la Home.
 
 ### Capacidades

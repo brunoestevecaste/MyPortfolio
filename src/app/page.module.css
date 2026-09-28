@@ -55,25 +55,6 @@
   max-width: 62rem;
 }
 
-.sectionCopy {
-  max-width: 38ch;
-  margin-top: 1.5rem;
-  font-size: clamp(0.875rem, 1vw, 1rem);
-  line-height: 1.55;
-  text-wrap: pretty;
-}
-
-.about {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--grid-gutter);
-  padding-top: 1rem;
-  padding-bottom: var(--section-space);
-}
-
-.profileIntroduction {
-  grid-column: 5 / -1;
-}
 
 @media (min-width: 48rem) and (max-width: 63.999rem) {
   .hero {
@@ -149,12 +130,5 @@
     max-width: 40ch;
     font-size: 0.9375rem;
   }
-
-  .about {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .profileIntroduction {
-    grid-column: 1;
-  }
 }
+
