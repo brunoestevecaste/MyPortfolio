@@ -222,6 +222,7 @@ jerarquía tipográfica débil.
 - **Menú desplegable de apartados:**
   - Panel flotante anclado a la derecha sobre superficie secundaria `--color-surface` (`#E9EAE7`), con esquinas rectas (`rounded-none`), sombra ambiental muy suave y sin líneas divisorias internas («Separación sin líneas»).
   - Enfoque purista y arquitectónico: muestra exclusivamente el número con paréntesis y el título de cada apartado en gran escala con `Archivo` en mayúsculas (`(01) INICIO`, `(02) EDUCACIÓN`, `(03) EXPERIENCIA`, `(04) PROYECTOS`, `(05) CONTACTO`), prescindiendo de metadatos, flechas o enlaces secundarios.
+  - Interacción hover sobria y perceptible: al posar el cursor sobre cualquier opción, se resalta de forma contenida mediante un bloque de superficie sutil (`bg-black/[0.045]`), un desplazamiento tipográfico de 6px a la derecha (`translate-x-1.5`) y paso del número y titular a contraste pleno en tinta (`text-ink`).
   - Cierre accesible con tecla `Escape`, clic exterior sobre backdrop y retorno automático del foco.
 
 ### Hero

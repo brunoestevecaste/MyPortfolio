@@ -239,7 +239,7 @@ export function SiteHeader() {
             }`}
           >
             <nav aria-label="Navegación de apartados">
-              <ul className="flex flex-col space-y-2">
+              <ul className="flex flex-col space-y-1">
                 {SECTION_ITEMS.map((item) => {
                   const isCurrent = activeItem.id === item.id;
                   return (
@@ -247,26 +247,28 @@ export function SiteHeader() {
                       <Link
                         href={item.href}
                         onClick={(e) => handleNavClick(e, item.href)}
-                        className={`group flex items-baseline gap-4 py-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-signal sm:py-3 ${
-                          isCurrent ? "text-signal font-medium" : "hover:text-signal"
+                        className={`group block px-3.5 -mx-3.5 py-2.5 sm:py-3 transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-signal hover:bg-black/[0.045] ${
+                          isCurrent ? "text-ink" : "text-ink/75 hover:text-ink"
                         }`}
                       >
-                        <span
-                          className={`font-mono text-xs tabular-nums transition-colors ${
-                            isCurrent
-                              ? "text-signal font-semibold"
-                              : "text-muted group-hover:text-signal"
-                          }`}
-                        >
-                          {item.number}
-                        </span>
-                        <span
-                          className={`font-display text-2xl font-normal uppercase tracking-[-0.04em] transition-colors sm:text-3xl ${
-                            isCurrent ? "text-signal" : "text-ink group-hover:text-signal"
-                          }`}
-                        >
-                          {item.label}
-                        </span>
+                        <div className="flex items-baseline gap-4 transition-transform duration-200 ease-out group-hover:translate-x-1.5 motion-reduce:group-hover:translate-x-0">
+                          <span
+                            className={`font-mono text-xs tabular-nums transition-colors duration-150 ${
+                              isCurrent
+                                ? "text-ink font-semibold"
+                                : "text-muted group-hover:text-ink group-hover:font-medium"
+                            }`}
+                          >
+                            {item.number}
+                          </span>
+                          <span
+                            className={`font-display text-2xl font-normal uppercase tracking-[-0.04em] transition-colors duration-150 sm:text-3xl ${
+                              isCurrent ? "text-ink font-medium" : "text-ink/80 group-hover:text-ink"
+                            }`}
+                          >
+                            {item.label}
+                          </span>
+                        </div>
                       </Link>
                     </li>
                   );
