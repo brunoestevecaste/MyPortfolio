@@ -24,7 +24,7 @@ div[class*='kursor'] {
   top: 0;
   pointer-events: none;
   transform: translate3d(0, 0, 0) translate(-50%, -50%);
-  z-index: 10000;
+  z-index: 99999999;
   will-change: transform;
 }
 
@@ -42,7 +42,7 @@ div[class*='kursorChild'] {
   transform: translate3d(0, 0, 0) translate(-50%, -50%);
   display: none;
   overflow: hidden;
-  z-index: 10001;
+  z-index: 99999999;
   will-change: transform;
 }
 
