@@ -241,19 +241,18 @@ jerarquía tipográfica débil.
 - Los dos párrafos deben ser breves, tener un ancho de lectura controlado y formar
   dos columnas alineadas por la base en desktop.
 - El retrato ocupa cinco de las doce columnas, a la derecha. Encuadre 5:4 en
-  desktop como `style-ref3.webp` y 4:5 en móvil, con tratamiento monocromo.
+  desktop y móvil para conservar el rostro completo, con tratamiento monocromo.
 - Los textos ocupan tres columnas cada uno; una columna libre los separa del
   retrato. Su tamaño es equivalente, sin un primer párrafo sobredimensionado.
 - Hasta recibir el original, reservar la superficie con una indicación discreta.
   No sustituir la identidad de Bruno por una persona de stock o generada.
 - El hero no incluye botones. `Work`, `About` y `Contact` en la navegación y la
   proximidad del índice de proyectos proporcionan las rutas necesarias.
-- En pantallas amplias, cabecera y hero ocupan aproximadamente el primer viewport;
-  el hero resta los 72px de cabecera a `100svh`. La altura puede crecer si el
-  contenido lo necesita. La imagen mantiene su proporción y nunca se recorta texto.
-- En móvil el orden será: nombre y navegación, declaración, retrato, párrafo 1 y
-  párrafo 2. El contenido puede superar el viewport y debe conservar un orden DOM
-  equivalente al orden de lectura.
+- En escritorio, cabecera y hero ocupan aproximadamente el primer viewport; el
+  hero resta los 72px de cabecera a `100svh`. Con texto extenso en móvil, el hero
+  crece en altura para conservar un tamaño legible y no recortar contenido.
+- En móvil el retrato aparece a ancho completo, seguido por los dos párrafos
+  apilados. El orden DOM sigue siendo declaración, retrato y párrafos.
 - No añadir etiquetas de versión, indicadores de scroll, disponibilidad ficticia
   ni tiras decorativas de palabras.
 
@@ -349,7 +348,7 @@ Tratamiento:
 
 - Blanco y negro o saturación contenida.
 - Encuadres amplios, documentales y con espacio negativo.
-- Retrato 5:4 en desktop y 4:5 en móvil; proyectos 4:3 y 16:10.
+- Retrato 5:4 en desktop y móvil; proyectos 4:3 y 16:10.
 - No usar stock genérico, blobs, renders 3D gratuitos ni capturas falsas.
 
 ## Motion

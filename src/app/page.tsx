@@ -16,9 +16,7 @@ export default function Home() {
         className={`site-container ${styles.hero}`}
       >
         <h1 className={`display-text ${styles.heroTitle}`} id="foundation-title">
-          <span>Diseño sistemas</span>{" "}
-          <span>de datos e IA para</span>{" "}
-          <span>decisiones reales.</span>
+          Soy un analista de datos e ingeniero de IA creando soluciones digitales.
         </h1>
 
         <div className={styles.heroComposition}>
@@ -27,20 +25,25 @@ export default function Home() {
               src="/hero/bruno-esteve-hero-umbral-editorial.webp"
               alt="Retrato editorial de Bruno Esteve con trama de impresión monocroma"
               priority
-              sizes="(min-width: 64rem) 42vw, (min-width: 48rem) 50vw, 100vw"
+              sizes="(min-width: 64rem) 46vw, (min-width: 48rem) 50vw, 100vw"
             />
           </div>
 
           <p className={styles.introduction}>
-            Soy Data Analyst y AI Engineer. Trabajo entre negocio, analítica e
-            inteligencia artificial para convertir problemas complejos en
-            soluciones claras.
+            En nuestro día a día dejamos pequeñas huellas sin darnos cuenta:
+            rutinas, elecciones y costumbres que se repiten una y otra vez.
+            Siempre he visto los datos como historias de cómo vivimos. Me
+            fascina la tecnología por su capacidad para encontrar sentido en el
+            ruido cotidiano y descubrir qué necesitamos realmente como personas.
           </p>
 
           <p className={styles.approach}>
-            Construyo dashboards, modelos predictivos y sistemas de datos
-            pensados para apoyar decisiones, mejorar procesos y generar valor
-            real.
+            Uno los datos y la IA para crear soluciones útiles desde el primer
+            momento. La creatividad está en mirar la información desde otra
+            perspectiva e idear respuestas originales a necesidades reales. Me
+            mueve convertir patrones cotidianos en herramientas intuitivas que
+            resuelvan dudas, ahorren tiempo y acerquen la tecnología a las
+            personas.
           </p>
         </div>
       </section>

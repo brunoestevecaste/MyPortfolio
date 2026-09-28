@@ -70,17 +70,23 @@ Bruno Esteve Castellano
 
 **Declaración principal**
 
-DISEÑO SISTEMAS DE DATOS E IA PARA DECISIONES REALES.
+Soy un analista de datos e ingeniero de IA creando soluciones digitales.
 
 **Descripción, columna 1**
 
-Soy Data Analyst y AI Engineer. Trabajo entre negocio, analítica e inteligencia
-artificial para convertir problemas complejos en soluciones claras.
+En nuestro día a día dejamos pequeñas huellas sin darnos cuenta: rutinas,
+elecciones y costumbres que se repiten una y otra vez. Siempre he visto los datos
+como historias de cómo vivimos. Me fascina la tecnología por su capacidad para
+encontrar sentido en el ruido cotidiano y descubrir qué necesitamos realmente
+como personas.
 
 **Descripción, columna 2**
 
-Construyo dashboards, modelos predictivos y sistemas de datos pensados para apoyar
-decisiones, mejorar procesos y generar valor real.
+Uno los datos y la IA para crear soluciones útiles desde el primer momento. La
+creatividad está en mirar la información desde otra perspectiva e idear respuestas
+originales a necesidades reales. Me mueve convertir patrones cotidianos en
+herramientas intuitivas que resuelvan dudas, ahorren tiempo y acerquen la
+tecnología a las personas.
 
 **Retrato**
 
