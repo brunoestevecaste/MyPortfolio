@@ -65,7 +65,7 @@
   top: 0;
   left: -0.5px;
   width: 2px;
-  background: var(--ink);
+  background: var(--accent);
   transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
@@ -149,7 +149,7 @@
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.06em;
-  color: var(--ink);
+  color: var(--accent);
 }
 
 .prominentMeta {
@@ -276,7 +276,7 @@
 .executiveIndexNumber {
   font-family: var(--font-space-mono), monospace;
   font-size: 0.8125rem;
-  color: var(--muted);
+  color: var(--accent-ink);
   letter-spacing: 0.08em;
 }
 
@@ -381,7 +381,7 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--signal);
+  color: var(--accent-ink);
   margin-bottom: 0.35rem;
 }
 
@@ -571,7 +571,7 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  color: var(--signal);
+  color: var(--accent-ink);
   font-size: 0.8125rem;
   text-decoration: underline;
   text-underline-offset: 0.3em;
@@ -632,7 +632,7 @@
 
 .facts .grade,
 .grade {
-  color: var(--signal);
+  color: var(--accent);
   font-family: var(--font-archivo), sans-serif;
   font-size: 2.75rem;
   line-height: 1;
@@ -683,8 +683,9 @@
   width: fit-content;
 }
 
-.caseNav a:hover {
-  color: var(--signal);
+.caseNav a:hover,
+.caseNav a:focus-visible {
+  color: var(--accent-ink);
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
