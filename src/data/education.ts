@@ -26,8 +26,8 @@ export const education: readonly Education[] = [
       "Proyectos aplicados con Python, SQL, Git, Docker y herramientas del ecosistema Data & AI.",
     ],
     image: {
-      src: "/education/ai-master.webp",
-      alt: "Composición conceptual editorial de Inteligencia Artificial con distorsión digital y refracción espectral",
+      src: "/education/ai-master-monochrome-dark-matched.webp",
+      alt: "Figura humana sobre fondo negro, en escala de grises con bloques translúcidos y distorsión digital, composición conceptual de Inteligencia Artificial",
     },
   },
   {
