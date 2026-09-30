@@ -9,6 +9,7 @@ export type ExecutiveSummary = {
 export type ProjectSummary = {
   slug: string;
   organization: string;
+  productName?: string;
   title: string;
   summary: string;
   year: string;
@@ -82,6 +83,7 @@ export const baleariaProject = {
 export const alinaProject = {
   slug: "alina-asistente-empleo",
   organization: "EDEM Escuela de Empresarios",
+  productName: "Alina",
   title: "Asistente de empleo con agentes de IA",
   summary:
     "Un sistema multi-agente con Google ADK y Gemini que transforma la búsqueda de empleo: extracción y matching explicable de habilidades, simulación interactiva de entrevistas y generación personalizada de cartas.",
@@ -109,6 +111,7 @@ export const alinaProject = {
 export const nextplanProject = {
   slug: "nextplan-recomendacion-eventos",
   organization: "EDEM Escuela de Empresarios",
+  productName: "NextPlan",
   title: "Plataforma de recomendación de eventos con IA",
   summary:
     "Una plataforma integral para descubrir eventos en España: exploración en mapa, swipes de afinidad, asistente conversacional con RAG en Vertex AI y clustering de usuarios para recomendaciones personalizadas. Proyecto de Máster en IA.",

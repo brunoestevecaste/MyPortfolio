@@ -152,6 +152,9 @@ export function ProjectIndex() {
       {/* Main alternating staggered project feed */}
       <div className={styles.projectsStaggeredGrid}>
         {projects.map((project, index) => {
+          const displayTitle = project.productName
+            ? `${project.productName}: ${project.title}`
+            : project.title;
           const isEven = index % 2 === 0;
           const isRevealed = !!visibleItems[project.slug];
           const isTarget = isTransitioning && activeProjectSlug === project.slug;
@@ -175,7 +178,7 @@ export function ProjectIndex() {
                 href={`/projects/${project.slug}`}
                 onClick={(e) => handleProjectClick(e, project)}
                 className={styles.staggeredCardLink}
-                aria-label={`Ver proyecto (${project.number}): ${project.title}`}
+                aria-label={`Ver proyecto (${project.number}): ${displayTitle}`}
               >
                 {/* Number above/adjacent to image */}
                 <div className={styles.projectNumberHeader}>
@@ -203,10 +206,7 @@ export function ProjectIndex() {
 
                 {/* Subtle text: Only project title in site's body typography */}
                 <div className={styles.subtleTextWrapper}>
-                  <h3 className={styles.subtleProjectTitle}>{project.title}</h3>
-                  <span className={styles.subtleArrow} aria-hidden="true">
-                    ↗
-                  </span>
+                  <h3 className={styles.subtleProjectTitle}>{displayTitle}</h3>
                 </div>
               </Link>
             </article>

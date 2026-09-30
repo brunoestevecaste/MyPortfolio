@@ -214,26 +214,6 @@
   letter-spacing: var(--tracking-heading-small);
   color: var(--ink);
   text-wrap: pretty;
-  transition: color var(--duration-feedback) var(--ease-out);
-}
-
-.staggeredCardLink:hover .subtleProjectTitle,
-.staggeredCardLink:focus-visible .subtleProjectTitle {
-  color: var(--signal);
-}
-
-.subtleArrow {
-  font-family: var(--font-space-mono), monospace;
-  font-size: 0.9375rem;
-  color: var(--muted);
-  transition: transform var(--duration-feedback) var(--ease-out),
-    color var(--duration-feedback) var(--ease-out);
-  flex-shrink: 0;
-}
-
-.staggeredCardLink:hover .subtleArrow {
-  transform: translate(2px, -2px);
-  color: var(--signal);
 }
 
 /* =========================================================================

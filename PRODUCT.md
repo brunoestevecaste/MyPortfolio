@@ -394,6 +394,12 @@ sin aprobación explícita de Bruno.
 
 ### Índice de proyectos (Layout & Flujo Editorial)
 
+En la Home, los títulos bajo las fotos de aplicaciones con nombre propio
+incluyen el nombre seguido de su descripción: «NextPlan: Plataforma de
+recomendación de eventos con IA» y «Alina: Asistente de empleo con agentes de IA».
+Son los dos nombres de producto verificados. Baleària y AEPD identifican a las
+organizaciones de sus respectivos casos, sin un nombre de aplicación documentado.
+
 La Home funciona como índice visual y punto de entrada inmersivo. Cada proyecto presenta:
 
 1. **Numeración destacada:** número de orden con dos dígitos (`01`, `02`, `03`, `04`) en gran escala.

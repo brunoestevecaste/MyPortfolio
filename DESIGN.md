@@ -324,6 +324,8 @@ Por indicación de Bruno en septiembre de 2026 y siguiendo la referencia de `ref
   referencia, la Home no muestra bloques largos de descripción en este índice.
   Muestra únicamente el título del proyecto en la tipografía de texto normal (`Space Mono`),
   garantizando una jerarquía limpia y descansada.
+  Los nombres bajo las fotos usan el negro `--ink`, también en hover y foco,
+  y no llevan flecha a la derecha, por indicación de Bruno el 30/09/2026.
 - **Animaciones:**
   - *Animación de scroll:* Los proyectos emergen suavemente mediante revelado
     progresivo (opacidad y ligero desplazamiento vertical) al entrar en el viewport,
