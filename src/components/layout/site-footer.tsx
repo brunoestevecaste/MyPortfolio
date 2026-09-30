@@ -56,7 +56,7 @@ export function SiteFooter() {
               <li key={link.href}>
                 <a
                   aria-label={link.label}
-                  className="inline-flex size-11 items-center justify-center text-ink transition-colors duration-200 hover:text-muted"
+                  className="inline-flex size-11 items-center justify-center text-ink transition-colors duration-200 hover:text-accent-ink focus-visible:text-accent-ink"
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"

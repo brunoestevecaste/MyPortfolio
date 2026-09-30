@@ -83,7 +83,7 @@ body {
 a,
 button {
   touch-action: manipulation;
-  -webkit-tap-highlight-color: rgb(51 51 51 / 15%);
+  -webkit-tap-highlight-color: color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 button,
@@ -101,7 +101,7 @@ svg {
 }
 
 :focus-visible {
-  outline: 2px solid var(--signal);
+  outline: 2px solid var(--accent);
   outline-offset: 4px;
 }
 
@@ -184,8 +184,12 @@ svg {
     column-gap: 1.5rem;
   }
 
+  .header-menu-link {
+    color: var(--muted);
+  }
+
   .header-menu-link[aria-current="location"] {
-    color: var(--ink);
+    color: var(--accent-ink);
     font-weight: 700;
   }
 
@@ -279,7 +283,7 @@ svg {
   .text-link {
     position: relative;
     text-decoration-line: underline;
-    text-decoration-color: color-mix(in srgb, var(--signal) 45%, transparent);
+    text-decoration-color: var(--accent-ink);
     text-decoration-thickness: 1px;
     text-underline-offset: 0.25em;
     transition:
@@ -287,8 +291,9 @@ svg {
       text-decoration-color var(--duration-feedback) var(--ease-out);
   }
 
-  .text-link:hover {
-    color: var(--signal);
+  .text-link:hover,
+  .text-link:focus-visible {
+    color: var(--accent-ink);
     text-decoration-color: currentColor;
   }
 

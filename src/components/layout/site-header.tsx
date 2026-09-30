@@ -175,7 +175,7 @@ export function SiteHeader() {
         <div className="relative">
           <div className="grid min-h-18 grid-cols-[1fr_auto_1fr] items-center">
             <Link
-              className="inline-flex min-h-11 items-center justify-self-start font-mono text-xs font-normal uppercase tracking-[-0.025em] text-ink transition-colors hover:text-signal focus-visible:outline-2 focus-visible:outline-signal"
+              className="inline-flex min-h-11 items-center justify-self-start font-mono text-xs font-normal uppercase tracking-[-0.025em] text-ink transition-colors hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent"
               href="/"
               onClick={(e) => handleNavClick(e, "/")}
             >
@@ -185,7 +185,7 @@ export function SiteHeader() {
 
             <div className="header-active-section justify-self-center" inert={isOpen}>
               <Link
-                className="inline-flex min-h-11 items-center font-mono text-xs font-normal uppercase tracking-wider text-ink transition-colors hover:text-signal focus-visible:outline-2 focus-visible:outline-signal md:tracking-widest"
+                className="inline-flex min-h-11 items-center font-mono text-xs font-normal uppercase tracking-wider text-ink transition-colors hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent md:tracking-widest"
                 href={activeItem.href}
                 onClick={(e) => handleNavClick(e, activeItem.href)}
                 aria-label={`Sección activa: ${activeItem.label}. Ir a ${activeItem.label}`}
@@ -201,7 +201,7 @@ export function SiteHeader() {
               aria-controls="site-header-menu"
               aria-label={isOpen ? "Cerrar menú" : "Abrir menú de apartados"}
               onClick={() => setIsOpen((prev) => !prev)}
-              className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-end justify-self-end text-ink transition-colors hover:text-signal focus-visible:outline-2 focus-visible:outline-signal"
+              className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-end justify-self-end text-ink transition-colors hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent"
             >
               <span
                 className="relative flex size-5 flex-col items-center justify-center"
@@ -231,7 +231,7 @@ export function SiteHeader() {
                         href={item.href}
                         onClick={(e) => handleNavClick(e, item.href)}
                         aria-current={activeItem.id === item.id ? "location" : undefined}
-                        className="header-menu-link inline-flex min-h-11 items-center font-mono text-xs uppercase text-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-signal"
+                        className="header-menu-link inline-flex min-h-11 items-center font-mono text-xs uppercase transition-colors hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent"
                       >
                         {item.label}
                       </Link>
