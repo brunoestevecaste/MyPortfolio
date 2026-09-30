@@ -1,3 +1,7 @@
+.photo {
+  border-radius: var(--radius-editorial);
+}
+
 .overlay {
   position: fixed;
   inset: 0;

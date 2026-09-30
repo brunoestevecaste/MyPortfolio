@@ -1,3 +1,27 @@
+.dashboard,
+.viewSwitch,
+.viewSwitch button,
+.contextBar,
+.resetButton,
+.panel,
+.eventCard,
+.badge,
+.artPromptBox,
+.swipeBtn,
+.statBox,
+.interactionLog li,
+.profileOption,
+.formulaDisplay,
+.termBox,
+.candidateCard,
+.reasonBadge,
+.scenarioBtn,
+.searchResultItem,
+.searchDistance,
+.chatBalloon {
+  border-radius: var(--radius-editorial);
+}
+
 .dashboardContainer {
   container-type: inline-size;
   margin-top: 2.5rem;
@@ -49,7 +73,7 @@
 .toolbar h3 {
   font-size: clamp(1.5rem, 3.2cqw, 2.25rem);
   font-weight: 750;
-  letter-spacing: -0.055em;
+  letter-spacing: var(--tracking-heading-title);
   line-height: 1;
   text-transform: uppercase;
 }
@@ -138,7 +162,7 @@
 .panel h4 {
   font-size: 0.75rem;
   font-weight: 750;
-  letter-spacing: 0.05em;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
   color: var(--muted);
   border-bottom: 1px solid var(--line);
@@ -549,7 +573,7 @@
   background: #111;
   color: #eee;
   padding: 0.85rem;
-  border-radius: 2px;
+  border-radius: var(--radius-editorial);
   font-family: var(--font-space-mono), monospace;
   font-size: 0.75rem;
   overflow-x: auto;

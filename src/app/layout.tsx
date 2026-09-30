@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Space_Mono } from "next/font/google";
+import { Archivo, Bricolage_Grotesque, Space_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Kursor } from "@/components/ui/kursor";
@@ -10,6 +10,12 @@ import "@/styles/kursor.css";
 const archivo = Archivo({
   subsets: ["latin"],
   variable: "--font-archivo",
+  display: "swap",
+});
+
+const bricolageGrotesque = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-bricolage-grotesque",
   display: "swap",
 });
 
@@ -31,7 +37,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" data-scroll-behavior="smooth" className={`${archivo.variable} ${spaceMono.variable}`}>
+    <html lang="es" data-scroll-behavior="smooth" className={`${archivo.variable} ${bricolageGrotesque.variable} ${spaceMono.variable}`}>
       <body className="flex min-h-dvh flex-col antialiased">
         <Kursor />
         <a className="skip-link" href="#main-content">

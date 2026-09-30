@@ -702,6 +702,7 @@ export function AlinaDashboard() {
                         {gap.resources.map((res) => (
                           <div
                             key={res.title}
+                            className="editorial-surface"
                             style={{
                               padding: "0.5rem 0.75rem",
                               background: "var(--canvas)",

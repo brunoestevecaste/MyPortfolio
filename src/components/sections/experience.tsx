@@ -31,7 +31,7 @@ export function ExperienceSection() {
             {experience.institution}
           </p>
           <h3
-            className="font-display text-[clamp(1.75rem,3vw,2.75rem)] leading-[1.1] font-normal tracking-[-0.04em] text-pretty"
+            className="font-heading text-[clamp(1.75rem,3vw,2.75rem)] leading-[1.1] font-normal tracking-[var(--tracking-heading-title)] text-pretty"
             id="experience-role"
           >
             {experience.role}

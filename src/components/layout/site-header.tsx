@@ -232,7 +232,7 @@ export function SiteHeader() {
             ref={menuRef}
             role="region"
             aria-label="Apartados de la página"
-            className={`absolute top-full right-0 w-full bg-[var(--surface)] p-6 shadow-[0_24px_48px_-12px_rgba(18,20,22,0.12)] transition-all duration-200 ease-out origin-top-right sm:w-[380px] md:w-[420px] md:p-8 ${
+            className={`editorial-surface absolute top-full right-0 w-full bg-[var(--surface)] p-6 shadow-[0_24px_48px_-12px_rgba(18,20,22,0.12)] transition-all duration-200 ease-out origin-top-right sm:w-[380px] md:w-[420px] md:p-8 ${
               isOpen
                 ? "pointer-events-auto translate-y-0 opacity-100"
                 : "pointer-events-none -translate-y-2 opacity-0"
@@ -247,7 +247,7 @@ export function SiteHeader() {
                       <Link
                         href={item.href}
                         onClick={(e) => handleNavClick(e, item.href)}
-                        className={`group block px-3.5 -mx-3.5 py-2.5 sm:py-3 transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-signal hover:bg-black/[0.045] ${
+                        className={`editorial-surface group block px-3.5 -mx-3.5 py-2.5 sm:py-3 transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-signal hover:bg-black/[0.045] ${
                           isCurrent ? "text-ink" : "text-ink/75 hover:text-ink"
                         }`}
                       >

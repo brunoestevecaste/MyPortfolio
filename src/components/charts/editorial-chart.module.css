@@ -1,3 +1,7 @@
+.tooltip {
+  border-radius: var(--radius-editorial);
+}
+
 .frame {
   width: 100%;
   min-width: 0;

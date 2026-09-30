@@ -9,7 +9,7 @@
 .heroTitle {
   margin: 0;
   font-size: clamp(3rem, min(6.25vw, 10svh), 6rem);
-  letter-spacing: -0.08em;
+  letter-spacing: var(--tracking-heading-display);
   word-spacing: 0.12em;
   text-wrap: balance;
 }

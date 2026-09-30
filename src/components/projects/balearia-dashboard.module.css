@@ -1,3 +1,11 @@
+.dashboard,
+.viewSwitch,
+.viewSwitch button,
+.kpis > div,
+.panel {
+  border-radius: var(--radius-editorial);
+}
+
 .dashboardContainer {
   container-type: inline-size;
   margin-top: 2.5rem;
@@ -53,7 +61,7 @@
 .toolbar h3 {
   font-size: clamp(1.5rem, 3.2cqw, 2.25rem);
   font-weight: 750;
-  letter-spacing: -0.055em;
+  letter-spacing: var(--tracking-heading-title);
   line-height: 1;
   text-transform: uppercase;
 }
@@ -120,7 +128,7 @@
   min-height: 44px;
   border: 0;
   border-bottom: 1px solid var(--line);
-  border-radius: 0;
+  border-radius: var(--radius-editorial);
   padding: 0.5rem 0.125rem;
   cursor: pointer;
   background: var(--canvas);
@@ -228,7 +236,7 @@
   margin-bottom: 1.75rem;
   font-size: 0.8125rem;
   font-weight: 650;
-  letter-spacing: 0.015em;
+  letter-spacing: -0.01em;
   line-height: 1.4;
   text-transform: uppercase;
 }

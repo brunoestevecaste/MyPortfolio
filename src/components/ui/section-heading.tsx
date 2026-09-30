@@ -11,7 +11,7 @@ export function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <h2 className={`section-heading ${className}`} id={id}>
-      {`</ ${title}>`}
+      {`</${title}>`}
     </h2>
   );
 }

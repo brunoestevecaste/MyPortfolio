@@ -139,12 +139,27 @@ Reglas:
 
 ### Familias
 
-- `Archivo`, con `next/font/google`, se reserva para titulares y texto
-  destacado.
+- Desde el 30/09/2026, `Bricolage Grotesque`, con `next/font/google`, se aplica
+  exclusivamente a los títulos (`h1`–`h6`), incluidos los del índice de proyectos
+  y los demostradores. Sustituye las referencias anteriores a Archivo o Space
+  Mono en títulos, conservando pesos e interlineados.
+- `Archivo` se mantiene en el texto destacado, la numeración y el menú.
 - `Space Mono`, también cargada con `next/font/google`, se aplica al cuerpo,
   navegación, enlaces y metadatos.
-- Display: Archivo 400 y mayúsculas, con tracking `-0.115em` en el hero y
-  `-0.12em` en los encabezados de sección. Estos también van en mayúsculas.
+- Display: Bricolage Grotesque 400 y mayúsculas, con tracking `-0.06em`
+  en el hero, títulos de caso y encabezados de sección. Los subtítulos usan
+  `-0.045em`, los títulos de educación `-0.04em` y los títulos pequeños
+  `-0.03em`; las etiquetas funcionales pequeñas en mayúsculas usan `-0.01em`.
+  Estos valores sustituyen el tracking anterior de Archivo para evitar
+  solapamientos sin perder la composición compacta. Se comparten mediante
+  los tokens `--tracking-heading-display`, `--tracking-heading-title` y
+  `--tracking-heading-small`.
+- Los títulos de sección usan `</Título>`, sin espacio entre la barra y la
+  primera letra, mediante el componente compartido `SectionHeading`.
+- La sección de contacto se titula «Hablemos», sin punto final.
+- Los encabezados de sección en móvil usan `clamp(2rem, 12vw, 3rem)`.
+  Los títulos de caso se limitan a `4.625rem` y bajan a `2.125rem` por debajo
+  de 360px para que las palabras largas encajen con el nuevo tracking.
 - El texto destacado usa Archivo; el texto de lectura continua usa Space Mono,
   con interlineado amplio y tracking natural. El texto destacado en Archivo usa
   `-0.03em` para una composición más compacta.
@@ -200,7 +215,11 @@ jerarquía tipográfica débil.
 
 ## Forma y materialidad
 
-- Layout, imágenes y bloques editoriales con esquinas rectas.
+- Esquinas apenas suavizadas con el token compartido `--radius-editorial: 2px`
+  en imágenes, superficies, paneles, menús y controles. La retícula conserva
+  su carácter editorial; los elementos circulares funcionales mantienen su forma.
+  Las imágenes se recortan al contorno redondeado sin borde ni línea superpuesta.
+  El retrato del hero conserva sus esquinas rectas, por indicación de Bruno.
 - Botones compactos con radio máximo de `2px` o enlaces textuales subrayados.
 - Sin tarjetas genéricas para agrupar contenido que puede organizarse con espacio.
 - Divisores finos solo donde expresen estructura real.
@@ -220,7 +239,7 @@ jerarquía tipográfica débil.
   - **Centro:** indicador dinámico de sección en mayúsculas (`Space Mono`); se inicia como `INICIO` en la portada y se actualiza suavemente según la sección visible en el scroll (`INICIO`, `EDUCACIÓN`, `EXPERIENCIA`, `PROYECTOS`, `CONTACTO`), enlazado con desplazamiento suave a cada apartado.
   - **Esquina superior derecha:** símbolo minimalista de menú (dos líneas horizontales suizas que transicionan a cruz de cierre al abrirse) con objetivo táctil accesible (44x44px).
 - **Menú desplegable de apartados:**
-  - Panel flotante anclado a la derecha sobre superficie secundaria `--color-surface` (`#E9EAE7`), con esquinas rectas (`rounded-none`), sombra ambiental muy suave y sin líneas divisorias internas («Separación sin líneas»).
+  - Panel flotante anclado a la derecha sobre superficie secundaria `--color-surface` (`#E9EAE7`), con radio editorial mínimo de `2px`, sombra ambiental muy suave y sin líneas divisorias internas («Separación sin líneas»).
   - Enfoque purista y arquitectónico: muestra exclusivamente el número con paréntesis y el título de cada apartado en gran escala con `Archivo` en mayúsculas (`(01) INICIO`, `(02) EDUCACIÓN`, `(03) EXPERIENCIA`, `(04) PROYECTOS`, `(05) CONTACTO`), prescindiendo de metadatos, flechas o enlaces secundarios.
   - Interacción hover sobria y perceptible: al posar el cursor sobre cualquier opción, se resalta de forma contenida mediante un bloque de superficie sutil (`bg-black/[0.045]`), un desplazamiento tipográfico de 6px a la derecha (`translate-x-1.5`) y paso del número y titular a contraste pleno en tinta (`text-ink`).
   - Cierre accesible con tecla `Escape`, clic exterior sobre backdrop y retorno automático del foco.
@@ -274,7 +293,7 @@ Por indicación de Bruno en septiembre de 2026 y siguiendo la referencia de `ref
 - **Numeración protagonista:** Cada tarjeta muestra su número de orden (`01`, `02`, etc.)
   en tipografía de gran escala (`Archivo`), situado limpiamente sobre el marco de imagen.
 - **Fotografía característica:** Cada proyecto incorpora una imagen representativa en
-  blanco y negro de encuadre editorial y proporción 4:3, con esquinas rectas y
+  blanco y negro de encuadre editorial y proporción 4:3, con radio mínimo de 2px y
   micro-interacción suave de escala en hover.
 - **Texto sutil en la Home:** Para mantener la pureza visual y el refinamiento de la
   referencia, la Home no muestra bloques largos de descripción en este índice.
@@ -457,7 +476,8 @@ Conservar el foco accesible y los trazos que representan datos en los gráficos.
 - Se conserva la paleta monocroma vigente. Archivo organiza títulos y resultados;
   Space Mono identifica categorías, escalas, leyendas y valores.
 - Los gráficos se integran en las superficies editoriales existentes, sin marcos,
-  sombras, radios decorativos ni cuadrículas añadidas. Las barras parten de cero.
+  sombras ni cuadrículas añadidas; las superficies usan el radio editorial de
+  `2px`. Las barras parten de cero.
 - Series observadas con trazo continuo y comparaciones con trazo discontinuo.
   Los perfiles de velocidad son escalonados: no se suavizan los datos.
 - Etiquetas de al menos 12px, formato numérico español y valores completos
@@ -480,7 +500,8 @@ se limita al dashboard AEPD; no se extiende al resto del portfolio.
   gruesas. El bloque de descargas se invierte a blanco sobre negro.
 - Predicciones como gráfico principal, anillo a la derecha y tabla de solicitudes
   a todo el ancho debajo. Los demás análisis continúan en una retícula inferior.
-- Paneles unidos sin separación entre tarjetas, sin sombras ni radios añadidos;
+- Paneles unidos sin separación entre tarjetas, sin sombras y con el radio
+  editorial mínimo de `2px`;
   divisores suaves y cabecera de tabla con una línea negra más marcada.
 - Se preservan todos los datos, fórmulas, filtros, etiquetas y tipos de gráfico.
   No se incorporan las métricas, numeraciones ni estados ficticios de la imagen.

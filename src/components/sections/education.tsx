@@ -31,7 +31,7 @@ export function EducationSection() {
               </div>
 
               <h3
-                className="mt-4 font-display text-[clamp(1.15rem,1.45vw,1.55rem)] leading-[1.15] font-normal tracking-[-0.035em] md:whitespace-nowrap"
+                className="mt-4 font-heading text-[clamp(1.15rem,1.45vw,1.55rem)] leading-[1.15] font-normal tracking-[-0.04em] lg:whitespace-nowrap"
                 id={`${entry.id}-title`}
               >
                 {entry.qualification}
@@ -48,7 +48,7 @@ export function EducationSection() {
               </div>
             </div>
 
-            <div className="relative mt-8 aspect-[3/2] w-full overflow-hidden bg-[var(--surface)] md:mt-10 lg:mt-12">
+            <div className="editorial-surface relative mt-8 aspect-[3/2] w-full overflow-hidden bg-[var(--surface)] md:mt-10 lg:mt-12">
               <Image
                 src={entry.image.src}
                 alt={entry.image.alt}

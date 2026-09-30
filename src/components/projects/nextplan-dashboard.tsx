@@ -549,7 +549,7 @@ export function NextPlanDashboard() {
                         </div>
                       </div>
                     ) : (
-                      <div style={{ padding: "0.75rem", background: "var(--surface)", fontSize: "0.75rem", color: "var(--muted)" }}>
+                      <div className="editorial-surface" style={{ padding: "0.75rem", background: "var(--surface)", fontSize: "0.75rem", color: "var(--muted)" }}>
                         Filtro de seguridad activado: no se invoca ninguna tool RAG ante peticiones fuera de dominio o intentos de manipulación de instrucciones.
                       </div>
                     )}
