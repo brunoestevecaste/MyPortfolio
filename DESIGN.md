@@ -229,12 +229,12 @@ jerarquía tipográfica débil.
 
 ## Forma y materialidad
 
-- Esquinas apenas suavizadas con el token compartido `--radius-editorial: 2px`
+- Esquinas apenas suavizadas con el token compartido `--radius-editorial: 3px`
   en imágenes, superficies, paneles, menús y controles. La retícula conserva
   su carácter editorial; los elementos circulares funcionales mantienen su forma.
   Las imágenes se recortan al contorno redondeado sin borde ni línea superpuesta.
   El retrato del hero conserva sus esquinas rectas, por indicación de Bruno.
-- Botones compactos con radio máximo de `2px` o enlaces textuales subrayados.
+- Botones compactos con radio máximo de `3px` o enlaces textuales subrayados.
 - Sin tarjetas genéricas para agrupar contenido que puede organizarse con espacio.
 - Divisores finos solo donde expresen estructura real.
 - Sombras casi inexistentes. Si se requieren, serán amplias, suaves y teñidas con
