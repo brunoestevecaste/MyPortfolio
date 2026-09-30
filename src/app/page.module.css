@@ -58,6 +58,23 @@
   max-width: 62rem;
 }
 
+@media (min-width: 64rem) {
+  .portrait {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .portrait > div {
+    /* Discount the silhouette's bottom whitespace: 89/1086 of the 5:4 frame. */
+    margin-bottom: calc(-100% * 89 / 1086 * 4 / 5);
+  }
+
+  .introduction,
+  .approach {
+    margin-bottom: 0;
+  }
+}
+
 
 @media (min-width: 48rem) and (max-width: 63.999rem) {
   .heroComposition {

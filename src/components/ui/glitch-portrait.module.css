@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 5 / 4;
-  background: var(--surface);
+  background: transparent;
   overflow: hidden;
   cursor: pointer;
   user-select: none;
@@ -21,7 +21,8 @@
   height: 100%;
 }
 
-/* Match the portrait crop so every animated layer stays inside the person. */
+/* Remove only the base portrait background; keep the animated layer masks intact. */
+.portraitSurface > .portraitImage,
 .sliceLayer,
 .dataBars {
   mask-image: url("/hero/bruno-esteve-silhouette.svg");
