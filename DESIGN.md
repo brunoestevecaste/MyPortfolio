@@ -164,7 +164,14 @@ Reglas:
 - Los títulos de sección usan `</Título>`, sin espacio entre la barra y la
   primera letra, mediante el componente compartido `SectionHeading`.
 - La sección de contacto se titula «Hablemos», sin punto final.
-- Los encabezados de sección en móvil usan `clamp(2rem, 12vw, 3rem)`.
+- Desde el 30/09/2026, el hero y los encabezados de sección aumentan su escala
+  aproximadamente un 8 % y usan tracking `-0.075em`, compartido mediante
+  `--tracking-heading-section`. El resto de titulares mantiene sus valores.
+  El hero usa `clamp(3.25rem, min(6.75vw, 10.8svh), 6.5rem)` en escritorio,
+  `clamp(2.125rem, min(10.25vw, 6.5svh), 3.75rem)` en móvil y
+  `clamp(1.625rem, min(8.5vw, 5.2svh), 1.875rem)` por debajo de 360px.
+- Los encabezados de sección usan `clamp(3.25rem, 8.6vw, 7.5rem)` en escritorio
+  y `clamp(2.125rem, 12.8vw, 3.25rem)` en móvil, también en Proyectos.
   Los títulos de caso se limitan a `4.625rem` y bajan a `2.125rem` por debajo
   de 360px para que las palabras largas encajen con el nuevo tracking.
 - El texto destacado usa Archivo; el texto de lectura continua usa Space Mono,

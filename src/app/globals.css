@@ -35,6 +35,7 @@
   --section-space: clamp(6rem, 10vw, 12rem);
 
   --tracking-heading-display: -0.06em;
+  --tracking-heading-section: -0.075em;
   --tracking-heading-title: -0.045em;
   --tracking-heading-small: -0.03em;
 
@@ -245,6 +246,7 @@ svg {
   }
 
   .display-text {
+    color: var(--accent);
     font-family: var(--font-bricolage-grotesque), Arial, Helvetica, sans-serif;
     font-size: clamp(3.25rem, 8.9vw, 8rem);
     font-weight: 400;
@@ -255,11 +257,12 @@ svg {
   }
 
   .heading-text {
+    color: var(--accent);
     font-family: var(--font-bricolage-grotesque), Arial, Helvetica, sans-serif;
-    font-size: clamp(3rem, 8vw, 7rem);
+    font-size: clamp(3.25rem, 8.6vw, 7.5rem);
     font-weight: 400;
     line-height: 1.02;
-    letter-spacing: var(--tracking-heading-display);
+    letter-spacing: var(--tracking-heading-section);
     text-wrap: balance;
     text-transform: uppercase;
   }
@@ -328,7 +331,7 @@ svg {
   }
 
   .heading-text {
-    font-size: clamp(2rem, 12vw, 3rem);
+    font-size: clamp(2.125rem, 12.8vw, 3.25rem);
   }
 
   .display-text {

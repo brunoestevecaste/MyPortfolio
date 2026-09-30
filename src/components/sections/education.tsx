@@ -31,7 +31,7 @@ export function EducationSection() {
               </div>
 
               <h3
-                className="mt-4 font-heading text-[clamp(1.15rem,1.45vw,1.55rem)] leading-[1.15] font-normal tracking-[-0.04em] lg:whitespace-nowrap"
+                className="mt-4 font-heading text-[clamp(1.15rem,1.45vw,1.55rem)] leading-[1.15] font-normal tracking-[-0.04em] text-accent-ink lg:whitespace-nowrap"
                 id={`${entry.id}-title`}
               >
                 {entry.qualification}

@@ -8,8 +8,8 @@
 
 .heroTitle {
   margin: 0;
-  font-size: clamp(3rem, min(6.25vw, 10svh), 6rem);
-  letter-spacing: var(--tracking-heading-display);
+  font-size: clamp(3.25rem, min(6.75vw, 10.8svh), 6.5rem);
+  letter-spacing: var(--tracking-heading-section);
   word-spacing: 0.12em;
   text-wrap: balance;
 }
@@ -94,13 +94,9 @@
 }
 
 @media (max-width: 47.999rem) {
-  .workIntroduction :global(.heading-text) {
-    font-size: clamp(2rem, 9.5vw, 3rem);
-  }
-
   .heroTitle {
     text-wrap: pretty;
-    font-size: clamp(2rem, min(9.5vw, 6svh), 3.5rem);
+    font-size: clamp(2.125rem, min(10.25vw, 6.5svh), 3.75rem);
     line-height: 1;
   }
 
@@ -145,7 +141,6 @@
 
 @media (max-width: 22.499rem) {
   .heroTitle {
-    font-size: clamp(1.5rem, min(7.9vw, 4.8svh), 1.75rem);
+    font-size: clamp(1.625rem, min(8.5vw, 5.2svh), 1.875rem);
   }
 }
-
