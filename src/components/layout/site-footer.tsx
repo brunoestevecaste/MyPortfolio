@@ -1,8 +1,10 @@
 import { SectionHeading } from "@/components/ui/section-heading";
+import { PortfolioChat } from "@/components/chat/portfolio-chat";
+import { profile } from "@/data/profile";
 
 const links = [
   {
-    href: "mailto:brunoestevecaste@gmail.com",
+    href: `mailto:${profile.email}`,
     label: "Email",
     icon: (
       <>
@@ -12,7 +14,7 @@ const links = [
     ),
   },
   {
-    href: "https://www.linkedin.com/in/bruno-esteve-castellano/",
+    href: profile.linkedin,
     label: "LinkedIn",
     icon: (
       <>
@@ -23,7 +25,7 @@ const links = [
     ),
   },
   {
-    href: "https://github.com/brunoestevecaste",
+    href: profile.github,
     label: "GitHub",
     icon: (
       <>
@@ -39,10 +41,11 @@ export function SiteFooter() {
     <footer className="site-container mt-auto" id="contact">
       <div className="editorial-grid items-end pt-8 pb-8 md:pt-12 md:pb-10">
         <div className="col-span-4 md:col-span-12">
-          <SectionHeading className="font-display text-[clamp(3.75rem,13vw,11.5rem)] leading-[1.05] font-normal tracking-[-0.125em]" title="Hablemos." />
+          <SectionHeading className="heading-text" id="contact-title" title="Hablemos" />
         </div>
+        <div className="col-span-4 w-full md:col-span-12"><PortfolioChat /></div>
         <p className="col-span-4 mt-3 text-sm text-muted md:col-span-6 md:self-center">
-          Bruno Esteve Castellano
+          {profile.name}
         </p>
         <nav
           aria-label="Contacto y perfiles"

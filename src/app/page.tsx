@@ -4,6 +4,7 @@ import { ExperienceSection } from "@/components/sections/experience";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ProjectIndex } from "@/components/projects/project-index";
 import { IntroSequence } from "@/components/intro/intro-sequence";
+import { profile } from "@/data/profile";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -16,7 +17,7 @@ export default function Home() {
         className={`site-container ${styles.hero}`}
       >
         <h1 className={`display-text ${styles.heroTitle}`} id="foundation-title">
-          Soy un analista de datos e ingeniero de IA creando soluciones digitales.
+          {profile.headline}
         </h1>
 
         <div className={styles.heroComposition}>
@@ -30,20 +31,11 @@ export default function Home() {
           </div>
 
           <p className={styles.introduction}>
-            En nuestro día a día dejamos pequeñas huellas sin darnos cuenta:
-            rutinas, elecciones y costumbres que se repiten una y otra vez.
-            Siempre he visto los datos como historias de cómo vivimos. Me
-            fascina la tecnología por su capacidad para encontrar sentido en el
-            ruido cotidiano y descubrir qué necesitamos realmente como personas.
+            {profile.introduction}
           </p>
 
           <p className={styles.approach}>
-            Uno los datos y la IA para crear soluciones útiles desde el primer
-            momento. La creatividad está en mirar la información desde otra
-            perspectiva e idear respuestas originales a necesidades reales. Me
-            mueve convertir patrones cotidianos en herramientas intuitivas que
-            resuelvan dudas, ahorren tiempo y acerquen la tecnología a las
-            personas.
+            {profile.approach}
           </p>
         </div>
       </section>
