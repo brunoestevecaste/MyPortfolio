@@ -104,7 +104,7 @@ La combinación elegida es:
 - Escala editorial para la narrativa.
 - Señalética técnica para tecnologías, roles y resultados.
 - Imágenes reales tratadas en monocromo o color muy controlado.
-- Una única señal monocroma como color de interacción y dato relevante.
+- Un único acento rojo para títulos, navegación y elementos clave.
 
 La búsqueda de `ui-ux-pro-max` devolvió una base monocroma con un color de acento,
 tipografía Archivo y Space Grotesk y composición asimétrica. Su clasificación
@@ -118,12 +118,14 @@ por el brief y el material visual.
 
 | Token | Valor | Uso |
 |---|---:|---|
-| `--color-canvas` | `#F4F3EF` | Fondo editorial principal |
+| `--color-canvas` | `#F9F4F4` | Fondo editorial principal |
 | `--color-surface` | `#E9EAE7` | Superficies secundarias y bloques de imagen |
 | `--color-ink` | `#121416` | Texto principal |
 | `--color-muted` | `#5C6268` | Texto secundario y metadatos |
 | `--color-line` | `#CFD1CE` | Divisores estructurales |
-| `--color-signal` | `#333333` | Enlaces, foco, CTA y datos clave |
+| `--color-accent` | `#C1282E` | Titulares grandes, numeración de proyectos y foco |
+| `--color-accent-ink` | `var(--accent)` | Títulos pequeños, enlaces y navegación activa |
+| `--color-signal` | `#333333` | Señal de datos y controles monocromos |
 | `--color-on-signal` | `#F8F8F8` | Texto sobre el color de señal |
 
 Reglas:
@@ -131,7 +133,12 @@ Reglas:
 - Un solo color de acento para toda la experiencia.
 - Nada de degradados morados, brillos neón o cambios arbitrarios de paleta.
 - El color de señal se usa para interacción o significado, no como decoración.
-- La señal y los gráficos usan únicamente negros, blancos y grises; no hay azul de acento.
+- Desde el 30/09/2026, por indicación de Bruno, el acento es `#C1282E`.
+  El fondo principal pasa a `#F9F4F4`, incluido el header y la introducción.
+  Se aplica al hero, encabezados de sección y caso, numeración de proyectos y foco.
+  Se usa el mismo rojo en texto grande y pequeño, con contraste
+  de al menos 4.5:1 sobre los fondos claros. Cuerpo, fotografías y gráficos conservan
+  su tratamiento monocromo.
 - La primera versión es light-only porque la dirección imita una publicación
   impresa y todas las referencias aportadas son claras. No mezclar secciones dark.
 

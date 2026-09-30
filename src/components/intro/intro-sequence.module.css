@@ -462,8 +462,8 @@
       rgba(18, 20, 22, 0.85) 44px,
       transparent 44px,
       transparent 76px,
-      rgba(244, 243, 239, 0.95) 76px,
-      rgba(244, 243, 239, 0.95) 110px
+      color-mix(in srgb, var(--canvas) 95%, transparent) 76px,
+      color-mix(in srgb, var(--canvas) 95%, transparent) 110px
     );
   background-size: 100% 6px, 150px 100%;
   opacity: 0;

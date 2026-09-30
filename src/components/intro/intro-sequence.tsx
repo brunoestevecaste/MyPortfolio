@@ -238,6 +238,7 @@ export function IntroSequence() {
 
     let animFrame: number;
     const startTime = performance.now();
+    const canvasColor = getComputedStyle(canvas).getPropertyValue("--canvas").trim();
 
     const render = (now: number) => {
       const elapsed = now - startTime;
@@ -272,7 +273,7 @@ export function IntroSequence() {
       const offCtx = offCanvas.getContext("2d");
 
       if (offCtx) {
-        offCtx.fillStyle = "#F4F3EF";
+        offCtx.fillStyle = canvasColor;
         offCtx.fillRect(0, 0, offW, offH);
 
         // Highlight bar in center
@@ -287,7 +288,7 @@ export function IntroSequence() {
         offCtx.fillText("Artificial Intelligence", offW * 0.06, barY + barH * 1.6);
 
         // Inside bar
-        offCtx.fillStyle = "#F4F3EF";
+        offCtx.fillStyle = canvasColor;
         offCtx.fillText("Creativity", offW * 0.06, barY + barH * 0.7);
 
         // Draw stretched with nearest neighbor

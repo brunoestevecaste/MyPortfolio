@@ -6,6 +6,8 @@
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
   --color-signal: var(--signal);
   --color-on-signal: var(--on-signal);
   --font-sans: var(--font-space-mono);
@@ -17,11 +19,13 @@
 :root {
   color-scheme: light;
 
-  --canvas: #f4f3ef;
+  --canvas: #f9f4f4;
   --surface: #e9eae7;
   --ink: #121416;
   --muted: #5c6268;
   --line: #cfd1ce;
+  --accent: #c1282e;
+  --accent-ink: var(--accent);
   --signal: #333333;
   --on-signal: #f8f8f8;
 
