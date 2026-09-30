@@ -1,11 +1,13 @@
 .layout {
+  --chat-surface: color-mix(in srgb, var(--ink) 6%, var(--canvas));
+
   margin-block: var(--space-6) var(--space-5);
   padding-block: var(--space-6);
 }
 
 .chat { width: 100%; min-width: 0; }
 .avatar { width: 44px; height: 44px; flex: 0 0 44px; border: 0; border-radius: 50%; object-fit: cover; }
-.visitorAvatar { display: grid; place-items: center; background: var(--surface); color: var(--ink); }
+.visitorAvatar { display: grid; place-items: center; background: var(--chat-surface); color: var(--ink); }
 .reset { display: block; margin-left: auto; min-height: 44px; padding: 0.5rem; color: var(--muted); font-size: 0.75rem; text-decoration: underline; text-underline-offset: 0.25em; }
 .scrollArea { position: relative; }
 .scrollRail {
@@ -29,7 +31,7 @@
 .transcript::-webkit-scrollbar { display: none; }
 .message { display: flex; align-items: flex-end; gap: var(--space-2); margin-bottom: var(--space-4); }
 .message .avatar { width: 36px; height: 36px; flex-basis: 36px; }
-.bubble { position: relative; max-width: min(86%, 72ch); min-width: 0; padding: 1rem 1.125rem; background: var(--surface); border-radius: var(--radius-editorial); }
+.bubble { position: relative; max-width: min(86%, 72ch); min-width: 0; padding: 1rem 1.125rem; background: var(--chat-surface); border-radius: var(--radius-editorial); }
 .bubble p { margin: 0; font-size: 0.8125rem; line-height: 1.7; overflow-wrap: anywhere; white-space: pre-wrap; }
 .speaker { display: block; margin-bottom: 0.375rem; font-size: 0.6875rem; color: var(--muted); }
 .outgoing { flex-direction: row-reverse; }

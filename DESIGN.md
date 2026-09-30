@@ -358,6 +358,9 @@ Por indicación de Bruno en septiembre de 2026 y siguiendo la referencia de `ref
 - Una única intención: contactar.
 - Correo, LinkedIn y GitHub.
 - No publicar teléfono sin autorización explícita.
+- El chat usa un gris cálido claro, derivado de `--ink` al 6 % sobre `--canvas`,
+  en las burbujas del asistente y el avatar del visitante. Por indicación de Bruno
+  el 30/09/2026, estas superficies permanecen en la escala de grises, sin rojo.
 
 ## Case studies
 
