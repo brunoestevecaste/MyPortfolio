@@ -238,11 +238,22 @@ jerarquía tipográfica débil.
   - **Esquina superior izquierda:** `Bruno Esteve Castellano` (adaptado a `Bruno Esteve` en móviles muy estrechos) en mayúsculas de peso normal (`Space Mono`), funcionando como enlace y retorno suave a la portada.
   - **Centro:** indicador dinámico de sección en mayúsculas (`Space Mono`); se inicia como `INICIO` en la portada y se actualiza suavemente según la sección visible en el scroll (`INICIO`, `EDUCACIÓN`, `EXPERIENCIA`, `PROYECTOS`, `CONTACTO`), enlazado con desplazamiento suave a cada apartado.
   - **Esquina superior derecha:** símbolo minimalista de menú (dos líneas horizontales suizas que transicionan a cruz de cierre al abrirse) con objetivo táctil accesible (44x44px).
-- **Menú desplegable de apartados:**
-  - Panel flotante anclado a la derecha sobre superficie secundaria `--color-surface` (`#E9EAE7`), con radio editorial mínimo de `2px`, sombra ambiental muy suave y sin líneas divisorias internas («Separación sin líneas»).
-  - Enfoque purista y arquitectónico: muestra exclusivamente el número con paréntesis y el título de cada apartado en gran escala con `Archivo` en mayúsculas (`(01) INICIO`, `(02) EDUCACIÓN`, `(03) EXPERIENCIA`, `(04) PROYECTOS`, `(05) CONTACTO`), prescindiendo de metadatos, flechas o enlaces secundarios.
-  - Interacción hover sobria y perceptible: al posar el cursor sobre cualquier opción, se resalta de forma contenida mediante un bloque de superficie sutil (`bg-black/[0.045]`), un desplazamiento tipográfico de 6px a la derecha (`translate-x-1.5`) y paso del número y titular a contraste pleno en tinta (`text-ink`).
-  - Cierre accesible con tecla `Escape`, clic exterior sobre backdrop y retorno automático del foco.
+- **Menú integrado en el header:**
+  - Al abrir, las cinco opciones (`INICIO`, `EDUCACIÓN`, `EXPERIENCIA`,
+    `PROYECTOS`, `CONTACTO`) se revelan desde la derecha y ocupan la misma fila
+    de 72px en escritorio (desde 1024px). El nombre y la cruz permanecen visibles;
+    el indicador central se oculta mientras el menú está abierto.
+  - En móvil y tablet, el header se amplía y distribuye las opciones en dos
+    columnas; desde 640px se muestran en una fila adicional. Todas conservan
+    un objetivo táctil de al menos 44px de alto.
+  - Misma superficie `--color-canvas`, Space Mono a 12px, sin panel flotante,
+    sombra, numeración ni fondo superpuesto sobre la página. La sección actual
+    se distingue por peso y contraste, además de `aria-current`.
+  - La cruz repliega las opciones hacia la derecha. También se cierra con
+    `Escape`, al navegar y al pulsar fuera del header. El menú cerrado queda
+    fuera del recorrido de teclado; `Escape` devuelve el foco al botón.
+  - Se reutilizan los tokens de duración y curva del sitio. Con movimiento
+    reducido, se desactivan las transiciones y el desplazamiento suave.
 
 ### Hero
 

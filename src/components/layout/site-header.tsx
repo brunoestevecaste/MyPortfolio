@@ -6,7 +6,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 interface NavigationItem {
   id: string;
-  number: string;
   label: string;
   href: string;
 }
@@ -14,31 +13,26 @@ interface NavigationItem {
 const SECTION_ITEMS: NavigationItem[] = [
   {
     id: "hero",
-    number: "(01)",
     label: "Inicio",
     href: "/#main-content",
   },
   {
     id: "education",
-    number: "(02)",
     label: "Educación",
     href: "/#education",
   },
   {
     id: "experience",
-    number: "(03)",
     label: "Experiencia",
     href: "/#experience",
   },
   {
     id: "work",
-    number: "(04)",
     label: "Proyectos",
     href: "/#work",
   },
   {
     id: "contact",
-    number: "(05)",
     label: "Contacto",
     href: "/#contact",
   },
@@ -48,7 +42,7 @@ export function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string>("hero");
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const menuRef = useRef<HTMLDivElement | null>(null);
+  const headerRef = useRef<HTMLElement | null>(null);
   const pathname = usePathname();
 
   // Dynamic active item determination
@@ -100,19 +94,29 @@ export function SiteHeader() {
 
   const handleNavClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) {
+        return;
+      }
+
       setIsOpen(false);
+      if (headerRef.current?.querySelector("nav")?.contains(e.currentTarget)) {
+        buttonRef.current?.focus({ preventScroll: true });
+      }
+      const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "instant"
+        : "smooth";
 
       if (pathname === "/") {
         if (href === "/#main-content" || href === "/") {
           e.preventDefault();
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({ top: 0, behavior });
           window.history.pushState(null, "", "/");
         } else if (href.startsWith("/#")) {
           const targetId = href.replace("/#", "");
           const targetElement = document.getElementById(targetId);
           if (targetElement) {
             e.preventDefault();
-            targetElement.scrollIntoView({ behavior: "smooth" });
+            targetElement.scrollIntoView({ behavior });
             window.history.pushState(null, "", href);
           }
         }
@@ -140,19 +144,17 @@ export function SiteHeader() {
   useEffect(() => {
     if (!isOpen) return;
 
-    const handleClickOutside = (e: MouseEvent) => {
+    const handleClickOutside = (e: PointerEvent) => {
       if (
-        menuRef.current &&
-        !menuRef.current.contains(e.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(e.target as Node)
+        headerRef.current &&
+        !headerRef.current.contains(e.target as Node)
       ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("pointerdown", handleClickOutside);
+    return () => document.removeEventListener("pointerdown", handleClickOutside);
   }, [isOpen]);
 
   // Reset open state when navigating between routes
@@ -164,130 +166,83 @@ export function SiteHeader() {
 
   return (
     <header
+      ref={headerRef}
       className="sticky top-0 z-[10001] w-full bg-[var(--canvas)]"
       data-site-header
+      data-menu-open={isOpen}
     >
       <div className="site-container">
         <div className="relative">
           <div className="grid min-h-18 grid-cols-[1fr_auto_1fr] items-center">
-            {/* Esquina superior izquierda: Nombre */}
-            <div className="justify-self-start">
-              <Link
-                className="inline-flex min-h-11 items-center font-mono text-xs font-normal uppercase tracking-[-0.025em] text-ink transition-colors hover:text-signal focus-visible:outline-2 focus-visible:outline-signal"
-                href="/"
-                onClick={(e) => handleNavClick(e, "/")}
-              >
-                <span>Bruno Esteve</span>
-                <span className="hidden sm:inline">&nbsp;Castellano</span>
-              </Link>
-            </div>
+            <Link
+              className="inline-flex min-h-11 items-center justify-self-start font-mono text-xs font-normal uppercase tracking-[-0.025em] text-ink transition-colors hover:text-signal focus-visible:outline-2 focus-visible:outline-signal"
+              href="/"
+              onClick={(e) => handleNavClick(e, "/")}
+            >
+              <span>Bruno Esteve</span>
+              <span className="hidden sm:inline">&nbsp;Castellano</span>
+            </Link>
 
-            {/* Centro: Indicador dinámico de sección (inicialmente 'INICIO') */}
-            <div className="justify-self-center">
+            <div className="header-active-section justify-self-center" inert={isOpen}>
               <Link
                 className="inline-flex min-h-11 items-center font-mono text-xs font-normal uppercase tracking-wider text-ink transition-colors hover:text-signal focus-visible:outline-2 focus-visible:outline-signal md:tracking-widest"
                 href={activeItem.href}
                 onClick={(e) => handleNavClick(e, activeItem.href)}
                 aria-label={`Sección activa: ${activeItem.label}. Ir a ${activeItem.label}`}
               >
-                <span key={activeItem.id} className="transition-opacity duration-200">
-                  {activeItem.label}
-                </span>
+                {activeItem.label}
               </Link>
             </div>
 
-            {/* Esquina superior derecha: Símbolo de menú desplegable */}
-            <div className="justify-self-end">
-              <button
-                ref={buttonRef}
-                type="button"
-                aria-expanded={isOpen}
-                aria-controls="site-dropdown-menu"
-                aria-label={isOpen ? "Cerrar menú" : "Abrir menú de apartados"}
-                onClick={() => setIsOpen((prev) => !prev)}
-                className="group inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-end text-ink transition-colors hover:text-signal focus-visible:outline-2 focus-visible:outline-signal"
+            <button
+              ref={buttonRef}
+              type="button"
+              aria-expanded={isOpen}
+              aria-controls="site-header-menu"
+              aria-label={isOpen ? "Cerrar menú" : "Abrir menú de apartados"}
+              onClick={() => setIsOpen((prev) => !prev)}
+              className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-end justify-self-end text-ink transition-colors hover:text-signal focus-visible:outline-2 focus-visible:outline-signal"
+            >
+              <span
+                className="relative flex size-5 flex-col items-center justify-center"
+                aria-hidden="true"
               >
                 <span
-                  className="relative flex size-5 flex-col items-center justify-center"
-                  aria-hidden="true"
-                >
-                  <span
-                    className={`h-[1.5px] w-5 bg-current transition-transform duration-200 ease-out ${
-                      isOpen ? "translate-y-[0.75px] rotate-45" : "-translate-y-1"
-                    }`}
-                  />
-                  <span
-                    className={`h-[1.5px] w-5 bg-current transition-transform duration-200 ease-out ${
-                      isOpen ? "-translate-y-[0.75px] -rotate-45" : "translate-y-1"
-                    }`}
-                  />
-                </span>
-              </button>
-            </div>
+                  className={`h-[1.5px] w-5 bg-current transition-transform duration-200 ease-out ${
+                    isOpen ? "translate-y-[0.75px] rotate-45" : "-translate-y-1"
+                  }`}
+                />
+                <span
+                  className={`h-[1.5px] w-5 bg-current transition-transform duration-200 ease-out ${
+                    isOpen ? "-translate-y-[0.75px] -rotate-45" : "translate-y-1"
+                  }`}
+                />
+              </span>
+            </button>
           </div>
 
-          {/* Menú desplegable */}
-          <div
-            id="site-dropdown-menu"
-            ref={menuRef}
-            role="region"
-            aria-label="Apartados de la página"
-            className={`editorial-surface absolute top-full right-0 w-full bg-[var(--surface)] p-6 shadow-[0_24px_48px_-12px_rgba(18,20,22,0.12)] transition-all duration-200 ease-out origin-top-right sm:w-[380px] md:w-[420px] md:p-8 ${
-              isOpen
-                ? "pointer-events-auto translate-y-0 opacity-100"
-                : "pointer-events-none -translate-y-2 opacity-0"
-            }`}
-          >
-            <nav aria-label="Navegación de apartados">
-              <ul className="flex flex-col space-y-1">
-                {SECTION_ITEMS.map((item) => {
-                  const isCurrent = activeItem.id === item.id;
-                  return (
+          <div className="header-menu" id="site-header-menu" inert={!isOpen}>
+            <div className="header-menu-clip">
+              <nav className="header-menu-nav" aria-label="Navegación de apartados">
+                <ul className="header-menu-items">
+                  {SECTION_ITEMS.map((item) => (
                     <li key={item.id}>
                       <Link
                         href={item.href}
                         onClick={(e) => handleNavClick(e, item.href)}
-                        className={`editorial-surface group block px-3.5 -mx-3.5 py-2.5 sm:py-3 transition-colors duration-150 ease-out focus-visible:outline-2 focus-visible:outline-signal hover:bg-black/[0.045] ${
-                          isCurrent ? "text-ink" : "text-ink/75 hover:text-ink"
-                        }`}
+                        aria-current={activeItem.id === item.id ? "location" : undefined}
+                        className="header-menu-link inline-flex min-h-11 items-center font-mono text-xs uppercase text-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-signal"
                       >
-                        <div className="flex items-baseline gap-4 transition-transform duration-200 ease-out group-hover:translate-x-1.5 motion-reduce:group-hover:translate-x-0">
-                          <span
-                            className={`font-mono text-xs tabular-nums transition-colors duration-150 ${
-                              isCurrent
-                                ? "text-ink font-semibold"
-                                : "text-muted group-hover:text-ink group-hover:font-medium"
-                            }`}
-                          >
-                            {item.number}
-                          </span>
-                          <span
-                            className={`font-display text-2xl font-normal uppercase tracking-[-0.04em] transition-colors duration-150 sm:text-3xl ${
-                              isCurrent ? "text-ink font-medium" : "text-ink/80 group-hover:text-ink"
-                            }`}
-                          >
-                            {item.label}
-                          </span>
-                        </div>
+                        {item.label}
                       </Link>
                     </li>
-                  );
-                })}
-              </ul>
-            </nav>
+                  ))}
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Backdrop transparente / sutil para cerrar al hacer clic fuera */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 top-18 z-[-1] bg-black/[0.04] transition-opacity"
-          onClick={() => setIsOpen(false)}
-          aria-hidden="true"
-        />
-      )}
     </header>
   );
 }
-
