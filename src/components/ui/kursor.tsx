@@ -6,7 +6,7 @@ import { useCallback, useEffect, useRef } from "react";
 export interface KursorProps {
   /**
    * RGB color values without rgba(), e.g. "18, 20, 22" or "51, 51, 51".
-   * Defaults to Bruno Esteve's portfolio ink token "18, 20, 22".
+   * Defaults to the portfolio's --accent color token.
    */
   color?: string;
   /**
@@ -47,7 +47,7 @@ function isElementClickable(el: Element | null): boolean {
 }
 
 export function Kursor({
-  color = "18, 20, 22",
+  color,
   removeDefaultCursor = true,
 }: KursorProps) {
   const pathname = usePathname();
@@ -225,13 +225,13 @@ export function Kursor({
       <div
         ref={outerRef}
         className="kursor kursor--4 kursor--hidden"
-        style={{ "--k-color": color } as React.CSSProperties}
+        style={{ "--k-color": color ? `rgb(${color})` : "var(--accent)" } as React.CSSProperties}
         aria-hidden="true"
       />
       <div
         ref={innerRef}
         className="kursorChild kursorChild--hidden"
-        style={{ "--k-color": color } as React.CSSProperties}
+        style={{ "--k-color": color ? `rgb(${color})` : "var(--accent)" } as React.CSSProperties}
         aria-hidden="true"
       />
     </>

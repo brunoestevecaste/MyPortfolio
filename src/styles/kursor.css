@@ -61,7 +61,7 @@ div[class*='kursorChild'].kursorChild:after {
   left: 50%;
   top: 50%;
   opacity: 1;
-  border: 0px solid rgba(var(--k-color, 18, 20, 22), 0.5);
+  border: 0px solid color-mix(in srgb, var(--k-color, var(--accent)) 50%, transparent);
   transform: translate(-50%, -50%);
 }
 
@@ -69,7 +69,7 @@ div[class*='kursorChild'].kursorChild:after {
 div[class*='kursor'].kursor--4 {
   width: 50px;
   height: 50px;
-  border: 1px solid rgba(var(--k-color, 18, 20, 22), 0.35);
+  border: 1px solid color-mix(in srgb, var(--k-color, var(--accent)) 35%, transparent);
   border-radius: 50%;
   transition: transform 0.2s ease-out, width 0.2s ease, height 0.2s ease,
     background-color 0.2s ease, border-color 0.2s ease, border-width 0.2s ease,
@@ -81,7 +81,7 @@ div[class*='kursor'].kursor--4 + .kursorChild {
   display: block;
   width: 6px;
   height: 6px;
-  background: rgba(var(--k-color, 18, 20, 22), 1);
+  background: var(--k-color, var(--accent));
   border-radius: 50%;
   transition: transform 0.03s ease-out, width 0.2s ease, height 0.2s ease,
     background-color 0.2s ease, opacity 0.2s ease;
@@ -91,14 +91,14 @@ div[class*='kursor'].kursor--4 + .kursorChild {
 div[class*='kursor'].kursor--4.--hover {
   width: 32px;
   height: 32px;
-  background: rgba(var(--k-color, 18, 20, 22), 0.08);
-  border: 2px solid rgba(var(--k-color, 18, 20, 22), 0.2);
+  background: color-mix(in srgb, var(--k-color, var(--accent)) 8%, transparent);
+  border: 2px solid color-mix(in srgb, var(--k-color, var(--accent)) 20%, transparent);
 }
 
 div[class*='kursor'].kursor--4.--hover + .kursorChild {
   width: 24px;
   height: 24px;
-  background: rgba(var(--k-color, 18, 20, 22), 0.15);
+  background: color-mix(in srgb, var(--k-color, var(--accent)) 15%, transparent);
 }
 
 /* Kursor Type 4 - Down/Click state with ripple */
@@ -117,7 +117,7 @@ div[class*='kursor'].kursor--4.kursor--down + .kursorChild:after {
   height: 44px !important;
   opacity: 0;
   border-radius: 50%;
-  border: 1px solid rgba(var(--k-color, 18, 20, 22), 0.8);
+  border: 1px solid color-mix(in srgb, var(--k-color, var(--accent)) 80%, transparent);
   transition: all 0.4s ease;
 }
 
