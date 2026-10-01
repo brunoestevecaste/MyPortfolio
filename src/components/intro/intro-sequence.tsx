@@ -100,7 +100,8 @@ export function IntroSequence() {
       const forceIntro = searchParams.get("intro") === "true";
       const hasSeen = window.sessionStorage.getItem("portfolio_intro_seen");
 
-      if (hasSeen && !forceIntro) {
+      // Anchor navigation (including return from a case) must keep its scroll target.
+      if ((hasSeen || window.location.hash) && !forceIntro) {
         queueMicrotask(() => {
           setIsActive(false);
         });
