@@ -10,9 +10,8 @@
   margin-top: 2.5rem;
 }
 .dashboard {
-  /* The supplied SYSTEM reference is a local visual exception to the portfolio. */
-  --canvas: #fff;
-  --surface: #f5f5f5;
+  /* Inherit the page canvas while retaining the SYSTEM data palette. */
+  --surface: var(--canvas);
   --ink: #080808;
   --muted: #696969;
   --line: #dedede;
@@ -31,7 +30,7 @@
   --panel-padding: clamp(1rem, 2.6cqw, 2rem);
   background: var(--dashboard-bg);
   color: var(--dashboard-text);
-  border: 1px solid var(--line);
+  border: 1px solid var(--accent);
   font-family: var(--font-archivo), sans-serif;
   font-size: 0.875rem;
   line-height: 1.45;

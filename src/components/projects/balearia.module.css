@@ -29,7 +29,8 @@
 .navigationFigure {
   margin-top: 2.5rem;
   padding: clamp(1.125rem, 3vw, 2.5rem);
-  background: var(--surface);
+  background: var(--canvas);
+  border: 1px solid var(--accent);
 }
 
 .inputs,

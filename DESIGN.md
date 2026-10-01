@@ -589,3 +589,16 @@ se limita al dashboard AEPD; no se extiende al resto del portfolio.
   de compatibilidad, advertencia y evaluación conservan sus colores funcionales.
 - Esta regla amplía las referencias anteriores al tratamiento monocromo de los
   dashboards únicamente en títulos e interacción.
+
+## Fondos y contornos de los cuadros de proyecto · 1 de octubre de 2026
+
+- Por indicación de Bruno, los dashboards de los cuatro proyectos y los cuadros
+  de arquitectura y navegación comparten exactamente el fondo de página
+  `var(--canvas)` (`#F9F4F4`). No fijan un blanco independiente.
+- Las superficies neutras internas de los dashboards usan también ese fondo.
+  Se conservan los bloques oscuros y los colores de estados semánticos.
+- Cada dashboard o cuadro completo lleva un contorno fino de `1px` en
+  `var(--accent)` (`#C1282E`) para identificarlo como una unidad.
+  Los divisores internos de la retícula conservan sus grises.
+- Esta regla sustituye las referencias anteriores al blanco puro de SYSTEM,
+  al fondo gris de los cuadros y a la ausencia de marco en estos objetos.
