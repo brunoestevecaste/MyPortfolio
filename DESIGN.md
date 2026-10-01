@@ -153,8 +153,11 @@ Reglas:
 - `Archivo` se mantiene en el texto destacado, la numeración y el menú.
 - `Space Mono`, también cargada con `next/font/google`, se aplica al cuerpo,
   navegación, enlaces y metadatos.
-- Display: Bricolage Grotesque 400 y mayúsculas, con tracking `-0.06em`
-  en el hero, títulos de caso y encabezados de sección. Los subtítulos usan
+- Display: Bricolage Grotesque 700 y mayúsculas, con tracking `-0.06em`
+  en títulos de caso. El hero y los encabezados de sección usan peso 700.
+  En el hero, «analista de datos» e «ingeniero de IA» se presentan en cursiva,
+  con síntesis de estilo localizada porque Bricolage Grotesque no incluye cursiva.
+  Los subtítulos usan
   `-0.045em`, los títulos de educación `-0.04em` y los títulos pequeños
   `-0.03em`; las etiquetas funcionales pequeñas en mayúsculas usan `-0.01em`.
   Estos valores sustituyen el tracking anterior de Archivo para evitar

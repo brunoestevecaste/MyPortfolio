@@ -260,7 +260,7 @@ svg {
     color: var(--accent);
     font-family: var(--font-bricolage-grotesque), Arial, Helvetica, sans-serif;
     font-size: clamp(3.25rem, 8.6vw, 7.5rem);
-    font-weight: 400;
+    font-weight: 700;
     line-height: 1.02;
     letter-spacing: var(--tracking-heading-section);
     text-wrap: balance;

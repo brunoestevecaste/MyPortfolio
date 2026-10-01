@@ -9,9 +9,15 @@
 .heroTitle {
   margin: 0;
   font-size: clamp(3.25rem, min(6.75vw, 10.8svh), 6.5rem);
+  font-weight: 700;
   letter-spacing: var(--tracking-heading-section);
   word-spacing: 0.12em;
   text-wrap: balance;
+}
+
+.heroTitle em {
+  font-style: italic;
+  font-synthesis: style;
 }
 
 .heroComposition {

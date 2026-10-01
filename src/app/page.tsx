@@ -17,7 +17,9 @@ export default function Home() {
         className={`site-container ${styles.hero}`}
       >
         <h1 className={`display-text ${styles.heroTitle}`} id="foundation-title">
-          {profile.headline}
+          {profile.headline.split(/(analista de datos|ingeniero de IA)/).map((part, index) =>
+            index % 2 === 1 ? <em key={part}>{part}</em> : part,
+          )}
         </h1>
 
         <div className={styles.heroComposition}>

@@ -575,7 +575,7 @@
   margin-block: 1rem 1.5rem;
   font-family: var(--font-bricolage-grotesque), sans-serif;
   font-size: clamp(2.75rem, 5.4vw, 4.625rem);
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1.02;
   letter-spacing: var(--tracking-heading-display);
   text-transform: uppercase;
