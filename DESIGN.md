@@ -133,6 +133,9 @@ Reglas:
 - Un solo color de acento para toda la experiencia.
 - Nada de degradados morados, brillos neón o cambios arbitrarios de paleta.
 - El color de señal se usa para interacción o significado, no como decoración.
+- Los botones de acción con fondo sólido usan el rojo `--accent` y texto claro
+  `--on-signal`, incluidos Enviar / Detener, el acceso al caso completo y
+  «Me interesa». El hover oscurece el mismo rojo; el foco sigue siendo visible.
 - Desde el 30/09/2026, por indicación de Bruno, el acento es `#C1282E`.
   El fondo principal pasa a `#F9F4F4`, incluido el header y la introducción.
   Se aplica al hero, encabezados de sección y caso, numeración de proyectos y foco.
