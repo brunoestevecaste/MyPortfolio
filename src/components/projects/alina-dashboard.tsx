@@ -497,7 +497,7 @@ export function AlinaDashboard() {
           {view === "interview" && (
             <>
               <Panel title="Sesión técnica guiada por turnos" className={styles.mainPanel}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                <div className={styles.turnHeader}>
                   <span style={{ fontSize: "0.75rem", textTransform: "uppercase", color: "var(--muted)", fontWeight: 700 }}>
                     Turno de la entrevista:
                   </span>
