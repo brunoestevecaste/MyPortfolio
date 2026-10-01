@@ -285,7 +285,10 @@ jerarquía tipográfica débil.
 - Los dos párrafos deben ser breves, tener un ancho de lectura controlado y formar
   dos columnas alineadas por la base en desktop.
 - El retrato ocupa cinco de las doce columnas, a la derecha. Encuadre 5:4 en
-  desktop y móvil para conservar el rostro completo, con tratamiento monocromo.
+  desktop y móvil para conservar el rostro completo, con trama de impresión en
+  duotono rojo y carbón (propuesta 02, seleccionada por Bruno el 01/10/2026).
+  El activo es `public/hero/bruno-esteve-hero-duotono-rojo.webp`;
+  conserva las dimensiones de origen, la máscara de silueta y la animación glitch.
 - Los textos ocupan tres columnas cada uno; una columna libre los separa del
   retrato. Su tamaño es equivalente, sin un primer párrafo sobredimensionado.
 - Hasta recibir el original, reservar la superficie con una indicación discreta.
