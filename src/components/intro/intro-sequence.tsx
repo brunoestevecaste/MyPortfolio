@@ -1,440 +1,188 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./intro-sequence.module.css";
 
-export const INTRO_ITEMS = [
-  { id: "creativity", label: "Creativity" },
-  { id: "ai", label: "Artificial Intelligence" },
-  { id: "data", label: "Data" },
-  { id: "me", label: "Me" },
-] as const;
+const PRESENTED_TEXT = "PRESENTED BY";
+const SIGNATURE_TEXT = "</BRUNO ESTEVE>";
+const ZOOM_DURATION = 1100;
+const REVEAL_DURATION = 280;
+
+type IntroFrame = {
+  text: string;
+  line: "presented" | "signature";
+  phase: "typing" | "zooming" | "revealing";
+};
+
+const INITIAL_FRAME: IntroFrame = { text: "", line: "presented", phase: "typing" };
 
 export function IntroSequence() {
-  // Start as true by default so the overlay covers the header and page from the very first frame
-  const [isActive, setIsActive] = useState<boolean>(true);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [isPixelating, setIsPixelating] = useState<boolean>(true);
-  const [isLocked, setIsLocked] = useState<boolean>(false);
-  const [isGlitching, setIsGlitching] = useState<boolean>(false);
-  const [isExiting, setIsExiting] = useState<boolean>(false);
+  const [isActive, setIsActive] = useState(true);
+  const [playback, setPlayback] = useState(0);
+  const [frame, setFrame] = useState<IntroFrame>(INITIAL_FRAME);
+  const stageRef = useRef<HTMLSpanElement>(null);
+  const presentedRef = useRef<HTMLSpanElement>(null);
+  const signatureRef = useRef<HTMLSpanElement>(null);
 
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const timersRef = useRef<NodeJS.Timeout[]>([]);
+  useEffect(() => {
+    const replay = () => {
+      setFrame(INITIAL_FRAME);
+      setIsActive(true);
+      setPlayback((current) => current + 1);
+      window.scrollTo({ top: 0, behavior: "instant" });
+    };
 
-  const clearAllTimers = useCallback(() => {
-    timersRef.current.forEach((timer) => clearTimeout(timer));
-    timersRef.current = [];
+    window.addEventListener("replay-intro", replay);
+    return () => window.removeEventListener("replay-intro", replay);
   }, []);
 
-  const skipIntro = useCallback(() => {
-    clearAllTimers();
-    setIsExiting(true);
-    try {
-      window.sessionStorage.setItem("portfolio_intro_seen", "true");
-    } catch {
-      // Ignore storage errors in private/restricted mode
-    }
-
-    document.documentElement.style.removeProperty("overflow");
-    document.body.style.removeProperty("overflow");
-
-    const exitTimer = setTimeout(() => {
-      setIsActive(false);
-      window.scrollTo({ top: 0, behavior: "instant" });
-      document.documentElement.style.removeProperty("overflow");
-      document.body.style.removeProperty("overflow");
-      window.dispatchEvent(new CustomEvent("intro-complete"));
-    }, 200);
-    timersRef.current.push(exitTimer);
-  }, [clearAllTimers]);
-
-  // Lock scroll completely while intro is actively displaying and not exiting
   useEffect(() => {
-    if (!isActive || isExiting) {
-      document.documentElement.style.removeProperty("overflow");
-      document.body.style.removeProperty("overflow");
-      return;
+    if (!isActive) return;
+
+    let cancelled = false;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const schedule = (callback: () => void, delay: number) => {
+      timers.push(setTimeout(() => { if (!cancelled) callback(); }, delay));
+    };
+
+    const finish = (remember = true, moveFocus = false) => {
+      if (cancelled) return;
+      cancelled = true;
+      timers.forEach(clearTimeout);
+      if (remember) {
+        try {
+          window.sessionStorage.setItem("portfolio_intro_seen", "true");
+        } catch {
+          // The intro remains usable when session storage is unavailable.
+        }
+      }
+      setIsActive(false);
+      if (moveFocus) {
+        document.getElementById("main-content")?.focus({ preventScroll: true });
+      }
+      if (remember) window.dispatchEvent(new CustomEvent("intro-complete"));
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (["Escape", " ", "Enter", "Tab"].includes(event.key)) {
+        event.preventDefault();
+        finish(true, true);
+      }
+    };
+    const handleMotionChange = () => { if (motionPreference.matches) finish(false); };
+    window.addEventListener("keydown", handleKeyDown);
+    motionPreference.addEventListener("change", handleMotionChange);
+
+    let seen = false;
+    try {
+      seen = window.sessionStorage.getItem("portfolio_intro_seen") === "true";
+    } catch {
+      // Play normally in private/restricted browsing.
+    }
+    const forceIntro = new URLSearchParams(window.location.search).get("intro") === "true";
+    const bypass = motionPreference.matches ||
+      (playback === 0 && (seen || Boolean(window.location.hash)) && !forceIntro);
+
+    if (bypass) {
+      queueMicrotask(() => finish(false));
+    } else {
+      // Wait for the existing display font before measuring and typing it.
+      void document.fonts.ready.then(() => {
+        if (cancelled) return;
+        let elapsed = 180;
+        for (let count = 1; count <= PRESENTED_TEXT.length; count++) {
+          elapsed += 65;
+          schedule(() => setFrame({ text: PRESENTED_TEXT.slice(0, count), line: "presented", phase: "typing" }), elapsed);
+        }
+        elapsed += 360;
+        for (let count = PRESENTED_TEXT.length - 1; count >= 0; count--) {
+          elapsed += 28;
+          schedule(() => setFrame({ text: PRESENTED_TEXT.slice(0, count), line: "presented", phase: "typing" }), elapsed);
+        }
+        elapsed += 180;
+        for (let count = 1; count <= SIGNATURE_TEXT.length; count++) {
+          elapsed += 65;
+          schedule(() => setFrame({ text: SIGNATURE_TEXT.slice(0, count), line: "signature", phase: "typing" }), elapsed);
+        }
+        elapsed += 380;
+        schedule(() => setFrame({ text: SIGNATURE_TEXT, line: "signature", phase: "zooming" }), elapsed);
+        elapsed += ZOOM_DURATION;
+        schedule(() => setFrame({ text: SIGNATURE_TEXT, line: "signature", phase: "revealing" }), elapsed);
+        schedule(() => finish(), elapsed + REVEAL_DURATION);
+      });
     }
 
-    const originalHtmlOverflow = document.documentElement.style.overflow;
-    const originalBodyOverflow = document.body.style.overflow;
+    return () => {
+      cancelled = true;
+      timers.forEach(clearTimeout);
+      window.removeEventListener("keydown", handleKeyDown);
+      motionPreference.removeEventListener("change", handleMotionChange);
+    };
+  }, [isActive, playback]);
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    const htmlOverflow = document.documentElement.style.overflow;
+    const bodyOverflow = document.body.style.overflow;
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
 
-    const preventScroll = (e: Event) => {
-      e.preventDefault();
-    };
-
-    window.addEventListener("wheel", preventScroll, { passive: false });
-    window.addEventListener("touchmove", preventScroll, { passive: false });
-
     return () => {
-      if (originalHtmlOverflow) {
-        document.documentElement.style.overflow = originalHtmlOverflow;
-      } else {
-        document.documentElement.style.removeProperty("overflow");
-      }
-      if (originalBodyOverflow) {
-        document.body.style.overflow = originalBodyOverflow;
-      } else {
-        document.body.style.removeProperty("overflow");
-      }
-      window.removeEventListener("wheel", preventScroll);
-      window.removeEventListener("touchmove", preventScroll);
+      document.documentElement.style.overflow = htmlOverflow;
+      document.body.style.overflow = bodyOverflow;
     };
-  }, [isActive, isExiting]);
+  }, [isActive]);
 
-  // Absolute fallback: ensure overflow is removed if IntroSequence unmounts
-  useEffect(() => {
-    return () => {
-      document.documentElement.style.removeProperty("overflow");
-      document.body.style.removeProperty("overflow");
-    };
-  }, []);
-
-  // Handle initialization on client mount
-  useEffect(() => {
-    try {
-      const searchParams = new URLSearchParams(window.location.search);
-      const forceIntro = searchParams.get("intro") === "true";
-      const hasSeen = window.sessionStorage.getItem("portfolio_intro_seen");
-
-      // Anchor navigation (including return from a case) must keep its scroll target.
-      if ((hasSeen || window.location.hash) && !forceIntro) {
-        queueMicrotask(() => {
-          setIsActive(false);
-        });
-        document.documentElement.style.removeProperty("overflow");
-        document.body.style.removeProperty("overflow");
-        return;
-      }
-
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (prefersReducedMotion) {
-        queueMicrotask(() => {
-          setIsActive(false);
-        });
-        document.documentElement.style.removeProperty("overflow");
-        document.body.style.removeProperty("overflow");
-        return;
-      }
-    } catch {
-      // Fallback
-    }
-  }, []);
-
-  // Listen for manual replay requests
-  useEffect(() => {
-    const handleReplay = () => {
-      clearAllTimers();
-      setCurrentIndex(0);
-      setIsPixelating(true);
-      setIsLocked(false);
-      setIsGlitching(false);
-      setIsExiting(false);
-      setIsActive(true);
-      window.scrollTo({ top: 0, behavior: "instant" });
-    };
-
-    window.addEventListener("replay-intro", handleReplay);
-    return () => window.removeEventListener("replay-intro", handleReplay);
-  }, [clearAllTimers]);
-
-  // Keyboard controls (Esc / Space / Enter to skip)
   useEffect(() => {
     if (!isActive) return;
+    const stage = stageRef.current;
+    const presented = presentedRef.current;
+    const signature = signatureRef.current;
+    if (!stage || !presented || !signature) return;
 
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" || e.key === " " || e.key === "Enter") {
-        e.preventDefault();
-        skipIntro();
-      }
+    let cancelled = false;
+    const fitText = () => {
+      if (cancelled) return;
+      // Measure complete phrases, so letter size stays fixed during typing/deleting.
+      const availableWidth = stage.clientWidth;
+      const presentedWidth = presented.getBoundingClientRect().width;
+      const signatureWidth = signature.getBoundingClientRect().width;
+      stage.style.setProperty("--presented-size", `${100 * availableWidth / presentedWidth}px`);
+      stage.style.setProperty("--signature-size", `${100 * availableWidth / signatureWidth}px`);
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isActive, skipIntro]);
-
-  // Calibrated timeline: each term stays for 300ms - 400ms (calibrated to 350ms dwell)
-  // Transition duration: 450ms.
-  // NOTE: isExiting is intentionally omitted from dependencies so setting isExiting(true)
-  // does not re-trigger cleanup and clear the completion timer.
-  useEffect(() => {
-    if (!isActive) return;
-
-    clearAllTimers();
-
-    const addTimer = (fn: () => void, ms: number) => {
-      const t = setTimeout(fn, ms);
-      timersRef.current.push(t);
-      return t;
-    };
-
-    // 1. Pixelation Resolve (0 - 220ms)
-    addTimer(() => {
-      setIsPixelating(false);
-    }, 220);
-
-    // 2. Step to Artificial Intelligence at 570ms (dwell on Creativity: 350ms)
-    addTimer(() => {
-      setCurrentIndex(1);
-    }, 570);
-
-    // 3. Step to Data at 1370ms (transition: 450ms, dwell on AI: 350ms)
-    addTimer(() => {
-      setCurrentIndex(2);
-    }, 1370);
-
-    // 4. Step to Me at 2170ms (transition: 450ms, dwell on Data: 350ms)
-    addTimer(() => {
-      setCurrentIndex(3);
-    }, 2170);
-
-    // 5. Arrive on Me at 2620ms, lock strobe at 2770ms
-    addTimer(() => {
-      setIsLocked(true);
-    }, 2770);
-
-    // 6. Glitch Parpadeo begins at 2970ms (dwell on Me: 350ms)
-    addTimer(() => {
-      setIsGlitching(true);
-    }, 2970);
-
-    // 7. Curtain dissolve starts at 3770ms (800ms of electric glitch)
-    addTimer(() => {
-      setIsExiting(true);
-      document.documentElement.style.removeProperty("overflow");
-      document.body.style.removeProperty("overflow");
-      try {
-        window.sessionStorage.setItem("portfolio_intro_seen", "true");
-      } catch {
-        // Safe fallback
-      }
-    }, 3770);
-
-    // 8. End sequence & unmount at 4170ms
-    addTimer(() => {
-      setIsActive(false);
-      window.scrollTo({ top: 0, behavior: "instant" });
-      document.documentElement.style.removeProperty("overflow");
-      document.body.style.removeProperty("overflow");
-      window.dispatchEvent(new CustomEvent("intro-complete"));
-    }, 4170);
+    const observer = new ResizeObserver(fitText);
+    observer.observe(stage);
+    fitText();
+    void document.fonts.ready.then(fitText);
 
     return () => {
-      clearAllTimers();
+      cancelled = true;
+      observer.disconnect();
     };
-  }, [isActive, clearAllTimers]);
-
-  // Canvas pixelation effect simulation (First 220ms)
-  useEffect(() => {
-    if (!isActive || !isPixelating) return;
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let animFrame: number;
-    const startTime = performance.now();
-    const canvasColor = getComputedStyle(canvas).getPropertyValue("--canvas").trim();
-
-    const render = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / 220, 1);
-
-      const dpr = window.devicePixelRatio || 1;
-      const width = canvas.clientWidth;
-      const height = canvas.clientHeight;
-
-      if (canvas.width !== width * dpr || canvas.height !== height * dpr) {
-        canvas.width = width * dpr;
-        canvas.height = height * dpr;
-      }
-
-      ctx.save();
-      ctx.scale(dpr, dpr);
-
-      // Pixel block size steps down: 28 -> 14 -> 6 -> 1
-      let blockSize = 24;
-      if (progress > 0.65) blockSize = 5;
-      else if (progress > 0.35) blockSize = 12;
-
-      ctx.clearRect(0, 0, width, height);
-
-      // Offscreen low-res rendering
-      const offW = Math.max(1, Math.floor(width / blockSize));
-      const offH = Math.max(1, Math.floor(height / blockSize));
-
-      const offCanvas = document.createElement("canvas");
-      offCanvas.width = offW;
-      offCanvas.height = offH;
-      const offCtx = offCanvas.getContext("2d");
-
-      if (offCtx) {
-        offCtx.fillStyle = canvasColor;
-        offCtx.fillRect(0, 0, offW, offH);
-
-        // Highlight bar in center
-        const barH = offH * 0.14;
-        const barY = (offH - barH) / 2;
-        offCtx.fillStyle = "#121416";
-        offCtx.fillRect(0, barY, offW, barH);
-
-        // Text simulation in Space Mono monospace
-        offCtx.fillStyle = "#121416";
-        offCtx.font = "8px monospace";
-        offCtx.fillText("Artificial Intelligence", offW * 0.06, barY + barH * 1.6);
-
-        // Inside bar
-        offCtx.fillStyle = canvasColor;
-        offCtx.fillText("Creativity", offW * 0.06, barY + barH * 0.7);
-
-        // Draw stretched with nearest neighbor
-        ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(offCanvas, 0, 0, width, height);
-      }
-
-      ctx.restore();
-
-      if (progress < 1 && isPixelating) {
-        animFrame = requestAnimationFrame(render);
-      }
-    };
-
-    animFrame = requestAnimationFrame(render);
-    return () => cancelAnimationFrame(animFrame);
-  }, [isActive, isPixelating]);
+  }, [isActive]);
 
   if (!isActive) return null;
 
   return (
-    <aside
-      aria-label="Animación interactiva de introducción"
-      className={`${styles.introOverlay} ${isExiting ? styles.introOverlayHidden : ""} ${
-        isGlitching ? styles.glitchingContainer : ""
-      }`}
-      role="region"
-      onClick={skipIntro}
+    <div
+      className={styles.introOverlay}
+      data-phase={frame.phase}
+      aria-hidden="true"
     >
-      {/* Main Center Roller Stage: ONLY the selector with the options */}
-      <div className={styles.rollerStage}>
-        {/* Layer 1: Base Track (Outside the Highlight Bar, Muted Space Mono on Canvas) */}
-        <div
-          className={`${styles.baseTrack} ${styles.trackMoving}`}
-          style={{
-            transform: `translate3d(0, calc(-0.5 * var(--intro-row-h) - ${currentIndex} * var(--intro-row-h)), 0)`,
-          }}
-        >
-          {INTRO_ITEMS.map((item) => (
-            <div key={item.id} className={styles.itemRow}>
-              <span className={styles.itemLabel}>{item.label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Layer 2: Fixed Highlight Bar in the Vertical Center (Inverted Layer) */}
-        <div
-          className={`${styles.highlightBar} ${isLocked ? styles.barSelected : ""}`}
-          aria-hidden="true"
-        >
-          <div
-            className={`${styles.invertedTrack} ${styles.trackMoving}`}
-            style={{
-              transform: `translate3d(0, calc(-${currentIndex} * var(--intro-row-h)), 0)`,
-            }}
-          >
-            {INTRO_ITEMS.map((item) => (
-              <div key={item.id} className={styles.itemRow}>
-                <span className={styles.itemLabel}>{item.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Canvas Pixelation Resolve Layer (Active during first 350ms) */}
-      <canvas
-        ref={canvasRef}
-        className={`${styles.pixelCanvas} ${!isPixelating ? styles.pixelCanvasHidden : ""}`}
-        aria-hidden="true"
-      />
-
-      {/* Glitch Overlay Slices with Authentic Parpadeo */}
-      {isGlitching && (
-        <>
-          <div className={`${styles.sliceLayer} ${styles.sliceA}`} aria-hidden="true">
-            <div
-              className={styles.highlightBar}
-              style={{
-                transform: "translateY(-50%) translate3d(25px, 0, 0)",
-              }}
-            >
-              <div
-                className={styles.invertedTrack}
-                style={{
-                  transform: `translate3d(0, calc(-3 * var(--intro-row-h)), 0)`,
-                }}
-              >
-                {INTRO_ITEMS.map((item) => (
-                  <div key={item.id} className={styles.itemRow}>
-                    <span className={styles.itemLabel}>{item.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className={`${styles.sliceLayer} ${styles.sliceB}`} aria-hidden="true">
-            <div
-              className={styles.highlightBar}
-              style={{
-                transform: "translateY(-50%) translate3d(-28px, 0, 0)",
-              }}
-            >
-              <div
-                className={styles.invertedTrack}
-                style={{
-                  transform: `translate3d(0, calc(-3 * var(--intro-row-h)), 0)`,
-                }}
-              >
-                {INTRO_ITEMS.map((item) => (
-                  <div key={item.id} className={styles.itemRow}>
-                    <span className={styles.itemLabel}>{item.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className={`${styles.sliceLayer} ${styles.sliceC}`} aria-hidden="true">
-            <div
-              className={styles.highlightBar}
-              style={{
-                transform: "translateY(-50%) translate3d(14px, 0, 0)",
-              }}
-            >
-              <div
-                className={styles.invertedTrack}
-                style={{
-                  transform: `translate3d(0, calc(-3 * var(--intro-row-h)), 0)`,
-                }}
-              >
-                {INTRO_ITEMS.map((item) => (
-                  <div key={item.id} className={styles.itemRow}>
-                    <span className={styles.itemLabel}>{item.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Barcode / Comb scanline data bars with parpadeo */}
-          <div className={styles.dataBars} aria-hidden="true" />
-        </>
-      )}
-    </aside>
+      <span ref={stageRef} className={styles.textStage} aria-hidden="true" translate="no">
+        <span ref={presentedRef} className={styles.measure}>{PRESENTED_TEXT}</span>
+        <span ref={signatureRef} className={styles.measure}>{SIGNATURE_TEXT}</span>
+        <span className={styles.zoomStage}>
+          <span className={styles.typedLine} data-line={frame.line}>
+            {frame.text}
+            <span className={styles.caret} />
+          </span>
+        </span>
+      </span>
+    </div>
   );
 }

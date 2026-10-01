@@ -1,536 +1,106 @@
-/* ==========================================================================
-   Intro Sequence Module
-   Editorial Selection Roller + Authentic Parpadeo Glitch
-   Inspired by:
-     - refs/intro/intro_selection.mp4 (Selection Roller)
-     - refs/intro/after_selection.mp4 (Electric Glitch Parpadeo & Scanlines)
-   ========================================================================== */
-
 .introOverlay {
   position: fixed;
   inset: 0;
-  z-index: 999999; /* Must strictly exceed SiteHeader's z-[10001] */
-  background-color: var(--canvas);
-  color: var(--ink);
+  z-index: 999999;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
-  overflow: hidden;
-  user-select: none;
-  cursor: pointer;
-  touch-action: none;
-  overscroll-behavior: none;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s ease;
-  will-change: opacity, transform;
-}
-
-.introOverlayHidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-/* ==========================================================================
-   Tokens: Space Mono Dimensions (Punto Medio)
-   ========================================================================== */
-
-:root {
-  --intro-row-h: clamp(4.5rem, 8.5vw, 6.75rem);
-  --intro-font-size: clamp(1.75rem, 3.8vw, 3.25rem);
-}
-
-@media (max-width: 47.999rem) {
-  :root {
-    --intro-row-h: clamp(3.5rem, 7vw, 4.5rem);
-    --intro-font-size: clamp(1.1rem, 4.4vw, 1.75rem);
-  }
-}
-
-/* ==========================================================================
-   Center Viewport Stage & Roller Tracks
-   ========================================================================== */
-
-.rollerStage {
-  position: relative;
+  align-items: center;
   width: 100%;
   height: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
   overflow: hidden;
-  display: flex;
-  align-items: center;
+  background: #fff;
+  color: var(--accent);
+  cursor: default;
+  user-select: none;
+  touch-action: manipulation;
+  overscroll-behavior: contain;
+  transition: opacity 280ms ease-out;
 }
 
-/* Base Track: Outside the Highlight Bar (Muted Space Mono on Canvas) */
-.baseTrack {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  display: flex;
-  flex-direction: column;
-  will-change: transform;
-}
-
-/* 0.45s smooth spring-like cubic-bezier */
-.trackMoving {
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.trackInstant {
-  transition: none !important;
-}
-
-/* Row Layout: ONLY the Option Text */
-.itemRow {
-  height: var(--intro-row-h);
-  padding-inline: var(--page-gutter);
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.itemLabel {
-  font-family: var(--font-space-mono), monospace;
-  font-size: var(--intro-font-size);
-  font-weight: 400;
+.textStage {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  margin-inline: max(clamp(12px, 1.4vw, 28px), env(safe-area-inset-left))
+    max(clamp(12px, 1.4vw, 28px), env(safe-area-inset-right));
+  font-family: var(--font-bricolage-grotesque), sans-serif;
+  font-weight: 800;
   line-height: 1;
-  letter-spacing: -0.025em;
-  text-transform: none; /* Title case: Creativity, Artificial Intelligence, Data, Me */
-  color: color-mix(in srgb, var(--ink) 28%, transparent);
-  transition: color 0.4s ease;
-  white-space: nowrap;
+  letter-spacing: var(--tracking-heading-display);
+  text-align: left;
+  white-space: pre;
 }
 
-/* ==========================================================================
-   Center Selection Highlight Bar (Inverted Layer)
-   ========================================================================== */
-
-.highlightBar {
+.measure {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  height: var(--intro-row-h);
-  background-color: var(--ink);
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 20;
-  box-shadow: 0 4px 28px rgba(18, 20, 22, 0.07);
-}
-
-/* Inverted Track: Nested inside Highlight Bar */
-.invertedTrack {
-  position: absolute;
-  left: 0;
-  right: 0;
   top: 0;
-  display: flex;
-  flex-direction: column;
-  will-change: transform;
-}
-
-.highlightBar .itemLabel {
-  color: var(--canvas);
-}
-
-/* Lock Strobe / Flicker on "Me" */
-.barSelected {
-  animation: lockStrobe 0.35s steps(2, jump-none) 1;
-}
-
-@keyframes lockStrobe {
-  0% {
-    filter: invert(0);
-  }
-  20% {
-    filter: invert(1);
-  }
-  40% {
-    filter: invert(0);
-  }
-  60% {
-    filter: invert(1);
-  }
-  80% {
-    filter: invert(0);
-  }
-  100% {
-    filter: invert(0);
-  }
-}
-
-/* ==========================================================================
-   Pixelation Resolve Canvas Layer
-   ========================================================================== */
-
-.pixelCanvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 30;
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 0.25s ease-out;
-}
-
-.pixelCanvasHidden {
-  opacity: 0;
+  left: 0;
+  width: max-content;
   visibility: hidden;
-}
-
-/* ==========================================================================
-   AUTHENTIC GLITCH PARPADEO (Directly inspired by after_selection.mp4)
-   High-speed strobe bursts, alternating blackouts and displaced slices
-   ========================================================================== */
-
-.glitchingContainer {
-  animation: glitchParpadeo 1s steps(2, jump-none) forwards;
-}
-
-@keyframes glitchParpadeo {
-  0% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-    filter: invert(0);
-  }
-  4% {
-    transform: translate3d(-6px, 1px, 0);
-    opacity: 0.15; /* Drop/blackout */
-  }
-  8% {
-    transform: translate3d(8px, -1px, 0);
-    opacity: 1;
-    filter: invert(1); /* Electric inverted flash */
-  }
-  13% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0.25;
-    filter: invert(0);
-  }
-  18% {
-    transform: translate3d(-10px, 2px, 0);
-    opacity: 1;
-    filter: invert(0);
-  }
-  24% {
-    transform: translate3d(6px, -1px, 0);
-    opacity: 0.1;
-  }
-  30% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-    filter: invert(1); /* Inverted burst */
-  }
-  38% {
-    transform: translate3d(-7px, 0, 0);
-    opacity: 0.9;
-    filter: invert(0);
-  }
-  46% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0.15; /* Sudden pause drop like frame 18-22 in video */
-  }
-  54% {
-    transform: translate3d(12px, -2px, 0);
-    opacity: 1;
-    filter: invert(1); /* Second wave */
-  }
-  62% {
-    transform: translate3d(-12px, 1px, 0);
-    opacity: 0.9;
-    filter: invert(0);
-  }
-  72% {
-    transform: translate3d(8px, 0, 0);
-    opacity: 0.2;
-  }
-  80% {
-    transform: translate3d(-4px, 0, 0);
-    opacity: 1;
-  }
-  88% {
-    transform: translate3d(2px, 0, 0);
-    opacity: 0.4;
-  }
-  96% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0.1;
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0;
-  }
-}
-
-/* Horizontal Slice Displacements with Parpadeo */
-.sliceLayer {
-  position: absolute;
-  inset: 0;
+  font-size: 100px;
+  letter-spacing: var(--tracking-heading-display);
   pointer-events: none;
-  z-index: 50;
-  overflow: hidden;
+}
+
+.zoomStage {
+  display: block;
+  transform-origin: center;
+}
+
+.typedLine {
+  display: block;
+  width: 100%;
+  min-height: 1em;
+  font-size: var(--presented-size, 12.5vw);
+  letter-spacing: var(--tracking-heading-display);
+}
+
+.typedLine[data-line="signature"] {
+  font-size: var(--signature-size, 10vw);
+}
+
+.caret {
+  display: inline-block;
+  width: 0.035em;
+  height: 0.72em;
+  margin-left: 0.04em;
+  background: currentColor;
+  vertical-align: -0.01em;
+  animation: blink 720ms step-end infinite;
+}
+
+.introOverlay[data-phase="zooming"] .zoomStage,
+.introOverlay[data-phase="revealing"] .zoomStage {
+  animation: zoomThrough 1100ms cubic-bezier(0.7, 0, 0.84, 0) forwards;
+  will-change: transform, opacity;
+}
+
+.introOverlay[data-phase="zooming"] .caret,
+.introOverlay[data-phase="revealing"] .caret {
+  visibility: hidden;
+  animation: none;
+}
+
+.introOverlay[data-phase="revealing"] {
   opacity: 0;
-}
-
-/* Slice A: Primary horizontal shearing parpadeo */
-.sliceA {
-  animation: sliceParpadeoA 1s steps(2, jump-none) forwards;
-}
-
-@keyframes sliceParpadeoA {
-  0% {
-    opacity: 0;
-    clip-path: inset(0 0 0 0);
-    transform: translate3d(0, 0, 0);
-  }
-  6% {
-    opacity: 1;
-    clip-path: inset(14% 0 68% 0);
-    transform: translate3d(-45px, 0, 0);
-  }
-  12% {
-    opacity: 0;
-  }
-  18% {
-    opacity: 1;
-    clip-path: inset(44% 0 34% 0);
-    transform: translate3d(55px, 0, 0);
-  }
-  26% {
-    opacity: 0.1;
-  }
-  32% {
-    opacity: 1;
-    clip-path: inset(26% 0 54% 0);
-    transform: translate3d(-65px, 0, 0);
-  }
-  42% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-    clip-path: inset(62% 0 18% 0);
-    transform: translate3d(45px, 0, 0);
-  }
-  58% {
-    opacity: 0.15;
-  }
-  66% {
-    opacity: 1;
-    clip-path: inset(36% 0 44% 0);
-    transform: translate3d(-35px, 0, 0);
-  }
-  78% {
-    opacity: 0.8;
-    clip-path: inset(10% 0 76% 0);
-    transform: translate3d(20px, 0, 0);
-  }
-  88% {
-    opacity: 0.2;
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-/* Slice B: Inverted contrast counter-displacement parpadeo */
-.sliceB {
-  filter: invert(1);
-  animation: sliceParpadeoB 1s steps(2, jump-none) forwards;
-}
-
-@keyframes sliceParpadeoB {
-  0% {
-    opacity: 0;
-    clip-path: inset(0 0 0 0);
-    transform: translate3d(0, 0, 0);
-  }
-  8% {
-    opacity: 0.95;
-    clip-path: inset(34% 0 46% 0);
-    transform: translate3d(50px, 0, 0);
-  }
-  16% {
-    opacity: 0;
-  }
-  24% {
-    opacity: 1;
-    clip-path: inset(58% 0 22% 0);
-    transform: translate3d(-45px, 0, 0);
-  }
-  34% {
-    opacity: 0.1;
-  }
-  44% {
-    opacity: 0.9;
-    clip-path: inset(18% 0 64% 0);
-    transform: translate3d(40px, 0, 0);
-  }
-  54% {
-    opacity: 0;
-  }
-  62% {
-    opacity: 1;
-    clip-path: inset(50% 0 30% 0);
-    transform: translate3d(-55px, 0, 0);
-  }
-  74% {
-    opacity: 0.8;
-    clip-path: inset(78% 0 6% 0);
-    transform: translate3d(30px, 0, 0);
-  }
-  86% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-/* Slice C: High-density micro-raster cuts with parpadeo */
-.sliceC {
-  animation: sliceParpadeoC 1s steps(3, jump-none) forwards;
-}
-
-@keyframes sliceParpadeoC {
-  0% {
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-    clip-path: inset(22% 0 62% 0);
-    transform: translate3d(-30px, 0, 0);
-  }
-  18% {
-    opacity: 0;
-  }
-  28% {
-    opacity: 0.9;
-    clip-path: inset(70% 0 16% 0);
-    transform: translate3d(35px, 0, 0);
-  }
-  38% {
-    opacity: 0.15;
-  }
-  48% {
-    opacity: 1;
-    clip-path: inset(42% 0 38% 0);
-    transform: translate3d(-25px, 0, 0);
-  }
-  60% {
-    opacity: 0;
-  }
-  70% {
-    opacity: 0.85;
-    clip-path: inset(16% 0 72% 0);
-    transform: translate3d(20px, 0, 0);
-  }
-  82% {
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 0;
-    transform: translate3d(0, 0, 0);
-  }
-}
-
-/* Data Bars: Barcode / Comb scanline bursts flickering on/off */
-.dataBars {
-  position: absolute;
-  inset: 0;
   pointer-events: none;
-  z-index: 60;
-  background-image: 
-    repeating-linear-gradient(
-      0deg,
-      rgba(18, 20, 22, 0.45) 0px,
-      rgba(18, 20, 22, 0.45) 2px,
-      transparent 2px,
-      transparent 6px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0px,
-      transparent 18px,
-      rgba(18, 20, 22, 0.85) 18px,
-      rgba(18, 20, 22, 0.85) 44px,
-      transparent 44px,
-      transparent 76px,
-      color-mix(in srgb, var(--canvas) 95%, transparent) 76px,
-      color-mix(in srgb, var(--canvas) 95%, transparent) 110px
-    );
-  background-size: 100% 6px, 150px 100%;
-  opacity: 0;
-  mix-blend-mode: difference;
-  animation: dataBarsParpadeo 1s steps(3, jump-none) forwards;
 }
 
-@keyframes dataBarsParpadeo {
-  0% {
-    opacity: 0;
-  }
-  7% {
-    opacity: 0.9;
-    background-position: 0 0, 0 0;
-  }
-  14% {
-    opacity: 0;
-  }
-  22% {
-    opacity: 0.95;
-    background-position: 0 6px, 70px 0;
-  }
-  30% {
-    opacity: 0.1;
-  }
-  40% {
-    opacity: 1;
-    background-position: 0 12px, -85px 0;
-  }
-  48% {
-    opacity: 0;
-  }
-  56% {
-    opacity: 0.9;
-    background-position: 0 4px, 110px 0;
-  }
-  66% {
-    opacity: 0.15;
-  }
-  76% {
-    opacity: 0.8;
-    background-position: 0 8px, -45px 0;
-  }
-  86% {
-    opacity: 0.2;
-  }
-  100% {
-    opacity: 0;
-  }
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
-/* Accessibility: strictly respect prefers-reduced-motion */
+@keyframes zoomThrough {
+  0% { transform: scale(1); opacity: 1; }
+  72% { opacity: 1; }
+  100% { transform: scale(24); opacity: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .introOverlay {
-    transition: none !important;
-  }
-  .trackMoving {
-    transition: none !important;
-  }
-  .sliceLayer,
-  .dataBars,
-  .pixelCanvas {
-    display: none !important;
-    animation: none !important;
-  }
-  .glitchingContainer,
-  .barSelected {
-    animation: none !important;
-  }
+  .introOverlay { display: none; transition: none; }
+  .zoomStage, .caret { animation: none !important; }
 }

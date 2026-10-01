@@ -137,7 +137,8 @@ Reglas:
   `--on-signal`, incluidos Enviar / Detener, el acceso al caso completo y
   «Me interesa». El hover oscurece el mismo rojo; el foco sigue siendo visible.
 - Desde el 30/09/2026, por indicación de Bruno, el acento es `#C1282E`.
-  El fondo principal pasa a `#F9F4F4`, incluido el header y la introducción.
+  El fondo principal pasa a `#F9F4F4`, incluido el header. La introducción usa
+  blanco puro desde el 01/10/2026, según la secuencia descrita más abajo.
   Se aplica al hero, encabezados de sección y caso, numeración de proyectos y foco.
   Se usa el mismo rojo en texto grande y pequeño, con contraste
   de al menos 4.5:1 sobre los fondos claros. Cuerpo, fotografías y gráficos conservan
@@ -274,6 +275,22 @@ jerarquía tipográfica débil.
     fuera del recorrido de teclado; `Escape` devuelve el foco al botón.
   - Se reutilizan los tokens de duración y curva del sitio. Con movimiento
     reducido, se desactivan las transiciones y el desplazamiento suave.
+
+### Introducción · octubre de 2026
+
+- Fondo blanco puro (`#FFFFFF`), texto en rojo `--accent` y Bricolage Grotesque
+  800, en una sola línea centrada verticalmente.
+- Se escribe `PRESENTED BY` letra a letra con cursor de ordenador, se borra
+  desde el final y se escribe `</BRUNO ESTEVE>`.
+- Cada frase completa ocupa el ancho de la pantalla con márgenes mínimos de
+  `clamp(12px, 1.4vw, 28px)`. Su tamaño se calcula para la frase completa y
+  permanece estable durante la escritura y el borrado, también en móvil.
+- Tras una pausa breve, el nombre crece desde el centro hasta desbordar el
+  viewport y desaparecer. El fondo blanco se desvanece y revela la Home.
+- No muestra un botón para saltarla y pulsar la pantalla no la interrumpe.
+  Conserva la omisión por teclado. La repetición manual reinicia la secuencia
+  completa. Se reproduce una vez por sesión, conserva la
+  navegación a anclas y se omite cuando el visitante solicita movimiento reducido.
 
 ### Hero
 
