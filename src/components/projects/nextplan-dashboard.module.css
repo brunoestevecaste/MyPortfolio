@@ -36,7 +36,6 @@
   --line: #dedede;
   --signal: #080808;
   --on-signal: #fff;
-  --accent: #e63946;
   --panel-padding: clamp(1rem, 2.6cqw, 2rem);
   border: 1px solid var(--line);
   background: var(--canvas);
@@ -48,7 +47,7 @@
 }
 
 .dashboard :focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -71,8 +70,9 @@
 }
 
 .toolbar h3 {
+  color: var(--accent);
   font-size: clamp(1.5rem, 3.2cqw, 2.25rem);
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: var(--tracking-heading-title);
   line-height: 1;
   text-transform: uppercase;
@@ -103,7 +103,7 @@
 }
 
 .viewSwitch button[aria-pressed="true"] {
-  background: var(--ink);
+  background: var(--accent);
   color: var(--canvas);
 }
 
@@ -160,11 +160,11 @@
 }
 
 .panel h4 {
+  color: var(--accent);
   font-size: 0.75rem;
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: -0.01em;
   text-transform: uppercase;
-  color: var(--muted);
   border-bottom: 1px solid var(--line);
   padding-bottom: 0.5rem;
   margin: 0;
@@ -217,8 +217,9 @@
 }
 
 .eventTitle {
+  color: var(--accent);
   font-size: clamp(1.25rem, 2.2cqw, 1.65rem);
-  font-weight: 750;
+  font-weight: 700;
   line-height: 1.15;
   margin: 0;
 }
@@ -385,7 +386,7 @@
 }
 
 .profileOption[aria-checked="true"] {
-  border: 2px solid var(--ink);
+  border: 2px solid var(--accent);
   background: var(--surface);
 }
 
@@ -522,7 +523,7 @@
 }
 
 .scenarioBtn[aria-pressed="true"] {
-  border: 2px solid var(--ink);
+  border: 2px solid var(--accent);
   background: var(--surface);
 }
 

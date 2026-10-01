@@ -36,7 +36,7 @@
 }
 
 .dashboard :focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -59,8 +59,9 @@
 }
 
 .toolbar h3 {
+  color: var(--accent);
   font-size: clamp(1.5rem, 3.2cqw, 2.25rem);
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: var(--tracking-heading-title);
   line-height: 1;
   text-transform: uppercase;
@@ -88,7 +89,7 @@
 }
 
 .viewSwitch button[aria-pressed="true"] {
-  background: var(--ink);
+  background: var(--accent);
   color: var(--canvas);
 }
 
@@ -233,9 +234,10 @@
 }
 
 .panel h4 {
+  color: var(--accent);
   margin-bottom: 1.75rem;
   font-size: 0.8125rem;
-  font-weight: 650;
+  font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.4;
   text-transform: uppercase;
@@ -542,14 +544,14 @@
   margin-top: 1.25rem;
   padding: 0.75rem 1rem;
   cursor: pointer;
-  background: var(--ink);
+  background: var(--accent);
   color: var(--canvas);
   font-size: 0.8125rem;
   font-weight: 650;
 }
 
 .calculateButton:hover {
-  background: #2a2a2a;
+  background: color-mix(in srgb, var(--accent) 85%, var(--ink));
 }
 
 .calculateButton:active {

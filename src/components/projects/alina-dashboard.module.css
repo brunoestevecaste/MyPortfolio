@@ -48,7 +48,7 @@
 }
 
 .dashboard :focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
@@ -71,8 +71,9 @@
 }
 
 .toolbar h3 {
+  color: var(--accent);
   font-size: clamp(1.5rem, 3.2cqw, 2.25rem);
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: var(--tracking-heading-title);
   line-height: 1;
   text-transform: uppercase;
@@ -103,7 +104,7 @@
 }
 
 .viewSwitch button[aria-pressed="true"] {
-  background: var(--ink);
+  background: var(--accent);
   color: var(--canvas);
 }
 
@@ -247,9 +248,10 @@
 }
 
 .panel h4 {
+  color: var(--accent);
   margin-bottom: 1.5rem;
   font-size: 0.8125rem;
-  font-weight: 650;
+  font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.4;
   text-transform: uppercase;
@@ -392,9 +394,9 @@
 }
 
 .toneSelector button[aria-pressed="true"] {
-  background: var(--ink);
+  background: var(--accent);
   color: var(--canvas);
-  border-color: var(--ink);
+  border-color: var(--accent);
 }
 
 .letterTextContainer {
@@ -450,9 +452,9 @@
 }
 
 .turnButton[aria-pressed="true"] {
-  background: var(--ink);
+  background: var(--accent);
   color: var(--canvas);
-  border-color: var(--ink);
+  border-color: var(--accent);
 }
 
 .dialoguePanel {
@@ -502,9 +504,9 @@
 }
 
 .responseSwitch button[aria-pressed="true"] {
-  background: var(--ink);
+  background: var(--accent);
   color: var(--canvas);
-  border-color: var(--ink);
+  border-color: var(--accent);
 }
 
 .candidateBubble textarea {
@@ -581,9 +583,9 @@
 }
 
 .intelCard h5 {
+  color: var(--accent);
   font-size: 0.75rem;
   text-transform: uppercase;
-  color: var(--muted);
   margin-bottom: 0.75rem;
   font-weight: 700;
 }
@@ -598,8 +600,9 @@
 }
 
 .newsHeadline {
+  color: var(--accent);
   font-size: 0.875rem;
-  font-weight: 650;
+  font-weight: 700;
   line-height: 1.4;
   margin-bottom: 0.25rem;
 }

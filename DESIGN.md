@@ -575,3 +575,17 @@ se limita al dashboard AEPD; no se extiende al resto del portfolio.
   del portfolio y mantiene tablas consultables como alternativa a los gráficos.
 - La etiqueta `Datos ficticios` permanece visible en la barra de filtros. Los
   nombres genéricos de unidades, puertos y rutas evitan sugerir datos reales.
+
+
+## Coherencia visual de los demostradores · octubre de 2026
+
+- Los dashboards AEPD, Baleària, NextPlan y Alina y el ejemplo de navegación
+  comparten el rojo `--accent` del portfolio en sus títulos y peso 700. Los
+  encabezados conservan Bricolage Grotesque y su escala compacta.
+- Las pestañas activas, selecciones de simulación, acción de cálculo de Baleària
+  y focos de teclado usan el mismo acento heredado, sin rojos locales distintos.
+- La retícula SYSTEM conserva sus superficies y divisores. Los datos, series,
+  leyendas y gráficos mantienen su lectura monocroma; los estados semánticos
+  de compatibilidad, advertencia y evaluación conservan sus colores funcionales.
+- Esta regla amplía las referencias anteriores al tratamiento monocromo de los
+  dashboards únicamente en títulos e interacción.

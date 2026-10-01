@@ -38,7 +38,7 @@
   color-scheme: light;
 }
 .dashboard :focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 .toolbar {
@@ -51,8 +51,9 @@
   border-bottom: 1px solid var(--line);
 }
 .toolbar h3 {
+  color: var(--accent);
   font-size: clamp(1.125rem, 2.2cqw, 1.5rem);
-  font-weight: 750;
+  font-weight: 700;
   letter-spacing: var(--tracking-heading-title);
   text-transform: uppercase;
   line-height: 1.05;
@@ -161,10 +162,11 @@
   background: var(--dashboard-panel);
 }
 .panel h4 {
+  color: var(--accent);
   margin-bottom: 2rem;
   font-size: 0.8125rem;
   line-height: 1.4;
-  font-weight: 650;
+  font-weight: 700;
   letter-spacing: -0.01em;
   text-transform: uppercase;
 }
@@ -172,6 +174,7 @@
   grid-column: span 4;
 }
 .predictions h4 {
+  color: var(--accent);
   font-size: clamp(1.5rem, 3.4cqw, 2.25rem);
   font-weight: 700;
   text-transform: none;
@@ -333,10 +336,10 @@
   width: 100%;
 }
 .modelPanel h5 {
+  color: var(--accent);
   grid-column: 2;
   font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--muted);
+  font-weight: 700;
 }
 .metrics {
   grid-column: 2;
@@ -380,7 +383,7 @@
 .pointExplorer input {
   width: 100%;
   min-height: 44px;
-  accent-color: var(--ink);
+  accent-color: var(--accent);
 }
 .pointExplorer output {
   display: block;
