@@ -12,6 +12,7 @@ export function CaseSection({
   return (
     <section
       id={section.id}
+      data-project-section={section.label}
       aria-labelledby={`${section.id}-title`}
       className={styles.caseSection}
     >

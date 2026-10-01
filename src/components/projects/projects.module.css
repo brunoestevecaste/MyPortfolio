@@ -246,20 +246,6 @@
   transform: none !important;
 }
 
-.executiveTopBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-}
-
-.executiveIndexNumber {
-  font-family: var(--font-space-mono), monospace;
-  font-size: 0.8125rem;
-  color: var(--accent-ink);
-  letter-spacing: 0.08em;
-}
-
 .executiveSplitGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;

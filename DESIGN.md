@@ -379,10 +379,15 @@ Por indicación de Bruno en septiembre de 2026 y siguiendo la referencia de `ref
 ## Case studies
 
 - Cada proyecto tiene una ruta independiente bajo `/projects/[slug]`.
+- Cabecera propia de los casos: nombre de Bruno a la izquierda, apartado visible
+  del proyecto en el centro y flecha de regreso a `/#work` a la derecha. El centro
+  empieza en «Resumen» y sigue las etiquetas del índice del caso al desplazarse.
+  Las etiquetas largas se adaptan al ancho móvil sin invadir los otros controles.
 - **Estructura en dos fases (Split Hero + Case Study profundo):**
   1. *Hero inicial dividido (50 / 50):*
-     - Columna izquierda: fotografía característica a gran escala y alta definición.
-     - Columna derecha: **Resumen ejecutivo** estructurado (numerador `01 / 04`,
+     - Columna izquierda: fotografía característica a gran escala y alta definición,
+       sin contador encima de la imagen.
+     - Columna derecha: **Resumen ejecutivo** estructurado (
        antetítulo de marco institucional, título en `Archivo`, sinopsis ejecutiva,
        tres puntos clave: *Reto de negocio*, *Solución técnica e IA*, e *Impacto y validación*,
        metadatos clave y tecnologías).

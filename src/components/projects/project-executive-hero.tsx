@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
-import Link from "next/link";
 import type { ProjectSummary } from "@/data/projects";
 import { useProjectTransition } from "./project-transition-context";
 import styles from "./projects.module.css";
@@ -60,21 +59,13 @@ export function ProjectExecutiveHero({
 
   return (
     <section
+      id="resumen"
+      data-project-section="Resumen"
       ref={heroRef}
       data-project-entering={isTransitionTarget || undefined}
       className={heroClass}
       aria-label={`Resumen ejecutivo de ${project.title}`}
     >
-      {/* Top navigation bar */}
-      <div className={styles.executiveTopBar} data-project-reveal>
-        <Link href="/#work" className={styles.backLink}>
-          ← Volver a proyectos
-        </Link>
-        <span className={styles.executiveIndexNumber}>
-          {project.number} / 04
-        </span>
-      </div>
-
       {/* Split layout: Photo on left, Executive Summary on right */}
       <div className={styles.executiveSplitGrid}>
         {/* Left column: Characteristic project photo */}
