@@ -59,6 +59,11 @@
   border-bottom: 1px solid var(--line);
 }
 
+.toolbar > div,
+.viewSwitch {
+  min-width: 0;
+}
+
 .toolbar p {
   margin-bottom: 0.35rem;
   color: var(--muted);
@@ -129,6 +134,7 @@
 }
 
 .resetButton {
+  min-height: 44px;
   background: transparent;
   border: 1px solid var(--line);
   padding: 0.35rem 0.75rem;
@@ -150,6 +156,7 @@
 
 /* Panel Generic */
 .panel {
+  min-width: 0;
   border: 1px solid var(--line);
   background: var(--canvas);
   padding: 1.25rem;
@@ -177,8 +184,17 @@
 }
 
 @container (max-width: 760px) {
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .viewSwitch button {
+    flex: 1;
+  }
+
   .swipeLayout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -361,7 +377,7 @@
 
 @container (max-width: 820px) {
   .clusterLayout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -494,7 +510,7 @@
 
 @container (max-width: 820px) {
   .agentLayout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -537,6 +553,7 @@
 }
 
 .agentExecution {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 1rem;
