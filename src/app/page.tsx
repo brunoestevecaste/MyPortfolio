@@ -1,4 +1,5 @@
 import { GlitchPortrait } from "@/components/ui/glitch-portrait";
+import { ContactSection } from "@/components/sections/contact";
 import { EducationSection } from "@/components/sections/education";
 import { ExperienceSection } from "@/components/sections/experience";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -55,6 +56,7 @@ export default function Home() {
         </div>
         <ProjectIndex />
       </section>
+      <ContactSection />
     </main>
     </>
   );

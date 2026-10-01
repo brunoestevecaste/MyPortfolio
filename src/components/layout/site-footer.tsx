@@ -1,5 +1,3 @@
-import { SectionHeading } from "@/components/ui/section-heading";
-import { PortfolioChat } from "@/components/chat/portfolio-chat";
 import { profile } from "@/data/profile";
 
 const links = [
@@ -38,20 +36,35 @@ const links = [
 
 export function SiteFooter() {
   return (
-    <footer className="site-container mt-auto" id="contact">
-      <div className="editorial-grid items-end pt-8 pb-8 md:pt-12 md:pb-10">
-        <div className="col-span-4 md:col-span-12">
-          <SectionHeading className="heading-text" id="contact-title" title="Hablemos" />
-        </div>
-        <div className="col-span-4 w-full md:col-span-12"><PortfolioChat /></div>
-        <p className="col-span-4 mt-3 text-sm text-muted md:col-span-6 md:self-center">
-          {profile.name}
+    <footer className="mt-auto bg-canvas">
+      <div className="mt-12 px-[max(clamp(0.75rem,1.4vw,1.75rem),env(safe-area-inset-left),env(safe-area-inset-right))] pb-[max(1.5rem,env(safe-area-inset-bottom))] md:mt-20 md:pb-8">
+        <p className="text-accent" translate="no">
+          <span className="sr-only">&lt;/BRUNO&gt;</span>
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            className="h-auto w-full fill-current font-heading font-extrabold"
+            viewBox="0 0 1000 186"
+            width="1000"
+            height="186"
+          >
+            <text
+              x="-10"
+              y="174.5"
+              fontSize="234"
+              letterSpacing="-0.075em"
+              textLength="1010"
+              lengthAdjust="spacingAndGlyphs"
+            >
+              &lt;/BRUNO&gt;
+            </text>
+          </svg>
         </p>
         <nav
           aria-label="Contacto y perfiles"
-          className="col-span-4 mt-2 md:col-span-6 md:mt-4"
+          className="mt-4 md:mt-6"
         >
-          <ul className="flex flex-wrap items-center gap-x-4 gap-y-2 md:justify-end md:gap-x-6">
+          <ul className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 md:gap-x-6">
             {links.map((link) => (
               <li key={link.href}>
                 <a

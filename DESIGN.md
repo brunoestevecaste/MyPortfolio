@@ -364,6 +364,14 @@ Por indicación de Bruno en septiembre de 2026 y siguiendo la referencia de `ref
 - Una única intención: contactar.
 - Correo, LinkedIn y GitHub.
 - No publicar teléfono sin autorización explícita.
+- Desde el 01/10/2026, el cierre bajo el chat muestra «</BRUNO>» en mayúsculas,
+  en Bricolage Grotesque 800 y rojo `--accent`, sobre el fondo claro `--canvas`.
+  El nombre ocupa todo el ancho del viewport, sin el límite de 1440px del
+  contenido, con márgenes de `clamp(12px, 1.4vw, 28px)`. Su proporción se
+  conserva en móvil y escritorio. Los iconos de contacto y redes permanecen
+  debajo del nombre, alineados a la derecha, con objetivos táctiles de 44px.
+  El tracking del cierre es `-0.075em`; el tamaño aumenta proporcionalmente
+  para compensar el espaciado más compacto y conservar el mismo ancho total.
 - El chat usa un gris cálido claro, derivado de `--ink` al 6 % sobre `--canvas`,
   en las burbujas del asistente y el avatar del visitante. Por indicación de Bruno
   el 30/09/2026, estas superficies permanecen en la escala de grises, sin rojo.
