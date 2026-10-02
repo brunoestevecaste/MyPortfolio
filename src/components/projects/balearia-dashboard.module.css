@@ -1,5 +1,4 @@
 .dashboard,
-.viewSwitch,
 .viewSwitch button,
 .kpis > div,
 .panel {
@@ -68,8 +67,9 @@
 
 .viewSwitch {
   display: flex;
-  align-items: stretch;
-  border: 1px solid var(--ink);
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .viewSwitch button {
@@ -81,15 +81,14 @@
   font-size: 0.75rem;
   font-weight: 650;
   text-transform: uppercase;
-}
-
-.viewSwitch button + button {
-  border-left: 1px solid var(--ink);
+  border: 1px solid var(--ink);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
 .viewSwitch button[aria-pressed="true"] {
   background: var(--accent);
   color: var(--canvas);
+  border-color: var(--accent);
 }
 
 .viewSwitch button:hover:not([aria-pressed="true"]) {
