@@ -1,35 +1,20 @@
 import type { Metadata } from "next";
-import { AepdTrafficFigure } from "@/components/projects/aepd-traffic-figure";
-import { AepdArchitecture } from "@/components/projects/aepd-architecture";
-import { aepdTools } from "@/data/aepd";
-import { ProjectTools } from "@/components/projects/project-tools";
 import { CaseSection } from "@/components/projects/case-section";
+import { AepdArchitecture } from "@/components/projects/aepd-architecture";
+import { AepdTrafficFigure } from "@/components/projects/aepd-traffic-figure";
 import { AepdDashboard } from "@/components/projects/aepd-dashboard";
 import { ProjectPagination } from "@/components/projects/project-pagination";
 import { ProjectExecutiveHero } from "@/components/projects/project-executive-hero";
+import { ProjectTools } from "@/components/projects/project-tools";
+import { aepdProject } from "@/data/projects";
 import {
   aepdCase,
-  aepdEtlSteps,
-  aepdProject,
-} from "@/data/projects";
+  aepdSections,
+  aepdTools,
+} from "@/data/aepd";
 import styles from "@/components/projects/projects.module.css";
 
 const path = `/projects/${aepdProject.slug}`;
-const sections = [
-  aepdCase.context,
-  aepdCase.architecture,
-  aepdCase.preparation,
-  aepdCase.visualization,
-  aepdCase.prediction,
-  aepdCase.outcome,
-  aepdCase.learning,
-  {
-    id: "herramientas",
-    label: "Herramientas",
-    title: "Herramientas y tecnologías",
-    paragraphs: [],
-  },
-];
 
 export const metadata: Metadata = {
   title: "AEPD: analítica y predicción de tráfico web",
@@ -54,7 +39,6 @@ export default function AepdCaseStudy() {
           project={aepdProject}
           eyebrow="AEPD / Trabajo de Fin de Grado"
           academicFramework="Universitat de València · IRTIC / 2025"
-          grade="10/10"
           scope="Sistema en producción utilizado por la AEPD"
         />
 
@@ -75,36 +59,35 @@ export default function AepdCaseStudy() {
             >
               <p>En este caso</p>
               <ol>
-                {sections.map((section) => (
+                {aepdSections.map((section) => (
                   <li key={section.id}>
                     <a href={`#${section.id}`}>{section.label}</a>
                   </li>
                 ))}
               </ol>
             </nav>
+
             <div className={styles.caseBody}>
               <CaseSection section={aepdCase.context} />
+
+              <CaseSection section={aepdCase.contribution} />
+
               <CaseSection section={aepdCase.architecture}>
                 <AepdArchitecture />
               </CaseSection>
-              <CaseSection section={aepdCase.preparation}>
-                <ol className={styles.etlSteps}>
-                  {aepdEtlSteps.map((step) => (
-                    <li key={step.title}>
-                      <h3>{step.title}</h3>
-                      <p>{step.text}</p>
-                    </li>
-                  ))}
-                </ol>
-              </CaseSection>
-              <CaseSection section={aepdCase.visualization}>
-                <AepdDashboard />
-              </CaseSection>
-              <CaseSection section={aepdCase.prediction}>
+
+              <CaseSection section={aepdCase.preparation} />
+
+              <CaseSection section={aepdCase.mlopsPipeline}>
                 <AepdTrafficFigure />
               </CaseSection>
-              <CaseSection section={aepdCase.outcome} />
+
+              <CaseSection section={aepdCase.finalProduct}>
+                <AepdDashboard />
+              </CaseSection>
+
               <CaseSection section={aepdCase.learning} />
+
               <section
                 id="herramientas"
                 data-project-section="Herramientas"
