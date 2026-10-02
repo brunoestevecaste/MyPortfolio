@@ -142,7 +142,7 @@ export const nextplanProject = {
     "React",
     "Tailwind CSS",
   ],
-  image: "/projects/nextplan.webp",
+  image: "/projects/nextplan-map.webp",
   number: "02",
   eyebrow: "EDEM / Proyecto de Máster en IA",
   academicFramework: "EDEM Escuela de Empresarios · Máster en IA / 2026",
