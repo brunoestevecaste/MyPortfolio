@@ -105,7 +105,7 @@ export const alinaProject = {
     "Selenium",
     "React",
   ],
-  image: "/projects/alina.webp",
+  image: "/projects/alina-scanner.webp",
   number: "03",
   eyebrow: "EDEM / Proyecto de Máster en IA",
   academicFramework: "EDEM Escuela de Empresarios · Máster en IA / 2026",
