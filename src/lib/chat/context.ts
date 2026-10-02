@@ -25,7 +25,10 @@ const publicOverview = JSON.stringify({
   projects: projects.map(({ slug, organization, title, summary, year, role, technologies, academicFramework, executiveSummary }) => ({
     url: `/projects/${slug}`, organization, title, summary, year, role, technologies, academicFramework, executiveSummary,
   })),
-  projectNotes: cases.map(({ content: item }) => ({ introduction: item.introduction, note: "confidentiality" in item ? item.confidentiality : item.contextNote })),
+  projectNotes: cases.map(({ content: item }) => ({
+    introduction: item.introduction,
+    note: "confidentiality" in item ? (item as { confidentiality: string }).confidentiality : (item as { contextNote?: string }).contextNote ?? "",
+  })),
 });
 
 export function buildSystemPrompt(messages: readonly ChatMessage[]): string {
