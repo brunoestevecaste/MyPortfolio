@@ -70,7 +70,7 @@ export const baleariaProject = {
     "Terraform",
     "React",
   ],
-  image: "/projects/balearia.webp",
+  image: "/projects/balearia-route.webp",
   number: "01",
   eyebrow: "Baleària / Trabajo de Fin de Máster",
   academicFramework: "EDEM Escuela de Empresarios · Máster en IA / 2026",
