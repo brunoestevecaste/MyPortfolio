@@ -620,3 +620,29 @@ se limita al dashboard AEPD; no se extiende al resto del portfolio.
   Los divisores internos de la retícula conservan sus grises.
 - Esta regla sustituye las referencias anteriores al blanco puro de SYSTEM,
   al fondo gris de los cuadros y a la ausencia de marco en estos objetos.
+
+## Agrupación de herramientas, sección dedicada e iconografía técnica · 2 de octubre de 2026
+
+- En cada proyecto, tanto en el resumen ejecutivo inicial (`ProjectExecutiveHero`)
+  como en el cuerpo del caso de estudio, las herramientas se presentan
+  como señalética técnica uniforme mediante el componente `ProjectTools`.
+- En el caso de estudio en profundidad, las herramientas y tecnologías constituyen
+  una sección propia e independiente (`<section id="herramientas">`), con su
+  correspondiente entrada en el índice lateral de navegación (`caseNav`) y un
+  titular `<h2>` destacado en Bricolage Grotesque y rojo `--accent`, al mismo nivel
+  y escala que el resto de capítulos del dossier (`clamp(2rem, 3.6vw, 3.5rem)`).
+- En dicha sección dedicada se utiliza la variante grande (`size="large"`): los
+  iconos tienen un tamaño prominente de 24–28px y los nombres de las tecnologías se
+  componen en Space Mono a 16–19px (`clamp(1rem, 1.35vw, 1.1875rem)`).
+- Cada herramienta se acompaña de un icono vectorial lineal en el mismo estilo
+  editorial de los enlaces del pie de página (`viewBox="0 0 24 24"`, `fill="none"`,
+  `stroke="currentColor"`, `strokeWidth="1.5"`).
+- Se presentan limpiamente sin encuadrar en cajas, marcos ni fondos de tarjeta,
+  mostrando únicamente el icono y el nombre sin contenedores artificiales.
+- Se elimina el enlace redundante de «Volver a proyectos» situado bajo las
+  herramientas, preservando la continuidad de lectura hacia el paginador de proyectos.
+- Las herramientas pertenecientes a un mismo ecosistema o suite se agrupan
+  siempre que sea posible: los múltiples servicios de Google Cloud (BigQuery,
+  Vertex AI, ADK, Gemini API, Dataflow, Cloud Run, Cloud Functions, Pub/Sub,
+  Cloud SQL, Cloud Storage, Firestore, etc.) se consolidan bajo `Google Cloud`,
+  evitando listados fragmentados y preservando la pureza y síntesis del dossier.

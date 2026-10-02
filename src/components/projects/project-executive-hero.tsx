@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 import type { ProjectSummary } from "@/data/projects";
+import { ProjectTools } from "./project-tools";
 import { useProjectTransition } from "./project-transition-context";
 import styles from "./projects.module.css";
 
@@ -157,12 +158,8 @@ export function ProjectExecutiveHero({
 
           {/* Technologies used */}
           <div className={styles.executiveTechRow} data-project-reveal>
-            <span className={styles.executiveTechLabel}>Tecnologías:</span>
-            <ul className={styles.technologies} aria-label="Tecnologías destacadas">
-              {project.technologies.map((tech) => (
-                <li key={tech}>{tech}</li>
-              ))}
-            </ul>
+            <span className={styles.executiveTechLabel}>Herramientas:</span>
+            <ProjectTools tools={project.technologies} ariaLabel="Herramientas destacadas" />
           </div>
 
           {/* Scroll down prompt to view the full case study */}

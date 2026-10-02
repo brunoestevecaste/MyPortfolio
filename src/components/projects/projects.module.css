@@ -497,6 +497,84 @@
   line-height: 1.7;
 }
 
+.toolsList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 1.5rem;
+  row-gap: 0.625rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toolBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.toolIcon {
+  display: inline-block;
+  width: 1.05rem;
+  height: 1.05rem;
+  flex-shrink: 0;
+  color: var(--ink);
+}
+
+.toolName {
+  font-size: 0.75rem;
+  color: var(--ink);
+}
+
+.toolsListLarge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: clamp(1.75rem, 3.2vw, 3rem);
+  row-gap: clamp(1rem, 2vw, 1.75rem);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.toolBadgeLarge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 1.35vw, 1.1875rem);
+  line-height: 1.4;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+
+.toolIconLarge {
+  display: inline-block;
+  width: clamp(1.5rem, 2vw, 1.75rem);
+  height: clamp(1.5rem, 2vw, 1.75rem);
+  flex-shrink: 0;
+  color: var(--ink);
+}
+
+.toolNameLarge {
+  font-size: clamp(1rem, 1.35vw, 1.1875rem);
+  color: var(--ink);
+}
+
 .readCase {
   display: inline-flex;
   min-height: 44px;

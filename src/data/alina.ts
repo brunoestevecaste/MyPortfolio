@@ -121,15 +121,12 @@ export const alinaPipeline = [
 ] as const;
 
 export const alinaTools = [
+  "Google Cloud",
   "Python",
   "FastAPI",
-  "Google ADK",
-  "Google Gemini 2.5 Flash",
+  "Docker",
   "Selenium",
   "React",
-  "Vite",
-  "Uvicorn",
-  "Prompt Engineering",
 ] as const;
 
 // Métricas de optimización obtenidas en las pruebas empíricas del proyecto (diapositivas 11 y 12)

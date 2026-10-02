@@ -132,9 +132,13 @@ export const baleariaDecisions = [
 ] as const;
 
 export const baleariaTools = [
-  "Python", "PostgreSQL", "dbt", "Cloud Storage", "Cloud SQL", "Pub/Sub",
-  "Cloud Functions", "Cloud Run", "API Gateway", "Cloud Composer / Airflow",
-  "Vertex AI / Kubeflow Pipelines", "Terraform", "Docker", "React",
+  "Google Cloud",
+  "Python",
+  "PostgreSQL",
+  "dbt",
+  "Docker",
+  "Terraform",
+  "React",
 ] as const;
 
 // Invented independently of source data. These are explanatory profiles, not

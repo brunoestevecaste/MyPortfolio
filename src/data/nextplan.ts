@@ -238,22 +238,12 @@ export const nextplanScoringFactors = [
 ] as const;
 
 export const nextplanTools = [
-  "Google Cloud Platform",
-  "BigQuery (Vector Search & SQL)",
-  "dbt (data build tool)",
-  "Vertex AI Gemini 2.5 Flash",
-  "gemini-embedding-001",
-  "Google ADK (Agent Development Kit)",
-  "Apache Beam / Dataflow",
+  "Google Cloud",
+  "Python",
   "FastAPI",
-  "PostgreSQL / Cloud SQL",
-  "Google Cloud Firestore",
-  "Google Cloud Pub/Sub",
-  "Cloud Run & Cloud Run Jobs",
-  "Cloud Functions",
-  "SendGrid",
-  "Terraform",
-  "React 19 & Tailwind CSS v4",
-  "Firebase Authentication",
+  "dbt",
   "Docker",
+  "Terraform",
+  "React",
+  "Tailwind CSS",
 ] as const;
