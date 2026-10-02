@@ -148,13 +148,13 @@ export const nextplanProject = {
   scope: "Plataforma integral en GCP (Dataflow + BigQuery + dbt + Vertex AI + React)",
   executiveSummary: {
     lead:
-      "Plataforma integral para descubrir y planificar eventos en España mediante una experiencia multicanal: exploración en mapa, swipes de afinidad, asistente conversacional con RAG en dos fases y clustering K-Means para recomendaciones personalizadas.",
+      "Plataforma integral para descubrir y planificar eventos en España mediante una experiencia multicanal: exploración en mapa, tarjetas de afinidad (swipes), asistente conversacional con RAG y recomendaciones personalizadas.",
     challenge:
-      "Superar la dispersión de la oferta cultural y el problema de cold-start mediante un motor de afinidad multivariable explicable bajo estricto cumplimiento del RGPD.",
+      "Eliminar la fatiga de decisión y la dispersión de las agendas culturales mediante un recomendador transparente y respetuoso con la privacidad del usuario.",
     solution:
-      "Ingesta masiva enriquecida con Gemini, streaming de swipes con Pub/Sub a BigQuery, modelado dimensional con dbt, motor K-Means con expansión por vecindad y agente conversacional RAG con Google ADK.",
+      "Arquitectura desacoplada en Google Cloud: enriquecimiento del catálogo con IA, streaming de interacciones a BigQuery con dbt, clustering K-Means con exploración de grupos vecinos y un asistente conversacional RAG sin alucinaciones.",
     impact:
-      "Arquitectura serverless en GCP con 20 módulos de Terraform, scoring multivariable de recomendación en tiempo real y latencia optimizada.",
+      "Aplicación web interactiva en React con scoring de afinidad en vivo y bucle de aprendizaje post-evento por email mediante enlaces de un solo clic bajo cumplimiento del RGPD.",
     framework: "Proyecto de Máster en IA · EDEM Escuela de Empresarios",
   },
 } as const satisfies ProjectSummary;

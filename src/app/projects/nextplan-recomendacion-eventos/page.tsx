@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { NextPlanScoringFigure } from "@/components/projects/nextplan-scoring-figure";
-import { NextPlanArchitecture } from "@/components/projects/nextplan-architecture";
-import { ProjectTools } from "@/components/projects/project-tools";
 import { CaseSection } from "@/components/projects/case-section";
+import { NextPlanArchitecture } from "@/components/projects/nextplan-architecture";
+import { NextPlanScoringFigure } from "@/components/projects/nextplan-scoring-figure";
 import { NextPlanDashboard } from "@/components/projects/nextplan-dashboard";
 import { ProjectPagination } from "@/components/projects/project-pagination";
 import { ProjectExecutiveHero } from "@/components/projects/project-executive-hero";
+import { ProjectTools } from "@/components/projects/project-tools";
 import { nextplanProject } from "@/data/projects";
 import {
   nextplanCase,
-  nextplanDecisions,
   nextplanSections,
+  nextplanDecisions,
   nextplanTools,
 } from "@/data/nextplan";
 import styles from "@/components/projects/projects.module.css";
@@ -39,16 +39,16 @@ export default function NextPlanCaseStudy() {
         {/* Split Hero: Characteristic Photo + Executive Summary */}
         <ProjectExecutiveHero
           project={nextplanProject}
-          eyebrow="EDEM / Proyecto de Máster en IA"
+          eyebrow="NextPlan / Proyecto de Máster en IA"
           academicFramework="EDEM Escuela de Empresarios · Máster en IA / 2026"
           scope="Plataforma integral en GCP (Dataflow + BigQuery + dbt + Vertex AI + React)"
         />
 
         {/* Full In-Depth Case Study on Scroll */}
         <div id="case-study" className={styles.caseStudyFull}>
-          <aside className={styles.privacy} aria-label="Contexto del proyecto">
+          <aside className={styles.privacy} aria-label="Marco del proyecto">
             <strong>Un proyecto integral de máster, producto e ingeniería de datos e IA.</strong>
-            <p>{nextplanCase.contextNote}</p>
+            <p>{nextplanCase.confidentiality}</p>
           </aside>
 
           <div className={styles.caseLayout}>
@@ -66,6 +66,8 @@ export default function NextPlanCaseStudy() {
             <div className={styles.caseBody}>
               <CaseSection section={nextplanCase.context} />
 
+              <CaseSection section={nextplanCase.contribution} />
+
               <CaseSection section={nextplanCase.architecture}>
                 <NextPlanArchitecture />
                 <ul className={archStyles.decisions}>
@@ -80,23 +82,15 @@ export default function NextPlanCaseStudy() {
                 </ul>
               </CaseSection>
 
-              <CaseSection section={nextplanCase.enrichment} />
+              <CaseSection section={nextplanCase.preparation} />
 
-              <CaseSection section={nextplanCase.transformations} />
-
-              <CaseSection section={nextplanCase.clustering}>
+              <CaseSection section={nextplanCase.mlopsPipeline}>
                 <NextPlanScoringFigure />
               </CaseSection>
 
-              <CaseSection section={nextplanCase.serving}>
+              <CaseSection section={nextplanCase.finalProduct}>
                 <NextPlanDashboard />
               </CaseSection>
-
-              <CaseSection section={nextplanCase.agent} />
-
-              <CaseSection section={nextplanCase.feedback} />
-
-              <CaseSection section={nextplanCase.outcome} />
 
               <CaseSection section={nextplanCase.learning} />
 
