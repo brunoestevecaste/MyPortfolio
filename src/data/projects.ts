@@ -33,7 +33,7 @@ export const aepdProject = {
   year: "2025",
   role: "Ingeniería de datos, BI y Machine Learning",
   technologies: ["Pentaho", "PostgreSQL", "Power BI", "Python", "XGBoost"],
-  image: "/projects/aepd.webp",
+  image: "/projects/aepd-dashboard.webp",
   number: "04",
   eyebrow: "AEPD / Trabajo de Fin de Grado",
   academicFramework:
