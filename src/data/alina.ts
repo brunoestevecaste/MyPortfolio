@@ -10,16 +10,18 @@ type ArchitectureInput = {
 export const alinaCase = {
   introduction:
     "Construir un asistente inteligente para transformar la búsqueda de empleo: extracción y matching explicable de habilidades, simulación de entrevistas y agentes colaborativos sin alucinaciones.",
+  confidentiality:
+    "Proyecto de ingeniería de IA aplicada desarrollado en equipo en EDEM (Grupo 3: Adrián Alemany, Bruno Esteve, Silvia Pla y Clàudia Salgado). Backend funcional en FastAPI con Google ADK y Gemini 2.5 Flash, y frontend en React. Todos los ejemplos y perfiles interactivos de este portfolio se presentan con fines ilustrativos sobre arquitectura real.",
   contextNote:
-    "Proyecto desarrollado en equipo durante el Máster en Inteligencia Artificial en EDEM Escuela de Empresarios (febrero – marzo de 2026). Grupo 3: Adrián Alemany, Bruno Esteve, Silvia Pla y Clàudia Salgado. Prototipo funcional real con backend en FastAPI, Google ADK, modelos Gemini y frontend en React.",
+    "Proyecto de ingeniería de IA aplicada desarrollado en equipo en EDEM (Grupo 3: Adrián Alemany, Bruno Esteve, Silvia Pla y Clàudia Salgado). Backend funcional en FastAPI con Google ADK y Gemini 2.5 Flash, y frontend en React. Todos los ejemplos y perfiles interactivos de este portfolio se presentan con fines ilustrativos sobre arquitectura real.",
   context: {
     id: "contexto",
     label: "El reto",
     title: "El problema no es encontrar ofertas, sino decidir con confianza",
     paragraphs: [
-      "La búsqueda de empleo actual está marcada por la sobrecarga de información y la falta de estándares. Cientos de portales publican ofertas con descripciones ambiguas, criterios excluyentes ocultos entre párrafos genéricos y requisitos inconsistentes. El candidato asume un alto coste cognitivo antes de saber siquiera si su perfil encaja.",
-      "A esta asimetría se suma una preparación manual repetitiva y fragmentada: redactar cartas de presentación específicas, investigar a la empresa en múltiples fuentes (Glassdoor, prensa, redes), detectar qué habilidades le faltan y preparar entrevistas técnicas sin feedback objetivo.",
-      "El proyecto Alina nació en el Máster de IA de EDEM para resolver esa fricción de extremo a extremo: transformar ofertas desestructuradas en información accionable, ofrecer un cálculo de compatibilidad transparente y dotar al candidato de agentes especializados que potencien su preparación.",
+      "Buscar empleo suele convertirse en un proceso agotador y lleno de incertidumbre. Los portales tradicionales publican cientos de ofertas con descripciones confusas, requisitos contradictorios y criterios excluyentes ocultos entre párrafos genéricos. El candidato invierte horas antes de saber si su perfil encaja realmente.",
+      "A esta desinformación se suma una preparación manual repetitiva y fragmentada: redactar cartas de presentación específicas, investigar la cultura corporativa en múltiples fuentes y afrontar entrevistas técnicas sin feedback objetivo ni criterios claros de evaluación.",
+      "El proyecto Alina nació en el Máster de IA de EDEM para eliminar esa fricción de principio a fin: transformar ofertas desestructuradas en datos claros, medir la compatibilidad de forma transparente y dotar al candidato de un equipo de asistentes inteligentes que potencien su candidatura con rigor técnico.",
     ],
   },
   contribution: {
@@ -27,9 +29,9 @@ export const alinaCase = {
     label: "Mi aportación",
     title: "Arquitectura de IA, diseño de agentes y backend",
     paragraphs: [
-      "Como parte del equipo de cuatro integrantes, mi trabajo se centró en la arquitectura de Inteligencia Artificial, la orquestación de agentes con Google ADK (Agent Development Kit) y el desarrollo de la API en FastAPI.",
-      "Diseñé e implementé el pipeline de extracción y análisis de CV (PDF y DOCX), el algoritmo matemático de Match Score explicable y la arquitectura en dos fases para optimizar tokens y latencia en los agentes de investigación y upskilling.",
-      "Asimismo, participé en la definición del flujo colaborativo escritor-crítico para cartas de presentación con guardrails estrictos de fidelidad al CV, evitando que el modelo invente logros, tecnologías o experiencia ausentes en el perfil del candidato.",
+      "Dentro del equipo de cuatro integrantes de Alina, mi contribución se centró en la arquitectura integral de Inteligencia Artificial, la orquestación multi-agente con Google ADK (Agent Development Kit) y el desarrollo de la API asíncrona en FastAPI.",
+      "Diseñé e implementé el pipeline de extracción y estructuración de CVs (PDF y DOCX), el algoritmo matemático de Match Score explicable y la arquitectura de prompts en dos fases para optimizar tokens y latencia en los agentes de investigación y upskilling.",
+      "Asimismo, definí el flujo colaborativo escritor-crítico para la redacción de cartas con guardrails estrictos de fidelidad al CV, coordinando con mis compañeros para que los modelos se integraran de manera reactiva con la interfaz en React mediante streaming con Server-Sent Events (SSE).",
     ],
   },
   architecture: {
@@ -37,51 +39,40 @@ export const alinaCase = {
     label: "Arquitectura",
     title: "Un backend desacoplado con agentes orquestados",
     paragraphs: [
-      "La solución separa la capa de presentación de la lógica de procesamiento. El frontend en React interactúa mediante llamadas REST y Server-Sent Events (SSE) con una API construida sobre FastAPI y Python 3.11.",
-      "La orquestación de agentes se apoya en Google ADK sobre el modelo Gemini 2.5 Flash. Cada agente cuenta con herramientas especializadas (tools) y un contexto de sesión en memoria, permitiendo tanto ejecuciones secuenciales como agentes en bucle de refinamiento.",
-      "Ante la limitación inicial de costes en la API de LinkedIn y la baja calidad de APIs gratuitas como Adzuna (cuyas descripciones venían truncadas a 500 caracteres), diseñamos un pipeline dual: búsqueda automática en Adzuna combinada con un scraper en Selenium para extraer el texto íntegro de la oferta, junto a una opción de pegado manual para analizar cualquier oferta sin depender de servicios de terceros.",
+      "Para ofrecer una respuesta rápida y reactiva, separamos la interfaz web en React de la lógica de procesamiento en el backend, construido sobre FastAPI y Python 3.11. Sobre esta base, orquestamos cuatro agentes especializados con Google ADK utilizando el modelo Gemini 2.5 Flash.",
+      "Las APIs de empleo gratuitas suelen truncar las descripciones a unas pocas líneas. Para solucionarlo, construimos un pipeline dual: búsqueda automatizada combinada con un extractor propio en Selenium para obtener la vacante completa, sumado a una opción de pegado manual directo para analizar cualquier oferta sin depender de servicios de terceros.",
+      "A continuación, el esquema funcional refleja cómo convergen las entradas, se procesan en el backend y alimentan tanto el motor de compatibilidad como el dossier de preparación del candidato.",
     ],
   },
-  agents: {
-    id: "agentes",
-    label: "Agentes IA",
-    title: "Cuatro agentes especializados con propósitos delimitados",
+  preparation: {
+    id: "preparacion",
+    label: "Preparación de datos",
+    title: "Extracción, estructuración y normalización de competencias",
     paragraphs: [
-      "En lugar de delegar todo el comportamiento en un único prompt conversacional, Alina estructura el sistema en cuatro agentes con responsabilidades aisladas:",
-      "1. Carta de presentación: Opera bajo un patrón colaborativo escritor-crítico (LlmAgent escritor ↔ LlmAgent editor dentro de un bucle LoopAgent con condición de escape exit_loop()), finalizando en un formateador JSON. El editor actúa como un evaluador senior inflexible: detecta afirmaciones no fundamentadas en el CV y exige reescrituras hasta garantizar veracidad absoluta y alineación estratégica.",
-      "2. Simulador de entrevistas: Agente conversacional que conduce una entrevista técnica realista paso a paso (soportando respuestas en texto y voz). Tras cada intervención, evalúa la respuesta según una rúbrica interna (puntuación de 0 a 10, fortalezas, puntos de mejora y una respuesta ideal explicada), adaptando la siguiente pregunta según la dificultad acumulada.",
-      "3. Upskilling: Analiza las brechas de habilidades identificadas por el matcher, consulta recursos de aprendizaje en plataformas reconocidas mediante Google Search, clasifica la dificultad (advirtiendo si una skill requiere certificaciones o años de dedicación no viables a corto plazo) y genera un plan formativo priorizado.",
-      "4. Company Research: Recopila inteligencia empresarial en tiempo real mediante Google Search, sintetizando cultura corporativa, aspectos positivos, posibles señales de alerta (red flags), noticias recientes con enlaces verificables y preguntas inteligentes para que el candidato plantee en la entrevista.",
+      "Los currículums y las ofertas de empleo son documentos intrínsecamente heterogéneos y desestructurados. Un PDF puede organizar las habilidades en tablas, barras laterales o párrafos narrativos, mientras que las ofertas alternan nombres comerciales, acrónimos y requisitos implícitos. Para posibilitar una comparación rigurosa, el primer paso del pipeline es la normalización de entidades.",
+      "Mediante librerías especializadas (pypdf y python-docx) y prompts extractores con esquemas estrictos de salida en Gemini, el sistema aísla las competencias técnicas (hard skills), las habilidades interpersonales (soft skills), los años de experiencia y la modalidad laboral (remoto, híbrido o presencial). Cada tecnología se mapea contra una taxonomía canónica que unifica variantes como «Postgres» y «PostgreSQL», o «K8s» y «Kubernetes».",
+      "Esta estructuración previa garantiza que los agentes posteriores no trabajen sobre texto crudo ruidoso, sino sobre perfiles semánticos comparables y auditables, sentando las bases para el cálculo matemático de compatibilidad.",
     ],
   },
-  matching: {
-    id: "matching",
-    label: "Match Score",
-    title: "Un algoritmo de compatibilidad transparente y auditable",
+  mlopsPipeline: {
+    id: "pipeline-ia",
+    label: "Pipeline de IA",
+    title: "El flujo de IA: matching matemático, especialización y optimización",
     paragraphs: [
-      "Los sistemas comerciales de reclutamiento suelen apoyarse en puntuaciones opacas de tipo 'caja negra'. En Alina, el cálculo de compatibilidad es determinista y completamente explicable tanto para el candidato como para el evaluador.",
-      "El pipeline extrae las habilidades técnicas requeridas en la oferta y las cruza con las habilidades verificadas en el CV del candidato, clasificando cada requisito en coincidencia total (matched), coincidencia parcial (partial) o faltante (missing).",
-      "La fórmula pondera el grado de cobertura e incorpora un incentivo cuando la modalidad de trabajo de la oferta coincide con la preferencia explícita del usuario:",
+      "Con los perfiles normalizados, el sistema despliega su inteligencia en tres fases complementarias: el cálculo determinista del ajuste, la activación de agentes especializados y la optimización de latencia en producción.",
+      "Para evitar la arbitrariedad de los filtros opacos de selección, el Match Score aplica una fórmula matemática transparente: divide las habilidades cubiertas y parciales entre el total de requisitos de la oferta, sumando un incentivo si coincide la modalidad preferida de trabajo. Cada punto porcentual es explicable y auditable por el usuario.",
+      "A continuación, cuatro agentes especializados entran en acción según la necesidad del candidato: uno redacta cartas de presentación fieles a su experiencia real, otro simula entrevistas técnicas con preguntas y notas cuantitativas, un tercero detecta qué habilidades le faltan sugiriendo cursos prácticos, y el último investiga a la empresa antes de la reunión.",
+      "Para que estos agentes respondieran rápido y sin fallos, dividimos las llamadas al modelo en dos pasos: primero razona libremente y consulta fuentes; después, una llamada rápida da formato a la respuesta final. Como muestra la gráfica inferior, este cambio redujo el tiempo de espera casi a la mitad y recortó un 40% el gasto en tokens, eliminando errores de sintaxis.",
     ],
   },
-  optimization: {
-    id: "optimizacion",
-    label: "Optimización",
-    title: "Separar razonamiento de formato: menos tokens, máxima fiabilidad",
+  finalProduct: {
+    id: "producto-final",
+    label: "Producto final",
+    title: "Asistente modular y simulador en tiempo real",
     paragraphs: [
-      "En las primeras iteraciones, exigir al LLM que investigara en internet, razonara y produjera simultáneamente un JSON estructurado en un único prompt ('one-shot') generaba problemas graves: prompts enormes, coste elevado por turno y una tasa de fallos de formato JSON de casi el 40%, obligando a repetir llamadas costosas.",
-      "La solución arquitectónica consistió en desacoplar responsabilidades en dos pasos: en el Paso 1, el agente ADK investiga y razona en texto libre con herramientas externas, sin restricciones sintácticas. En el Paso 2, una llamada corta y determinista a Gemini recibe el texto consolidado y lo transforma al esquema JSON final.",
-      "El resultado fue contundente: los tokens por llamada cayeron de ~1.500 a ~900 (-40%), y la fiabilidad de salida del JSON aumentó del ~60% a más del ~95%. Paralelamente, la paralelización del scraping y parsing redujo el tiempo total de ejecución de 55 segundos a solo 30 segundos (-45%), logrando una precisión en extracción de skills clave superior al 85%.",
-    ],
-  },
-  outcome: {
-    id: "resultado",
-    label: "Evolución y modelo",
-    title: "De prototipo experimental a solución modular",
-    paragraphs: [
-      "El proyecto transitó de un primer MVP en Streamlit para validar el concepto a una arquitectura profesional desacoplada con backend en FastAPI y frontend en React, preparada para escalar e incorporar nuevos servicios sin rehacer la lógica base.",
-      "Como parte del diseño de producto, se articuló una propuesta de negocio dual: un modelo Freemium para adopción inicial entre estudiantes, bootcamps y candidatos individuales, y una versión Pro por suscripción orientada a universidades, career centers y agencias de orientación laboral.",
-      "Las líneas de evolución técnica contemplan la integración de APIs oficiales, simulación de entrevistas con análisis de vídeo y expresiones faciales, un Career Tracker histórico de candidaturas, extensión para navegadores y recomendación adaptativa mediante Reinforcement Learning.",
+      "Todo el pipeline de agentes e inferencia se materializa en una interfaz interactiva en React que empodera al candidato durante todo su ciclo de postulación. En lugar de ofrecer un simple chat genérico, la aplicación organiza la experiencia en tres espacios especializados: cálculo de compatibilidad, interacción con agentes y monitorización de rendimiento.",
+      "El candidato puede inspeccionar en vivo el desglose de sus habilidades frente a diferentes ofertas, consultar las recomendaciones personalizadas de cada agente (descargando cartas validadas o practicando entrevistas con evaluación inmediata) y comprobar la eficiencia operativa del sistema.",
+      "A continuación puedes explorar el prototipo funcional de Alina. Selecciona diferentes puestos de demostración, consulta el cálculo de compatibilidad y experimenta las salidas de los cuatro agentes inteligentes.",
     ],
   },
   learning: {
@@ -89,19 +80,18 @@ export const alinaCase = {
     label: "Aprendizajes",
     title: "Ingeniería de agentes para problemas reales",
     paragraphs: [
-      "Este proyecto consolidó aprendizajes esenciales sobre el desarrollo de sistemas con modelos de lenguaje. En primer lugar, que los agentes deben tener límites muy estrechos: un agente generalista fracasa con facilidad, mientras que un equipo de agentes especializados con herramientas y guardrails concretos produce resultados predecibles y de alta calidad.",
-      "En segundo lugar, que la resiliencia de datos es prioritaria sobre la magia del LLM. Las APIs externas fallan, truncan descripciones o cambian esquemas; contar con scrapers alternativos y permitir la entrada manual directa es lo que hace viable un producto frente a las contingencias del entorno.",
-      "Por último, la importancia de la veracidad: en un contexto donde el trabajo y la carrera de una persona están en juego, un sistema de IA no puede permitirse alucinar capacidades. El diseño de agentes críticos que verifiquen el contenido frente al CV demostró que la honestidad algorítmica es un requisito de diseño imprescindible.",
+      "Alina consolidó tres lecciones esenciales sobre el desarrollo de sistemas basados en inteligencia artificial: primero, que los agentes deben tener límites muy estrechos: un equipo de asistentes especializados con herramientas concretas supera con creces a un modelo generalista.",
+      "Segundo, que la resiliencia en la captura de datos es prioritaria sobre cualquier algoritmo: las APIs de terceros fallan o truncan información, por lo que disponer de scrapers alternativos y entrada manual directa es lo que hace viable un producto ante contingencias reales.",
+      "Y tercero, la importancia de la honestidad algorítmica: cuando está en juego la carrera profesional de una persona, el sistema no puede permitirse alucinar. Diseñar agentes críticos que verifiquen cada afirmación frente a la realidad del currículum es una exigencia técnica y ética indispensable.",
     ],
   },
-} as const satisfies { introduction: string; contextNote: string } & Record<
+} as const satisfies { introduction: string; confidentiality: string; contextNote: string } & Record<
   | "context"
   | "contribution"
   | "architecture"
-  | "agents"
-  | "matching"
-  | "optimization"
-  | "outcome"
+  | "preparation"
+  | "mlopsPipeline"
+  | "finalProduct"
   | "learning",
   CaseSection
 >;
@@ -110,10 +100,9 @@ export const alinaSections = [
   alinaCase.context,
   alinaCase.contribution,
   alinaCase.architecture,
-  alinaCase.agents,
-  alinaCase.matching,
-  alinaCase.optimization,
-  alinaCase.outcome,
+  alinaCase.preparation,
+  alinaCase.mlopsPipeline,
+  alinaCase.finalProduct,
   alinaCase.learning,
   {
     id: "herramientas",

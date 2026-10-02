@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { AlinaOptimizationFigure } from "@/components/projects/alina-optimization-figure";
-import { AlinaArchitecture } from "@/components/projects/alina-architecture";
-import { ProjectTools } from "@/components/projects/project-tools";
 import { CaseSection } from "@/components/projects/case-section";
+import { AlinaArchitecture } from "@/components/projects/alina-architecture";
+import { AlinaOptimizationFigure } from "@/components/projects/alina-optimization-figure";
 import { AlinaDashboard } from "@/components/projects/alina-dashboard";
 import { ProjectPagination } from "@/components/projects/project-pagination";
 import { ProjectExecutiveHero } from "@/components/projects/project-executive-hero";
+import { ProjectTools } from "@/components/projects/project-tools";
 import { alinaProject } from "@/data/projects";
 import {
   alinaCase,
-  alinaDecisions,
   alinaSections,
+  alinaDecisions,
   alinaTools,
 } from "@/data/alina";
 import styles from "@/components/projects/projects.module.css";
@@ -39,19 +39,19 @@ export default function AlinaCaseStudy() {
         {/* Split Hero: Characteristic Photo + Executive Summary */}
         <ProjectExecutiveHero
           project={alinaProject}
-          eyebrow="EDEM / Proyecto de Máster en IA"
+          eyebrow="Alina / Proyecto de Máster en IA"
           academicFramework="EDEM Escuela de Empresarios · Máster en IA / 2026"
-          scope="Prototipo funcional (FastAPI + Google ADK + React)"
+          scope="Prototipo funcional (FastAPI + Google ADK + Gemini + React)"
         />
 
         {/* Full In-Depth Case Study on Scroll */}
         <div id="case-study" className={styles.caseStudyFull}>
           <aside
             className={styles.privacy}
-            aria-label="Contexto del proyecto"
+            aria-label="Marco del proyecto"
           >
             <strong>Un proyecto de máster, ingeniería de IA aplicada.</strong>
-            <p>{alinaCase.contextNote}</p>
+            <p>{alinaCase.confidentiality}</p>
           </aside>
 
           <div className={styles.caseLayout}>
@@ -88,26 +88,15 @@ export default function AlinaCaseStudy() {
                 </ul>
               </CaseSection>
 
-              <CaseSection section={alinaCase.agents} />
+              <CaseSection section={alinaCase.preparation} />
 
-              <CaseSection section={alinaCase.matching}>
-                <div className={styles.methodNote}>
-                  <h3>Fórmula del Match Score</h3>
-                  <p>
-                    <code>match_score = (matched_skills + partial_skills × 0.5) / total_skills × 100</code>
-                  </p>
-                  <p>
-                    Se añaden <strong>+5 puntos</strong> si la modalidad del puesto (remoto, híbrido, presencial) coincide con la preferencia establecida por el candidato. Cada habilidad se audita individualmente frente al CV.
-                  </p>
-                </div>
+              <CaseSection section={alinaCase.mlopsPipeline}>
+                <AlinaOptimizationFigure />
               </CaseSection>
 
-              <CaseSection section={alinaCase.optimization}>
-                <AlinaOptimizationFigure />
+              <CaseSection section={alinaCase.finalProduct}>
                 <AlinaDashboard />
               </CaseSection>
-
-              <CaseSection section={alinaCase.outcome} />
 
               <CaseSection section={alinaCase.learning} />
 

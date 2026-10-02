@@ -111,13 +111,13 @@ export const alinaProject = {
   scope: "Sistema multi-agente con Google ADK y Gemini",
   executiveSummary: {
     lead:
-      "Sistema multi-agente con Google ADK y Gemini que transforma la búsqueda de empleo: extracción y matching explicable de habilidades frente al CV, simulación interactiva de entrevistas y generación personalizada de cartas.",
+      "Asistente inteligente con agentes de IA y Gemini para transformar la búsqueda de empleo: cálculo explicable de compatibilidad frente al CV, simulación de entrevistas técnicas y redacción asistida de cartas.",
     challenge:
-      "Eliminar la asimetría informativa en las ofertas de empleo y evitar alucinaciones en la preparación del candidato mediante matching auditable y estructurado.",
+      "Superar la desinformación de las ofertas de empleo y preparar candidaturas con rigor técnico, evitando filtros opacos y asegurando que la IA no invente méritos ausentes en el currículum.",
     solution:
-      "Orquestación multi-agente en FastAPI con Google ADK (LlmAgent, SequentialAgent, LoopAgent con parada estricta), parsing dual con Selenium y arquitectura de prompts en dos fases.",
+      "Backend en FastAPI con cuatro agentes especializados en Google ADK, extracción dual de ofertas completas, Match Score matemático transparente y optimización de prompts en dos fases.",
     impact:
-      "Reducción del 40% en consumo de tokens, disminución del 45% en latencia (55s a 30s) y fiabilidad JSON elevada del 60% al 95%.",
+      "Reducción del 45% en los tiempos de respuesta y del 40% en consumo de tokens, con un prototipo funcional en React para evaluar ofertas, practicar entrevistas e investigar empresas.",
     framework: "Proyecto de Máster en IA · EDEM Escuela de Empresarios",
   },
 } as const satisfies ProjectSummary;
