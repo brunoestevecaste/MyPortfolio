@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { ProjectTools } from "@/components/projects/project-tools";
 import { CaseSection } from "@/components/projects/case-section";
 import { NextPlanDashboard } from "@/components/projects/nextplan-dashboard";
 import { ProjectPagination } from "@/components/projects/project-pagination";
@@ -133,16 +133,21 @@ export default function NextPlanCaseStudy() {
 
               <CaseSection section={nextplanCase.learning} />
 
+              <section
+                id="herramientas"
+                data-project-section="Herramientas"
+                aria-labelledby="herramientas-title"
+                className={styles.caseSection}
+              >
+                <h2 id="herramientas-title">Herramientas y tecnologías</h2>
+                <ProjectTools
+                  tools={nextplanTools}
+                  size="large"
+                  ariaLabel="Herramientas y tecnologías utilizadas"
+                />
+              </section>
+
               <footer className={styles.caseFooter}>
-                <p>Herramientas y tecnologías utilizadas</p>
-                <ul className={styles.technologies} aria-label="Tecnologías">
-                  {nextplanTools.map((tool) => (
-                    <li key={tool}>{tool}</li>
-                  ))}
-                </ul>
-                <Link href="/#work" className={styles.backLink}>
-                  Volver a proyectos
-                </Link>
                 <ProjectPagination slug={nextplanProject.slug} />
               </footer>
             </div>

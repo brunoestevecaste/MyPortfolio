@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { aepdTools } from "@/data/aepd";
+import { ProjectTools } from "@/components/projects/project-tools";
 import { CaseSection } from "@/components/projects/case-section";
 import { AepdDashboard } from "@/components/projects/aepd-dashboard";
 import { ProjectPagination } from "@/components/projects/project-pagination";
@@ -21,6 +22,12 @@ const sections = [
   aepdCase.prediction,
   aepdCase.outcome,
   aepdCase.learning,
+  {
+    id: "herramientas",
+    label: "Herramientas",
+    title: "Herramientas y tecnologías",
+    paragraphs: [],
+  },
 ];
 
 export const metadata: Metadata = {
@@ -120,16 +127,21 @@ export default function AepdCaseStudy() {
               </CaseSection>
               <CaseSection section={aepdCase.outcome} />
               <CaseSection section={aepdCase.learning} />
+              <section
+                id="herramientas"
+                data-project-section="Herramientas"
+                aria-labelledby="herramientas-title"
+                className={styles.caseSection}
+              >
+                <h2 id="herramientas-title">Herramientas y tecnologías</h2>
+                <ProjectTools
+                  tools={aepdTools}
+                  size="large"
+                  ariaLabel="Herramientas utilizadas"
+                />
+              </section>
+
               <footer className={styles.caseFooter}>
-                <p>Herramientas utilizadas</p>
-                <ul className={styles.technologies} aria-label="Tecnologías">
-                  {aepdProject.technologies.map((technology) => (
-                    <li key={technology}>{technology}</li>
-                  ))}
-                </ul>
-                <Link href="/#work" className={styles.backLink}>
-                  Volver a proyectos
-                </Link>
                 <ProjectPagination slug={aepdProject.slug} />
               </footer>
             </div>

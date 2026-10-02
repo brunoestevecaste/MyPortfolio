@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { ProjectTools } from "@/components/projects/project-tools";
 import { CaseSection } from "@/components/projects/case-section";
 import { BaleariaArchitecture } from "@/components/projects/balearia-architecture";
 import { BaleariaDashboard } from "@/components/projects/balearia-dashboard";
@@ -92,16 +92,21 @@ export default function BaleariaCaseStudy() {
               </CaseSection>
               <CaseSection section={baleariaCase.outcome} />
               <CaseSection section={baleariaCase.learning} />
+              <section
+                id="herramientas"
+                data-project-section="Herramientas"
+                aria-labelledby="herramientas-title"
+                className={styles.caseSection}
+              >
+                <h2 id="herramientas-title">Herramientas y tecnologías</h2>
+                <ProjectTools
+                  tools={baleariaTools}
+                  size="large"
+                  ariaLabel="Herramientas y tecnologías utilizadas"
+                />
+              </section>
+
               <footer className={styles.caseFooter}>
-                <p>Herramientas de la solución del equipo</p>
-                <ul className={styles.technologies} aria-label="Tecnologías">
-                  {baleariaTools.map((tool) => (
-                    <li key={tool}>{tool}</li>
-                  ))}
-                </ul>
-                <Link href="/#work" className={styles.backLink}>
-                  Volver a proyectos
-                </Link>
                 <ProjectPagination slug={baleariaProject.slug} />
               </footer>
             </div>

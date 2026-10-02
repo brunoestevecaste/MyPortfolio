@@ -108,6 +108,12 @@ export const baleariaSections = [
   baleariaCase.context, baleariaCase.contribution, baleariaCase.architecture,
   baleariaCase.preparation, baleariaCase.prediction, baleariaCase.optimization,
   baleariaCase.operations, baleariaCase.outcome, baleariaCase.learning,
+  {
+    id: "herramientas",
+    label: "Herramientas",
+    title: "Herramientas y tecnologías",
+    paragraphs: [],
+  },
 ] as const;
 
 export const baleariaInputs = [

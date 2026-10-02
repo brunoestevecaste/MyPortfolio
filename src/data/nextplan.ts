@@ -140,6 +140,12 @@ export const nextplanSections = [
   nextplanCase.feedback,
   nextplanCase.outcome,
   nextplanCase.learning,
+  {
+    id: "herramientas",
+    label: "Herramientas",
+    title: "Herramientas y tecnologías",
+    paragraphs: [],
+  },
 ] as const;
 
 export const nextplanPipeline = [

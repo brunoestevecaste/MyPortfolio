@@ -110,6 +110,12 @@ export const alinaSections = [
   alinaCase.optimization,
   alinaCase.outcome,
   alinaCase.learning,
+  {
+    id: "herramientas",
+    label: "Herramientas",
+    title: "Herramientas y tecnologías",
+    paragraphs: [],
+  },
 ] as const;
 
 export const alinaPipeline = [
