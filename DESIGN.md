@@ -418,6 +418,7 @@ Por indicación de Bruno en septiembre de 2026 y siguiendo la referencia de `ref
      - Índice lateral sticky de secciones (`Contexto`, `Arquitectura`, `Preparación`,
        `Predicción`, `Modelos / Clustering / Agentes`, `Demostración interactiva / Dashboard`,
        `Resultados`, `Aprendizajes`).
+     - Títulos de las diferentes secciones en mayúsculas y negrita (`Bricolage Grotesque`, `font-weight: 700`, `text-transform: uppercase`).
      - Demostradores interactivos completos y dashboards con Recharts (AEPD, Baleària,
        NextPlan, Alina).
      - Paginación editorial recíproca al pie entre proyectos.

@@ -337,7 +337,7 @@
 }
 
 .executivePointCard {
-  border-left: 2px solid var(--signal);
+  border-left: 2px solid var(--accent);
   padding-left: 1.25rem;
 }
 
@@ -671,9 +671,10 @@
   margin-bottom: 2rem;
   font-family: var(--font-bricolage-grotesque), sans-serif;
   font-size: clamp(2rem, 3.6vw, 3.5rem);
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1.08;
   letter-spacing: var(--tracking-heading-title);
+  text-transform: uppercase;
   text-wrap: balance;
 }
 
