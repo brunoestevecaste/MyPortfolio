@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { ProjectTools } from "@/components/projects/project-tools";
 import { CaseSection } from "@/components/projects/case-section";
 import { BaleariaArchitecture } from "@/components/projects/balearia-architecture";
 import { BaleariaDashboard } from "@/components/projects/balearia-dashboard";
 import { NavigationFigure } from "@/components/projects/navigation-figure";
 import { ProjectPagination } from "@/components/projects/project-pagination";
 import { ProjectExecutiveHero } from "@/components/projects/project-executive-hero";
+import { ProjectTools } from "@/components/projects/project-tools";
 import { baleariaProject } from "@/data/projects";
 import {
   baleariaCase,
@@ -85,14 +85,12 @@ export default function BaleariaCaseStudy() {
                 </ul>
               </CaseSection>
               <CaseSection section={baleariaCase.preparation} />
-              <CaseSection section={baleariaCase.prediction} />
-              <CaseSection section={baleariaCase.optimization}>
+              <CaseSection section={baleariaCase.mlopsPipeline}>
                 <NavigationFigure />
               </CaseSection>
-              <CaseSection section={baleariaCase.operations}>
+              <CaseSection section={baleariaCase.finalProduct}>
                 <BaleariaDashboard />
               </CaseSection>
-              <CaseSection section={baleariaCase.outcome} />
               <CaseSection section={baleariaCase.learning} />
               <section
                 id="herramientas"

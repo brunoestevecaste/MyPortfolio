@@ -78,11 +78,11 @@ export const baleariaProject = {
     lead:
       "Plataforma en Google Cloud que conecta datos de navegación marítima, modelos de consumo de combustible y algoritmos de optimización para recomendar velocidades por tramo y reducir la energía estimada respetando la llegada.",
     challenge:
-      "Reducir emisiones y consumo energético en rutas de alta frecuencia manteniendo la puntualidad y operando con datos de telemetría y meteorología en tiempo real.",
+      "Reducir el gasto de combustible y las emisiones en travesías regulares manteniendo la puntualidad, en un entorno donde el viento y las corrientes cambian de forma constante.",
     solution:
-      "Pipeline de IA en Kubeflow/Vertex AI con alineación temporal de sensores GPS, modelado de componentes energéticos y optimización mediante programación dinámica con restricciones operativas.",
+      "Pipeline continuo de Machine Learning en Google Cloud que predice la potencia necesaria según las condiciones del mar y optimiza la velocidad tramo a tramo, apoyado en una base de datos centralizada con dbt.",
     impact:
-      "Validación técnica del prototipo desplegado en GCP con monitorización en vivo y dashboards operacionales deterministas para centros de control en tierra y tripulación a bordo.",
+      "Simulador web interactivo con vistas adaptadas para operaciones en tierra y el puente de mando, ofreciendo criterios objetivos de velocidad para ahorrar energía sin llegar tarde.",
     framework: "TFM Máster en Inteligencia Artificial · EDEM Escuela de Empresarios",
   },
 } as const satisfies ProjectSummary;

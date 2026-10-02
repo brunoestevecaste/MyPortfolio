@@ -10,83 +10,62 @@ export const baleariaCase = {
   context: {
     id: "contexto",
     label: "El reto",
-    title: "Consumir menos, llegar a tiempo",
+    title: "Consumir menos sin llegar tarde",
     paragraphs: [
-      "La eficiencia de un viaje marítimo depende de más que su velocidad media. La carga, el viento, el oleaje, las corrientes y la fase de navegación cambian la potencia necesaria para avanzar. Reducir velocidad de forma indiscriminada puede comprometer la hora de llegada; aumentarla para recuperar tiempo también tiene un coste energético.",
-      "El TFM desarrollado para Baleària en EDEM abordó ese equilibrio mediante una plataforma desplegada en Google Cloud Platform. El objetivo era reunir información operativa dispersa, estimar la potencia necesaria por tramo y buscar un perfil de velocidades compatible con el tiempo disponible.",
-      "El alcance combinó históricos de navegación, telemetría simulada en streaming y fuentes meteorológicas y marítimas. Las recomendaciones se plantearon como apoyo a operaciones y a la tripulación: la decisión de navegación permanece en manos del personal a bordo.",
+      "En el transporte marítimo, ahorrar combustible no es tan sencillo como navegar más despacio. El viento, el oleaje, las corrientes y la carga del barco cambian de forma constante la fuerza necesaria para avanzar. Reducir la velocidad sin criterio compromete los horarios del puerto, pero acelerar de golpe para recuperar tiempo dispara el consumo de combustible.",
+      "El reto de este proyecto para Baleària fue encontrar el equilibrio óptimo: determinar a qué velocidad debe navegar el buque en cada punto de la travesía para minimizar el gasto energético total, asegurando siempre la llegada a la hora programada.",
+      "Para que la solución fuera aplicable en la operativa real, las recomendaciones debían actuar como un sistema de apoyo a la toma de decisiones para los equipos de tierra y el puente de mando, dejando siempre el control final en manos del capitán.",
     ],
   },
   contribution: {
     id: "aportacion",
     label: "Mi aportación",
-    title: "IA conectada con el problema de negocio",
+    title: "Inteligencia artificial guiada por el negocio",
     paragraphs: [
-      "Trabajé en el área de Inteligencia Artificial junto a otra integrante del equipo. Mi aportación se centró en conectar la preparación de los datos operativos con la estimación del consumo y la recomendación de velocidades por tramo, dentro de una solución cloud compartida.",
-      "El trabajo de IA abarcó la integración y validación de datos para modelado, el entrenamiento y la evaluación de modelos energéticos, y el motor de optimización. La trazabilidad y los controles de calidad permitían evaluar una recomendación junto con los datos y el modelo que la habían generado.",
-      "La arquitectura de ingesta, la infraestructura y el dashboard que se describen a continuación forman parte del resultado colectivo. La colaboración entre ingeniería de datos, cloud e IA fue necesaria para que todas las capas utilizaran una base analítica coherente.",
+      "Dentro de un equipo multidisciplinar en Baleària, mi contribución se centró en el área de Inteligencia Artificial y optimización: diseñar la lógica para transformar los datos de los sensores en estimaciones de consumo fiables y en recomendaciones de velocidad prácticas.",
+      "Mi trabajo abarcó desde la estructuración de las variables de navegación y el entrenamiento de los modelos predictivos de energía, hasta el algoritmo que calcula la mejor combinación de velocidades y los controles de calidad para asegurar que las sugerencias fueran siempre seguras.",
+      "Ningún algoritmo genera impacto si trabaja aislado. La clave estuvo en colaborar estrechamente con los perfiles de datos y cloud para que los modelos se apoyaran en una arquitectura sólida y compartida, que conecta desde la captura del dato hasta la pantalla del usuario.",
     ],
   },
   architecture: {
     id: "arquitectura",
     label: "Arquitectura cloud",
-    title: "Tres entradas, una base analítica común",
+    title: "De las fuentes de datos a la plataforma común",
     paragraphs: [
-      "El histórico se carga desde Cloud Storage a Cloud SQL. La telemetría simulada recorre una capa de entrada, Pub/Sub y Cloud Functions, separando la recepción de mensajes de su procesamiento. Las fuentes externas aportan el contexto meteorológico y marítimo.",
-      "Sobre PostgreSQL en Cloud SQL, dbt transforma los datos en modelos analíticos que alimentan tanto el dashboard como el pipeline de Machine Learning. Cloud Composer, con Apache Airflow, coordina el flujo de datos externos y las transformaciones; Kubeflow Pipelines estructura las etapas de IA en Vertex AI.",
-      "Cloud Run aloja servicios de aplicación y procesos en contenedores. Terraform define la infraestructura y facilita reproducir el entorno. Esta separación permite modificar la ingesta, el modelado o la visualización sin rehacer toda la plataforma.",
+      "Para que el sistema recomiende velocidades con criterio, necesita alimentar los modelos con información fiable y en tiempo real. La arquitectura desplegada en Google Cloud Platform reúne tres fuentes distintas: el histórico de viajes pasados, la telemetría enviada por el buque y las previsiones meteorológicas y marítimas.",
+      "Todas estas fuentes convergen en una base de datos centralizada en Cloud SQL (PostgreSQL), donde la herramienta dbt limpia, estandariza y valida la información. Esto garantiza que tanto los modelos de IA como las pantallas de control trabajen siempre sobre los mismos datos depurados.",
     ],
   },
   preparation: {
     id: "preparacion",
     label: "Preparación de datos",
-    title: "El tramo como unidad de decisión",
+    title: "El tramo de navegación como unidad de medida",
     paragraphs: [
-      "GPS, sensores y registros de viaje tienen frecuencias y granularidades diferentes. El pipeline reconstruye la trayectoria y la divide en tramos de distancia, vinculando cada lectura a la ventana temporal del viaje y del segmento correspondiente.",
-      "La integración temporal de potencia permite obtener energía por tramo. Separar propulsión, auxiliares y generación de eje conserva comportamientos distintos, en lugar de ocultarlos en un único total.",
-      "El contexto ambiental también se expresa respecto al rumbo: una corriente a favor y una corriente en contra no tienen el mismo efecto. Antes del entrenamiento se comprueban cobertura, coherencia temporal, rangos físicos y consistencia energética. Los tramos sin calidad suficiente quedan fuera del modelado.",
+      "Los datos brutos de un buque llegan desordenados y a ritmos muy dispares: el GPS emite coordenadas cada pocos segundos, los motores transmiten potencia continua y los partes meteorológicos se actualizan cada varias horas. Para hacerlos comparables, el primer paso fue dividir cada travesía en tramos regulares de navegación.",
+      "En cada tramo separamos el gasto energético en sus tres sistemas principales: la propulsión (motores que mueven el barco), los servicios auxiliares (electricidad y climatización a bordo) y los generadores de eje. Desglosar la energía permite al modelo entender el comportamiento real del barco en vez de ocultarlo tras una cifra global.",
+      "Además, calculamos el efecto del viento y las corrientes respecto al rumbo del buque, ya que una corriente a favor empuja el barco y una en contra multiplica la resistencia. Una vez limpios y enriquecidos, estos tramos alimentan el núcleo inteligente del proyecto: el pipeline de Machine Learning.",
     ],
   },
-  prediction: {
-    id: "prediccion",
-    label: "Modelos predictivos",
-    title: "Estimar potencia y conocer la incertidumbre",
+  mlopsPipeline: {
+    id: "pipeline-mlops",
+    label: "Pipeline MLOps",
+    title: "El flujo de IA: estimar, optimizar y gobernar",
     paragraphs: [
-      "El modelado compara referencias sencillas con alternativas como Ridge, Random Forest e HistGradientBoosting. En los auxiliares se contempla un enfoque en dos etapas: detectar actividad y, después, estimar la potencia cuando el componente está activo.",
-      "La validación respeta el orden temporal y mantiene los viajes completos dentro de cada partición. Así, el modelo se entrena con el pasado y se evalúa sobre viajes posteriores. Una auditoría de variables excluye información conocida solo después del viaje y datos derivados del propio consumo que se quiere predecir.",
-      "La evaluación combina error absoluto, error relativo ponderado y sesgo, con lectura por componente, tramo, viaje y ruta. También revisa la coherencia física de la relación entre velocidad y potencia propulsiva.",
-      "Los intervalos de incertidumbre se calibran con errores de validación. El optimizador utiliza una estimación conservadora de energía para evitar que una recomendación dependa únicamente de la predicción más favorable.",
+      "Con los datos organizados por tramos, el reto del sistema es resolver una decisión práctica: ¿a qué velocidad conviene navegar en cada segmento para gastar el mínimo combustible sin retrasar la llegada a puerto? Para responder con solvencia, construimos un flujo continuo de Machine Learning y MLOps estructurado en tres etapas consecutivas.",
+      "En primer lugar, un modelo predictivo estima la potencia necesaria para cada tramo en función de la velocidad y del estado del mar (viento, corrientes y altura de olas). En lugar de aplicar tablas teóricas, el modelo aprende de viajes pasados reales e incorpora un margen de prudencia para que la recomendación nunca dependa de un cálculo excesivamente optimista.",
+      "A continuación, el algoritmo de optimización analiza la travesía completa para encontrar el reparto de velocidades más eficiente. Si un tramo presenta condiciones meteorológicas adversas, compensa moderar la marcha para no malgastar energía y recuperar tiempo en zonas de aguas calmas. La figura inferior muestra este principio: frente a navegar a velocidad constante, la propuesta inteligente ajusta el ritmo tramo a tramo, cumpliendo el horario con menor esfuerzo.",
+      "Por último, la capa de MLOps garantiza la fiabilidad y trazabilidad de todo el sistema en la nube. Cada recomendación queda registrada con sus datos meteorológicos y la versión del modelo que la originó. Antes de activar un nuevo modelo, se ejecutan validaciones automáticas que comprueban su coherencia física, permitiendo detectar cuándo cambian los patrones de navegación y hace falta reentrenar.",
     ],
   },
-  optimization: {
-    id: "optimizacion",
-    label: "Optimización",
-    title: "Una velocidad para cada tramo, un límite para el viaje",
+  finalProduct: {
+    id: "producto-final",
+    label: "Producto final",
+    title: "Centro de control y apoyo a la navegación en vivo",
     paragraphs: [
-      "Para cada tramo restante se generan velocidades candidatas dentro del dominio respaldado por el histórico. Los modelos estiman su potencia y el sistema calcula el tiempo y la energía asociados. La hora estimada de llegada, o ETA, fija el presupuesto temporal del conjunto.",
-      "La programación dinámica busca la combinación que minimiza el coste energético conservador. Incluye reservas de tiempo y penaliza cambios bruscos de velocidad. Las fases de aproximación y maniobra tienen restricciones específicas.",
-      "No basta con encontrar un perfil matemáticamente factible. Antes de emitir una recomendación se comprueba que sea estable ante pequeños cambios del contexto, que aporte un beneficio suficiente o recupere puntualidad, y que pueda ejecutarse en la fase de navegación actual.",
-      "El backtest compara alternativas sobre viajes reservados para evaluación. Ese análisis permite estudiar qué habría recomendado el sistema; no equivale a medir combustible ahorrado tras aplicar las recomendaciones a bordo.",
-    ],
-  },
-  operations: {
-    id: "mlops",
-    label: "MLOps y producto",
-    title: "La recomendación necesita contexto y trazabilidad",
-    paragraphs: [
-      "El pipeline conserva una relación entre la extracción de datos, el entrenamiento, los informes de evaluación y la versión del modelo. Una compuerta de calidad reúne las comprobaciones de datos, predicción y optimización antes de permitir el registro del paquete.",
-      "El diseño de monitorización contempla cambios en las variables de entrada, nuevas rutas, cobertura de recomendaciones y calidad de los datos. La memoria detalla señales y reglas para gobernar el reentrenamiento; cerrar y validar ese ciclo automático en operación sigue siendo una línea de evolución.",
-      "El dashboard ofrece dos perspectivas: operaciones en tierra, con tendencias y comparación de viajes, y tripulación, con posición, sensores y condiciones del entorno. React presenta la información y una API en Cloud Run consulta la base analítica. En el TFM, el flujo en vivo se alimenta con telemetría simulada.",
-    ],
-  },
-  outcome: {
-    id: "resultado",
-    label: "Resultado y límites",
-    title: "Una cadena funcional desplegada en GCP",
-    paragraphs: [
-      "El resultado fue una plataforma que conecta carga histórica, streaming simulado, transformación analítica, modelos energéticos y visualización. La documentación describe la validación técnica del flujo y un pipeline de IA con controles de aceptación y advertencias pendientes de resolver.",
-      "El valor del proyecto está en convertir una predicción en una decisión evaluable: proponer velocidades con restricciones de llegada, incorporar incertidumbre y conservar la evidencia de cada ejecución. Los consumos, costes, errores y resultados internos no se publican en este caso.",
-      "El despliegue cloud del prototipo no demuestra por sí solo ahorro operativo ni adopción a bordo. La siguiente fase planteada es un piloto con operaciones y capitanes, seguido de validación en nuevas rutas y buques. Separar almacenamiento operacional y analítico sería otra evolución si aumenta la escala.",
+      "Todo este trabajo de datos y algoritmos solo cobra verdadero sentido si llega de forma clara y oportuna a las personas que toman las decisiones. Para conectar el pipeline de IA con la operativa diaria de Baleària, desarrollamos una aplicación web interactiva en React que ofrece dos puntos de vista especializados: Operaciones en tierra y Tripulación en el mar.",
+      "Para el equipo de Operaciones en tierra, la plataforma brinda una visión global y comparativa de la flota. Permite supervisar el avance de cada viaje en tiempo real, contrastar la velocidad observada frente a la sugerida por la IA y vigilar el consumo acumulado. Gracias a esta perspectiva, la compañía puede detectar ineficiencias de forma inmediata y analizar el rendimiento histórico de las rutas con datos objetivos.",
+      "Para la Tripulación a bordo, la interfaz se simplifica para responder a las necesidades inmediatas del puente de mando. El capitán y los oficiales reciben una recomendación de velocidad directa para el tramo en curso, el margen de minutos respecto a la hora de llegada y el estado del entorno marítimo. Esto les proporciona un criterio objetivo para ahorrar combustible manteniendo siempre la seguridad de la navegación.",
+      "A continuación puedes explorar el prototipo funcional. Alterna entre la vista de Operaciones y la de Tripulación, cambia de barco o travesía y utiliza el simulador para comprobar cómo responde el sistema ante nuevas condiciones.",
     ],
   },
   learning: {
@@ -94,20 +73,24 @@ export const baleariaCase = {
     label: "Aprendizajes",
     title: "La mejor predicción no siempre es la mejor decisión",
     paragraphs: [
-      "Este proyecto reforzó mi forma de abordar la IA aplicada: empezar por la decisión que necesita el negocio y construir hacia atrás los datos, el modelo y los controles necesarios. Un error en la alineación entre GPS y sensores puede condicionar toda la recomendación, aunque el algoritmo sea adecuado.",
-      "También me permitió conectar predicción y optimización. Un modelo con buen error medio puede resultar poco útil si extrapola fuera del histórico o genera cambios de velocidad difíciles de ejecutar. La incertidumbre, la estabilidad y las restricciones operativas forman parte del producto.",
-      "Trabajar con el equipo de datos y cloud hizo tangible otra lección: una solución de IA no termina en el entrenamiento. Necesita contratos de datos, versiones reproducibles, observabilidad y una interfaz que permita interpretar sus límites.",
+      "Este proyecto consolidó mi visión sobre cómo aplicar la inteligencia artificial a problemas de negocio: el punto de partida debe ser siempre la decisión operativa que se quiere mejorar, construyendo hacia atrás los modelos, los datos y los controles necesarios.",
+      "Comprobé que un modelo con un margen de error estadístico bajo puede ser inútil en la práctica si propone cambios de velocidad bruscos o difíciles de maniobrar para un barco de gran tonelaje. Las restricciones del mundo real y la gestión de la incertidumbre deben integrarse en el propio algoritmo de optimización.",
+      "Por último, la experiencia reafirmó que un proyecto de IA no termina en el entrenamiento de un modelo. Para generar impacto duradero se necesitan contratos de datos fiables, una infraestructura cloud que garantice la trazabilidad y, sobre todo, una interfaz clara que transmita confianza a los usuarios finales.",
     ],
   },
 } as const satisfies { introduction: string; confidentiality: string } & Record<
-  "context" | "contribution" | "architecture" | "preparation" | "prediction" |
-  "optimization" | "operations" | "outcome" | "learning", CaseSection
+  "context" | "contribution" | "architecture" | "preparation" | "mlopsPipeline" |
+  "finalProduct" | "learning", CaseSection
 >;
 
 export const baleariaSections = [
-  baleariaCase.context, baleariaCase.contribution, baleariaCase.architecture,
-  baleariaCase.preparation, baleariaCase.prediction, baleariaCase.optimization,
-  baleariaCase.operations, baleariaCase.outcome, baleariaCase.learning,
+  baleariaCase.context,
+  baleariaCase.contribution,
+  baleariaCase.architecture,
+  baleariaCase.preparation,
+  baleariaCase.mlopsPipeline,
+  baleariaCase.finalProduct,
+  baleariaCase.learning,
   {
     id: "herramientas",
     label: "Herramientas",
