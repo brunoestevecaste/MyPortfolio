@@ -26,8 +26,8 @@ export const education: readonly Education[] = [
       "Proyectos aplicados con Python, SQL, Git, Docker y herramientas del ecosistema Data & AI.",
     ],
     image: {
-      src: "/education/ai-master-monochrome-dark-matched.webp",
-      alt: "Figura humana sobre fondo negro, en escala de grises con bloques translúcidos y distorsión digital, composición conceptual de Inteligencia Artificial",
+      src: "/education/ai-master-synapse.webp",
+      alt: "Composición conceptual de Inteligencia Artificial con figura humana y red sináptica con acento en rojo",
     },
   },
   {
@@ -43,8 +43,8 @@ export const education: readonly Education[] = [
       "Minería de datos, analítica predictiva y visualización para abordar problemas empresariales desde el análisis, la tecnología y la estrategia.",
     ],
     image: {
-      src: "/education/bia-degree.webp",
-      alt: "Monografía editorial suiza con gráficos de analítica de datos y visualización para inteligencia de negocio",
+      src: "/education/bia-degree-dual.webp",
+      alt: "Monografía editorial con trazas de circuito de hardware y gráfico de distribución estadística con acento en rojo",
     },
   },
 ];

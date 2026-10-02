@@ -54,7 +54,7 @@ export function EducationSection() {
                 alt={entry.image.alt}
                 fill
                 sizes="(min-width: 1024px) 45vw, (min-width: 768px) 50vw, 100vw"
-                className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                className="object-cover grayscale transition-[transform,filter] duration-500 ease-out group-hover:scale-[1.02] group-hover:grayscale-0 motion-reduce:transform-none"
               />
             </div>
           </article>
