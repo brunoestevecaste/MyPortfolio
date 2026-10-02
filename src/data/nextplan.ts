@@ -1,5 +1,10 @@
 import type { CaseSection } from "./projects";
 
+type ArchitectureInput = {
+  title: string;
+  steps: readonly string[];
+};
+
 // Fuente: Repositorio público Data_IA_Project_3, arquitectura GCP implementada,
 // pipelines de Dataflow, dbt, clustering K-Means, Vertex AI Agent Engine y Frontend React.
 export const nextplanCase = {
@@ -145,6 +150,62 @@ export const nextplanSections = [
     label: "Herramientas",
     title: "Herramientas y tecnologías",
     paragraphs: [],
+  },
+] as const;
+
+export const nextplanInputs = [
+  {
+    title: "Catálogo masivo",
+    steps: ["Ticketmaster API diaria", "Apache Beam (Dataflow)", "Enriquecimiento Gemini + Embeddings"],
+  },
+  {
+    title: "Telemetría en tiempo real",
+    steps: ["SPA React 19", "FastAPI portal-api", "Pub/Sub streaming swipe-events"],
+  },
+  {
+    title: "Feedback post-evento",
+    steps: ["Cloud Tasks & Cloud Functions", "SendGrid (JWT firmado HS256)", "Calificación 1-clic"],
+  },
+] as const satisfies readonly ArchitectureInput[];
+
+export const nextplanDataUses = [
+  {
+    title: "Motor de recomendación",
+    service: "K-Means + Scoring multivariable",
+    action: "Clustering por afinidad, vecinos y bonificaciones",
+    outcome: "Ranking personalizado por usuario",
+    audience: "Tarjetas de swipe y mapa",
+  },
+  {
+    title: "Asistente conversacional",
+    service: "Vertex AI Agent Engine (ADK)",
+    action: "Extracción defensiva + VECTOR_SEARCH en BigQuery",
+    outcome: "Itinerarios reales sin alucinación",
+    audience: "Chat en lenguaje natural",
+  },
+] as const;
+
+export const nextplanDecisions = [
+  {
+    title: "Ingesta dual: streaming reactivo con Pub/Sub y batch masivo con Dataflow",
+    paragraphs: [
+      "El comportamiento del usuario exige inmediatez: cada swipe o lectura prolongada se transmite de forma asíncrona mediante Pub/Sub a BigQuery sin bloquear la aplicación web, garantizando alta tolerancia a picos de tráfico.",
+      "Por su parte, la actualización del catálogo cultural se ejecuta en batch diario mediante Apache Beam en Dataflow, enriqueciendo las descripciones con Gemini y generando embeddings vectoriales de forma controlada y rentable.",
+    ],
+  },
+  {
+    title: "Almacén analítico centralizado y Feature Store con dbt sobre BigQuery",
+    paragraphs: [
+      "Evitar silos entre la navegación de la app y los modelos de IA fue prioritario. Centralizar todo el histórico en BigQuery y transformar las interacciones con dbt en ventanas móviles de 30 y 90 días permite calcular señales de afinidad limpias y comparables.",
+      "Este modelado dimensional actúa como un Feature Store continuo: tanto el algoritmo K-Means como las consultas vectoriales de búsqueda se nutren exactamente de los mismos datos depurados y auditables.",
+    ],
+  },
+  {
+    title: "Recomendación híbrida: K-Means con expansión de centroides y agente RAG",
+    paragraphs: [
+      "El sistema no depende de una sola técnica de IA. Para navegación rápida, el algoritmo K-Means segmenta a los usuarios por afinidad y calcula distancias euclídeas entre centroides para sugerir planes afines sin encerrar al usuario en una burbuja de repetición.",
+      "Para búsquedas complejas en lenguaje natural, un agente conversacional RAG en Vertex AI traduce la intención del usuario a una consulta SQL y vectorial sobre BigQuery, entregando itinerarios con precios y horarios reales sin riesgo de alucinación.",
+    ],
   },
 ] as const;
 

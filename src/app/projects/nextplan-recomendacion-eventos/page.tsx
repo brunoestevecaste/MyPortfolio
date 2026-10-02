@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { NextPlanScoringFigure } from "@/components/projects/nextplan-scoring-figure";
+import { NextPlanArchitecture } from "@/components/projects/nextplan-architecture";
 import { ProjectTools } from "@/components/projects/project-tools";
 import { CaseSection } from "@/components/projects/case-section";
 import { NextPlanDashboard } from "@/components/projects/nextplan-dashboard";
@@ -7,13 +9,12 @@ import { ProjectExecutiveHero } from "@/components/projects/project-executive-he
 import { nextplanProject } from "@/data/projects";
 import {
   nextplanCase,
-  nextplanPipeline,
+  nextplanDecisions,
   nextplanSections,
   nextplanTools,
-  nextplanClusters,
-  nextplanScoringFactors,
 } from "@/data/nextplan";
 import styles from "@/components/projects/projects.module.css";
+import archStyles from "@/components/projects/project-architecture.module.css";
 
 const path = `/projects/${nextplanProject.slug}`;
 
@@ -66,22 +67,17 @@ export default function NextPlanCaseStudy() {
               <CaseSection section={nextplanCase.context} />
 
               <CaseSection section={nextplanCase.architecture}>
-                <figure className={styles.architecture}>
-                  <ol>
-                    {nextplanPipeline.map((step) => (
-                      <li key={step.title}>
-                        <strong>{step.title}</strong>
-                        <span>{step.detail}</span>
-                      </li>
-                    ))}
-                  </ol>
-                  <p className={styles.directConnection}>
-                    El sistema combina streaming asíncrono con Pub/Sub para swipes, batching periódico con Dataflow y dbt sobre BigQuery, y APIs en Cloud Run para baja latencia.
-                  </p>
-                  <figcaption>
-                    Arquitectura global de ingesta, analítica, clustering de gustos y servicio de recomendaciones en Google Cloud.
-                  </figcaption>
-                </figure>
+                <NextPlanArchitecture />
+                <ul className={archStyles.decisions}>
+                  {nextplanDecisions.map((decision) => (
+                    <li key={decision.title}>
+                      <h3>{decision.title}</h3>
+                      {decision.paragraphs.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                    </li>
+                  ))}
+                </ul>
               </CaseSection>
 
               <CaseSection section={nextplanCase.enrichment} />
@@ -89,39 +85,10 @@ export default function NextPlanCaseStudy() {
               <CaseSection section={nextplanCase.transformations} />
 
               <CaseSection section={nextplanCase.clustering}>
-                <div className={styles.methodNote}>
-                  <h3>Perfiles de Clúster de Usuario (K-Means)</h3>
-                  <p>
-                    El algoritmo identifica segmentos de afinidad basados en el histórico de swipes en ventanas móviles de 30 y 90 días, calculando matrices de distancia euclídea entre centroides para habilitar la recomendación inter-clúster.
-                  </p>
-                  <ul style={{ listStyle: "none", padding: 0, margin: "1rem 0 0 0", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                    {nextplanClusters.map((cluster) => (
-                      <li key={cluster.id} style={{ borderLeft: "2px solid var(--signal)", paddingLeft: "0.75rem" }}>
-                        <strong>{cluster.name}</strong> ({cluster.affinitySegment})
-                        <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>
-                          {cluster.traits} · Ticket medio: {cluster.avgTicket}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <NextPlanScoringFigure />
               </CaseSection>
 
               <CaseSection section={nextplanCase.serving}>
-                <div className={styles.methodNote}>
-                  <h3>Fórmula de Scoring Multivariable de Candidatos</h3>
-                  <p>
-                    <code>Score = (Peso_Clúster × Afinidad_Base) + Home_City_Boost + Urgency_Boost</code>
-                  </p>
-                  <ul style={{ paddingLeft: "1.2rem", margin: "0.5rem 0", fontSize: "0.85rem" }}>
-                    {nextplanScoringFactors.map((factor) => (
-                      <li key={factor.name}>
-                        <strong>{factor.name}</strong> ({factor.weight}): {factor.description}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
                 <NextPlanDashboard />
               </CaseSection>
 
