@@ -1,15 +1,15 @@
 .architecture,
-.navigationFigure,
-.sharedData {
+.navigationFigure {
   border-radius: var(--radius-editorial);
 }
 
 .decisions {
-  margin-top: 2.5rem;
+  max-width: 65ch;
+  margin-top: 3rem;
 }
 
 .decisions li {
-  padding-block: 1.5rem;
+  padding-block: 1.25rem;
 }
 
 .decisions h3 {
@@ -21,7 +21,7 @@
 .decisions p {
   max-width: 65ch;
   margin-top: 0.75rem;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   line-height: 1.85;
 }
 
@@ -33,45 +33,269 @@
   border: 1px solid var(--accent);
 }
 
-.inputs,
-.consumers {
+.architecture {
+  container-type: inline-size;
+}
+
+.architectureHeader {
+  margin-bottom: 2rem;
+}
+
+.architectureHeader h3 {
+  color: var(--accent);
+  font-family: var(--font-bricolage-grotesque), sans-serif;
+  font-size: clamp(1.375rem, 2vw, 1.875rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: var(--tracking-heading-small);
+  text-wrap: balance;
+}
+
+.inputs {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.75rem;
+  gap: 0;
 }
 
-.consumers {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.input {
+  position: relative;
+  padding-inline: 0.75rem;
+  padding-bottom: 1.5rem;
+  text-align: center;
 }
 
-.architecture strong {
-  display: block;
-  font-family: var(--font-archivo), sans-serif;
-  font-size: clamp(1.125rem, 1.7vw, 1.5rem);
-  font-weight: 500;
+.input h4,
+.consumer h4 {
+  font-family: var(--font-bricolage-grotesque), sans-serif;
+  font-size: clamp(1.0625rem, 1.5vw, 1.375rem);
+  font-weight: 600;
   line-height: 1.25;
-  letter-spacing: -0.025em;
+  letter-spacing: var(--tracking-heading-small);
+  text-wrap: balance;
 }
 
-.architecture span {
-  display: block;
-  margin-top: 0.75rem;
+.inputSteps,
+.dataNode p,
+.dataNode span,
+.service,
+.action,
+.audience,
+.flowSupport {
   font-size: 0.75rem;
-  line-height: 1.8;
+  line-height: 1.7;
+}
+
+.inputSteps {
+  margin-top: 1rem;
+  list-style: none;
+}
+
+.inputSteps li + li::before {
+  content: "↓";
+  display: block;
+  margin-block: 0.25rem;
+  color: var(--muted);
+}
+
+.input::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  height: 1.25rem;
+  border-left: 1px solid var(--signal);
+}
+
+/* The three input stems meet, then enter Cloud SQL at the left node. */
+.convergence {
+  position: relative;
+  height: 2rem;
+  margin-inline: calc(100% / 6);
+  border-top: 1px solid var(--signal);
+}
+
+.convergence::before,
+.distribution::before,
+.outcomeArrow::before {
+  content: "";
+  position: absolute;
+  border-left: 1px solid var(--signal);
+}
+
+.convergence::before {
+  top: 0;
+  bottom: 0;
+  left: 12.5%;
+}
+
+.convergence::after,
+.consumer::before,
+.transformArrow::after,
+.outcomeArrow::after {
+  content: "";
+  position: absolute;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-right: 1px solid var(--signal);
+  border-bottom: 1px solid var(--signal);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.convergence::after {
+  bottom: 0;
+  left: 12.5%;
 }
 
 .flowLabel {
-  margin-block: 1.5rem;
-  color: var(--signal);
+  margin-block: 0.75rem;
+  text-align: center;
+  color: var(--muted);
   font-size: 0.75rem;
+  line-height: 1.7;
+}
+
+.convergence + .flowLabel {
+  width: 50%;
 }
 
 .sharedData {
-  background: var(--canvas);
-  padding: 1.5rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  padding-block: 0.5rem 1.5rem;
 }
 
-.architecture figcaption,
+.dataNode {
+  padding-inline: 0.75rem;
+  text-align: center;
+}
+
+.dataNode h4 {
+  color: var(--accent);
+  font-family: var(--font-bricolage-grotesque), sans-serif;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: var(--tracking-heading-small);
+}
+
+.dataNode p {
+  margin-top: 0.75rem;
+}
+
+.dataNode span {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--muted);
+}
+
+.transformArrow {
+  position: absolute;
+  top: 40%;
+  left: calc(50% - 1.5rem);
+  width: 3rem;
+  border-top: 1px solid var(--signal);
+}
+
+.transformArrow::after {
+  top: -0.25rem;
+  right: 0;
+  transform: rotate(-45deg);
+}
+
+/* Only the prepared dbt data branches towards IA and the application API. */
+.distribution {
+  position: relative;
+  height: 3rem;
+}
+
+.distribution::before {
+  top: 0;
+  left: 75%;
+  height: 1.5rem;
+}
+
+.distribution::after {
+  content: "";
+  position: absolute;
+  top: 1.5rem;
+  right: 25%;
+  left: 25%;
+  height: 1.5rem;
+  border: 1px solid var(--signal);
+  border-bottom: 0;
+}
+
+.consumers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.consumer {
+  position: relative;
+  padding: 1rem 1rem 0;
+  text-align: center;
+}
+
+.consumer::before {
+  top: -0.4375rem;
+  left: 50%;
+}
+
+.service {
+  margin-top: 1rem;
+}
+
+.action,
+.audience {
+  margin-top: 0.5rem;
+  color: var(--muted);
+}
+
+.outcomeArrow {
+  position: relative;
+  height: 2rem;
+  margin-block: 0.75rem;
+}
+
+.outcomeArrow::before {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+}
+
+.outcomeArrow::after {
+  bottom: 0;
+  left: 50%;
+}
+
+.outcome {
+  display: block;
+  font-family: var(--font-archivo), sans-serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.flowSupport {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.flowSupport dt {
+  font-weight: 700;
+}
+
+.flowSupport dd {
+  margin-top: 0.5rem;
+  color: var(--muted);
+}
+
 .navigationFigure figcaption {
   max-width: 80ch;
   margin-top: 2rem;
@@ -216,14 +440,156 @@
   color: var(--signal);
 }
 
-@media (max-width: 63.999rem) {
+@container (max-width: 38rem) {
   .inputs {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+    position: relative;
+    padding-right: 1.5rem;
+  }
+
+  .inputs::after {
+    content: "";
+    position: absolute;
+    top: 1rem;
+    right: 0;
+    bottom: 0;
+    border-right: 1px solid var(--signal);
+  }
+
+  .input {
+    padding: 0;
+    text-align: left;
+  }
+
+  .inputSteps {
+    margin-top: 0.5rem;
+  }
+
+  .inputSteps li {
+    display: inline;
+  }
+
+  .inputSteps li + li::before {
+    content: " → ";
+    display: inline;
+    margin: 0;
+  }
+
+  .input::after {
+    top: 1rem;
+    right: -1.5rem;
+    bottom: auto;
+    left: auto;
+    width: 1rem;
+    height: 0;
+    border-top: 1px solid var(--signal);
+    border-left: 0;
+  }
+
+  .convergence {
+    height: 2rem;
+    margin-inline: 50% 0;
+  }
+
+  .convergence::before,
+  .convergence::after {
+    left: 0;
+  }
+
+  .convergence + .flowLabel {
+    width: auto;
+  }
+
+  .sharedData {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .transformArrow {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 0;
+    height: 2rem;
+    margin-inline: auto;
+    border-top: 0;
+    border-left: 1px solid var(--signal);
+  }
+
+  .transformArrow::after {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: auto;
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .distribution {
+    height: 2rem;
+    margin-left: 0.25rem;
+  }
+
+  .distribution::before {
+    left: 50%;
+    height: 1rem;
+  }
+
+  .distribution::after {
+    top: 1rem;
+    right: 50%;
+    left: 0;
+    height: 1rem;
+    border-right: 0;
+  }
+
+  .consumers {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    position: relative;
+    margin-left: 0.25rem;
+  }
+
+  .consumer {
+    padding: 0 0 0 1.75rem;
+    text-align: left;
+  }
+
+  .consumer:not(:last-child) {
+    border-left: 1px solid var(--signal);
+  }
+
+  .consumer:not(:last-child)::after {
+    height: calc(100% + 2rem);
+    border-left: 1px solid var(--signal);
+  }
+
+  .consumer::after {
+    content: "";
+    position: absolute;
+    top: 0.75rem;
+    left: 0;
+    width: 1.25rem;
+    border-top: 1px solid var(--signal);
+  }
+
+  .consumer::before {
+    top: 0.5625rem;
+    left: 1.125rem;
+    transform: rotate(-45deg);
+  }
+
+  .outcomeArrow::before,
+  .outcomeArrow::after {
+    left: 0.25rem;
+  }
+
+  .flowSupport {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
 @media (max-width: 47.999rem) {
-  .consumers,
   .comparison {
     grid-template-columns: minmax(0, 1fr);
   }

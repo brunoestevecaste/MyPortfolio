@@ -533,6 +533,11 @@ Conservar el foco accesible y los trazos que representan datos en los gráficos.
 - Mismos tokens, tipografías y superficie clara; sin nuevas líneas de separación.
 - Arquitectura funcional con entradas, base compartida y consumidores; no es
   una captura ni reproduce identificadores internos.
+- En la arquitectura cloud de Baleària, las líneas y flechas finas representan
+  el recorrido de los datos: fuentes hacia Cloud SQL, transformación con dbt
+  y bifurcación hacia IA y dashboard. Por indicación de Bruno, se permiten estos
+  conectores funcionales, sin añadir divisores decorativos. En móvil el esquema
+  conserva la convergencia y los dos usos mediante una lectura vertical.
 - Gráfico escalonado de velocidades con valores ficticios, leyenda por trazo y
   color, y tabla desplegable accesible. No representa un ahorro real.
 - Aviso introductorio de confidencialidad y etiqueta de ilustración junto al

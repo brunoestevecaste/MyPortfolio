@@ -116,24 +116,54 @@ export const baleariaSections = [
   },
 ] as const;
 
+type ArchitectureInput = {
+  title: string;
+  steps: readonly string[];
+};
+
 export const baleariaInputs = [
-  { title: "Histórico", detail: "CSV · Cloud Storage · carga a Cloud SQL" },
-  { title: "Telemetría simulada", detail: "API de ingesta · Pub/Sub · Cloud Functions" },
-  { title: "Contexto ambiental", detail: "APIs meteorológicas y marítimas · Cloud Functions" },
+  { title: "Histórico", steps: ["Archivos CSV", "Cloud Storage"] },
+  { title: "Telemetría simulada", steps: ["API de ingesta", "Pub/Sub", "Cloud Functions"] },
+  { title: "Contexto ambiental", steps: ["APIs meteorológicas y marítimas", "Cloud Functions"] },
+] as const satisfies readonly ArchitectureInput[];
+
+export const baleariaDataUses = [
+  {
+    title: "Predicción y optimización",
+    service: "Vertex AI / Kubeflow Pipelines",
+    action: "Estimar potencia y optimizar velocidades",
+    outcome: "Perfiles de velocidad por tramo",
+  },
+  {
+    title: "Consulta y visualización",
+    service: "API en Cloud Run",
+    action: "Consultar la base analítica",
+    outcome: "Dashboard React",
+    audience: "Operaciones y tripulación",
+  },
 ] as const;
 
 export const baleariaDecisions = [
   {
-    title: "Una base compartida, transformaciones explícitas",
-    text: "Cloud SQL cubre el alcance operacional y analítico del TFM. dbt prepara una base común para el dashboard y ML, evitando duplicar reglas de negocio. BigQuery queda como posible evolución al crecer la carga analítica.",
+    title: "Ingesta especializada por tipo de fuente",
+    paragraphs: [
+      "Los archivos históricos se cargan desde Cloud Storage, mientras que la telemetría en tiempo real entra mediante una API hacia Pub/Sub y Cloud Functions para procesar eventos sin saturar el sistema.",
+      "En paralelo, funciones automáticas consultan las previsiones de viento y oleaje para sincronizar las condiciones del mar con la posición exacta del buque en cada momento.",
+    ],
   },
   {
-    title: "Procesar al recibir un evento",
-    text: "Pub/Sub desacopla emisores y consumidores. Las funciones por tipo de dato sustituyen la consulta periódica de mensajes y permiten aislar procesamiento y errores.",
+    title: "Una única fuente de verdad para IA y producto",
+    paragraphs: [
+      "Centralizar los datos en PostgreSQL sobre Cloud SQL y estandarizarlos con dbt evita discrepancias: el algoritmo de optimización y el panel visual consultan exactamente las mismas métricas depuradas.",
+      "Los modelos se ejecutan en Vertex AI para generar los perfiles de navegación, mientras que una API ligera en Cloud Run atiende las consultas del dashboard interactivo con inmediatez.",
+    ],
   },
   {
-    title: "Validar antes de continuar",
-    text: "Los tests de dbt y las compuertas del pipeline controlan el avance. Sustituir las esperas fijas entre ingesta y transformación por confirmaciones de disponibilidad es una mejora identificada en la memoria.",
+    title: "Orquestación automatizada y entorno reproducible",
+    paragraphs: [
+      "Apache Airflow en Cloud Composer coordina las tareas de ingesta y transformación en el orden estricto necesario, asegurando que los datos estén listos antes de ejecutar los modelos.",
+      "Toda la infraestructura cloud se definió mediante código con Terraform, lo que permite replicar el entorno técnico con rapidez y consistencia ante nuevas rutas o buques.",
+    ],
   },
 ] as const;
 

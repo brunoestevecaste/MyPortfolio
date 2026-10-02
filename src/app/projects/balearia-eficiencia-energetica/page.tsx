@@ -77,7 +77,9 @@ export default function BaleariaCaseStudy() {
                   {baleariaDecisions.map((decision) => (
                     <li key={decision.title}>
                       <h3>{decision.title}</h3>
-                      <p>{decision.text}</p>
+                      {decision.paragraphs.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
                     </li>
                   ))}
                 </ul>
