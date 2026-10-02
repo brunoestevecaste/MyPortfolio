@@ -1,5 +1,10 @@
 import type { CaseSection } from "./projects";
 
+type ArchitectureInput = {
+  title: string;
+  steps: readonly string[];
+};
+
 // Fuentes: Presentación del proyecto de máster (5 marzo 2026), repositorio público en GitHub (ia-project-II)
 // y arquitectura implementada en FastAPI + Google ADK + React.
 export const alinaCase = {
@@ -115,6 +120,62 @@ export const alinaSections = [
     label: "Herramientas",
     title: "Herramientas y tecnologías",
     paragraphs: [],
+  },
+] as const;
+
+export const alinaInputs = [
+  {
+    title: "Perfil del candidato",
+    steps: ["Currículum (PDF/DOCX)", "Extracción PyPDF / docx", "Texto normalizado"],
+  },
+  {
+    title: "Ofertas de empleo",
+    steps: ["API de Adzuna", "Selenium Scraper en paralelo", "Oferta íntegra"],
+  },
+  {
+    title: "Entrada directa",
+    steps: ["Pegado manual de texto", "Sanitización de caracteres", "Fallback sin dependencias"],
+  },
+] as const satisfies readonly ArchitectureInput[];
+
+export const alinaDataUses = [
+  {
+    title: "Scoring y compatibilidad",
+    service: "Algoritmo determinista",
+    action: "Calcular cobertura y bonus de modalidad",
+    outcome: "Match Score explicable (%)",
+    audience: "Candidato y evaluador",
+  },
+  {
+    title: "Preparación con agentes",
+    service: "Agentes satélite ADK",
+    action: "LoopAgent (Carta), Entrevista, Upskilling, Research",
+    outcome: "Dossier 360° verificado",
+    audience: "Candidato a empleo",
+  },
+] as const;
+
+export const alinaDecisions = [
+  {
+    title: "Ingesta dual: scraping paralelo y contingencia de pegado manual",
+    paragraphs: [
+      "Las APIs públicas de empleo como Adzuna truncan las descripciones a 500 caracteres, omitiendo requisitos técnicos críticos. Diseñamos un pipeline donde Selenium extrae la oferta original completa en paralelo, asegurando que el modelo disponga del contexto íntegro.",
+      "Como salvaguarda operativa ante bloqueos o cambios de HTML en portales de terceros, se habilitó la entrada manual directa, garantizando que el usuario siempre pueda analizar cualquier oferta sin depender de la disponibilidad de servicios externos.",
+    ],
+  },
+  {
+    title: "Orquestación multi-agente con patrón colaborativo escritor-crítico",
+    paragraphs: [
+      "En lugar de confiar la redacción de cartas a un prompt único propenso a inventar méritos, implementamos un bucle LoopAgent en Google ADK donde un agente escritor genera borradores y un agente evaluador senior actúa como crítico inflexible.",
+      "El crítico audita cada afirmación contrastándola exclusivamente con las tecnologías y experiencias verificadas en el CV. Si detecta competencias no respaldadas, rechaza la versión y fuerza una reescritura, saliendo del bucle (exit_loop()) únicamente cuando la fidelidad es total.",
+    ],
+  },
+  {
+    title: "Desacoplamiento de prompts en dos fases: razonamiento y formateo",
+    paragraphs: [
+      "Exigir al LLM que investigue en internet con herramientas externas, razone la estrategia y genere a la vez un JSON estructurado provocaba una tasa de fallo de formato del 40% y un elevado coste en tokens por turno.",
+      "La solución consistió en separar el flujo: la fase 1 razona y consulta fuentes en texto libre sin restricciones sintácticas; la fase 2 ejecuta una llamada compacta y determinista orientada exclusivamente a validar y estructurar el payload JSON final.",
+    ],
   },
 ] as const;
 

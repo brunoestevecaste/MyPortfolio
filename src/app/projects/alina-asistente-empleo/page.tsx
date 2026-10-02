@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { AlinaOptimizationFigure } from "@/components/projects/alina-optimization-figure";
+import { AlinaArchitecture } from "@/components/projects/alina-architecture";
 import { ProjectTools } from "@/components/projects/project-tools";
 import { CaseSection } from "@/components/projects/case-section";
 import { AlinaDashboard } from "@/components/projects/alina-dashboard";
@@ -7,11 +9,12 @@ import { ProjectExecutiveHero } from "@/components/projects/project-executive-he
 import { alinaProject } from "@/data/projects";
 import {
   alinaCase,
-  alinaPipeline,
+  alinaDecisions,
   alinaSections,
   alinaTools,
 } from "@/data/alina";
 import styles from "@/components/projects/projects.module.css";
+import archStyles from "@/components/projects/project-architecture.module.css";
 
 const path = `/projects/${alinaProject.slug}`;
 
@@ -72,22 +75,17 @@ export default function AlinaCaseStudy() {
               <CaseSection section={alinaCase.contribution} />
 
               <CaseSection section={alinaCase.architecture}>
-                <figure className={styles.architecture}>
-                  <ol>
-                    {alinaPipeline.map((step) => (
-                      <li key={step.title}>
-                        <strong>{step.title}</strong>
-                        <span>{step.detail}</span>
-                      </li>
-                    ))}
-                  </ol>
-                  <p className={styles.directConnection}>
-                    El pipeline admite tanto búsqueda automática con scraping en Selenium como entrada manual de ofertas para sortear restricciones de APIs externas.
-                  </p>
-                  <figcaption>
-                    Flujo funcional de ingestión, extracción y derivación a agentes especializados.
-                  </figcaption>
-                </figure>
+                <AlinaArchitecture />
+                <ul className={archStyles.decisions}>
+                  {alinaDecisions.map((decision) => (
+                    <li key={decision.title}>
+                      <h3>{decision.title}</h3>
+                      {decision.paragraphs.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                    </li>
+                  ))}
+                </ul>
               </CaseSection>
 
               <CaseSection section={alinaCase.agents} />
@@ -105,6 +103,7 @@ export default function AlinaCaseStudy() {
               </CaseSection>
 
               <CaseSection section={alinaCase.optimization}>
+                <AlinaOptimizationFigure />
                 <AlinaDashboard />
               </CaseSection>
 
