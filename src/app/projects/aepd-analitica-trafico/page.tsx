@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { AepdTrafficFigure } from "@/components/projects/aepd-traffic-figure";
+import { AepdArchitecture } from "@/components/projects/aepd-architecture";
 import { aepdTools } from "@/data/aepd";
 import { ProjectTools } from "@/components/projects/project-tools";
 import { CaseSection } from "@/components/projects/case-section";
@@ -8,7 +10,6 @@ import { ProjectExecutiveHero } from "@/components/projects/project-executive-he
 import {
   aepdCase,
   aepdEtlSteps,
-  aepdPipeline,
   aepdProject,
 } from "@/data/projects";
 import styles from "@/components/projects/projects.module.css";
@@ -84,23 +85,7 @@ export default function AepdCaseStudy() {
             <div className={styles.caseBody}>
               <CaseSection section={aepdCase.context} />
               <CaseSection section={aepdCase.architecture}>
-                <figure className={styles.architecture}>
-                  <ol>
-                    {aepdPipeline.map((step) => (
-                      <li key={step.title}>
-                        <strong>{step.title}</strong>
-                        <span>{step.detail}</span>
-                      </li>
-                    ))}
-                  </ol>
-                  <p className={styles.directConnection}>
-                    PostgreSQL también alimenta directamente el análisis
-                    descriptivo en Power BI.
-                  </p>
-                  <figcaption>
-                    Esquema funcional del recorrido de los datos.
-                  </figcaption>
-                </figure>
+                <AepdArchitecture />
               </CaseSection>
               <CaseSection section={aepdCase.preparation}>
                 <ol className={styles.etlSteps}>
@@ -116,14 +101,7 @@ export default function AepdCaseStudy() {
                 <AepdDashboard />
               </CaseSection>
               <CaseSection section={aepdCase.prediction}>
-                <div className={styles.methodNote}>
-                  <h3>El criterio de evaluación</h3>
-                  <p>
-                    Ajustar con el pasado y evaluar sobre datos posteriores.
-                    Contrastar el modelo con una referencia y observar sus errores
-                    antes de interpretar la previsión.
-                  </p>
-                </div>
+                <AepdTrafficFigure />
               </CaseSection>
               <CaseSection section={aepdCase.outcome} />
               <CaseSection section={aepdCase.learning} />
