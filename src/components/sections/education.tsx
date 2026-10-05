@@ -20,35 +20,35 @@ export function EducationSection() {
           >
             <div>
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm text-muted">
-                <p className="font-mono text-xs uppercase tracking-wider md:text-sm">
+                <p data-motion="mask" className="font-mono text-xs uppercase tracking-wider md:text-sm">
                   {entry.institution}
                 </p>
-                <p className="font-mono text-xs tabular-nums md:text-sm">
+                <p data-motion="mask" className="font-mono text-xs tabular-nums md:text-sm">
                   <time dateTime={entry.start.date}>{entry.start.label}</time>
                   {" – "}
                   <time dateTime={entry.end.date}>{entry.end.label}</time>
                 </p>
               </div>
 
-              <h3
+              <h3 data-motion="mask"
                 className="mt-4 font-heading text-[clamp(1.15rem,1.45vw,1.55rem)] leading-[1.15] font-normal tracking-[-0.04em] text-accent-ink lg:whitespace-nowrap"
                 id={`${entry.id}-title`}
               >
                 {entry.qualification}
               </h3>
 
-              <p className="mt-3 font-display text-[clamp(0.9375rem,1.1vw,1.0625rem)] leading-relaxed tracking-[-0.02em] text-pretty text-ink/90">
+              <p data-motion="mask" className="mt-3 font-display text-[clamp(0.9375rem,1.1vw,1.0625rem)] leading-relaxed tracking-[-0.02em] text-pretty text-ink/90">
                 {entry.summary}
               </p>
 
               <div className="mt-5 space-y-3.5 text-[0.875rem] leading-relaxed text-muted md:text-[0.9375rem]">
                 {entry.details.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
+                  <p data-motion="mask" key={paragraph}>{paragraph}</p>
                 ))}
               </div>
             </div>
 
-            <div className="image-hover editorial-surface relative mt-8 aspect-[3/2] w-full overflow-hidden bg-[var(--surface)] md:mt-10 lg:mt-12">
+            <div data-motion-image="pixels" className="image-hover editorial-surface relative mt-8 aspect-[3/2] w-full overflow-hidden bg-[var(--surface)] md:mt-10 lg:mt-12">
               <Image
                 src={entry.image.src}
                 alt={entry.image.alt}
