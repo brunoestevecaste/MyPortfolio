@@ -16,7 +16,7 @@ export function EducationSection() {
           <article
             key={entry.id}
             aria-labelledby={`${entry.id}-title`}
-            className="group flex flex-col justify-between"
+            className="flex flex-col justify-between"
           >
             <div>
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm text-muted">
@@ -48,13 +48,13 @@ export function EducationSection() {
               </div>
             </div>
 
-            <div className="editorial-surface relative mt-8 aspect-[3/2] w-full overflow-hidden bg-[var(--surface)] md:mt-10 lg:mt-12">
+            <div className="image-hover editorial-surface relative mt-8 aspect-[3/2] w-full overflow-hidden bg-[var(--surface)] md:mt-10 lg:mt-12">
               <Image
                 src={entry.image.src}
                 alt={entry.image.alt}
                 fill
                 sizes="(min-width: 1024px) 45vw, (min-width: 768px) 50vw, 100vw"
-                className="object-cover grayscale transition-[transform,filter] duration-500 ease-out group-hover:scale-[1.02] group-hover:grayscale-0 motion-reduce:transform-none"
+                className="object-cover grayscale hover:grayscale-0"
               />
             </div>
           </article>

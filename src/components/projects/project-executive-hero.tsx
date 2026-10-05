@@ -74,7 +74,7 @@ export function ProjectExecutiveHero({
           <figure className={styles.photoContainer}>
             <div
               data-project-photo
-              className={styles.photoInner}
+              className={`image-hover ${styles.photoInner}`}
             >
               <Image
                 src={project.image}

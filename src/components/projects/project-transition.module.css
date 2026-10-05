@@ -1,5 +1,5 @@
 .photo {
-  border-radius: var(--radius-editorial);
+  border-radius: var(--radius-image);
 }
 
 .overlay {

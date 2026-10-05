@@ -189,7 +189,7 @@ export function ProjectIndex() {
                 </div>
 
                 {/* Characteristic project image frame */}
-                <div className={styles.imageFrame}>
+                <div className={`image-hover ${styles.imageFrame}`}>
                   <Image
                     src={project.image}
                     alt={project.title}
@@ -201,7 +201,6 @@ export function ProjectIndex() {
                     // avoids React's automatic preloads for eager images.
                     loading="lazy"
                   />
-                  <div className={styles.imageOverlay} aria-hidden="true" />
                 </div>
 
                 {/* Subtle text: Only project title in site's body typography */}

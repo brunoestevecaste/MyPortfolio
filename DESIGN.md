@@ -236,11 +236,16 @@ jerarquía tipográfica débil.
 
 ## Forma y materialidad
 
-- Esquinas apenas suavizadas con el token compartido `--radius-editorial: 3px`
-  en imágenes, superficies, paneles, menús y controles. La retícula conserva
+- Esquinas apenas suavizadas con el token compartido `--radius-editorial: 5px`
+  en superficies, paneles, menús y controles. La retícula conserva
   su carácter editorial; los elementos circulares funcionales mantienen su forma.
   Las imágenes se recortan al contorno redondeado sin borde ni línea superpuesta.
-  El retrato del hero conserva sus esquinas rectas, por indicación de Bruno.
+  Las fotografías tienen un radio de `10px` en reposo y de `15px` al pasar el
+  cursor sobre la propia imagen, con un zoom del 3 % y sin resplandor añadido.
+  Los textos y espacios de la tarjeta no activan este efecto. Los enlaces
+  ofrecen el mismo estado con foco visible. Con movimiento reducido se omite
+  el zoom. El retrato del hero conserva su presentación y glitch originales,
+  sin estos efectos de redondeo ni zoom.
 - Botones compactos con radio máximo de `3px` o enlaces textuales subrayados.
 - Sin tarjetas genéricas para agrupar contenido que puede organizarse con espacio.
 - Divisores finos solo donde expresen estructura real.
@@ -457,7 +462,8 @@ Nivel 4: composición editorial con transiciones motivadas y feedback de navegac
   y, al asentarse en la página de destino, la columna derecha con el resumen ejecutivo
   emerge en cascada editorial (`translateY: 24px -> 0`, `opacity: 0 -> 1`).
 - Aparición fluida del split hero en la página de caso y scroll suave hacia el case study.
-- Micro-escala (1.03) y filtro tonal en el hover de imágenes.
+- Micro-escala (1.03) y contorno de 10px a 15px al hacer hover sobre una fotografía,
+  con la excepción del retrato del hero.
 - Duraciones de 180ms para feedback, 440ms para la transición compartida y 600-700ms para reveals.
 
 ### No permitido
