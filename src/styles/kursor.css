@@ -78,6 +78,23 @@ div[class*='kursor'].kursor--4 {
     opacity var(--duration-feedback) var(--ease-out);
 }
 
+/* Composite against painted pixels, rather than the element's bounding box. */
+@supports (backdrop-filter: url("#kursor-contrast")) {
+  div[class*='kursor'].kursor--4 {
+    background: transparent;
+    backdrop-filter: var(--k-contrast-filter);
+  }
+}
+
+/* WebKit parses reference filters but does not render them yet (bug 245510).
+   Keep a visible red cursor there instead of making it transparent. */
+@supports (-webkit-backdrop-filter: none) {
+  div[class*='kursor'].kursor--4 {
+    background: var(--k-color, var(--accent));
+    backdrop-filter: none;
+  }
+}
+
 /* Keep Kursor's child hook without drawing a second cursor or click ripple. */
 div[class*='kursor'].kursor--4 + .kursorChild {
   display: none;

@@ -1,7 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useId, useRef } from "react";
+import { KursorContrastFilter } from "./kursor-contrast-filter";
 
 export interface KursorProps {
   /**
@@ -51,6 +52,7 @@ export function Kursor({
   removeDefaultCursor = true,
 }: KursorProps) {
   const pathname = usePathname();
+  const contrastFilterId = useId();
   const outerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
   const lastPosRef = useRef<{ x: number; y: number } | null>(null);
@@ -222,10 +224,14 @@ export function Kursor({
 
   return (
     <>
+      <KursorContrastFilter id={contrastFilterId} color={color} />
       <div
         ref={outerRef}
         className="kursor kursor--4 kursor--hidden"
-        style={{ "--k-color": color ? `rgb(${color})` : "var(--accent)" } as React.CSSProperties}
+        style={{
+          "--k-color": color ? `rgb(${color})` : "var(--accent)",
+          "--k-contrast-filter": `url("#${contrastFilterId}")`,
+        } as React.CSSProperties}
         aria-hidden="true"
       />
       <div
