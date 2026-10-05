@@ -4,7 +4,10 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { Kursor } from "@/components/ui/kursor";
 import { ProjectTransitionProvider } from "@/components/projects/project-transition-context";
+import { PageMotion } from "@/components/motion/page-motion";
+import { MotionBootstrap } from "@/components/motion/motion-bootstrap";
 import "./globals.css";
+import "@/components/motion/motion.css";
 import "@/styles/kursor.css";
 
 const archivo = Archivo({
@@ -45,13 +48,17 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" data-scroll-behavior="smooth" className={`${archivo.variable} ${bricolageGrotesque.variable} ${spaceMono.variable}`}>
+      <head><MotionBootstrap /></head>
       <body className="flex min-h-dvh flex-col antialiased">
         <Kursor />
         <a className="skip-link" href="#main-content">
           Saltar al contenido
         </a>
         <SiteHeader />
-        <ProjectTransitionProvider>{children}</ProjectTransitionProvider>
+        <ProjectTransitionProvider>
+          {children}
+          <PageMotion />
+        </ProjectTransitionProvider>
         <SiteFooter />
       </body>
     </html>
