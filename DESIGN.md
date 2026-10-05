@@ -313,10 +313,13 @@ jerarquía tipográfica débil.
 - Los dos párrafos deben ser breves, tener un ancho de lectura controlado y formar
   dos columnas alineadas por la base en desktop.
 - El retrato ocupa cinco de las doce columnas, a la derecha. Encuadre 5:4 en
-  desktop y móvil para conservar el rostro completo, con trama de impresión en
-  duotono rojo y carbón (propuesta 02, seleccionada por Bruno el 01/10/2026).
-  El activo es `public/hero/bruno-esteve-hero-duotono-rojo.webp`;
-  conserva las dimensiones de origen, la máscara de silueta y la animación glitch.
+  desktop y móvil para conservar el rostro completo. Desde el 05/10/2026 usa la
+  propuesta 01, monocromo editorial, seleccionada por Bruno: grises, grano fino
+  y silueta sin fondo, conservando el glitch interactivo.
+  El activo es `public/hero/bruno-esteve-hero-monocromo-editorial.webp`, una
+  conversión sin pérdida del retrato elegido. La transparencia se obtiene con
+  `public/hero/bruno-esteve-monocromo-silhouette.webp`, cuyo alfa enmascara la
+  imagen base y todas las capas del glitch. Se conservan dimensiones y encuadre.
 - Los textos ocupan tres columnas cada uno; una columna libre los separa del
   retrato. Su tamaño es equivalente, sin un primer párrafo sobredimensionado.
 - Hasta recibir el original, reservar la superficie con una indicación discreta.

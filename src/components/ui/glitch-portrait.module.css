@@ -21,11 +21,12 @@
   height: 100%;
 }
 
-/* Remove only the base portrait background; keep the animated layer masks intact. */
+/* Use the cutout alpha while preserving the selected portrait's original texture. */
 .portraitSurface > .portraitImage,
 .sliceLayer,
 .dataBars {
-  mask-image: url("/hero/bruno-esteve-silhouette.svg");
+  mask-image: url("/hero/bruno-esteve-monocromo-silhouette.webp");
+  mask-mode: alpha;
   mask-size: cover;
   mask-position: center 25%;
   mask-repeat: no-repeat;
