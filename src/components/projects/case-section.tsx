@@ -16,10 +16,10 @@ export function CaseSection({
       aria-labelledby={`${section.id}-title`}
       className={styles.caseSection}
     >
-      <h2 id={`${section.id}-title`}>{section.title}</h2>
+      <h2 id={`${section.id}-title`} data-motion="mask">{section.title}</h2>
       <div className={styles.prose}>
         {section.paragraphs.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
+          <p data-motion="mask" key={paragraph}>{paragraph}</p>
         ))}
       </div>
       {children}
