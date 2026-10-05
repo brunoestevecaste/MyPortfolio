@@ -14,11 +14,9 @@ export function ProjectIndex() {
     useProjectTransition();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [trackHeight, setTrackHeight] = useState(440);
-  const [visibleItems, setVisibleItems] = useState<Record<string, boolean>>({});
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<(HTMLElement | null)[]>([]);
 
   const THUMB_HEIGHT = 56;
 
@@ -57,33 +55,6 @@ export function ProjectIndex() {
     updateMetrics();
     window.addEventListener("resize", updateMetrics);
     return () => window.removeEventListener("resize", updateMetrics);
-  }, []);
-
-  // IntersectionObserver for smooth entrance animation on scroll
-  useEffect(() => {
-    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const slug = entry.target.getAttribute("data-slug");
-            if (slug) {
-              setVisibleItems((prev) => ({ ...prev, [slug]: true }));
-            }
-          }
-        });
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" }
-    );
-
-    itemRefs.current.forEach((el) => {
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
   }, []);
 
   const handleProjectClick = (
@@ -156,7 +127,6 @@ export function ProjectIndex() {
             ? `${project.productName}: ${project.title}`
             : project.title;
           const isEven = index % 2 === 0;
-          const isRevealed = !!visibleItems[project.slug];
           const isTarget = isTransitioning && activeProjectSlug === project.slug;
           const isOtherFading =
             isTransitioning && activeProjectSlug !== project.slug;
@@ -164,13 +134,10 @@ export function ProjectIndex() {
           return (
             <article
               key={project.slug}
-              ref={(el) => {
-                itemRefs.current[index] = el;
-              }}
               data-slug={project.slug}
               className={`${styles.staggeredItem} ${
                 isEven ? styles.itemLeft : styles.itemRight
-              } ${isRevealed ? styles.itemRevealed : ""} ${
+              } ${
                 isTarget ? styles.itemTransitioningTarget : ""
               } ${isOtherFading ? styles.itemOtherFading : ""}`}
             >
@@ -182,14 +149,14 @@ export function ProjectIndex() {
               >
                 {/* Number above/adjacent to image */}
                 <div className={styles.projectNumberHeader}>
-                  <span className={styles.prominentNumber}>({project.number})</span>
-                  <span className={styles.prominentMeta}>
+                  <span className={styles.prominentNumber} data-motion="mask">({project.number})</span>
+                  <span className={styles.prominentMeta} data-motion="mask">
                     {project.year} · {project.organization}
                   </span>
                 </div>
 
                 {/* Characteristic project image frame */}
-                <div className={`image-hover ${styles.imageFrame}`}>
+                <div className={`image-hover ${styles.imageFrame}`} data-motion-image="pixels">
                   <Image
                     src={project.image}
                     alt={project.title}
@@ -205,7 +172,7 @@ export function ProjectIndex() {
 
                 {/* Subtle text: Only project title in site's body typography */}
                 <div className={styles.subtleTextWrapper}>
-                  <h3 className={styles.subtleProjectTitle}>{displayTitle}</h3>
+                  <h3 className={styles.subtleProjectTitle} data-motion="mask">{displayTitle}</h3>
                 </div>
               </Link>
             </article>
