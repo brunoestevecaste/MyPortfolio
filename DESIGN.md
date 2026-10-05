@@ -447,6 +447,45 @@ Tratamiento:
 
 ## Motion
 
+### Revelados GSAP · 5 de octubre de 2026
+
+Por indicación de Bruno, Home y los cuatro casos incorporan GSAP. Se conservan
+la composición, tipografía y paleta. El titular principal y los grandes capítulos
+de Home usan ScrambleText (unos 850ms, con ancho estable por palabra). Los títulos
+secundarios y párrafos editoriales usan máscaras `clip-path` sobre su contenido
+original (650ms), activadas por separado al entrar en el viewport. No se divide
+el texto en líneas: tamaño, interlineado, saltos y HTML permanecen estables al
+terminar y al cambiar de ancho. Los textos de chat y demostradores conservan
+su interacción propia.
+
+Las fotografías se descubren en una cuadrícula de 12 × 9 bloques, con avance
+diagonal de arriba izquierda a abajo derecha en menos de un segundo. La imagen
+que llega mediante la transición compartida conserva su continuidad; el texto
+se revela al finalizar el movimiento. Se sustituyen las entradas anteriores
+para evitar superponer efectos.
+
+El scroll de rueda usa ScrollTo con una amortiguación breve (200–480ms), sobre
+el documento nativo. Touch, teclado, zoom, anclas y contenedores de scroll internos
+siguen disponibles, sin transformar el documento ni alterar posiciones sticky.
+Los efectos se ejecutan una sola vez por entrada a la página, esperan a la intro
+y las fuentes, y se limpian al navegar. Con movimiento reducido, el contenido
+aparece directamente y el scroll permanece nativo. Sin JavaScript, todo es legible.
+
+Refinamiento del 5 de octubre: los elementos pendientes quedan ocultos por
+opacidad antes del primer pintado, conservando su espacio y texto accesible.
+Un único IntersectionObserver prepara cada efecto al entrar en pantalla; después
+del revelado se retira el recorte de texto y se restaura el HTML de los titulares
+ScrambleText. Los párrafos no crean wrappers ni observadores de SplitText.
+No se construyen cuadrículas de píxeles fuera del viewport.
+Un fallo de carga devuelve la presentación estática en un máximo de cinco segundos.
+
+La transición Home → Proyecto precarga la ruta y la imagen responsive al señalar
+o enfocar el enlace. La navegación transcurre durante la disolución, y la imagen
+de destino se decodifica durante el desplazamiento. Los revelados se activan
+después de que React retire la transición, sin desmontar los efectos de la Home
+al pulsar. El indicador de scroll actualiza únicamente su transform, una vez
+por frame, sin renderizar de nuevo la lista de proyectos.
+
 Nivel 4: composición editorial con transiciones motivadas y feedback de navegación.
 
 ### Permitido
