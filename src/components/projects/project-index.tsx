@@ -137,22 +137,22 @@ export function ProjectIndex() {
                 isTarget ? styles.itemTransitioningTarget : ""
               } ${isOtherFading ? styles.itemOtherFading : ""}`}
             >
+              {/* Number above/adjacent to image */}
+              <div className={styles.projectNumberHeader}>
+                <span className={styles.prominentNumber} data-motion="mask">({project.number})</span>
+                <span className={styles.prominentMeta} data-motion="mask">
+                  {project.year} · {project.organization}
+                </span>
+              </div>
+
               <Link
                 href={`/projects/${project.slug}`}
                 onClick={(e) => handleProjectClick(e, project)}
                 onPointerEnter={() => prefetchProject(project)}
                 onFocus={() => prefetchProject(project)}
-                className={styles.staggeredCardLink}
+                className={styles.projectImageLink}
                 aria-label={`Ver proyecto (${project.number}): ${displayTitle}`}
               >
-                {/* Number above/adjacent to image */}
-                <div className={styles.projectNumberHeader}>
-                  <span className={styles.prominentNumber} data-motion="mask">({project.number})</span>
-                  <span className={styles.prominentMeta} data-motion="mask">
-                    {project.year} · {project.organization}
-                  </span>
-                </div>
-
                 {/* Characteristic project image frame */}
                 <div className={`image-hover ${styles.imageFrame}`} data-motion-image="pixels">
                   <Image
@@ -167,12 +167,12 @@ export function ProjectIndex() {
                     loading="lazy"
                   />
                 </div>
-
-                {/* Subtle text: Only project title in site's body typography */}
-                <div className={styles.subtleTextWrapper}>
-                  <h3 className={styles.subtleProjectTitle} data-motion="mask">{displayTitle}</h3>
-                </div>
               </Link>
+
+              {/* Subtle text: Only project title in site's body typography */}
+              <div className={styles.subtleTextWrapper}>
+                <h3 className={styles.subtleProjectTitle} data-motion="mask">{displayTitle}</h3>
+              </div>
             </article>
           );
         })}

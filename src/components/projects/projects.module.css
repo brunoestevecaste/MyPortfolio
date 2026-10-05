@@ -113,10 +113,9 @@
   transition: opacity 0.3s ease;
 }
 
-/* Staggered Card */
-.staggeredCardLink {
-  display: flex;
-  flex-direction: column;
+/* Only the image opens the case study. */
+.projectImageLink {
+  display: block;
   text-decoration: none;
   color: inherit;
   position: relative;
@@ -163,7 +162,7 @@
   filter: grayscale(100%);
 }
 
-.staggeredCardLink:focus-visible .projectImage {
+.projectImageLink:focus-visible .projectImage {
   filter: grayscale(40%);
 }
 
