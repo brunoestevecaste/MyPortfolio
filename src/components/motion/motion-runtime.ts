@@ -1,9 +1,71 @@
 import { gsap } from "gsap";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { SplitText } from "gsap/SplitText";
 import { MOTION_TARGETS } from "./motion-gate";
 
-gsap.registerPlugin(ScrambleTextPlugin, SplitText);
+gsap.registerPlugin(ScrambleTextPlugin, ScrollToPlugin, SplitText);
+
+function smoothWheel() {
+  const root = document.documentElement;
+  const originalBehavior = root.style.scrollBehavior;
+  let tween: gsap.core.Tween | undefined;
+  let destination = window.scrollY;
+  const restore = () => { tween = undefined; root.style.scrollBehavior = originalBehavior; };
+  const stop = () => { tween?.kill(); restore(); };
+
+  const onWheel = (event: WheelEvent) => {
+    if (event.defaultPrevented || event.ctrlKey || event.metaKey ||
+      Math.abs(event.deltaX) >= Math.abs(event.deltaY) ||
+      getComputedStyle(document.documentElement).overflow === "hidden" ||
+      document.querySelector("[data-project-transition], [data-intro-active]")) return;
+
+    // Let inputs, the chat and nested scroll containers handle their own wheel.
+    let element = event.target instanceof Element ? event.target : null;
+    if (element?.closest("input, textarea, select, [role='dialog']")) { stop(); return; }
+    while (element && element !== document.body && element !== document.documentElement) {
+      const style = getComputedStyle(element);
+      if (/(auto|scroll)/.test(style.overflowY) && element.scrollHeight > element.clientHeight) {
+        stop();
+        return;
+      }
+      element = element.parentElement;
+    }
+
+    const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1);
+    const maximum = document.documentElement.scrollHeight - window.innerHeight;
+    const next = gsap.utils.clamp(0, maximum, (tween?.isActive() ? destination : window.scrollY) + delta);
+    if (next === window.scrollY && !tween?.isActive()) return;
+    event.preventDefault();
+    stop();
+    destination = next;
+    // CSS smooth scrolling would otherwise compete with each GSAP frame.
+    root.style.scrollBehavior = "auto";
+    tween = gsap.to(window, {
+      scrollTo: { y: destination, autoKill: true },
+      duration: event.deltaMode === 0 && Math.abs(delta) < 50 ? 0.2 : 0.48,
+      ease: "power2.out",
+      onComplete: restore,
+      onInterrupt: restore,
+    });
+  };
+
+  window.addEventListener("wheel", onWheel, { passive: false });
+  window.addEventListener("touchstart", stop, { passive: true });
+  window.addEventListener("pointerdown", stop, { passive: true });
+  window.addEventListener("keydown", stop);
+  window.addEventListener("hashchange", stop);
+  window.addEventListener("project-transition-start", stop);
+  return () => {
+    stop();
+    window.removeEventListener("wheel", onWheel);
+    window.removeEventListener("touchstart", stop);
+    window.removeEventListener("pointerdown", stop);
+    window.removeEventListener("keydown", stop);
+    window.removeEventListener("hashchange", stop);
+    window.removeEventListener("project-transition-start", stop);
+  };
+}
 
 export interface PageMotionControls {
   activate: () => void;
@@ -117,6 +179,7 @@ export function setupPageMotion(main: HTMLElement): PageMotionControls {
       });
     });
   }, { rootMargin: "0px 0px -10% 0px", threshold: 0 });
+  const stopWheel = smoothWheel();
 
   return {
     activate() {
@@ -128,6 +191,7 @@ export function setupPageMotion(main: HTMLElement): PageMotionControls {
     destroy() {
       destroyed = true;
       observer.disconnect();
+      stopWheel();
       context.revert();
       imageCleanups.forEach((remove) => remove());
       targets.forEach((target) => target.removeAttribute("data-motion-state"));
