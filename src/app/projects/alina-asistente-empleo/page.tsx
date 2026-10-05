@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 
 export default function AlinaCaseStudy() {
   return (
-    <main id="main-content" tabIndex={-1} className="site-container flex-1">
+    <main data-motion-page id="main-content" tabIndex={-1} className="site-container flex-1">
       <article>
         {/* Split Hero: Characteristic Photo + Executive Summary */}
         <ProjectExecutiveHero
@@ -50,8 +50,8 @@ export default function AlinaCaseStudy() {
             className={styles.privacy}
             aria-label="Marco del proyecto"
           >
-            <strong>Un proyecto de máster, ingeniería de IA aplicada.</strong>
-            <p>{alinaCase.confidentiality}</p>
+            <strong data-motion="mask">Un proyecto de máster, ingeniería de IA aplicada.</strong>
+            <p data-motion="mask">{alinaCase.confidentiality}</p>
           </aside>
 
           <div className={styles.caseLayout}>
@@ -106,7 +106,7 @@ export default function AlinaCaseStudy() {
                 aria-labelledby="herramientas-title"
                 className={styles.caseSection}
               >
-                <h2 id="herramientas-title">Herramientas y tecnologías</h2>
+                <h2 id="herramientas-title" data-motion="mask">Herramientas y tecnologías</h2>
                 <ProjectTools
                   tools={alinaTools}
                   size="large"
