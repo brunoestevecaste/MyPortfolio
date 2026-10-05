@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import styles from "./intro-sequence.module.css";
 
 const PRESENTED_TEXT = "PRESENTED BY";
@@ -23,6 +23,13 @@ export function IntroSequence() {
   const stageRef = useRef<HTMLSpanElement>(null);
   const presentedRef = useRef<HTMLSpanElement>(null);
   const signatureRef = useRef<HTMLSpanElement>(null);
+  const playedRef = useRef(false);
+
+  // Notify reveals after React has committed the overlay's actual DOM state.
+  useLayoutEffect(() => {
+    window.dispatchEvent(isActive ? new Event("intro-start") :
+      new CustomEvent("intro-complete", { detail: { played: playedRef.current } }));
+  }, [isActive, playback]);
 
   useEffect(() => {
     const replay = () => {
@@ -58,11 +65,11 @@ export function IntroSequence() {
           // The intro remains usable when session storage is unavailable.
         }
       }
+      playedRef.current = remember;
       setIsActive(false);
       if (moveFocus) {
         document.getElementById("main-content")?.focus({ preventScroll: true });
       }
-      if (remember) window.dispatchEvent(new CustomEvent("intro-complete"));
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -171,6 +178,7 @@ export function IntroSequence() {
     <div
       className={styles.introOverlay}
       data-phase={frame.phase}
+      data-intro-active
       aria-hidden="true"
     >
       <span ref={stageRef} className={styles.textStage} aria-hidden="true" translate="no">

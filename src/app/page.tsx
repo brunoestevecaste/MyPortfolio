@@ -12,6 +12,7 @@ export default function Home() {
   return (
     <>
       <IntroSequence />
+      <noscript><style>{"[data-intro-active] { display: none; }"}</style></noscript>
       <main className="flex-1" id="main-content" tabIndex={-1}>
       <section
         aria-labelledby="foundation-title"

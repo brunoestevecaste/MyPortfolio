@@ -72,7 +72,9 @@ export function GlitchPortrait({
   );
 
   useEffect(() => {
-    const handleIntroComplete = () => {
+    const handleIntroComplete = (event: Event) => {
+      if (event instanceof CustomEvent && event.detail?.played === false) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       setIsGlitching(true);
       setTimeout(() => {
         setIsGlitching(false);
