@@ -2,3 +2,21 @@
   position: relative;
   display: inline-block;
 }
+
+.motion-pixels {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(9, minmax(0, 1fr));
+  pointer-events: none;
+}
+
+.motion-pixels > span {
+  background: var(--canvas);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-pixels { display: none; }
+}

@@ -1,5 +1,5 @@
 export const MOTION_GATE_ID = "portfolio-motion-gate";
-export const MOTION_TARGETS = '[data-motion]';
+export const MOTION_TARGETS = '[data-motion], [data-motion-image="pixels"]';
 
 // Opacity reserves layout and keeps the original text available to assistive tech.
 export const MOTION_GATE_CSS = `

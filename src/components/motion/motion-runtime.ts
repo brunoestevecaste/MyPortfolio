@@ -14,6 +14,7 @@ export interface PageMotionControls {
 export function setupPageMotion(main: HTMLElement): PageMotionControls {
   const targets = Array.from(main.querySelectorAll<HTMLElement>(MOTION_TARGETS));
   const started = new Set<HTMLElement>();
+  const imageCleanups: Array<() => void> = [];
   const context = gsap.context(() => {}, main);
   let active = false;
   let destroyed = false;
@@ -69,6 +70,37 @@ export function setupPageMotion(main: HTMLElement): PageMotionControls {
     });
   };
 
+  const pixels = (frame: HTMLElement) => {
+    const image = frame.querySelector("img");
+    if (!image) { complete(frame); return; }
+    const columns = 12;
+    const rows = 9;
+    const overlay = document.createElement("div");
+    overlay.className = "motion-pixels";
+    overlay.setAttribute("aria-hidden", "true");
+    const cells = Array.from({ length: columns * rows }, () => document.createElement("span"));
+    overlay.append(...cells);
+    frame.append(overlay);
+    const removeListeners = () => {
+      image.removeEventListener("load", play);
+      image.removeEventListener("error", play);
+    };
+    const reveal = gsap.to(cells, {
+      opacity: 0, duration: 0.16, ease: "none", paused: true,
+      stagger: (index) => (Math.floor(index / columns) + index % columns) * 0.038,
+      onComplete: () => { complete(frame); overlay.remove(); removeListeners(); },
+    });
+    function play() {
+      if (destroyed) return;
+      frame.dataset.motionState = "revealing";
+      reveal.play();
+    }
+    image.addEventListener("load", play);
+    image.addEventListener("error", play);
+    if (image.complete) play();
+    imageCleanups.push(() => { removeListeners(); overlay.remove(); });
+  };
+
   // A single native observer replaces a ScrollTrigger and SplitText instance for
   // every offscreen paragraph. DOM work starts only when a target is in view.
   const observer = new IntersectionObserver((entries) => {
@@ -81,6 +113,7 @@ export function setupPageMotion(main: HTMLElement): PageMotionControls {
         observer.unobserve(element);
         if (element.dataset.motion === "scramble") scramble(element);
         else if (element.dataset.motion === "mask") mask(element);
+        else pixels(element);
       });
     });
   }, { rootMargin: "0px 0px -10% 0px", threshold: 0 });
@@ -96,6 +129,7 @@ export function setupPageMotion(main: HTMLElement): PageMotionControls {
       destroyed = true;
       observer.disconnect();
       context.revert();
+      imageCleanups.forEach((remove) => remove());
       targets.forEach((target) => target.removeAttribute("data-motion-state"));
     },
   };
