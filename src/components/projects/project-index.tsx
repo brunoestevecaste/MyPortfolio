@@ -152,6 +152,7 @@ export function ProjectIndex() {
                 onFocus={() => prefetchProject(project)}
                 className={styles.projectImageLink}
                 aria-label={`Ver proyecto (${project.number}): ${displayTitle}`}
+                data-cursor-label="VIEW CASE!"
               >
                 {/* Characteristic project image frame */}
                 <div className={`image-hover ${styles.imageFrame}`} data-motion-image="pixels">
