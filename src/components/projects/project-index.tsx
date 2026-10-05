@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,18 +12,19 @@ export function ProjectIndex() {
   const router = useRouter();
   const { transitionToProject, isTransitioning, activeProjectSlug } =
     useProjectTransition();
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [trackHeight, setTrackHeight] = useState(440);
-
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const thumbRef = useRef<HTMLDivElement>(null);
 
   const THUMB_HEIGHT = 56;
 
-  // Track scroll position within the projects section to update the left rail indicator
+  // Update only the rail's transform, at most once per frame. Scrolling no longer
+  // rerenders the entire project index and its animated text/image subtrees.
   useEffect(() => {
-    const handleScroll = () => {
-      if (!sectionRef.current) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (!sectionRef.current || !trackRef.current || !thumbRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const sectionHeight = sectionRef.current.offsetHeight;
       const windowHeight = window.innerHeight;
@@ -36,25 +37,22 @@ export function ProjectIndex() {
         Math.max(scrolled / totalScrollableDistance, 0),
         1
       );
-      setScrollProgress(progress);
+      const maxTravel = Math.max(0, trackRef.current.clientHeight - THUMB_HEIGHT);
+      thumbRef.current.style.transform = `translateY(${progress * maxTravel}px)`;
     };
-
+    const handleScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const observer = new ResizeObserver(handleScroll);
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    if (trackRef.current) observer.observe(trackRef.current);
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
     handleScroll();
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Update track height dynamically on mount and window resize
-  useEffect(() => {
-    const updateMetrics = () => {
-      if (trackRef.current) {
-        setTrackHeight(trackRef.current.offsetHeight);
-      }
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
-    updateMetrics();
-    window.addEventListener("resize", updateMetrics);
-    return () => window.removeEventListener("resize", updateMetrics);
   }, []);
 
   const handleProjectClick = (
@@ -91,8 +89,6 @@ export function ProjectIndex() {
     });
   };
 
-  const maxTravel = Math.max(0, trackHeight - THUMB_HEIGHT);
-
   return (
     <div ref={sectionRef} className={styles.projectsStreamWrapper}>
       {/* Delicate left vertical scroll rail */}
@@ -110,10 +106,10 @@ export function ProjectIndex() {
             aria-hidden="true"
           >
             <div
+              ref={thumbRef}
               className={styles.railThumb}
               style={{
                 height: `${THUMB_HEIGHT}px`,
-                transform: `translateY(${scrollProgress * maxTravel}px)`,
               }}
             />
           </div>
