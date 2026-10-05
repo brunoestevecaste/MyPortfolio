@@ -74,6 +74,7 @@ export function ProjectExecutiveHero({
           <figure className={styles.photoContainer}>
             <div
               data-project-photo
+              data-motion-image={arrivedViaTransition ? "settled" : "pixels"}
               className={`image-hover ${styles.photoInner}`}
             >
               <Image
@@ -82,11 +83,11 @@ export function ProjectExecutiveHero({
                 width={1200}
                 height={900}
                 className={styles.characteristicImage}
-                priority
+                preload
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
-            <figcaption className={styles.photoCaption} data-project-reveal>
+            <figcaption className={styles.photoCaption} data-project-reveal data-motion="mask">
               {project.number} · {project.organization} — {project.title}
             </figcaption>
           </figure>
@@ -94,33 +95,33 @@ export function ProjectExecutiveHero({
 
         {/* Right column: Executive Summary */}
         <div className={summaryColClass}>
-          <p className={styles.caseEyebrow} data-project-reveal>{resolvedEyebrow}</p>
-          <h1 className={styles.caseTitle} data-project-reveal>{project.title}</h1>
+          <p data-motion="mask" className={styles.caseEyebrow} data-project-reveal>{resolvedEyebrow}</p>
+          <h1 className={styles.caseTitle} data-project-reveal data-motion="scramble">{project.title}</h1>
 
           {/* Lead executive overview */}
-          <p className={styles.executiveLead} data-project-reveal>
+          <p data-motion="mask" className={styles.executiveLead} data-project-reveal>
             {project.executiveSummary.lead}
           </p>
 
           {/* Structured Executive Takeaways */}
           <div className={styles.executivePointsList} data-project-reveal>
             <div className={styles.executivePointCard}>
-              <strong className={styles.executivePointTitle}>01 / Reto de negocio</strong>
-              <p className={styles.executivePointText}>
+              <strong data-motion="mask" className={styles.executivePointTitle}>01 / Reto de negocio</strong>
+              <p data-motion="mask" className={styles.executivePointText}>
                 {project.executiveSummary.challenge}
               </p>
             </div>
 
             <div className={styles.executivePointCard}>
-              <strong className={styles.executivePointTitle}>02 / Solución técnica e IA</strong>
-              <p className={styles.executivePointText}>
+              <strong data-motion="mask" className={styles.executivePointTitle}>02 / Solución técnica e IA</strong>
+              <p data-motion="mask" className={styles.executivePointText}>
                 {project.executiveSummary.solution}
               </p>
             </div>
 
             <div className={styles.executivePointCard}>
-              <strong className={styles.executivePointTitle}>03 / Impacto y validación</strong>
-              <p className={styles.executivePointText}>
+              <strong data-motion="mask" className={styles.executivePointTitle}>03 / Impacto y validación</strong>
+              <p data-motion="mask" className={styles.executivePointText}>
                 {project.executiveSummary.impact}
               </p>
             </div>
@@ -129,29 +130,29 @@ export function ProjectExecutiveHero({
           {/* Key Facts Summary */}
           <dl className={styles.executiveFacts} data-project-reveal>
             <div>
-              <dt>Organización</dt>
-              <dd>{project.organization}</dd>
+              <dt data-motion="mask">Organización</dt>
+              <dd data-motion="mask">{project.organization}</dd>
             </div>
             <div>
-              <dt>Mi aportación</dt>
-              <dd>{project.role}</dd>
+              <dt data-motion="mask">Mi aportación</dt>
+              <dd data-motion="mask">{project.role}</dd>
             </div>
             {resolvedFramework && (
               <div>
-                <dt>Marco académico</dt>
-                <dd>{resolvedFramework}</dd>
+                <dt data-motion="mask">Marco académico</dt>
+                <dd data-motion="mask">{resolvedFramework}</dd>
               </div>
             )}
             {resolvedScope && (
               <div>
-                <dt>Alcance</dt>
-                <dd>{resolvedScope}</dd>
+                <dt data-motion="mask">Alcance</dt>
+                <dd data-motion="mask">{resolvedScope}</dd>
               </div>
             )}
             {resolvedGrade && (
               <div>
-                <dt>Calificación</dt>
-                <dd className={styles.grade}>{resolvedGrade}</dd>
+                <dt data-motion="mask">Calificación</dt>
+                <dd data-motion="mask" className={styles.grade}>{resolvedGrade}</dd>
               </div>
             )}
           </dl>
