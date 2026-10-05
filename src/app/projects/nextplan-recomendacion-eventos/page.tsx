@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 
 export default function NextPlanCaseStudy() {
   return (
-    <main id="main-content" tabIndex={-1} className="site-container flex-1">
+    <main data-motion-page id="main-content" tabIndex={-1} className="site-container flex-1">
       <article>
         {/* Split Hero: Characteristic Photo + Executive Summary */}
         <ProjectExecutiveHero
@@ -47,8 +47,8 @@ export default function NextPlanCaseStudy() {
         {/* Full In-Depth Case Study on Scroll */}
         <div id="case-study" className={styles.caseStudyFull}>
           <aside className={styles.privacy} aria-label="Marco del proyecto">
-            <strong>Un proyecto integral de máster, producto e ingeniería de datos e IA.</strong>
-            <p>{nextplanCase.confidentiality}</p>
+            <strong data-motion="mask">Un proyecto integral de máster, producto e ingeniería de datos e IA.</strong>
+            <p data-motion="mask">{nextplanCase.confidentiality}</p>
           </aside>
 
           <div className={styles.caseLayout}>
@@ -100,7 +100,7 @@ export default function NextPlanCaseStudy() {
                 aria-labelledby="herramientas-title"
                 className={styles.caseSection}
               >
-                <h2 id="herramientas-title">Herramientas y tecnologías</h2>
+                <h2 id="herramientas-title" data-motion="mask">Herramientas y tecnologías</h2>
                 <ProjectTools
                   tools={nextplanTools}
                   size="large"
