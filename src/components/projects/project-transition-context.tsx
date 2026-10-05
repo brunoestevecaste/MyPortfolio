@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import {
   createContext,
   useCallback,
@@ -13,6 +13,8 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import type { ProjectSummary } from "@/data/projects";
 import styles from "./project-transition.module.css";
+
+export const PROJECT_HERO_SIZES = "(max-width: 1024px) 100vw, 50vw";
 
 interface ProjectFlight {
   slug: string;
@@ -27,6 +29,7 @@ interface ProjectFlight {
 interface ProjectTransitionContextType {
   transitionToProject: (project: ProjectSummary, origin: HTMLElement) => void;
   registerHero: (slug: string, hero: HTMLElement) => void;
+  prefetchProject: (project: ProjectSummary) => void;
   isTransitioning: boolean;
   activeProjectSlug: string | null;
 }
@@ -34,6 +37,7 @@ interface ProjectTransitionContextType {
 const ProjectTransitionContext = createContext<ProjectTransitionContextType>({
   transitionToProject: () => {},
   registerHero: () => {},
+  prefetchProject: () => {},
   isTransitioning: false,
   activeProjectSlug: null,
 });
@@ -81,19 +85,21 @@ function TransitionOverlay({ flight, navigate, finish }: {
 
     async function run() {
       try {
-        // Dissolve the index while keeping the exact clicked image on screen.
-        await animate(backdrop!, [{ opacity: 0 }, { opacity: 1 }], {
-          duration: 180, easing: "ease-out", fill: "both",
-        }).finished;
-        if (cancelled) return;
+        // Load the route during the dissolve instead of adding its duration to
+        // navigation. Keep the cached source bitmap on screen throughout.
         navigate(flight.slug);
+        const dissolve = animate(backdrop!, [{ opacity: 0 }, { opacity: 1 }], {
+          duration: 180, easing: "ease-out", fill: "both",
+        });
         const hero = await flight.destination;
         if (cancelled) return;
         const target = hero.querySelector<HTMLElement>("[data-project-photo]");
         const targetImage = target?.querySelector("img");
         if (!target || !targetImage) { finish(); return; }
-        // Keep the source bitmap until the real, responsive destination is ready.
-        await targetImage.decode().catch(() => {});
+        // Font readiness and the dissolve are independent. Decode the destination
+        // while the cached photo travels, rather than blocking the movement.
+        const decoded = targetImage.decode().catch(() => {});
+        await Promise.all([document.fonts.ready, dissolve.finished]);
         if (cancelled) return;
         const rect = target.getBoundingClientRect();
         const destinationFilter = getComputedStyle(targetImage).filter;
@@ -104,18 +110,17 @@ function TransitionOverlay({ flight, navigate, finish }: {
           { transform: `translate3d(${rect.left - flight.origin.left}px, ${rect.top - flight.origin.top}px, 0) scale(${rect.width / flight.origin.width}, ${rect.height / flight.origin.height})` },
         ], flightTiming);
         animate(image, [
-          { transform: flight.imageTransform, filter: flight.imageFilter },
-          { transform: "none", filter: destinationFilter },
+          { transform: flight.imageTransform },
+          { transform: "none" },
         ], flightTiming);
+        // Apply the destination tone once, avoiding a full-image filter update
+        // on every frame of the shared-element movement.
+        image.style.filter = destinationFilter;
         animate(backdrop!, [{ opacity: 1 }, { opacity: 0 }], {
           duration: 320, easing: "ease-out", fill: "both",
         });
-        const reveals = Array.from(hero.querySelectorAll<HTMLElement>("[data-project-reveal]"));
-        const textAnimations = reveals.map((element, index) => animate(element, [
-          { opacity: 0, transform: "translateY(20px)" },
-          { opacity: 1, transform: "translateY(0)" },
-        ], { ...flightTiming, duration: 400, delay: 100 + Math.min(index, 5) * 35 }));
-        await Promise.all([movement.finished, ...textAnimations.map((animation) => animation.finished)]);
+        // PageMotion reveals each text block after the shared image has settled.
+        await Promise.all([movement.finished, decoded]);
         if (cancelled) return;
         finish();
         document.getElementById("main-content")?.focus({ preventScroll: true });
@@ -157,8 +162,10 @@ export function ProjectTransitionProvider({ children }: { children: ReactNode })
   const pathname = usePathname();
   const [flight, setFlight] = useState<ProjectFlight | null>(null);
   const flightRef = useRef<ProjectFlight | null>(null);
+  const prefetchedImages = useRef(new Set<string>());
 
   const finish = useCallback(() => {
+    if (!flightRef.current) return;
     flightRef.current = null;
     setFlight(null);
   }, []);
@@ -174,16 +181,34 @@ export function ProjectTransitionProvider({ children }: { children: ReactNode })
   }, []);
 
   useEffect(() => {
-    if (pathname !== "/" && pathname !== `/projects/${flightRef.current?.slug}`) finish();
+    if (flightRef.current && pathname !== "/" && pathname !== `/projects/${flightRef.current.slug}`) finish();
   }, [pathname, finish]);
+
+  const prefetchProject = useCallback((project: ProjectSummary) => {
+    // Warm only the image the user points at or focuses, using the same srcset
+    // as the destination hero so Next Image and the browser share their cache.
+    if (prefetchedImages.current.has(project.slug)) return;
+    prefetchedImages.current.add(project.slug);
+    router.prefetch(`/projects/${project.slug}`);
+    const { props } = getImageProps({
+      src: project.image, alt: "", width: 1200, height: 900, sizes: PROJECT_HERO_SIZES,
+    });
+    const image = new window.Image();
+    image.sizes = props.sizes ?? "";
+    image.srcset = props.srcSet ?? "";
+    image.src = props.src;
+    void image.decode().catch(() => {});
+  }, [router]);
 
   const transitionToProject = useCallback((project: ProjectSummary, origin: HTMLElement) => {
     if (flightRef.current) return;
     const image = origin.querySelector("img");
-    if (!image || !image.complete || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!image || !image.complete || !image.naturalWidth || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       router.push(`/projects/${project.slug}`);
       return;
     }
+    // Stop any in-flight smooth wheel tween before measuring the source rect.
+    window.dispatchEvent(new Event("project-transition-start"));
     let arrive!: ProjectFlight["arrive"];
     const destination = new Promise<HTMLElement>((resolve) => { arrive = resolve; });
     const imageStyle = getComputedStyle(image);
@@ -197,12 +222,13 @@ export function ProjectTransitionProvider({ children }: { children: ReactNode })
       arrive,
     };
     flightRef.current = nextFlight;
+    prefetchProject(project);
     setFlight(nextFlight);
-  }, [router]);
+  }, [router, prefetchProject]);
 
   return (
     <ProjectTransitionContext.Provider value={{
-      transitionToProject, registerHero,
+      transitionToProject, registerHero, prefetchProject,
       isTransitioning: flight !== null,
       activeProjectSlug: flight?.slug ?? null,
     }}>

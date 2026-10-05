@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 import type { ProjectSummary } from "@/data/projects";
 import { ProjectTools } from "./project-tools";
-import { useProjectTransition } from "./project-transition-context";
+import { PROJECT_HERO_SIZES, useProjectTransition } from "./project-transition-context";
 import styles from "./projects.module.css";
 
 export interface ProjectExecutiveHeroProps {
@@ -84,7 +84,7 @@ export function ProjectExecutiveHero({
                 height={900}
                 className={styles.characteristicImage}
                 preload
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                sizes={PROJECT_HERO_SIZES}
               />
             </div>
             <figcaption className={styles.photoCaption} data-project-reveal data-motion="mask">

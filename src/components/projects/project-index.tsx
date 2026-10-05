@@ -10,7 +10,7 @@ import styles from "./projects.module.css";
 
 export function ProjectIndex() {
   const router = useRouter();
-  const { transitionToProject, isTransitioning, activeProjectSlug } =
+  const { transitionToProject, prefetchProject, isTransitioning, activeProjectSlug } =
     useProjectTransition();
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -140,6 +140,8 @@ export function ProjectIndex() {
               <Link
                 href={`/projects/${project.slug}`}
                 onClick={(e) => handleProjectClick(e, project)}
+                onPointerEnter={() => prefetchProject(project)}
+                onFocus={() => prefetchProject(project)}
                 className={styles.staggeredCardLink}
                 aria-label={`Ver proyecto (${project.number}): ${displayTitle}`}
               >
