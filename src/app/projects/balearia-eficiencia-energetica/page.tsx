@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 
 export default function BaleariaCaseStudy() {
   return (
-    <main id="main-content" tabIndex={-1} className="site-container flex-1">
+    <main data-motion-page id="main-content" tabIndex={-1} className="site-container flex-1">
       <article>
         {/* Split Hero: Characteristic Photo + Executive Summary */}
         <ProjectExecutiveHero
@@ -50,8 +50,8 @@ export default function BaleariaCaseStudy() {
             className={styles.privacy}
             aria-label="Confidencialidad de los datos"
           >
-            <strong>Un caso real, datos ficticios.</strong>
-            <p>{baleariaCase.confidentiality}</p>
+            <strong data-motion="mask">Un caso real, datos ficticios.</strong>
+            <p data-motion="mask">{baleariaCase.confidentiality}</p>
           </aside>
 
           <div className={styles.caseLayout}>
@@ -98,7 +98,7 @@ export default function BaleariaCaseStudy() {
                 aria-labelledby="herramientas-title"
                 className={styles.caseSection}
               >
-                <h2 id="herramientas-title">Herramientas y tecnologías</h2>
+                <h2 id="herramientas-title" data-motion="mask">Herramientas y tecnologías</h2>
                 <ProjectTools
                   tools={baleariaTools}
                   size="large"
