@@ -55,16 +55,46 @@ export function Kursor({
   const contrastFilterId = useId();
   const outerRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLDivElement>(null);
+  const labelTextRef = useRef<HTMLSpanElement>(null);
+  const labelSizeRef = useRef<{ width: number; height: number } | null>(null);
   const lastPosRef = useRef<{ x: number; y: number } | null>(null);
 
-  const updateHoverState = useCallback((target: Element | null) => {
-    const isClickable = isElementClickable(target);
-    if (isClickable) {
-      outerRef.current?.classList.add("--hover");
-    } else {
-      outerRef.current?.classList.remove("--hover");
-    }
+  const positionLabel = useCallback(() => {
+    const label = labelRef.current;
+    const position = lastPosRef.current;
+    if (!label || !position || !label.classList.contains("kursorLabel--visible")) return;
+
+    // Measure only when the text changes; pointer movement only updates transforms.
+    const size = labelSizeRef.current ?? { width: label.offsetWidth, height: label.offsetHeight };
+    labelSizeRef.current = size;
+    const gap = 12;
+    const offsetX = 6;
+    const offsetY = 9;
+    const x = position.x + offsetX + size.width > window.innerWidth - gap
+      ? position.x - size.width - offsetX
+      : position.x + offsetX;
+    const y = position.y + offsetY + size.height > window.innerHeight - gap
+      ? position.y - size.height - offsetY
+      : position.y + offsetY;
+
+    label.style.transform = `translate3d(${Math.max(gap, x)}px, ${Math.max(gap, y)}px, 0)`;
   }, []);
+
+  const updateHoverState = useCallback((target: Element | null) => {
+    const outer = outerRef.current;
+    if (!outer) return;
+
+    const isClickable = isElementClickable(target);
+    outer.classList.toggle("--hover", isClickable);
+    const text = isClickable ? target?.closest("[data-cursor-label]")?.getAttribute("data-cursor-label") ?? "" : "";
+    if (labelTextRef.current && labelTextRef.current.textContent !== text) {
+      labelTextRef.current.textContent = text;
+      labelSizeRef.current = null;
+    }
+    labelRef.current?.classList.toggle("kursorLabel--visible", Boolean(text));
+    positionLabel();
+  }, [positionLabel]);
 
   const syncHoverAtCurrentPosition = useCallback(() => {
     if (!lastPosRef.current) return;
@@ -80,6 +110,7 @@ export function Kursor({
     // Immediately clear down and hover states to avoid lingering clickable styles
     outerRef.current?.classList.remove("kursor--down");
     outerRef.current?.classList.remove("--hover");
+    labelRef.current?.classList.remove("kursorLabel--visible");
 
     // After DOM has rendered for the new route, verify if cursor rests on a clickable element
     const rafId = requestAnimationFrame(() => {
@@ -111,6 +142,7 @@ export function Kursor({
       const position = lastPosRef.current;
       if (!position) return;
 
+      positionLabel();
       const transform = `translate3d(${position.x}px, ${position.y}px, 0) translate(-50%, -50%)`;
       if (outer) {
         outer.style.transform = transform;
@@ -150,7 +182,7 @@ export function Kursor({
 
     const handleMouseOut = (e: MouseEvent) => {
       if (!e.relatedTarget) {
-        outer?.classList.remove("--hover");
+        updateHoverState(null);
       } else {
         updateHoverState(e.relatedTarget as Element | null);
       }
@@ -160,11 +192,17 @@ export function Kursor({
       syncHoverAtCurrentPosition();
     };
 
+    const handleResize = () => {
+      labelSizeRef.current = null;
+      syncHoverAtCurrentPosition();
+    };
+
     const handleMouseLeave = () => {
       cancelPendingMove();
       outer?.classList.add("kursor--hidden");
       inner?.classList.add("kursorChild--hidden");
       outer?.classList.remove("--hover");
+      labelRef.current?.classList.remove("kursorLabel--visible");
       outer?.classList.remove("kursor--down");
     };
 
@@ -179,6 +217,7 @@ export function Kursor({
       outer?.classList.add("kursor--hidden");
       inner?.classList.add("kursorChild--hidden");
       outer?.classList.remove("--hover");
+      labelRef.current?.classList.remove("kursorLabel--visible");
       outer?.classList.remove("kursor--down");
     };
 
@@ -195,6 +234,7 @@ export function Kursor({
     document.addEventListener("mouseover", handleMouseOver, { passive: true });
     document.addEventListener("mouseout", handleMouseOut, { passive: true });
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResize, { passive: true });
     window.addEventListener("blur", handleBlur);
     window.addEventListener("focus", syncHoverAtCurrentPosition);
     window.addEventListener("popstate", handlePopStateOrHash);
@@ -213,6 +253,7 @@ export function Kursor({
       document.removeEventListener("mouseover", handleMouseOver);
       document.removeEventListener("mouseout", handleMouseOut);
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("blur", handleBlur);
       window.removeEventListener("focus", syncHoverAtCurrentPosition);
       window.removeEventListener("popstate", handlePopStateOrHash);
@@ -220,7 +261,7 @@ export function Kursor({
       document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
       document.documentElement.removeEventListener("mouseenter", handleMouseEnter);
     };
-  }, [removeDefaultCursor, syncHoverAtCurrentPosition, updateHoverState]);
+  }, [removeDefaultCursor, syncHoverAtCurrentPosition, updateHoverState, positionLabel]);
 
   return (
     <>
@@ -240,6 +281,9 @@ export function Kursor({
         style={{ "--k-color": color ? `rgb(${color})` : "var(--accent)" } as React.CSSProperties}
         aria-hidden="true"
       />
+      <div ref={labelRef} className="kursorLabel" aria-hidden="true">
+        <span ref={labelTextRef} />
+      </div>
     </>
   );
 }
