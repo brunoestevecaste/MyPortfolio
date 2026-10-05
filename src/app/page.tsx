@@ -13,12 +13,12 @@ export default function Home() {
     <>
       <IntroSequence />
       <noscript><style>{"[data-intro-active] { display: none; }"}</style></noscript>
-      <main className="flex-1" id="main-content" tabIndex={-1}>
+      <main className="flex-1" id="main-content" tabIndex={-1} data-motion-page>
       <section
         aria-labelledby="foundation-title"
         className={`site-container ${styles.hero}`}
       >
-        <h1 className={`display-text ${styles.heroTitle}`} id="foundation-title">
+        <h1 className={`display-text ${styles.heroTitle}`} id="foundation-title" data-motion="scramble">
           {profile.headline.split(/(analista de datos|ingeniero de IA)/).map((part, index) =>
             index % 2 === 1 ? <em key={part}>{part}</em> : part,
           )}
@@ -34,11 +34,11 @@ export default function Home() {
             />
           </div>
 
-          <p className={styles.introduction}>
+          <p data-motion="mask" className={styles.introduction}>
             {profile.introduction}
           </p>
 
-          <p className={styles.approach}>
+          <p data-motion="mask" className={styles.approach}>
             {profile.approach}
           </p>
         </div>

@@ -100,6 +100,7 @@ export function GlitchPortrait({
       role="button"
       aria-label="Retrato interactivo con animación glitch de Bruno Esteve"
       data-cursor-hover="true"
+      data-motion-image="pixels"
     >
       {/* Base Portrait Image */}
       <Image

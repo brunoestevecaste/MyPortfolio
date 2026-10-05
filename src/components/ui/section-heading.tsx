@@ -10,7 +10,7 @@ export function SectionHeading({
   id,
 }: SectionHeadingProps) {
   return (
-    <h2 className={`section-heading ${className}`} id={id}>
+    <h2 className={`section-heading ${className}`} id={id} data-motion="scramble">
       {`</${title}>`}
     </h2>
   );
