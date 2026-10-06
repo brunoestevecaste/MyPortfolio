@@ -51,7 +51,7 @@
   --radius-editorial: 5px;
   --radius-image: 10px;
   --radius-image-hover: 15px;
-  --zoom-image-hover: 1.03;
+  --scale-image-hover: 1.01;
 
   --duration-feedback: 180ms;
   --duration-reveal: 360ms;
@@ -109,31 +109,31 @@ svg {
   outline-offset: 4px;
 }
 
-/* One hover treatment for editorial photographs and their keyboard focus. */
+/* Grow the whole frame without zooming or cropping the photograph inside it. */
 .image-hover {
   --image-scale: 1;
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-image);
-  transition: border-radius var(--duration-reveal) var(--ease-out);
+  scale: var(--image-scale);
+  transition:
+    scale var(--duration-reveal) var(--ease-out),
+    border-radius var(--duration-reveal) var(--ease-out);
 }
 
 .image-hover > img {
-  transform: scale(var(--image-scale));
-  transition:
-    transform var(--duration-reveal) var(--ease-out),
-    filter var(--duration-reveal) var(--ease-out);
+  transition: filter var(--duration-reveal) var(--ease-out);
 }
 
 .image-hover:focus-visible,
 a:focus-visible .image-hover {
-  --image-scale: var(--zoom-image-hover);
+  --image-scale: var(--scale-image-hover);
   border-radius: var(--radius-image-hover);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .image-hover:hover {
-    --image-scale: var(--zoom-image-hover);
+    --image-scale: var(--scale-image-hover);
     border-radius: var(--radius-image-hover);
   }
 }
