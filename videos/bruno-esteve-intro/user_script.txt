@@ -1,0 +1,124 @@
+Crea y renderiza con Hyperframes un vídeo de presentación del portfolio de Bruno Esteve, siguiendo exactamente la secuencia descrita a continuación.
+
+FORMATO Y DIRECCIÓN VISUAL
+
+- Vídeo vertical 4:5, resolución 1080 × 1350 px, 30 fps y duración de 20 segundos.
+- Exportación final en MP4 con H.264.
+- Estética editorial y tecnológica: tipografía protagonista, composición precisa y transiciones fluidas.
+- Fondo blanco puro #FFFFFF durante todo el vídeo.
+- Único color de acento: rojo #C1282E.
+- Tipografía Bricolage Grotesque, peso 800 y tracking inicial de -0.06em, ajustado solo si es necesario para evitar solapamientos.
+- Todos los textos principales deben ocupar prácticamente todo el ancho, dejando aproximadamente 24 px de margen lateral. Deben conservarse completos y legibles, excepto durante el zoom de salida.
+- Cada frase debe permanecer en una sola línea. Calcula su tamaño a partir del texto completo antes de animarlo y mantenlo fijo durante la escritura. Las frases tendrán tamaños diferentes para alcanzar el mismo ancho; no deformes ni estires las letras.
+- El texto del botón será blanco. El favicon conservará las proporciones de su diseño original.
+
+REFERENCIAS DEL PROYECTO
+
+Si tienes acceso al repositorio, utiliza:
+- DESIGN.md para la identidad visual.
+- src/components/intro/intro-sequence.tsx y su archivo CSS para reproducir el inicio.
+- public/icon.svg como geometría exacta del favicon </I3>.
+
+Crea el vídeo en una carpeta independiente. No modifiques la web. Si el SVG no está disponible, solicítalo antes de construir la escena de partículas: el símbolo debe corresponder al favicon real.
+
+SECUENCIA OBLIGATORIA
+
+1. INTRODUCCIÓN — 0:00–0:04.5
+
+Reproduce el inicio de la web sobre fondo blanco.
+
+Escribe literalmente:
+PRESENTED BY
+
+El texto aparece carácter a carácter, de izquierda a derecha, con un cursor vertical rojo al final. Usa una cadencia aproximada de 65 ms por carácter y un parpadeo del cursor de 720 ms.
+
+Una vez completo, mantenlo unos 360 ms. Después bórralo carácter a carácter desde el final, a unos 28 ms por carácter.
+
+Tras una pausa de 180 ms, escribe de la misma manera:
+</BRUNO ESTEVE>
+
+Ambas frases aparecen en la misma posición, centradas verticalmente. El comienzo de la escritura queda anclado al margen izquierdo; las letras ya escritas no se desplazan al añadir caracteres.
+
+Cuando el nombre esté completo, mantenlo unos 380 ms y oculta el cursor. A continuación, amplía el nombre desde el centro durante aproximadamente 1.1 segundos, con aceleración progresiva, hasta una escala cercana a 24×. Debe desbordar los límites del encuadre y desaparecer, como si atravesáramos el texto. Conserva la opacidad hasta aproximadamente el 72 % del zoom y desvanece al final.
+
+2. ACCESO A LA WEB — 0:04.5–0:07
+
+Una vez desaparecido el nombre, presenta un botón centrado, de fondo #C1282E, esquinas discretas de unos 3 px y sin sombra.
+
+Dentro del botón debe resolverse exactamente:
+brunoesteve.com
+
+El texto es blanco y utiliza Bricolage Grotesque. Aplica text scrambling durante unos 800 ms: caracteres provisionales cambian rápidamente hasta fijarse, de izquierda a derecha, en el dominio correcto. Mantén estable el ancho del botón durante todo el efecto.
+
+Cuando el dominio sea completamente legible, deja una breve pausa. Solo entonces aparece un cursor de ratón de color oscuro, que se aproxima al botón y hace un único clic.
+
+Haz perceptible el clic mediante una compresión breve del botón y su recuperación. Después retira botón y cursor para dar paso a la siguiente escena.
+
+3. LOS TRES PILARES — 0:07–0:12.7
+
+Escribe estas tres líneas, respetando exactamente sus caracteres y orden:
+
+</DATA>
+</ARTIFICIAL INTELLIGENCE>
+</CREATIVITY>
+
+Deben aparecer una debajo de otra, formando un bloque centrado verticalmente y alineado al mismo margen izquierdo.
+
+Escribe una línea cada vez, carácter a carácter, con cursor rojo. Empieza la siguiente solo cuando la anterior haya terminado. Conserva las líneas completadas en pantalla.
+
+Cada línea completa debe ocupar prácticamente todo el ancho disponible. Ajusta el tamaño de cada frase de manera independiente: ARTIFICIAL INTELLIGENCE será más pequeña que DATA y CREATIVITY para caber en una sola línea.
+
+Distribución temporal orientativa:
+- 7.0–8.0 s: escritura de </DATA>.
+- 8.0–10.3 s: escritura de </ARTIFICIAL INTELLIGENCE>.
+- 10.3–11.7 s: escritura de </CREATIVITY>.
+- 11.7–12.7 s: pausa con las tres líneas completas.
+
+No uses scrambling en esta escena: debe verse una escritura real y secuencial.
+
+4. EXPLOSIÓN Y FORMACIÓN DEL FAVICON — 0:12.7–0:16.8
+
+Después de la pausa, las tres líneas se desintegran en una explosión de partículas rojas.
+
+Las partículas deben tener un carácter tecnológico mediante pequeños puntos, cuadrados y segmentos cortos. La explosión nace de las formas del texto, se expande brevemente y después converge hacia el centro.
+
+Las mismas partículas se agrupan para reconstruir la silueta exacta del favicon </I3>, utilizando public/icon.svg como máscara o geometría de destino. No sustituyas el favicon por texto escrito con una fuente.
+
+La trayectoria debe comunicar una transformación clara: palabras → dispersión → agrupación → símbolo.
+
+El favicon terminado queda centrado, grande y nítido, manteniendo su proporción original. Conserva el símbolo formado durante aproximadamente un segundo antes de la siguiente transición.
+
+5. GLITCH Y CIERRE — 0:16.8–0:20
+
+Aplica al favicon un glitch breve de aproximadamente 600 ms: fragmentación en franjas horizontales, pequeños desplazamientos laterales y cortes digitales en rojo y blanco.
+
+El favicon desaparece durante ese glitch y da paso al texto exacto:
+</ENJOY ;) >
+
+Respeta el espacio entre el paréntesis de cierre y el último signo >.
+
+Revela el texto con una escritura rápida de aproximadamente 600 ms inmediatamente después del glitch. Utiliza Bricolage Grotesque 800, rojo #C1282E y prácticamente todo el ancho del encuadre.
+
+Mantén la frase completa, centrada verticalmente, hasta el final. Oculta el cursor al terminar la escritura. El último fotograma debe quedar limpio y estable.
+
+ANIMACIÓN Y SONIDO
+
+Mantén un ritmo ágil, con pausas suficientes para leer. Reserva la mayor intensidad para el zoom, la explosión de partículas y el glitch.
+
+El vídeo debe entenderse completamente sin sonido. Si incorporas audio, utiliza únicamente efectos discretos sincronizados: escritura, borrado, clic, zoom y transformación digital. Sin voz en off.
+
+IMPLEMENTACIÓN Y VERIFICACIÓN
+
+Utiliza una composición de Hyperframes con animaciones deterministas y reproducibles al saltar a cualquier instante. Precarga la tipografía antes de medir los textos. Las partículas y el scrambling deben usar una semilla fija.
+
+Consulta el registro de Hyperframes para los efectos de scrambling, partículas y glitch antes de implementarlos manualmente.
+
+Comprueba que:
+- La secuencia respeta el orden y los tiempos.
+- Todos los textos coinciden exactamente con los indicados.
+- No hay cambios de tamaño durante la escritura, saltos de posición ni recortes accidentales.
+- El cursor de ratón aparece después de terminar el scrambling.
+- Las partículas forman el favicon real.
+- El resultado exportado coincide con la previsualización.
+
+Entrega el MP4 final y el proyecto editable de Hyperframes.
