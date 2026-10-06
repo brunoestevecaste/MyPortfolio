@@ -295,7 +295,7 @@ a:focus-visible .image-hover {
   .heading-text {
     color: var(--accent);
     font-family: var(--font-bricolage-grotesque), Arial, Helvetica, sans-serif;
-    font-size: clamp(3.25rem, 8.6vw, 7.5rem);
+    font-size: clamp(3.4375rem, 9.1vw, 8rem);
     font-weight: 700;
     line-height: 1.02;
     letter-spacing: var(--tracking-heading-section);
@@ -367,7 +367,7 @@ a:focus-visible .image-hover {
   }
 
   .heading-text {
-    font-size: clamp(2.125rem, 12.8vw, 3.25rem);
+    font-size: clamp(2.25rem, calc(14.2vw - 0.3125rem), 3.4375rem);
   }
 
   .display-text {

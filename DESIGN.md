@@ -177,8 +177,11 @@ Reglas:
   El hero usa `clamp(3.25rem, min(6.75vw, 10.8svh), 6.5rem)` en escritorio,
   `clamp(2.125rem, min(10.25vw, 6.5svh), 3.75rem)` en móvil y
   `clamp(1.625rem, min(8.5vw, 5.2svh), 1.875rem)` por debajo de 360px.
-- Los encabezados de sección usan `clamp(3.25rem, 8.6vw, 7.5rem)` en escritorio
-  y `clamp(2.125rem, 12.8vw, 3.25rem)` en móvil, también en Proyectos.
+- Desde el 06/10/2026, los encabezados de Educación, Experiencia, Proyectos y
+  Hablemos aumentan aproximadamente un 6 % en escritorio: usan
+  `clamp(3.4375rem, 9.1vw, 8rem)` en escritorio y
+  `clamp(2.25rem, calc(14.2vw - 0.3125rem), 3.4375rem)` en móvil, con un aumento más contenido
+  para que Experiencia siga cabiendo en una línea. El hero conserva su escala.
   Los títulos de caso se limitan a `4.625rem` y bajan a `2.125rem` por debajo
   de 360px para que las palabras largas encajen con el nuevo tracking.
 - El texto destacado usa Archivo; el texto de lectura continua usa Space Mono,
