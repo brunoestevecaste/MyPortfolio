@@ -67,8 +67,8 @@ div[class*='kursorChild'].kursorChild:after {
 
 /* Kursor Type 4 - Small filled circle in the portfolio accent. */
 div[class*='kursor'].kursor--4 {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   background: var(--k-color, var(--accent));
   border: 0;
   border-radius: 50%;
@@ -102,8 +102,9 @@ div[class*='kursor'].kursor--4 + .kursorChild {
 
 /* Kursor Type 4 - Hover state on interactive elements */
 div[class*='kursor'].kursor--4.--hover {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
+  opacity: 0.75;
 }
 
 /* Contextual caption, separate from the circle's pixel contrast effect. */
