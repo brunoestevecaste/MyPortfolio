@@ -19,7 +19,6 @@ import archStyles from "@/components/projects/project-architecture.module.css";
 const path = `/projects/${alinaProject.slug}`;
 
 export const metadata: Metadata = {
-  title: "Alina: asistente de empleo con agentes de IA",
   description: alinaProject.summary,
   alternates: { canonical: path },
   openGraph: {

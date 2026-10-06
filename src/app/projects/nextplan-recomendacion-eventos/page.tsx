@@ -19,7 +19,6 @@ import archStyles from "@/components/projects/project-architecture.module.css";
 const path = `/projects/${nextplanProject.slug}`;
 
 export const metadata: Metadata = {
-  title: "NextPlan: plataforma de recomendación de eventos con IA",
   description: nextplanProject.summary,
   alternates: { canonical: path },
   openGraph: {

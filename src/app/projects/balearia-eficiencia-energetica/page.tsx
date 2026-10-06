@@ -19,7 +19,6 @@ import baleariaStyles from "@/components/projects/balearia.module.css";
 const path = `/projects/${baleariaProject.slug}`;
 
 export const metadata: Metadata = {
-  title: "Baleària: optimización energética de rutas navieras",
   description: baleariaProject.summary,
   alternates: { canonical: path },
   openGraph: {

@@ -30,10 +30,7 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: {
-    default: "Bruno Esteve Castellano | Data Analyst & AI Engineer",
-    template: "%s | Bruno Esteve Castellano",
-  },
+  title: "Bruno Esteve",
   description:
     "Portfolio de Bruno Esteve Castellano, Data Analyst y AI Engineer especializado en analítica, inteligencia artificial y sistemas de datos.",
   icons: {

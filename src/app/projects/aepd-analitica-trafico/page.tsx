@@ -17,7 +17,6 @@ import styles from "@/components/projects/projects.module.css";
 const path = `/projects/${aepdProject.slug}`;
 
 export const metadata: Metadata = {
-  title: "AEPD: analítica y predicción de tráfico web",
   description: aepdProject.summary,
   alternates: { canonical: path },
   openGraph: {
