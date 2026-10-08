@@ -8,6 +8,66 @@
 
 .image { object-fit: cover; object-position: center 25%; }
 
+.idleScan, .cursorScan, .rasterPulse, .rasterSignal, .microActive, .microIdle,
+.echoNear, .echoFar {
+  position: absolute;
+  inset: 0;
+  transition: opacity var(--settle), transform var(--settle);
+}
+
+/* One quiet signal becomes a precise response to the pointer. */
+.idleScan { opacity: 0.68; }
+.scanSweep {
+  height: 100%;
+  border-top: 2px solid var(--ink);
+  animation: sweep 4.5s linear infinite;
+}
+.scanSweep::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  width: 100%;
+  height: 18px;
+  background: color-mix(in srgb, var(--canvas) 60%, transparent);
+  transform: translateY(-1px);
+}
+.cursorScan { opacity: 0; }
+.cursorLine {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-top: 2px solid var(--accent);
+  background: linear-gradient(color-mix(in srgb, var(--accent) 22%, transparent) 0 14px, transparent 14px);
+  transform: translateY(var(--scan-y));
+  transition: transform 100ms ease-out;
+}
+[data-portrait-active="true"] .idleScan { opacity: 0; }
+[data-portrait-active="true"] .cursorScan { opacity: 1; }
+@keyframes sweep {
+  from { transform: translateY(-5%); }
+  to { transform: translateY(102%); }
+}
+
+/* The resting ghost and the live offset share the same two image registers. */
+.echoNear, .echoFar { mix-blend-mode: multiply; }
+.echoNear { opacity: 0.32; transform: translateX(4px); }
+.echoFar { opacity: 0.2; transform: translateX(-4px); }
+.echoNear .image { animation: echoBreath 4.2s ease-in-out infinite; }
+.echoFar .image { animation: echoBreath 4.2s -2.1s ease-in-out infinite; }
+[data-portrait-active="true"] .echoNear {
+  opacity: 0.7;
+  transform: translate(calc(var(--pointer-x) * 1.85 + 8px), calc(var(--pointer-y) * 1.85 + 2.5px));
+}
+[data-portrait-active="true"] .echoFar {
+  opacity: 0.49;
+  transform: translate(calc((var(--pointer-x) * 1.85 + 8px) * -0.7), calc((var(--pointer-y) * 1.85 + 2.5px) * -0.7));
+}
+@keyframes echoBreath {
+  0%, 100% { opacity: 0.55; transform: translateX(-3px); }
+  50% { opacity: 1; transform: translateX(3px); }
+}
+
 /* Emissions may leave the matte; the native pointer target remains the silhouette. */
 .particleLayers { mask: none; overflow: clip; overflow-clip-margin: 80px; }
 .particleCanvas {
@@ -16,6 +76,44 @@
   width: 140%;
   height: 140%;
   pointer-events: none;
+}
+
+/* The grid keeps its phase as the interaction changes its amplitude. */
+.rasterPulse { opacity: 0.3; mix-blend-mode: multiply; }
+.rasterGrid {
+  position: absolute;
+  inset: -12px;
+  background-image: radial-gradient(var(--ink) 1px, transparent 1.3px);
+  background-size: 4px 4px;
+  transform: translate(var(--pointer-x), var(--pointer-y));
+  transition: transform var(--settle);
+  animation: rasterBreath 4.5s ease-in-out infinite;
+}
+.rasterSignal {
+  background: repeating-linear-gradient(0deg, var(--canvas) 0 1px, transparent 1px 5px);
+  opacity: 0;
+  transform: translateY(var(--pointer-y));
+}
+[data-portrait-active="true"] .rasterPulse { opacity: 0.78; }
+[data-portrait-active="true"] .rasterSignal { opacity: 0.36; }
+@keyframes rasterBreath { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+/* A resting slice and two stronger hover slices share a continuous phase. */
+.microRestSlice {
+  position: absolute;
+  inset: 0;
+  opacity: 0.25;
+  clip-path: inset(42% 0 53%);
+  animation: restingShift 4.2s step-end infinite;
+  transition: opacity var(--settle);
+}
+[data-portrait-active="true"] .microRestSlice { opacity: 0; }
+@keyframes restingShift {
+  0%, 25%, 65%, 100% { transform: translateX(0); }
+  15% { transform: translateX(4px); }
+  20% { transform: translateX(-3px); }
+  55% { transform: translateX(-4px); }
+  60% { transform: translateX(2px); }
 }
 
 .digitalCanvas {
@@ -62,6 +160,39 @@
 @keyframes digitalWindowRegister {
   from { transform: translateY(12%); }
   to { transform: translateY(-100%); }
+}
+
+.microIdle {
+  --signal-strength: 0.38;
+  background: linear-gradient(transparent 32%, var(--canvas) 32% 32.3%, transparent 32.3% 65%, var(--ink) 65% 65.2%, transparent 65.2%);
+  opacity: 0.13;
+  animation: microSignal 4.2s ease-in-out infinite;
+}
+.microActive { opacity: 0; }
+.microUpper, .microLower { position: absolute; inset: 0; }
+.microUpper { clip-path: inset(30% 0 63%); animation: upperShift 3.2s step-end infinite; }
+.microLower { clip-path: inset(61% 0 33%); animation: lowerShift 3.2s step-end infinite; }
+[data-portrait-active="true"] .microIdle { --signal-strength: 0.6; }
+[data-portrait-active="true"] .microActive { opacity: 0.9; }
+@keyframes microSignal {
+  0%, 40%, 70%, 100% { opacity: 0; }
+  46%, 52% { opacity: var(--signal-strength); }
+  76%, 82% { opacity: calc(var(--signal-strength) * 0.5); }
+}
+@keyframes upperShift {
+  0%, 12%, 100% { transform: translateX(0); }
+  3% { transform: translateX(11px); }
+  6% { transform: translateX(-7px); }
+  9% { transform: translateX(5px); }
+  64% { transform: translateX(-9px); }
+  69% { transform: translateX(0); }
+}
+@keyframes lowerShift {
+  0%, 28%, 100% { transform: translateX(0); }
+  19% { transform: translateX(-9px); }
+  23% { transform: translateX(7px); }
+  70% { transform: translateX(9px); }
+  75% { transform: translateX(0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
