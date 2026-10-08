@@ -1,13 +1,98 @@
 {
-  "duration": 20,
+  "duration": 19.5,
   "assertions": [
-    { "kind": "appearsBy", "selector": "#presented-line", "bySec": 0.9 },
-    { "kind": "appearsBy", "selector": "#name-line", "bySec": 2.8 },
-    { "kind": "appearsBy", "selector": "#site-button", "bySec": 5.55 },
-    { "kind": "before", "a": "#site-button", "b": "#pointer" },
-    { "kind": "appearsBy", "selector": "#formed-logo", "bySec": 15.85 },
-    { "kind": "appearsBy", "selector": "#enjoy-line", "bySec": 18.1 },
-    { "kind": "staysInFrame", "selector": "#site-button" },
-    { "kind": "staysInFrame", "selector": "#enjoy-line" }
+    {
+      "kind": "appearsBy",
+      "selector": "#intro-hook",
+      "bySec": 0
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#intro-name",
+      "bySec": 0
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#entry-panel",
+      "bySec": 2.9
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#proof-aepd",
+      "bySec": 3.2
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#proof-nextplan",
+      "bySec": 6.1
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#proof-alina",
+      "bySec": 8.8
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#formed-logo",
+      "bySec": 13.2
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#outro-domain",
+      "bySec": 15.3
+    },
+    {
+      "kind": "staysInFrame",
+      "selector": "#outro-domain"
+    },
+    {
+      "kind": "before",
+      "a": "#nextplan-recommendation",
+      "b": "#nextplan-save"
+    },
+    {
+      "kind": "before",
+      "a": "#alina-match",
+      "b": "#alina-letter"
+    },
+    {
+      "kind": "before",
+      "a": "#alina-letter",
+      "b": "#alina-agents"
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#alina-letter",
+      "bySec": 9.5
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#web-cursor",
+      "bySec": 16.3
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#enjoy-line",
+      "bySec": 18.2
+    },
+    {
+      "kind": "before",
+      "a": "#outro-domain",
+      "b": "#web-cursor"
+    },
+    {
+      "kind": "before",
+      "a": "#web-cursor",
+      "b": "#enjoy-line"
+    },
+    {
+      "kind": "staysInFrame",
+      "selector": "#enjoy-line"
+    },
+    {
+      "kind": "appearsBy",
+      "selector": "#web-logo",
+      "bySec": 14.04
+    }
   ]
 }
