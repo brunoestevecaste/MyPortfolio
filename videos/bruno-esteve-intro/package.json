@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npx --yes hyperframes@0.8.138 preview",
-    "check": "npx --yes hyperframes@0.8.138 check",
-    "render": "npx --yes hyperframes@0.8.138 render",
-    "publish": "npx --yes hyperframes@0.8.138 publish"
+    "dev": "npx --yes hyperframes@0.8.141 preview",
+    "check": "npx --yes hyperframes@0.8.141 check",
+    "render": "npx --yes hyperframes@0.8.141 render --workers 2 --experimental-fast-capture=false --no-browser-gpu",
+    "publish": "npx --yes hyperframes@0.8.141 publish"
   }
 }

@@ -3,3 +3,4 @@
 renders/
 snapshots/
 node_modules/
+.waveform-cache/
