@@ -98,9 +98,9 @@ export function setupPageMotion(main: HTMLElement): PageMotionControls {
     words.forEach((word, index) => {
       timeline.set(word, { opacity: 1 }, index * 0.025);
       timeline.to(word, {
-        duration: 0.85,
+        duration: 1.1,
         scrambleText: {
-          text: originals[index], chars: "upperAndLowerCase", speed: 0.35,
+          text: originals[index], chars: "upperAndLowerCase", speed: 0.28,
           revealDelay: 0.08, tweenLength: false,
         },
       }, index * 0.025);

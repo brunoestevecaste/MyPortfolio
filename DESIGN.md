@@ -458,7 +458,7 @@ Tratamiento:
 
 Por indicación de Bruno, Home y los cuatro casos incorporan GSAP. Se conservan
 la composición, tipografía y paleta. El titular principal y los grandes capítulos
-de Home usan ScrambleText (unos 850ms, con ancho estable por palabra). Los títulos
+de Home usan ScrambleText (unos 1100ms, con ancho estable por palabra). Los títulos
 secundarios y párrafos editoriales usan máscaras `clip-path` sobre su contenido
 original (650ms), activadas por separado al entrar en el viewport. No se divide
 el texto en líneas: tamaño, interlineado, saltos y HTML permanecen estables al
