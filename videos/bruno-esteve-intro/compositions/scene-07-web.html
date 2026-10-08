@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Enlace y ENJOY</title></head><body><template>
+<style>
+@font-face{font-family:"Bricolage Grotesque";src:url("assets/bricolage-grotesque-latin.woff2") format("woff2");font-weight:200 800;font-display:block}
+*{box-sizing:border-box}p,h2{margin:0}
+#root{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;background:#F9F4F4;color:#C1282E;font-family:"Bricolage Grotesque",sans-serif;font-weight:800}
+#web-logo{position:absolute;left:150px;top:285px;width:780px;height:780px;transform-origin:50% 50%;pointer-events:none}
+#web-invitation{position:absolute;left:108px;top:462px;width:864px;text-align:center;font-size:42px;line-height:1.2;letter-spacing:.015em}
+#web-target{position:absolute;left:108px;top:590px;width:864px;height:160px;transform-origin:50% 50%}
+#web-plate{position:absolute;inset:0;background:#C1282E;border-radius:6px;transform-origin:50% 50%;pointer-events:none}
+#outro-domain{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:82px;line-height:1.2;letter-spacing:-.035em;color:#F9F4F4;transform-origin:50% 50%}
+#enjoy-line{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:144px;line-height:1.05;letter-spacing:-.035em;color:#C1282E;transform-origin:50% 50%;z-index:2}
+#web-cursor{position:absolute;left:0;top:0;width:96px;height:96px;transform-origin:0 0;pointer-events:none;z-index:4}
+#web-cursor svg{display:block;width:100%;height:100%}
+#web-click-ring{position:absolute;left:856px;top:702px;width:40px;height:40px;border:3px solid #F9F4F4;border-radius:50%;pointer-events:none;z-index:3}
+</style>
+<div id="root" data-composition-id="scene-07-web" data-duration="5.5" data-width="1080" data-height="1350">
+<img id="web-logo" src="assets/icon.svg" width="780" height="780" alt="Logo de Bruno Esteve">
+<p id="web-invitation">NOS VEMOS EN</p>
+<div id="web-target"><div id="web-plate" aria-hidden="true"></div><p id="outro-domain">brunoesteve.com</p><h2 id="enjoy-line">ENJOY ;)</h2></div>
+<div id="web-click-ring" aria-hidden="true"></div>
+<div id="web-cursor" aria-label="El cursor pulsa el enlace de la web"><svg viewBox="0 0 24 24" role="img" aria-label="Cursor del ratón"><path d="M0 0 L0 16 L4 12 L7 19 L10 17.5 L6.5 11 L13 11 Z" fill="#121416" stroke="#F9F4F4" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
+</div>
+<script>
+(function(){"use strict";
+const tl=gsap.timeline({paused:true});
+// Fixed geometry and the same carried logo pose make the scene handoff seek-safe.
+gsap.set('#web-logo',{scale:1,y:0});
+gsap.set(['#web-invitation','#web-target','#enjoy-line','#web-cursor','#web-click-ring'],{opacity:0});
+tl.addLabel('link-enters',.65);
+tl.to('#web-logo',{scale:.23,y:-365,duration:.55,ease:'power3.inOut'},.10);
+tl.fromTo('#web-invitation',{opacity:0,y:12},{opacity:1,y:0,duration:.30,ease:'power2.out'},.50);
+tl.fromTo('#web-target',{opacity:0,y:28,scale:.92},{opacity:1,y:0,scale:1,duration:.52,ease:'power3.out'},.65);
+// Adapted from the registry press-ripple actor: decelerate, dwell, press, release.
+tl.fromTo('#web-cursor',{opacity:0,x:944,y:1070},{opacity:1,x:876,y:722,duration:.66,ease:'power3.out'},1.54);
+tl.addLabel('press',2.45);
+tl.set('#web-target',{transformOrigin:'88.8889% 82.5%'},2.44);
+tl.to(['#web-target','#web-cursor'],{scale:.94,duration:.12,ease:'power1.in'},2.45);
+tl.to(['#web-target','#web-cursor'],{scale:1,duration:.42,ease:'back.out(1.5)'},2.59);
+tl.fromTo('#web-click-ring',{opacity:.85,scale:.4},{opacity:0,scale:2.8,duration:.34,ease:'power2.out',immediateRender:false},2.57);
+// Cursor leaves the label clear before the button becomes the final greeting.
+tl.to('#web-cursor',{x:940,y:890,opacity:0,duration:.38,ease:'power2.in'},3.04);
+tl.addLabel('button-to-enjoy',3.18);
+tl.set('#web-target',{transformOrigin:'50% 50%'},3.16);
+tl.to('#outro-domain',{opacity:0,scale:.78,duration:.16,ease:'power2.in'},3.18);
+tl.to('#web-plate',{scaleX:.045,scaleY:.08,duration:.28,ease:'power3.inOut'},3.18);
+tl.to('#web-plate',{opacity:0,duration:.10},3.36);
+tl.to(['#web-invitation','#web-logo'],{opacity:0,duration:.30,ease:'power2.in'},3.18);
+tl.fromTo('#enjoy-line',{opacity:0,scale:.72,y:8},{opacity:1,scale:1,y:0,duration:.48,ease:'back.out(1.35)',immediateRender:false},3.46);
+window.__timelines['scene-07-web']=tl;
+})();
+</script></template></body></html>
