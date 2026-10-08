@@ -10,21 +10,5 @@
     "autoProxy": true
   },
   "authoringSkill": "product-launch-video",
-  "registryItems": [
-    {
-      "name": "scramble-reveal",
-      "type": "hyperframes:component",
-      "target": "compositions/components/scramble-reveal.html"
-    },
-    {
-      "name": "particle-text-dissolve",
-      "type": "hyperframes:component",
-      "target": "compositions/components/particle-text-dissolve.html"
-    },
-    {
-      "name": "rgb-glitch-text",
-      "type": "hyperframes:component",
-      "target": "compositions/components/rgb-glitch-text.html"
-    }
-  ]
+  "registryItems": []
 }
