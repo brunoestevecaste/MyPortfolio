@@ -248,7 +248,7 @@ jerarquía tipográfica débil.
   el encuadre de la fotografía sin zoom interior ni resplandor añadido.
   Los textos y espacios de la tarjeta no activan este efecto. Los enlaces
   ofrecen el mismo estado con foco visible. Con movimiento reducido se omite
-  la ampliación. El retrato del hero conserva su presentación y glitch originales,
+  la ampliación. El retrato del hero conserva su presentación con eco de registro,
   sin estos efectos de redondeo ni ampliación.
 - Botones compactos con radio máximo de `3px` o enlaces textuales subrayados.
 - Sin tarjetas genéricas para agrupar contenido que puede organizarse con espacio.
@@ -319,11 +319,17 @@ jerarquía tipográfica débil.
 - El retrato ocupa cinco de las doce columnas, a la derecha. Encuadre 5:4 en
   desktop y móvil para conservar el rostro completo. Desde el 05/10/2026 usa la
   propuesta 01, monocromo editorial, seleccionada por Bruno: grises, grano fino
-  y silueta sin fondo, conservando el glitch interactivo.
+  y silueta sin fondo. Desde el 08/10/2026 usa el eco de registro seleccionado por
+  Bruno: dos registros monocromos oscilan suavemente en reposo y se separan al
+  interactuar, con el hover suavizado aprobado en el comparador `/lab/hero`.
+  El rostro permanece reconocible y solo la silueta activa el hover; tocar el
+  retrato o pulsar Intro/Espacio permite activar el efecto sin ratón.
   El activo es `public/hero/bruno-esteve-hero-monocromo-editorial.webp`, una
   conversión sin pérdida del retrato elegido. La transparencia se obtiene con
   `public/hero/bruno-esteve-monocromo-silhouette.webp`, cuyo alfa enmascara la
-  imagen base y todas las capas del glitch. Se conservan dimensiones y encuadre.
+  imagen base y todas las capas del eco. Se conservan dimensiones y encuadre.
+  El movimiento se pausa fuera de pantalla y con la pestaña oculta; con
+  `prefers-reduced-motion` queda la fotografía estática.
 - Los textos ocupan tres columnas cada uno; una columna libre los separa del
   retrato. Su tamaño es equivalente, sin un primer párrafo sobredimensionado.
 - Hasta recibir el original, reservar la superficie con una indicación discreta.

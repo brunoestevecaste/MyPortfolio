@@ -14,6 +14,7 @@ export function HomeHero({ portrait }: { portrait?: ReactNode }) {
       <div className={styles.heroComposition}>
         <div className={styles.portrait} data-hero-portrait>
           {portrait ?? <GlitchPortrait
+            motion="echo"
             src="/hero/bruno-esteve-hero-monocromo-editorial.webp"
             alt="Retrato editorial de Bruno Esteve en blanco y negro, con grano fino y sin fondo"
             priority
