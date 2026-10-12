@@ -62,7 +62,7 @@ export const alinaCase = {
       "Con los perfiles normalizados, el sistema despliega su inteligencia en tres fases complementarias: el cálculo determinista del ajuste, la activación de agentes especializados y la optimización de latencia en producción.",
       "Para evitar la arbitrariedad de los filtros opacos de selección, el Match Score aplica una fórmula matemática transparente: divide las habilidades cubiertas y parciales entre el total de requisitos de la oferta, sumando un incentivo si coincide la modalidad preferida de trabajo. Cada punto porcentual es explicable y auditable por el usuario.",
       "A continuación, cuatro agentes especializados entran en acción según la necesidad del candidato: uno redacta cartas de presentación fieles a su experiencia real, otro simula entrevistas técnicas con preguntas y notas cuantitativas, un tercero detecta qué habilidades le faltan sugiriendo cursos prácticos, y el último investiga a la empresa antes de la reunión.",
-      "Para que estos agentes respondieran rápido y sin fallos, dividimos las llamadas al modelo en dos pasos: primero razona libremente y consulta fuentes; después, una llamada rápida da formato a la respuesta final. Como muestra la gráfica inferior, este cambio redujo el tiempo de espera casi a la mitad y recortó un 40% el gasto en tokens, eliminando errores de sintaxis.",
+      "Para optimizar la respuesta de estos agentes, separamos las llamadas al modelo en dos pasos: primero, el agente razona y consulta fuentes en texto libre; después, otra llamada estructura la respuesta final. Esta separación redujo la latencia y el consumo de tokens y evitó errores de sintaxis.",
     ],
   },
   finalProduct: {
@@ -144,30 +144,6 @@ export const alinaDataUses = [
   },
 ] as const;
 
-export const alinaDecisions = [
-  {
-    title: "Ingesta dual: scraping paralelo y contingencia de pegado manual",
-    paragraphs: [
-      "Las APIs públicas de empleo como Adzuna truncan las descripciones a 500 caracteres, omitiendo requisitos técnicos críticos. Diseñamos un pipeline donde Selenium extrae la oferta original completa en paralelo, asegurando que el modelo disponga del contexto íntegro.",
-      "Como salvaguarda operativa ante bloqueos o cambios de HTML en portales de terceros, se habilitó la entrada manual directa, garantizando que el usuario siempre pueda analizar cualquier oferta sin depender de la disponibilidad de servicios externos.",
-    ],
-  },
-  {
-    title: "Orquestación multi-agente con patrón colaborativo escritor-crítico",
-    paragraphs: [
-      "En lugar de confiar la redacción de cartas a un prompt único propenso a inventar méritos, implementamos un bucle LoopAgent en Google ADK donde un agente escritor genera borradores y un agente evaluador senior actúa como crítico inflexible.",
-      "El crítico audita cada afirmación contrastándola exclusivamente con las tecnologías y experiencias verificadas en el CV. Si detecta competencias no respaldadas, rechaza la versión y fuerza una reescritura, saliendo del bucle (exit_loop()) únicamente cuando la fidelidad es total.",
-    ],
-  },
-  {
-    title: "Desacoplamiento de prompts en dos fases: razonamiento y formateo",
-    paragraphs: [
-      "Exigir al LLM que investigue en internet con herramientas externas, razone la estrategia y genere a la vez un JSON estructurado provocaba una tasa de fallo de formato del 40% y un elevado coste en tokens por turno.",
-      "La solución consistió en separar el flujo: la fase 1 razona y consulta fuentes en texto libre sin restricciones sintácticas; la fase 2 ejecuta una llamada compacta y determinista orientada exclusivamente a validar y estructurar el payload JSON final.",
-    ],
-  },
-] as const;
-
 export const alinaPipeline = [
   { title: "CV & Oferta", detail: "Entrada PDF/DOCX o texto libre" },
   { title: "Buscador / Scraper", detail: "Adzuna + Selenium en paralelo" },
@@ -185,33 +161,6 @@ export const alinaTools = [
   "React",
 ] as const;
 
-// Métricas de optimización obtenidas en las pruebas empíricas del proyecto (diapositivas 11 y 12)
-export const alinaOptimizationMetrics = [
-  {
-    metric: "Tokens por llamada",
-    oneshot: 1500,
-    twostep: 900,
-    reduction: "-40%",
-    unit: "tokens",
-    description: "Desacoplar la investigación en texto libre del formateo JSON reduce drásticamente el tamaño del contexto.",
-  },
-  {
-    metric: "Fiabilidad JSON",
-    oneshot: 60,
-    twostep: 95,
-    reduction: "+58%",
-    unit: "%",
-    description: "Separar responsabilidades eliminó prácticamente las repeticiones por error de sintaxis en el payload.",
-  },
-  {
-    metric: "Tiempo de respuesta",
-    oneshot: 55,
-    twostep: 30,
-    reduction: "-45%",
-    unit: "s",
-    description: "La paralelización de scrapers y llamadas en ADK redujo el tiempo total de procesamiento casi a la mitad.",
-  },
-] as const;
 
 // Ofertas y perfiles de demostración para el calculador interactivo
 export type SampleJobOffer = {

@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
 import { CaseSection } from "@/components/projects/case-section";
 import { AlinaArchitecture } from "@/components/projects/alina-architecture";
-import { AlinaOptimizationFigure } from "@/components/projects/alina-optimization-figure";
 import { AlinaDashboard } from "@/components/projects/alina-dashboard";
 import { ProjectPagination } from "@/components/projects/project-pagination";
 import { ProjectExecutiveHero } from "@/components/projects/project-executive-hero";
 import { ProjectTools } from "@/components/projects/project-tools";
+import { ProjectSectionNavigation } from "@/components/projects/project-section-navigation";
 import { alinaProject } from "@/data/projects";
 import {
   alinaCase,
   alinaSections,
-  alinaDecisions,
   alinaTools,
 } from "@/data/alina";
 import styles from "@/components/projects/projects.module.css";
-import archStyles from "@/components/projects/project-architecture.module.css";
 
 const path = `/projects/${alinaProject.slug}`;
 
@@ -54,19 +52,7 @@ export default function AlinaCaseStudy() {
           </aside>
 
           <div className={styles.caseLayout}>
-            <nav
-              className={styles.caseNav}
-              aria-label="Índice del caso de estudio"
-            >
-              <p>En este caso</p>
-              <ol>
-                {alinaSections.map((section) => (
-                  <li key={section.id}>
-                    <a href={`#${section.id}`}>{section.label}</a>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            <ProjectSectionNavigation sections={alinaSections} />
 
             <div className={styles.caseBody}>
               <CaseSection section={alinaCase.context} />
@@ -75,23 +61,11 @@ export default function AlinaCaseStudy() {
 
               <CaseSection section={alinaCase.architecture}>
                 <AlinaArchitecture />
-                <ul className={archStyles.decisions}>
-                  {alinaDecisions.map((decision) => (
-                    <li key={decision.title}>
-                      <h3>{decision.title}</h3>
-                      {decision.paragraphs.map((paragraph) => (
-                        <p key={paragraph}>{paragraph}</p>
-                      ))}
-                    </li>
-                  ))}
-                </ul>
               </CaseSection>
 
               <CaseSection section={alinaCase.preparation} />
 
-              <CaseSection section={alinaCase.mlopsPipeline}>
-                <AlinaOptimizationFigure />
-              </CaseSection>
+              <CaseSection section={alinaCase.mlopsPipeline} />
 
               <CaseSection section={alinaCase.finalProduct}>
                 <AlinaDashboard />
