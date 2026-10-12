@@ -9,6 +9,8 @@ type Bucket = { minute: number; daily: number; active: number; requests: number[
 // Ephemeral counters only: no questions, answers or raw IPs are stored.
 // This protects ONE process. Distributed deployments require an edge limiter.
 export class ChatLimiter {
+  constructor(private readonly local = false) {}
+
   private actors = new Map<string, Bucket>();
   private global: Bucket = { minute: 0, daily: 0, active: 0, requests: [], last: 0 };
 
@@ -24,13 +26,14 @@ export class ChatLimiter {
       if (now >= item.minute + DAY) { item.minute = now; item.daily = 0; }
     }
     let wait = 0;
-    if (bucket.active || global.active >= 2) wait = 8_000;
+    if (bucket.active || global.active >= (this.local ? 20 : 2)) wait = 8_000;
     if (bucket.last && now - bucket.last < 8_000) wait = Math.max(wait, 8_000 - (now - bucket.last));
     if (bucket.requests.length >= 4) wait = Math.max(wait, MINUTE - (now - bucket.requests[0]));
-    // Conservative shared budget for the free model's token quota.
-    if (global.requests.length >= 2) wait = Math.max(wait, MINUTE - (now - global.requests[0]));
-    if (bucket.daily >= 20) wait = Math.max(wait, bucket.minute + DAY - now);
-    if (global.daily >= 80) wait = Math.max(wait, global.minute + DAY - now);
+    // Each generated answer uses up to TWO model calls (draft + review).
+    // These counters are per process; provider quotas remain authoritative.
+    if (global.requests.length >= (this.local ? 120 : 1)) wait = Math.max(wait, MINUTE - (now - global.requests[0]));
+    if (bucket.daily >= (this.local ? 200 : 20)) wait = Math.max(wait, bucket.minute + DAY - now);
+    if (global.daily >= (this.local ? 5_000 : 40)) wait = Math.max(wait, global.minute + DAY - now);
     if (wait > 0) return { allowed: false, retryAfter: Math.max(1, Math.ceil(wait / 1_000)) };
     this.actors.set(actor, bucket);
     for (const item of [bucket, global]) {
@@ -46,11 +49,14 @@ export class ChatLimiter {
 
 const salt = randomBytes(32).toString("hex");
 export const chatLimiter = new ChatLimiter();
+export const localChatLimiter = new ChatLimiter(true);
 
 export function protectionConfigured(): boolean {
   if (process.env.NODE_ENV !== "production") return true;
   try {
-    if (!process.env.CHAT_ALLOWED_ORIGIN || new URL(process.env.CHAT_ALLOWED_ORIGIN).protocol !== "https:") return false;
+    if (!process.env.CHAT_ALLOWED_ORIGIN) return false;
+    const origin = new URL(process.env.CHAT_ALLOWED_ORIGIN);
+    if (origin.protocol !== "https:" || origin.username || origin.password || origin.pathname !== "/" || origin.search || origin.hash) return false;
   } catch { return false; }
   const mode = process.env.CHAT_PROTECTION_MODE;
   if (mode === "single-instance") return process.env.VERCEL !== "1";
