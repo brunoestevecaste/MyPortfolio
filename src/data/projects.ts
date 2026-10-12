@@ -130,7 +130,7 @@ export const nextplanProject = {
   summary:
     "Una plataforma integral para descubrir eventos en España: exploración en mapa, swipes de afinidad, asistente conversacional con RAG en Vertex AI y clustering de usuarios para recomendaciones personalizadas. Proyecto de Máster en IA.",
   year: "2026",
-  role: "Ingeniería de datos, clustering y sistemas de IA",
+  role: "Sistemas de IA: clustering y RAG",
   technologies: [
     "Google Cloud",
     "Python",

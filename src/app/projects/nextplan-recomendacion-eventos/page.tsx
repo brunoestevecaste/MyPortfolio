@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { CaseSection } from "@/components/projects/case-section";
 import { NextPlanArchitecture } from "@/components/projects/nextplan-architecture";
-import { NextPlanScoringFigure } from "@/components/projects/nextplan-scoring-figure";
 import { NextPlanDashboard } from "@/components/projects/nextplan-dashboard";
 import { ProjectPagination } from "@/components/projects/project-pagination";
 import { ProjectExecutiveHero } from "@/components/projects/project-executive-hero";
 import { ProjectTools } from "@/components/projects/project-tools";
+import { ProjectSectionNavigation } from "@/components/projects/project-section-navigation";
 import { nextplanProject } from "@/data/projects";
 import {
   nextplanCase,
@@ -51,16 +51,7 @@ export default function NextPlanCaseStudy() {
           </aside>
 
           <div className={styles.caseLayout}>
-            <nav className={styles.caseNav} aria-label="Índice del caso de estudio">
-              <p>En este caso</p>
-              <ol>
-                {nextplanSections.map((section) => (
-                  <li key={section.id}>
-                    <a href={`#${section.id}`}>{section.label}</a>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            <ProjectSectionNavigation sections={nextplanSections} />
 
             <div className={styles.caseBody}>
               <CaseSection section={nextplanCase.context} />
@@ -83,9 +74,7 @@ export default function NextPlanCaseStudy() {
 
               <CaseSection section={nextplanCase.preparation} />
 
-              <CaseSection section={nextplanCase.mlopsPipeline}>
-                <NextPlanScoringFigure />
-              </CaseSection>
+              <CaseSection section={nextplanCase.mlopsPipeline} />
 
               <CaseSection section={nextplanCase.finalProduct}>
                 <NextPlanDashboard />

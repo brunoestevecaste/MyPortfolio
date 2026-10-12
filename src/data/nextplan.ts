@@ -27,11 +27,11 @@ export const nextplanCase = {
   contribution: {
     id: "aportacion",
     label: "Mi aportación",
-    title: "Ingeniería de datos, modelado analítico y recomendación",
+    title: "Sistemas de IA: clustering y RAG",
     paragraphs: [
-      "En un equipo multidisciplinar de cuatro personas en NextPlan, mi contribución se focalizó en el diseño integral de la arquitectura de datos, el modelado dimensional con dbt y el desarrollo de los algoritmos de Machine Learning y recomendación en Google Cloud Platform.",
-      "Diseñé el flujo de ingesta y streaming de swipes hacia BigQuery, implementé los modelos de feature store en dbt para procesar ventanas de afinidad de 30 y 90 días, y desarrollé el motor de clustering K-Means junto a la lógica de expansión de centroides para evitar burbujas de filtro.",
-      "Asimismo, participé en la integración del agente conversacional RAG desacoplado en Vertex AI Agent Engine y en el diseño del loop de feedback post-evento mediante enlaces encriptados, asegurando que todos los componentes cumplieran estrictamente con el RGPD.",
+      "Mi aportación en NextPlan se limitó a los sistemas de IA: el motor de clustering de usuarios y el asistente conversacional basado en RAG.",
+      "Desarrollé el clustering con K-Means para agrupar usuarios según sus afinidades y ampliar las recomendaciones con eventos de grupos próximos.",
+      "También desarrollé el asistente RAG en dos fases, que interpreta las peticiones y recupera eventos del catálogo para responder con información verificada.",
     ],
   },
   architecture: {
@@ -62,7 +62,6 @@ export const nextplanCase = {
       "Con las variables de afinidad consolidadas en el almacén de datos, el núcleo inteligente de NextPlan resuelve dos retos: ordenar los mejores planes para las tarjetas y responder dudas complejas en el chat.",
       "En primer lugar, el algoritmo K-Means agrupa a los usuarios en comunidades con gustos similares. Para no encerrar a nadie en una burbuja repetitiva donde siempre vea lo mismo, el recomendador combina planes del grupo principal del usuario (peso 1.00) con sugerencias de grupos vecinos cercanos (pesos 0.60, 0.40 y 0.25). De este modo, alguien afín a la música indie también descubre obras de teatro alternativo o festivales afines.",
       "A continuación, el cálculo final suma dos impulsos deterministas: una bonificación si el evento ocurre en la ciudad del usuario (+0.08) y un incentivo si la fecha está próxima (hasta +0.04) para primar planes inmediatos. En paralelo, el asistente conversacional con RAG en Vertex AI interpreta peticiones abiertas en lenguaje natural («planes tranquilos para este sábado») y busca directamente en la base de datos planes verificados con precio y horario real, sin inventar información.",
-      "La figura inferior ilustra cómo convergen la afinidad matemática del clúster y las bonificaciones para ordenar los eventos de cada persona con total claridad y transparencia.",
     ],
   },
   finalProduct: {
@@ -196,70 +195,6 @@ export const nextplanPipeline = [
   {
     title: "Feedback loop y RGPD",
     detail: "Cloud Tasks · Cloud Functions · JWT firmado · SendGrid · Art. 32 Audit Log",
-  },
-] as const;
-
-export const nextplanClusters = [
-  {
-    id: "cluster-01",
-    name: "Cultura Urbana e Indie",
-    traits: "Conciertos de salas, festivales alternativos, exposiciones de diseño",
-    affinitySegment: "Music & Arts",
-    topGenres: ["Rock/Indie", "Exposiciones", "Teatro"],
-    avgTicket: "18 - 35 €",
-    timing: "Fin de semana (tarde/noche)",
-    weightOwn: 1.0,
-  },
-  {
-    id: "cluster-02",
-    name: "Artes Escénicas y Teatro",
-    traits: "Musicales de gran formato, comedia en vivo, danza y ballet clásico",
-    affinitySegment: "Arts & Theatre",
-    topGenres: ["Musical", "Comedia", "Teatro"],
-    avgTicket: "25 - 60 €",
-    timing: "Viernes y domingos tarde",
-    weightOwn: 1.0,
-  },
-  {
-    id: "cluster-03",
-    name: "Deportes y Ocio Dinámico",
-    traits: "Partidos de baloncesto y fútbol, eventos deportivos al aire libre, motor",
-    affinitySegment: "Sports",
-    topGenres: ["Baloncesto", "Fútbol", "Competiciones"],
-    avgTicket: "15 - 45 €",
-    timing: "Sábados tarde y mañanas",
-    weightOwn: 1.0,
-  },
-  {
-    id: "cluster-04",
-    name: "Planes Familiares y Descubrimiento",
-    traits: "Parques temáticos, circo contemporáneo, espectáculos infantiles y ferias",
-    affinitySegment: "Family & Misc",
-    topGenres: ["Infantil/Kids", "Circo", "Parques"],
-    avgTicket: "10 - 25 €",
-    timing: "Sábados y domingos matinal/mediodía",
-    weightOwn: 1.0,
-  },
-] as const;
-
-export const nextplanScoringFactors = [
-  {
-    name: "Afinidad de Clúster (Base)",
-    factor: "Afinidad × Peso de Clúster",
-    weight: "1.00 (Propio) / 0.60 (Vecino 1) / 0.40 (Vecino 2) / 0.25 (Vecino 3)",
-    description: "Multiplica el like rate histórico del clúster sobre la categoría y género por el grado de proximidad del centroide.",
-  },
-  {
-    name: "Impulso de Ciudad (Home City Boost)",
-    factor: "home_city_boost",
-    weight: "+0.08 fijo",
-    description: "Bonificación aplicada si la ciudad del evento coincide con la ciudad de residencia o de referencia deducida.",
-  },
-  {
-    name: "Impulso de Urgencia Temporal",
-    factor: "urgency_boost",
-    weight: "Hasta +0.04 (lineal)",
-    description: "Premia eventos que se celebran en los próximos días frente a fechas lejanas en el horizonte temporal.",
   },
 ] as const;
 
