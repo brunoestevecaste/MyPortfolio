@@ -6,6 +6,7 @@ import { NavigationFigure } from "@/components/projects/navigation-figure";
 import { ProjectPagination } from "@/components/projects/project-pagination";
 import { ProjectExecutiveHero } from "@/components/projects/project-executive-hero";
 import { ProjectTools } from "@/components/projects/project-tools";
+import { ProjectSectionNavigation } from "@/components/projects/project-section-navigation";
 import { baleariaProject } from "@/data/projects";
 import {
   baleariaCase,
@@ -54,19 +55,7 @@ export default function BaleariaCaseStudy() {
           </aside>
 
           <div className={styles.caseLayout}>
-            <nav
-              className={styles.caseNav}
-              aria-label="Índice del caso de estudio"
-            >
-              <p>En este caso</p>
-              <ol>
-                {baleariaSections.map((section) => (
-                  <li key={section.id}>
-                    <a href={`#${section.id}`}>{section.label}</a>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            <ProjectSectionNavigation sections={baleariaSections} />
             <div className={styles.caseBody}>
               <CaseSection section={baleariaCase.context} />
               <CaseSection section={baleariaCase.contribution} />

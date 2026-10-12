@@ -675,6 +675,10 @@
   text-underline-offset: 0.25em;
 }
 
+.caseNav .caseNavActive {
+  color: var(--accent-ink);
+}
+
 .caseBody {
   min-width: 0;
 }

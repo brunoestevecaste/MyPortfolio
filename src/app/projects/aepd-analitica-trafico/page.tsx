@@ -6,6 +6,7 @@ import { AepdDashboard } from "@/components/projects/aepd-dashboard";
 import { ProjectPagination } from "@/components/projects/project-pagination";
 import { ProjectExecutiveHero } from "@/components/projects/project-executive-hero";
 import { ProjectTools } from "@/components/projects/project-tools";
+import { ProjectSectionNavigation } from "@/components/projects/project-section-navigation";
 import { aepdProject } from "@/data/projects";
 import {
   aepdCase,
@@ -52,19 +53,7 @@ export default function AepdCaseStudy() {
           </aside>
 
           <div className={styles.caseLayout}>
-            <nav
-              className={styles.caseNav}
-              aria-label="Índice del caso de estudio"
-            >
-              <p>En este caso</p>
-              <ol>
-                {aepdSections.map((section) => (
-                  <li key={section.id}>
-                    <a href={`#${section.id}`}>{section.label}</a>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            <ProjectSectionNavigation sections={aepdSections} />
 
             <div className={styles.caseBody}>
               <CaseSection section={aepdCase.context} />
