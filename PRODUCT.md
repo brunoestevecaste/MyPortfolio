@@ -215,7 +215,8 @@ producto e ingeniería de datos e IA: ingesta masiva con enriquecimiento semánt
 Gemini, streaming asíncrono de swipes con Pub/Sub, modelado dimensional y feature
 store con dbt, motor K-Means de clustering y expansión de catálogo por vecindad,
 agente conversacional RAG desacoplado en dos fases con Google ADK y bucle de feedback
-activo post-evento por email bajo cumplimiento estricto del RGPD.
+activo post-evento por email bajo cumplimiento estricto del RGPD. La aportación
+individual de Bruno se centró exclusivamente en los sistemas de IA: clustering y RAG.
 
 **Sistema documentado**
 
@@ -285,7 +286,8 @@ mediante arquitectura de prompts en dos fases.
 **Estado de evidencia:** verificado en el CV y ampliado con la memoria y defensa
 del TFG facilitadas por Bruno el 22/09/2026. Calificación 10/10 confirmada por
 Bruno. Trabajo de 2025 realizado en el marco de prácticas académicas en IRTIC
-(Universitat de València) para la AEPD.
+(Universitat de València) para la AEPD. Bruno confirma que diseñó y elaboró el
+proyecto íntegramente de forma individual.
 
 **Publicación y confidencialidad**
 

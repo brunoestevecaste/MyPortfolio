@@ -35,7 +35,7 @@ export const aepdCase = {
     title: "De los logs web a la analítica: un flujo lineal sin fisuras",
     paragraphs: [
       "La arquitectura del proyecto resuelve un problema habitual en analítica web: los servidores generan un torrente continuo de registros técnicos no estructurados que deben transformarse antes de llegar a la base de datos para no degradar su rendimiento.",
-      "Diseñamos una estructura lineal en dos capas sobre PostgreSQL. En primer lugar, una zona de staging recibe y valida los archivos de registro crudos; posteriormente, un almacén dimensional en esquema en estrella (Star Schema) consolida las sesiones de los usuarios, separando los hechos cuantificables de las dimensiones descriptivas (tiempo, trámite y tipo de solicitud).",
+      "Diseñé una estructura lineal en dos capas sobre PostgreSQL. En primer lugar, una zona de staging recibe y valida los archivos de registro crudos; posteriormente, un almacén dimensional en esquema en estrella (Star Schema) consolida las sesiones de los usuarios, separando los hechos cuantificables de las dimensiones descriptivas (tiempo, trámite y tipo de solicitud).",
       "Esta base unificada sirve como fuente única de verdad para dos propósitos independientes: alimenta el cuadro de mando en Power BI para la toma de decisiones directivas y provee los datos históricos a los modelos en Python para la predicción de tráfico.",
     ],
   },
@@ -55,8 +55,8 @@ export const aepdCase = {
     title: "Series temporales horarias, optimización bayesiana y backtesting",
     paragraphs: [
       "Con los datos organizados por sesiones y horas, el siguiente paso fue pasar de ver el pasado a anticipar el futuro: ¿cuántas visitas recibirá la sede electrónica en cada hora del día siguiente para dimensionar la infraestructura técnica?",
-      "El tráfico web sigue patrones muy marcados: hay más actividad a media mañana que de madrugada, y los días laborables tienen mucha más afluencia que fines de semana o festivos. Por eso, enriquecimos los datos con el calendario oficial (festivos nacionales y autonómicos) y con el historial de visitas de las últimas 24 horas y de la misma hora de la semana anterior para capturar la inercia habitual.",
-      "Entrenamos y comparamos modelos de Machine Learning (XGBoost, LightGBM e HistGradientBoosting) ajustando sus parámetros para encontrar la mayor precisión. Para garantizar que las previsiones funcionaran en la práctica, evaluamos los modelos únicamente intentando predecir días futuros que nunca habían visto durante el entrenamiento.",
+      "El tráfico web sigue patrones muy marcados: hay más actividad a media mañana que de madrugada, y los días laborables tienen mucha más afluencia que fines de semana o festivos. Por eso, enriquecí los datos con el calendario oficial (festivos nacionales y autonómicos) y con el historial de visitas de las últimas 24 horas y de la misma hora de la semana anterior para capturar la inercia habitual.",
+      "Entrené y comparé modelos de Machine Learning (XGBoost, LightGBM e HistGradientBoosting) ajustando sus parámetros para encontrar la mayor precisión. Para garantizar que las previsiones funcionaran en la práctica, evalué los modelos únicamente intentando predecir días futuros que no habían aparecido durante el entrenamiento.",
       "La gráfica inferior muestra este resultado: la curva estimada por el modelo reproduce fielmente los picos de máxima afluencia laboral y el descenso nocturno, ofreciendo a los administradores una referencia fiable con horas de antelación.",
     ],
   },
@@ -65,7 +65,7 @@ export const aepdCase = {
     label: "Producto final",
     title: "Cuadro de mando en producción y apoyo a la toma de decisiones",
     paragraphs: [
-      "La inteligencia predictiva y los datos depurados debían ser fácilmente interpretables por el equipo directivo y técnico de la AEPD. Por ello, diseñamos un cuadro de mando interactivo en Power BI que integra en una misma pantalla el análisis histórico de visitas y las previsiones horarias del modelo.",
+      "La inteligencia predictiva y los datos depurados debían ser fácilmente interpretables por el equipo directivo y técnico de la AEPD. Por ello, diseñé un cuadro de mando interactivo en Power BI que integra en una misma pantalla el análisis histórico de visitas y las previsiones horarias del modelo.",
       "El informe permite explorar qué servicios digitales generan mayor afluencia (como el canal de denuncias o las guías de protección de datos), identificar patrones según la procedencia geográfica y contrastar de un vistazo la demanda real frente a la esperada.",
       "El proyecto obtuvo la máxima calificación académica (10/10) en la Universitat de València y fue transferido a producción, operando actualmente como una herramienta oficial utilizada por la propia Agencia Española de Protección de Datos para supervisar su sede web.",
       "A continuación puedes interactuar con el cuadro de mando funcional con datos ficticios ilustrativos. Filtra por periodo o procedencia y consulta las predicciones horarias estimadas por el sistema.",
