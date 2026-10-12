@@ -239,6 +239,13 @@ jerarquía tipográfica débil.
 
 ## Forma y materialidad
 
+- Desde el 12/10/2026, el scrollbar de página adopta la propuesta «Línea roja»:
+  trazo rojo `--accent` de 3px, extremos rectos y guía central `--line` de 1px
+  sobre `--canvas`. Se conserva el desplazamiento nativo y una zona de 11px
+  para arrastrar la barra. Firefox usa su variante nativa fina con el mismo rojo;
+  los dispositivos con barras superpuestas conservan su comportamiento propio.
+  Los scrollbars internos de demostradores y chat mantienen su presentación.
+
 - Esquinas apenas suavizadas con el token compartido `--radius-editorial: 5px`
   en superficies, paneles, menús y controles. La retícula conserva
   su carácter editorial; los elementos circulares funcionales mantienen su forma.

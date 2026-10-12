@@ -69,6 +69,56 @@ html {
   background: var(--canvas);
 }
 
+/* Native page scrollbar: 3px red ink over a centered 1px guide. */
+html::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+html::-webkit-scrollbar-track {
+  background: linear-gradient(var(--line), var(--line)) center / 1px 100% no-repeat
+    var(--canvas);
+}
+
+html::-webkit-scrollbar-thumb {
+  border: 4px solid transparent;
+  border-radius: 0;
+  background: var(--accent);
+  background-clip: padding-box;
+  min-height: 44px;
+}
+
+html::-webkit-scrollbar-button {
+  display: none;
+}
+
+html::-webkit-scrollbar-corner {
+  background: var(--canvas);
+}
+
+/* Firefox uses the native thin scrollbar; its exact geometry is browser-owned. */
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) var(--canvas);
+  }
+}
+
+@media (forced-colors: active) {
+  html {
+    scrollbar-color: auto;
+    scrollbar-width: auto;
+  }
+
+  html::-webkit-scrollbar-thumb {
+    background-color: CanvasText;
+  }
+
+  html::-webkit-scrollbar-track {
+    background: Canvas;
+  }
+}
+
 body {
   min-height: 100dvh;
   margin: 0;
