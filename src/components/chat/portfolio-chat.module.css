@@ -33,11 +33,11 @@
 .message .avatar { width: 36px; height: 36px; flex-basis: 36px; }
 .bubble { position: relative; max-width: min(86%, 72ch); min-width: 0; padding: 1rem 1.125rem; background: var(--chat-surface); border-radius: var(--radius-editorial); }
 .bubble p { margin: 0; font-size: 0.8125rem; line-height: 1.7; overflow-wrap: anywhere; white-space: pre-wrap; }
-.speaker { display: block; margin-bottom: 0.375rem; font-size: 0.6875rem; color: var(--muted); }
+.speaker { display: block; margin-bottom: 0.375rem; font-size: 0.75rem; color: var(--muted); }
 .outgoing { flex-direction: row-reverse; }
 .outgoing .bubble { background: var(--ink); color: var(--canvas); border-radius: var(--radius-editorial); }
 .outgoing .speaker { color: var(--line); }
-.partial { display: block; margin-top: 0.75rem; font-size: 0.6875rem; color: var(--muted); }
+.partial { display: block; margin-top: 0.75rem; font-size: 0.75rem; color: var(--muted); }
 .suggestions { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; padding: 0 var(--space-1) var(--space-4); }
 .suggestions button { min-height: 44px; padding: 0.375rem 0; text-align: left; font-size: 0.75rem; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 0.3em; }
 .form { padding-top: var(--space-4); }
@@ -62,3 +62,5 @@
   .composer { gap: 0.5rem; }
   .send { min-width: 72px; padding-inline: 0.75rem; }
 }
+
+.notice { font-size: 0.75rem; line-height: 1.6; color: var(--muted); max-width: 85ch; }

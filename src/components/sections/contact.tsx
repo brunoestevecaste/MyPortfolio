@@ -12,7 +12,7 @@ export function ContactSection() {
         <SectionHeading className="heading-text" id="contact-title" title="Hablemos" />
       </div>
       <div className="col-span-4 w-full md:col-span-12">
-        <PortfolioChat />
+        <PortfolioChat generative={process.env.CHAT_MODE !== "local"} />
       </div>
     </section>
   );

@@ -20,7 +20,7 @@ function Avatar({ visitor = false }: { visitor?: boolean }) {
   ) : <Image className={styles.avatar} src="/chat/bruno-avatar.webp" width={44} height={44} alt="" sizes="44px" />;
 }
 
-export function PortfolioChat() {
+export function PortfolioChat({ generative = true }: { generative?: boolean }) {
   const chat = usePortfolioChat();
   const [draft, setDraft] = useState("");
   const transcript = useRef<HTMLDivElement>(null);
@@ -50,7 +50,7 @@ export function PortfolioChat() {
             <div>
               <div className={styles.message}>
                 <Avatar />
-                <div className={styles.bubble}><span className={styles.speaker}>Asistente de Bruno</span><p>Hola. Soy el asistente de IA de Bruno. Puedo contarte en qué ha trabajado, qué ha estudiado y cómo aborda sus proyectos. ¿Por dónde empezamos?</p></div>
+                <div className={styles.bubble}><span className={styles.speaker}>Asistente de Bruno</span><p>Hola. Soy el asistente {generative ? "de IA " : ""}del portfolio de Bruno. Puedo contarte en qué ha trabajado, qué ha estudiado y cómo aborda sus proyectos. ¿Por dónde empezamos?</p></div>
               </div>
               {chat.messages.map((message) => (
                 <div key={message.id} className={`${styles.message} ${message.role === "user" ? styles.outgoing : ""}`}>
@@ -70,6 +70,7 @@ export function PortfolioChat() {
           {suggestions.map((question) => <button key={question} type="button" onClick={() => { followsEnd.current = true; void chat.send(question); }} disabled={busy || chat.cooldown > 0}>{question}</button>)}
         </div> : null}
         {chat.messages.length ? <button type="button" className={styles.reset} onClick={chat.reset} disabled={busy}>Reiniciar</button> : null}
+        <p className={styles.notice}>{generative ? "IA generativa: puede cometer errores. Tus consultas se envían a Groq para generar y revisar la respuesta." : "Respuestas extraídas del portfolio, sin IA generativa ni envío a un proveedor de IA."} No incluyas datos sensibles. La conversación se mantiene en esta pestaña hasta recargar o reiniciar.</p>
         <form className={styles.form} onSubmit={submit}>
           <label htmlFor="portfolio-question">Tu pregunta</label>
           <div className={styles.composer}>

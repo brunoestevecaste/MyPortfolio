@@ -20,7 +20,11 @@ export function usePortfolioChat() {
   useEffect(() => () => active.current?.abort(), []);
   useEffect(() => {
     if (!retryAt) return;
-    const update = () => setCooldown(Math.max(0, Math.ceil((retryAt - Date.now()) / 1_000)));
+    const update = () => {
+      const remaining = Math.max(0, Math.ceil((retryAt - Date.now()) / 1_000));
+      setCooldown(remaining);
+      if (!remaining) setRetryAt(0);
+    };
     update();
     const timer = setInterval(update, 1_000);
     return () => clearInterval(timer);
@@ -77,12 +81,15 @@ export function usePortfolioChat() {
         while (true) {
           const { value, done } = await reader.read();
           buffer += done ? decoder.decode() : decoder.decode(value, { stream: true });
+          if (buffer.length > 32_768) throw new Error("La respuesta es demasiado larga.");
           let newline: number;
           while ((newline = buffer.indexOf("\n")) !== -1) {
             const line = buffer.slice(0, newline); buffer = buffer.slice(newline + 1);
             if (!line) continue;
             const event: unknown = JSON.parse(line);
             if (!event || typeof event !== "object" || !("type" in event)) throw new Error("La respuesta no es válida. Vuelve a intentarlo.");
+            if (receivedDone) throw new Error("La respuesta no es válida.");
+            if (event.type !== "delta" && event.type !== "done" && event.type !== "error") throw new Error("La respuesta no es válida.");
             if (event.type === "error") throw new Error("message" in event && typeof event.message === "string" ? event.message : "La respuesta se ha interrumpido.");
             if (event.type === "done") { receivedDone = true; }
             if (event.type === "delta" && "text" in event && typeof event.text === "string") {
