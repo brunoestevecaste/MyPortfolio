@@ -70,7 +70,6 @@ export function PortfolioChat({ generative = true }: { generative?: boolean }) {
           {suggestions.map((question) => <button key={question} type="button" onClick={() => { followsEnd.current = true; void chat.send(question); }} disabled={busy || chat.cooldown > 0}>{question}</button>)}
         </div> : null}
         {chat.messages.length ? <button type="button" className={styles.reset} onClick={chat.reset} disabled={busy}>Reiniciar</button> : null}
-        <p className={styles.notice}>{generative ? "IA generativa: puede cometer errores. Tus consultas se envían a Groq para generar y revisar la respuesta." : "Respuestas extraídas del portfolio, sin IA generativa ni envío a un proveedor de IA."} No incluyas datos sensibles. La conversación se mantiene en esta pestaña hasta recargar o reiniciar.</p>
         <form className={styles.form} onSubmit={submit}>
           <label htmlFor="portfolio-question">Tu pregunta</label>
           <div className={styles.composer}>
