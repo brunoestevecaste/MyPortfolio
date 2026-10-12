@@ -6,9 +6,9 @@ const number = new Intl.NumberFormat("es-ES");
 
 export function AepdTrafficFigure() {
   return (
-    <figure className={styles.figure} aria-labelledby="aepd-fig-caption">
+    <figure className={styles.figure} aria-labelledby="aepd-figure-title">
       <div className={styles.figureHeader}>
-        <p>Predicción horaria frente a demanda observada</p>
+        <p id="aepd-figure-title">Predicción horaria frente a demanda observada</p>
         <span>Validación sobre periodo futuro con modelo XGBoost / Horas 00:00 – 22:00</span>
       </div>
 
@@ -39,10 +39,6 @@ export function AepdTrafficFigure() {
           </dd>
         </div>
       </dl>
-
-      <figcaption id="aepd-fig-caption">
-        Ejemplo con datos ficticios ilustrativos. La serie horaria modela el comportamiento del portal público a lo largo de una jornada: ascenso matinal continuado con pico a las 10:00 y descenso progresivo durante la noche. El modelo XGBoost anticipa con fiabilidad la curva de carga, permitiendo a los administradores de sistemas programar paradas de mantenimiento y dimensionar la infraestructura sin degradar el servicio ciudadano.
-      </figcaption>
 
       <details className={styles.figureDetails}>
         <summary>Consultar los valores detallados del gráfico</summary>

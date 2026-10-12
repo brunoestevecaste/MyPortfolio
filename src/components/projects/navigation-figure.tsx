@@ -15,7 +15,7 @@ export function NavigationFigure() {
   return (
     <figure className={styles.navigationFigure} aria-labelledby="navigation-caption">
       <div className={styles.figureHeader}>
-        <p>Una travesía ficticia, dos perfiles</p>
+        <p id="navigation-caption">Una travesía ficticia, dos perfiles</p>
         <span>Velocidad en nudos / tramos A–F</span>
       </div>
       <NavigationPlot interactive />
@@ -28,13 +28,6 @@ export function NavigationFigure() {
         <div><dt>Tiempo de la propuesta</dt><dd>{duration("proposal")}</dd></div>
         <div><dt>Tiempo disponible</dt><dd>4 h 45 min</dd></div>
       </dl>
-      <figcaption id="navigation-caption">
-        Ejemplo con datos ficticios. Cada tramo mide 12 millas náuticas. Los tiempos
-        se calculan como distancia / velocidad y se redondean al minuto. Ambos
-        perfiles caben en el tiempo disponible; para elegir el de menor energía
-        harían falta el modelo de potencia, el contexto ambiental y las reservas
-        operativas. Este gráfico explica la decisión, no demuestra ahorro.
-      </figcaption>
       <details className={styles.figureDetails}>
         <summary>Consultar los valores del gráfico</summary>
         <table>
