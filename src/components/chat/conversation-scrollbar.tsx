@@ -21,6 +21,8 @@ export function ConversationScrollbar({ target }: { target: RefObject<HTMLDivEle
 
     const sync = () => {
       const maxScroll = Math.max(0, element.scrollHeight - element.clientHeight);
+      // Keep the rail measurable so ResizeObserver can reveal it when content grows.
+      control.style.visibility = maxScroll > 0 ? "visible" : "hidden";
       const progress = maxScroll ? Math.min(1, Math.max(0, element.scrollTop / maxScroll)) : 0;
       indicator.style.transform = `translateY(${progress * Math.max(0, line.clientHeight - THUMB_HEIGHT)}px)`;
       control.setAttribute("aria-valuenow", String(Math.round(progress * 100)));
@@ -61,7 +63,7 @@ export function ConversationScrollbar({ target }: { target: RefObject<HTMLDivEle
   }
 
   return (
-    <div ref={rail} className={styles.scrollRail} role="scrollbar" aria-label="Desplazar conversación" aria-controls="portfolio-conversation"
+    <div ref={rail} className={styles.scrollRail} style={{ visibility: "hidden" }} role="scrollbar" aria-label="Desplazar conversación" aria-controls="portfolio-conversation"
       aria-orientation="vertical" aria-valuemin={0} aria-valuemax={100} aria-valuenow={0} tabIndex={-1}
       onPointerDown={startDrag}
       onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) move(event.clientY); }}
