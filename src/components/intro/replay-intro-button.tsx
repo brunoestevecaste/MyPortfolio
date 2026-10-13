@@ -1,8 +1,10 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import { useCallback } from "react";
 
 export function ReplayIntroButton() {
+  const { t } = useTranslations();
   const handleReplay = useCallback(() => {
     try {
       window.sessionStorage.removeItem("portfolio_intro_seen");
@@ -18,9 +20,8 @@ export function ReplayIntroButton() {
       type="button"
       onClick={handleReplay}
       className="text-link inline-flex min-h-11 min-w-11 items-center font-mono text-xs tracking-wider uppercase text-muted hover:text-ink cursor-pointer"
-      aria-label="Volver a reproducir la animación de introducción"
+      aria-label={t("Volver a reproducir la animación de introducción")}
     >
-      [ ↺ Intro ]
-    </button>
+      {t("[ ↺ Intro ]")}</button>
   );
 }

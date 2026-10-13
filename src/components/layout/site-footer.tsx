@@ -1,3 +1,4 @@
+import { getTranslations } from "@/lib/i18n/server";
 import { profile } from "@/data/profile";
 
 const links = [
@@ -34,12 +35,13 @@ const links = [
   },
 ] as const;
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const { t } = await getTranslations();
   return (
     <footer className="mt-auto bg-canvas">
       <div className="mt-12 px-[max(clamp(0.75rem,1.4vw,1.75rem),env(safe-area-inset-left),env(safe-area-inset-right))] pb-[max(1.5rem,env(safe-area-inset-bottom))] md:mt-20 md:pb-8">
         <p className="text-accent" translate="no">
-          <span className="sr-only">&lt;/BRUNO&gt;</span>
+          <span className="sr-only">{"</BRUNO>"}</span>
           <svg
             aria-hidden="true"
             focusable="false"
@@ -56,19 +58,18 @@ export function SiteFooter() {
               textLength="1010"
               lengthAdjust="spacingAndGlyphs"
             >
-              &lt;/BRUNO&gt;
-            </text>
+              {"</BRUNO>"}</text>
           </svg>
         </p>
         <nav
-          aria-label="Contacto y perfiles"
+          aria-label={t("Contacto y perfiles")}
           className="mt-4 md:mt-6"
         >
           <ul className="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 md:gap-x-6">
             {links.map((link) => (
               <li key={link.href}>
                 <a
-                  aria-label={link.label}
+                  aria-label={t(link.label)}
                   className="inline-flex size-11 items-center justify-center text-ink transition-colors duration-200 hover:text-accent-ink focus-visible:text-accent-ink"
                   href={link.href}
                   target="_blank"
