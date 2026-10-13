@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState, type PointerEvent } from "react";
 import { portraitHitClip } from "@/data/portrait-silhouette";
@@ -23,6 +24,7 @@ export function GlitchPortrait({
   sizes = "(min-width: 64rem) 42vw, (min-width: 48rem) 50vw, 100vw",
   className = "", motion = "original", preview = "auto", playback = "running",
 }: GlitchPortraitProps) {
+  const { t } = useTranslations();
   const [interacting, setInteracting] = useState(false);
   const surfaceRef = useRef<HTMLDivElement>(null);
   const hoveredRef = useRef(false);
@@ -107,7 +109,7 @@ export function GlitchPortrait({
       data-portrait-playback={playback}
       data-motion-image="pixels"
     >
-      <Image src={src} alt={alt} fill preload={priority} sizes={sizes} unoptimized className={styles.portraitImage} />
+      <Image src={src} alt={t(alt)} fill preload={priority} sizes={sizes} unoptimized className={styles.portraitImage} />
       {motion !== "original" && <PortraitMotionLayers motion={motion} src={src} sizes={sizes} active={active} playback={playback} />}
       {motion === "original" && active && (
         <>
@@ -155,7 +157,7 @@ export function GlitchPortrait({
         type="button"
         className={styles.silhouetteTarget}
         style={{ clipPath: portraitHitClip }}
-        aria-label="Animar el retrato de Bruno Esteve"
+        aria-label={t("Animar el retrato de Bruno Esteve")}
         data-cursor-hover="true"
         data-cursor-label="ME :)"
         onPointerEnter={(event) => {

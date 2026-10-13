@@ -1,3 +1,4 @@
+import { getTranslations } from "@/lib/i18n/server";
 import { HomeHero } from "@/components/sections/home-hero";
 import { ContactSection } from "@/components/sections/contact";
 import { EducationSection } from "@/components/sections/education";
@@ -7,7 +8,8 @@ import { ProjectIndex } from "@/components/projects/project-index";
 import { IntroSequence } from "@/components/intro/intro-sequence";
 import styles from "./page.module.css";
 
-export default function Home() {
+export default async function Home() {
+  const { t } = await getTranslations();
   return (
     <>
       <IntroSequence />
@@ -24,7 +26,7 @@ export default function Home() {
         aria-labelledby="work-title"
       >
         <div className={styles.workIntroduction}>
-          <SectionHeading className="heading-text" id="work-title" title="Proyectos" />
+          <SectionHeading className="heading-text" id="work-title" title={t("Proyectos")} />
         </div>
         <ProjectIndex />
       </section>

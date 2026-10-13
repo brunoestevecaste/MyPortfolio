@@ -5,8 +5,10 @@ import { usePathname } from "next/navigation";
 import { useProjectTransition } from "@/components/projects/project-transition-context";
 import { ensureMotionGate } from "./motion-gate";
 import type { PageMotionControls } from "./motion-runtime";
+import { useTranslations } from "@/components/i18n/language-provider";
 
 export function PageMotion() {
+  const { locale } = useTranslations();
   const pathname = usePathname();
   const { isTransitioning } = useProjectTransition();
   const activateRef = useRef<(() => void) | undefined>(undefined);
@@ -79,7 +81,7 @@ export function PageMotion() {
       window.removeEventListener("project-transition-start", pause);
       window.removeEventListener("motion-fallback", fallback);
     };
-  }, [pathname]);
+  }, [pathname, locale]);
 
   // React may commit overlay removal after a requestAnimationFrame callback.
   // Activate from the committed transition state, without tearing down effects.

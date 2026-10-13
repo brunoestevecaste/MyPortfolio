@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { HomeHero } from "./home-hero";
+import { HomeHeroView as HomeHero } from "./home-hero-view";
 import { GlitchPortrait } from "@/components/ui/glitch-portrait";
 import { portraitProposals, type PortraitMotion, type PortraitPreview } from "@/data/portrait-motion";
 import styles from "./portrait-motion-lab.module.css";
