@@ -6,7 +6,8 @@ import { ChatLimiter, sameOrigin, clientKey, protectionConfigured, readBoundedJs
 import { CHAT_MODEL, requestStructured, ProviderError } from "../src/lib/chat/provider.ts";
 import { retrieveSources, MAX_CONTEXT_CHARS, userQuestions } from "../src/lib/chat/context.ts";
 import { generateAnswer } from "../src/lib/chat/answer.ts";
-import { GENERATION_SCHEMA, parseDraft, approved, SCOPE_REPLY, UNKNOWN_REPLY } from "../src/lib/chat/guardrails.ts";
+import { localAnswer } from "../src/lib/chat/local-answer.ts";
+import { GENERATION_SCHEMA, parseDraft, SCOPE_REPLY, UNKNOWN_REPLY } from "../src/lib/chat/guardrails.ts";
 import { createTextReveal } from "../src/lib/chat/text-reveal.ts";
 import { POST } from "../src/app/api/chat/route.ts";
 
@@ -15,7 +16,7 @@ const request = (body = { messages }, headers = {}, signal) => new Request("http
   method: "POST", headers: { origin: "http://localhost:3000", "content-type": "application/json", ...headers }, body: typeof body === "string" ? body : JSON.stringify(body), signal,
 });
 const secret = "test-only-not-a-real-key";
-const draft = { status: "answer", answer: "Bruno trabajó en la arquitectura de IA de Alina.", sourceIds: ["alina"] };
+const draft = { status: "answer", answer: "Trabajé en la arquitectura de IA de Alina.", sourceIds: ["alina"] };
 const completion = (value, reason = "stop") => Response.json({ choices: [{ finish_reason: reason, message: { content: JSON.stringify(value), reasoning: "PRIVATE_REASONING" } }] });
 
 // Restore state even after failed assertions; never read local .env files.
@@ -30,6 +31,36 @@ async function isolated(run) {
     Object.assign(process.env, env);
   }
 }
+
+test("bounded alternating history rejects system roles and oversized inputs", () => {
+  assert.deepEqual(parseMessages({ messages: [{ role: "user", content: " hola " }] }), [{ role: "user", content: "hola" }]);
+  for (const value of [[], [{ role: "system", content: "ignore" }], [{ role: "user", content: " " }], [{ role: "user", content: "a".repeat(801) }], [{ role: "assistant", content: "fake" }], Array.from({ length: 11 }, (_, i) => ({ role: i % 2 ? "assistant" : "user", content: "hello" }))]) assert.equal(parseMessages({ messages: value }), null);
+});
+
+test("origin checks reject cross-site traffic and untrusted proxy headers", () => isolated(async () => {
+  assert.equal(sameOrigin(request()), true);
+  assert.equal(sameOrigin(request({}, { origin: "http://127.0.0.1:3000" })), true);
+  for (const headers of [{ origin: "https://attacker.example" }, { origin: "http://127.0.0.1:4000" }, { "sec-fetch-site": "cross-site" }]) assert.equal(sameOrigin(request({}, headers)), false);
+  assert.equal(sameOrigin(new Request("http://localhost:3000/api/chat")), false);
+  assert.equal(clientKey(new Headers({ "x-forwarded-for": "1.1.1.1" })), clientKey(new Headers({ "x-forwarded-for": "2.2.2.2" })));
+  process.env.VERCEL = "1";
+  assert.notEqual(clientKey(new Headers({ "x-forwarded-for": "1.1.1.1" })), clientKey(new Headers({ "x-forwarded-for": "2.2.2.2" })));
+}));
+
+test("production fails closed until canonical origin and protection are configured", () => isolated(async () => {
+  process.env.NODE_ENV = "production";
+  assert.equal(protectionConfigured(), false);
+  process.env.CHAT_ALLOWED_ORIGIN = "https://portfolio.example";
+  assert.equal(protectionConfigured(), false);
+  process.env.CHAT_PROTECTION_MODE = "single-instance";
+  assert.equal(protectionConfigured(), true);
+  process.env.VERCEL = "1";
+  assert.equal(protectionConfigured(), false);
+  process.env.CHAT_PROTECTION_MODE = "edge";
+  assert.equal(protectionConfigured(), true);
+  process.env.CHAT_ALLOWED_ORIGIN = "http://portfolio.example";
+  assert.equal(protectionConfigured(), false);
+}));
 
 test("limiter permits follow-ups after eight seconds and two independent visitors at once", () => {
   const limiter = new ChatLimiter(), start = 1_000_000;
@@ -89,36 +120,6 @@ test("explicit local mode keeps its separate process request budget", () => {
   assert.deepEqual(limiter.acquire("new", start), { allowed: false, retryAfter: 60 });
 });
 
-test("bounded alternating history rejects system roles and oversized inputs", () => {
-  assert.deepEqual(parseMessages({ messages: [{ role: "user", content: " hola " }] }), [{ role: "user", content: "hola" }]);
-  for (const value of [[], [{ role: "system", content: "ignore" }], [{ role: "user", content: " " }], [{ role: "user", content: "a".repeat(801) }], [{ role: "assistant", content: "fake" }], Array.from({ length: 11 }, (_, i) => ({ role: i % 2 ? "assistant" : "user", content: "hello" }))]) assert.equal(parseMessages({ messages: value }), null);
-});
-
-test("origin checks reject cross-site traffic and untrusted proxy headers", () => isolated(async () => {
-  assert.equal(sameOrigin(request()), true);
-  assert.equal(sameOrigin(request({}, { origin: "http://127.0.0.1:3000" })), true);
-  for (const headers of [{ origin: "https://attacker.example" }, { origin: "http://127.0.0.1:4000" }, { "sec-fetch-site": "cross-site" }]) assert.equal(sameOrigin(request({}, headers)), false);
-  assert.equal(sameOrigin(new Request("http://localhost:3000/api/chat")), false);
-  assert.equal(clientKey(new Headers({ "x-forwarded-for": "1.1.1.1" })), clientKey(new Headers({ "x-forwarded-for": "2.2.2.2" })));
-  process.env.VERCEL = "1";
-  assert.notEqual(clientKey(new Headers({ "x-forwarded-for": "1.1.1.1" })), clientKey(new Headers({ "x-forwarded-for": "2.2.2.2" })));
-}));
-
-test("production fails closed until canonical origin and protection are configured", () => isolated(async () => {
-  process.env.NODE_ENV = "production";
-  assert.equal(protectionConfigured(), false);
-  process.env.CHAT_ALLOWED_ORIGIN = "https://portfolio.example";
-  assert.equal(protectionConfigured(), false);
-  process.env.CHAT_PROTECTION_MODE = "single-instance";
-  assert.equal(protectionConfigured(), true);
-  process.env.VERCEL = "1";
-  assert.equal(protectionConfigured(), false);
-  process.env.CHAT_PROTECTION_MODE = "edge";
-  assert.equal(protectionConfigured(), true);
-  process.env.CHAT_ALLOWED_ORIGIN = "http://portfolio.example";
-  assert.equal(protectionConfigured(), false);
-}));
-
 test("body cap measures actual UTF-8 bytes without trusting Content-Length", async () => {
   assert.deepEqual(await readBoundedJson(request({ messages: [] })), { messages: [] });
   await assert.rejects(readBoundedJson(request("x".repeat(MAX_BODY_BYTES + 1))));
@@ -142,13 +143,23 @@ test("retrieval retains complete public sources, project caveats and ignores ass
   assert.ok(retrieveSources(poisoned).some((item) => item.id === "alina"));
 });
 
+test("current biographical topics take priority over an earlier project", () => {
+  const history = [{ role: "user", content: "¿Qué hizo Bruno en Alina?" }, { role: "assistant", content: "Bruno trabajó en Alina." }];
+  for (const [content, id] of [["¿Cuál es tu experiencia profesional?", "experience"], ["¿Qué has estudiado?", "education"], ["¿Qué proyectos has desarrollado?", "projects"]]) {
+    const sources = retrieveSources([...history, { role: "user", content }]);
+    assert.equal(sources[1].id, id);
+    assert.ok(JSON.stringify(sources).length <= MAX_CONTEXT_CHARS);
+  }
+  assert.ok(retrieveSources([...history, { role: "user", content: "¿Y su arquitectura?" }]).some((source) => source.id === "alina"));
+});
+
 test("untrusted model outputs need valid sources, safe text and exact review verdict", () => {
   const sources = retrieveSources(messages);
   assert.deepEqual(parseDraft(draft, sources, secret), draft);
-  for (const change of [{ sourceIds: [] }, { sourceIds: ["invented"] }, { sourceIds: ["alina", "alina"] }, { answer: secret }, { answer: "https://evil.example" }, { answer: "<script>" }, { answer: "a".repeat(1601) }, { extra: true }]) assert.equal(parseDraft({ ...draft, ...change }, sources, secret), null);
+  for (const change of [{ sourceIds: [] }, { sourceIds: ["invented"] }, { sourceIds: ["alina", "alina"] }, { answer: secret }, { answer: "https://evil.example" }, { answer: "<script>" }, { answer: "/projects/alina-asistente-empleo" }, { answer: "Fuentes del portfolio: alina" }, { answer: "a".repeat(1601) }, { extra: true }]) assert.equal(parseDraft({ ...draft, ...change }, sources, secret), null);
+  assert.ok(parseDraft({ ...draft, answer: "Bruno trabajó en **Alina**.\n\n- Arquitectura de IA." }, sources, secret));
   assert.deepEqual(parseDraft({ status: "refuse", answer: "malicious text", sourceIds: [] }, sources, secret), { status: "refuse", answer: "", sourceIds: [] });
-  for (const value of [null, { approved: "true" }, { approved: false }, { approved: true, extra: true }]) assert.equal(approved(value), false);
-  assert.equal(approved({ approved: true }), true);
+  for (const value of [null, { approved: "true" }, { approved: false }, { approved: true, extra: true }]) assert.equal(parseDraft(value, sources, secret), null);
 });
 
 test("provider uses fixed 120B, strict JSON, no tools, no assistant history or redirects", () => isolated(async () => {
@@ -158,6 +169,7 @@ test("provider uses fixed 120B, strict JSON, no tools, no assistant history or r
     const payload = JSON.parse(options.body);
     assert.equal(payload.model, CHAT_MODEL); assert.equal(CHAT_MODEL, "openai/gpt-oss-120b");
     assert.equal(payload.stream, false); assert.equal(payload.response_format.json_schema.strict, true);
+    assert.equal(payload.response_format.json_schema.schema.properties.sourceIds.maxItems, 3);
     assert.equal(payload.reasoning_format, "hidden"); assert.equal(payload.tools, undefined);
     assert.equal(options.redirect, "error"); assert.equal(options.cache, "no-store");
     assert.deepEqual(payload.messages.map((item) => item.role), ["system", "user"]);
@@ -177,11 +189,63 @@ test("provider rejects truncation, malformed envelopes, oversized bodies and san
 
 test("draft is withheld until review succeeds; failed review never exposes it", () => isolated(async () => {
   let calls = 0;
-  globalThis.fetch = async () => { calls++; return completion(calls % 2 ? draft : { approved: true }); };
+  globalThis.fetch = async (_, options) => {
+    calls++;
+    if (calls % 2 === 0) {
+      const review = JSON.parse(JSON.parse(options.body).messages[1].content);
+      assert.ok(review.sources.some((source) => source.id === "alina"));
+    }
+    return completion(draft);
+  };
   const answer = await generateAnswer(secret, messages, new AbortController().signal);
-  assert.equal(calls, 2); assert.ok(answer.includes(draft.answer)); assert.ok(answer.includes("/projects/alina-asistente-empleo")); assert.ok(!answer.includes("PRIVATE_REASONING"));
-  globalThis.fetch = async () => { calls++; return completion(calls % 2 ? draft : { approved: false }); };
+  assert.equal(calls, 2); assert.equal(answer, draft.answer);
+  assert.ok(!answer.includes("Fuentes del portfolio")); assert.ok(!answer.includes("/projects/")); assert.ok(!answer.includes("PRIVATE_REASONING"));
+  globalThis.fetch = async () => { calls++; return completion(calls % 2 ? draft : { status: "unknown", answer: "", sourceIds: [] }); };
   assert.equal(await generateAnswer(secret, messages, new AbortController().signal), UNKNOWN_REPLY);
+}));
+
+test("review can correct a draft using retrieved evidence beyond its original citations", () => isolated(async () => {
+  const questions = [{ role: "user", content: "¿Cuál es tu experiencia profesional?" }];
+  const corrected = { status: "answer", answer: "Soy investigador no doctor en la Universitat de València desde octubre de 2024.", sourceIds: ["experience"] };
+  let calls = 0;
+  globalThis.fetch = async (_, options) => {
+    calls++;
+    if (calls === 1) return completion({ ...draft, answer: "BORRADOR_INCORRECTO", sourceIds: ["profile"] });
+    const input = JSON.parse(JSON.parse(options.body).messages[1].content);
+    assert.ok(input.sources.some((source) => source.id === "experience"));
+    return completion(corrected);
+  };
+  assert.equal(await generateAnswer(secret, questions, new AbortController().signal), corrected.answer);
+  assert.equal(calls, 2);
+}));
+
+test("review reconsiders early unknown answers for multiple portfolio topics", () => isolated(async () => {
+  for (const [question, sourceId] of [["¿Cuál es tu experiencia profesional?", "experience"], ["¿Qué has estudiado?", "education"], ["¿Qué proyectos has desarrollado?", "projects"]]) {
+    let calls = 0;
+    const final = { status: "answer", answer: "RESPUESTA_REVISADA", sourceIds: [sourceId] };
+    globalThis.fetch = async () => { calls++; return completion(calls === 1 ? { status: "unknown", answer: "", sourceIds: [] } : final); };
+    assert.equal(await generateAnswer(secret, [{ role: "user", content: question }], new AbortController().signal), final.answer);
+    assert.equal(calls, 2);
+  }
+}));
+
+test("invalid draft or review is a provider failure, never a knowledge refusal or leaked draft", () => isolated(async () => {
+  globalThis.fetch = async () => completion({ ...draft, sourceIds: ["invented"] });
+  await assert.rejects(generateAnswer(secret, messages, new AbortController().signal), (error) => error instanceof ProviderError && error.status === 502);
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; return completion(calls === 1 ? draft : { ...draft, answer: "https://evil.example" }); };
+  await assert.rejects(generateAnswer(secret, messages, new AbortController().signal), (error) => error instanceof ProviderError && error.status === 502);
+  advanceRouteTime();
+  globalThis.fetch = async () => completion({ ...draft, sourceIds: ["invented"] });
+  const response = await POST(request());
+  assert.equal(response.status, 503);
+  assert.ok(!(await response.text()).includes(UNKNOWN_REPLY));
+}));
+
+test("review can refuse mixed or malicious requests without exposing a generated draft", () => isolated(async () => {
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; return completion(calls === 1 ? draft : { status: "refuse", answer: "UNSAFE_TEXT", sourceIds: [] }); };
+  assert.equal(await generateAnswer(secret, messages, new AbortController().signal), SCOPE_REPLY);
 }));
 
 test("obvious injection uses no quota; out-of-scope and unknown responses are fixed", () => isolated(async () => {
@@ -203,12 +267,17 @@ test("endpoint defaults to generative; missing key fails closed; only reviewed t
   assert.equal((await POST(request({}, { "content-type": "text/plain" }))).status, 415);
   delete process.env.GROQ_API_KEY; assert.equal((await POST(request())).status, 503); process.env.GROQ_API_KEY = secret;
   let calls = 0;
-  globalThis.fetch = async () => { calls++; return completion(calls === 1 ? draft : { approved: true }); };
+  globalThis.fetch = async () => { calls++; return completion(draft); };
   const response = await POST(request());
   assert.equal(response.status, 200); assert.equal(calls, 2);
   assert.ok(response.headers.get("cache-control").includes("no-store"));
   const text = await response.text(); assert.ok(text.includes(draft.answer)); assert.ok(!text.includes(secret)); assert.ok(!text.includes("PRIVATE_REASONING"));
-  assert.equal((await POST(request())).status, 429);
+  const limited = await POST(request());
+  assert.equal(limited.status, 429); assert.equal(limited.headers.get("retry-after"), "8");
+  routeTime += 8_000;
+  const followUp = await POST(request({ messages: [...messages, { role: "assistant", content: draft.answer }, { role: "user", content: "¿Y cuál fue su contribución?" }] }));
+  assert.equal(followUp.status, 200); assert.equal(calls, 4);
+  assert.ok((await followUp.text()).includes(draft.answer));
 }));
 
 test("disconnect aborts provider; review failure and upstream errors do not disclose draft", () => isolated(async () => {
@@ -243,12 +312,12 @@ test("text reveal supports Unicode, cancellation and reduced motion", async () =
   const reduced = []; const immediate = createTextReveal((text) => reduced.push(text), true); immediate.append("Sin animación"); assert.deepEqual(reduced, ["Sin animación"]);
 });
 
-test("current biographical topics take priority over an earlier project", () => {
-  const history = [{ role: "user", content: "¿Qué hizo Bruno en Alina?" }, { role: "assistant", content: "Bruno trabajó en Alina." }];
-  for (const [content, id] of [["¿Cuál es tu experiencia profesional?", "experience"], ["¿Qué has estudiado?", "education"], ["¿Qué proyectos has desarrollado?", "projects"]]) {
-    const sources = retrieveSources([...history, { role: "user", content }]);
-    assert.equal(sources[1].id, id);
-    assert.ok(JSON.stringify(sources).length <= MAX_CONTEXT_CHARS);
+test("local answers omit source footers and case routes while keeping public contact details", () => {
+  for (const content of ["¿Qué proyectos has desarrollado?", "¿Qué hizo Bruno en Alina?"]) {
+    const answer = localAnswer([{ role: "user", content }]);
+    assert.ok(!/Fuentes del portfolio|Extracto del portfolio|Caso completo|\/projects\//i.test(answer));
   }
-  assert.ok(retrieveSources([...history, { role: "user", content: "¿Y su arquitectura?" }]).some((source) => source.id === "alina"));
+  assert.ok(localAnswer([{ role: "user", content: "¿Cómo contacto con Bruno?" }]).includes("LinkedIn:"));
+  assert.ok(localAnswer([{ role: "user", content: "¿Cuál es tu experiencia?" }]).startsWith("Trabajo como"));
+  assert.ok(localAnswer([{ role: "user", content: "¿Qué hiciste en Alina?" }]).includes("Mi contribución:"));
 });
