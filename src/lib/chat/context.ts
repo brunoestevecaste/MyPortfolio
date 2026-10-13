@@ -22,7 +22,7 @@ export const normalize = (text: string) => text.normalize("NFD").replace(/[\u030
 const stopwords = new Set("como cual cuales cuando donde para sobre tiene hizo hacer bruno esteve portfolio proyecto proyectos that what with this about your does".split(" "));
 
 const sources: PublicSource[] = [
-  { id: "profile", title: "Perfil y contacto", href: "/#contact", text: `${profile.name}. ${profile.title}. ${profile.headline}\nEnfoque: ${profile.approach}\nEmail: ${profile.email}\nLinkedIn: ${profile.linkedin}\nGitHub: ${profile.github}` },
+  { id: "profile", title: "Perfil y contacto", href: "/#contact", text: `${profile.name}. ${profile.title}. ${profile.headline}\nPresentación: ${profile.introduction}\nEnfoque: ${profile.approach}\nEmail: ${profile.email}\nLinkedIn: ${profile.linkedin}\nGitHub: ${profile.github}` },
   { id: "experience", title: "Experiencia profesional", href: "/#experience", text: `${experience.institution}. ${experience.role}, ${experience.specialty}. ${experience.start.label} – ${experience.end}.\n${experience.summary}\n${experience.responsibilities.map((item) => `${item.title}: ${item.description}`).join("\n")}` },
   { id: "education", title: "Formación y estudios", href: "/#education", text: education.map((item) => `${item.qualification}. ${item.institution}. ${item.start.label} – ${item.end.label}. ${item.summary}\n${item.details.join("\n")}`).join("\n") },
   { id: "projects", title: "Índice de proyectos", href: "/#work", text: cases.map(({ project }) => `${project.slug.split("-")[0]}: ${project.title}. ${project.summary}`).join("\n") },
@@ -48,16 +48,22 @@ export function userQuestions(messages: readonly ChatMessage[]): string[] {
 export function retrieveSources(messages: readonly ChatMessage[]): PublicSource[] {
   const questions = userQuestions(messages);
   const current = normalize(questions.at(-1) ?? "");
-  const query = normalize(questions.join(" "));
+  const topic = /\b(experiencia|experience|trabaj\w*|career|trayectoria|laboral|profesional|puesto)/.test(current) ? "experience"
+    : /\b(estudi\w*|formacion|education|master|grado)/.test(current) ? "education"
+      : /\b(proyectos|projects|desarrollado)/.test(current) ? "projects"
+        : /\b(perfil|quien|presentacion|profile|who|contact\w*|email|correo|enfoque|conectas)/.test(current) ? "profile" : undefined;
+  // An explicit new topic must not inherit the project from the previous turn.
+  // Keep earlier questions for elliptical follow-ups such as "¿Y su arquitectura?".
+  const query = topic ? current : normalize(questions.join(" "));
   const words = [...new Set(query.match(/[a-z0-9]{3,}/g) ?? [])].filter((word) => !stopwords.has(word));
   const explicit = cases.map(({ project }) => project.slug.split("-")[0]).filter((id) => current.includes(id));
   const named = explicit.length ? explicit : cases.map(({ project }) => project.slug.split("-")[0]).filter((id) => query.includes(id));
   const ranked = index.map(({ source, searchable }) => ({ source, score:
     words.reduce((sum, word) => sum + (searchable.includes(word) ? 1 : 0), 0)
     + (named.includes(source.id) ? 80 : named.some((id) => source.id.startsWith(`${id}-`)) ? 15 : 0)
-    + (!named.length && /\b(proyectos|projects|desarrollado)/.test(current) && source.id === "projects" ? 70 : 0)
-    + (/\b(experiencia|experience|trabaj|career)/.test(current) && source.id === "experience" ? 50 : 0)
-    + (/\b(estudi|formacion|education|master|grado)/.test(current) && source.id === "education" ? 50 : 0),
+    + (!named.length && topic === "projects" && source.id === "projects" ? 70 : 0)
+    + (topic === "experience" && source.id === "experience" ? 50 : 0)
+    + (topic === "education" && source.id === "education" ? 50 : 0),
   })).sort((a, b) => b.score - a.score);
   const selected: PublicSource[] = [sources[0]];
   let size = JSON.stringify(selected).length;
@@ -66,6 +72,11 @@ export function retrieveSources(messages: readonly ChatMessage[]): PublicSource[
     const extra = JSON.stringify(source).length + 1;
     if (size + extra <= MAX_CONTEXT_CHARS) { selected.push(source); size += extra; }
   };
+  // Reserve the main biographical source before filling the context with cases.
+  if (topic && !explicit.length) {
+    const primary = sources.find((source) => source.id === topic);
+    if (primary) add(primary);
+  }
   // Always keep the parent project (including confidentiality and contribution)
   // before considering a detailed section. Never truncate a source mid-sentence.
   for (const { source, score } of ranked) {

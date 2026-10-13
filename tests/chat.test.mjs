@@ -242,3 +242,13 @@ test("text reveal supports Unicode, cancellation and reduced motion", async () =
   const count = frames.length; reveal.append(" cancelado"); const draining = reveal.finish(); reveal.stop(); await draining; await delay(10); assert.equal(frames.length, count);
   const reduced = []; const immediate = createTextReveal((text) => reduced.push(text), true); immediate.append("Sin animación"); assert.deepEqual(reduced, ["Sin animación"]);
 });
+
+test("current biographical topics take priority over an earlier project", () => {
+  const history = [{ role: "user", content: "¿Qué hizo Bruno en Alina?" }, { role: "assistant", content: "Bruno trabajó en Alina." }];
+  for (const [content, id] of [["¿Cuál es tu experiencia profesional?", "experience"], ["¿Qué has estudiado?", "education"], ["¿Qué proyectos has desarrollado?", "projects"]]) {
+    const sources = retrieveSources([...history, { role: "user", content }]);
+    assert.equal(sources[1].id, id);
+    assert.ok(JSON.stringify(sources).length <= MAX_CONTEXT_CHARS);
+  }
+  assert.ok(retrieveSources([...history, { role: "user", content: "¿Y su arquitectura?" }]).some((source) => source.id === "alina"));
+});
