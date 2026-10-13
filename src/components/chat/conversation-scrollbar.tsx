@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import { useEffect, useRef, type RefObject, type PointerEvent } from "react";
 import projectStyles from "@/components/projects/projects.module.css";
 import styles from "./portfolio-chat.module.css";
@@ -7,6 +8,7 @@ import styles from "./portfolio-chat.module.css";
 const THUMB_HEIGHT = 56;
 
 export function ConversationScrollbar({ target }: { target: RefObject<HTMLDivElement | null> }) {
+  const { t } = useTranslations();
   const rail = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const thumb = useRef<HTMLDivElement>(null);
@@ -63,7 +65,7 @@ export function ConversationScrollbar({ target }: { target: RefObject<HTMLDivEle
   }
 
   return (
-    <div ref={rail} className={styles.scrollRail} style={{ visibility: "hidden" }} role="scrollbar" aria-label="Desplazar conversación" aria-controls="portfolio-conversation"
+    <div ref={rail} className={styles.scrollRail} style={{ visibility: "hidden" }} role="scrollbar" aria-label={t("Desplazar conversación")} aria-controls="portfolio-conversation"
       aria-orientation="vertical" aria-valuemin={0} aria-valuemax={100} aria-valuenow={0} tabIndex={-1}
       onPointerDown={startDrag}
       onPointerMove={(event) => { if (event.currentTarget.hasPointerCapture(event.pointerId)) move(event.clientY); }}

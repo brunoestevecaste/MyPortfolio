@@ -1,4 +1,6 @@
 import "server-only";
+import { getMessages } from "@/lib/i18n/dictionaries";
+import { createTranslator, languageFromCookie } from "@/lib/i18n/shared";
 import { parseMessages } from "@/lib/chat/contracts";
 import { generateAnswer } from "@/lib/chat/answer";
 import { localAnswer } from "@/lib/chat/local-answer";
@@ -22,13 +24,16 @@ function answer(text: string) {
   });
 }
 export async function POST(request: Request) {
-  if (!sameOrigin(request)) return error("Solicitud no permitida.", 403);
-  if (request.headers.get("content-type")?.split(";")[0].trim() !== "application/json") return error("La solicitud debe contener JSON.", 415);
+  const locale = languageFromCookie(request.headers.get("cookie"));
+  const t = createTranslator(await getMessages(locale));
+  const localizedError = (message: string, status: number, retryAfter?: number) => error(t(message), status, retryAfter);
+  if (!sameOrigin(request)) return localizedError("Solicitud no permitida.", 403);
+  if (request.headers.get("content-type")?.split(";")[0].trim() !== "application/json") return localizedError("La solicitud debe contener JSON.", 415);
   const mode = process.env.CHAT_MODE || "groq";
   const key = process.env.GROQ_API_KEY;
-  if (!["local", "groq"].includes(mode) || (mode === "groq" && (!key || !protectionConfigured()))) return error(unavailable, 503);
+  if (!["local", "groq"].includes(mode) || (mode === "groq" && (!key || !protectionConfigured()))) return localizedError(unavailable, 503);
   const admission = (mode === "local" ? localChatLimiter : chatLimiter).acquire(clientKey(request.headers));
-  if (!admission.allowed) return error("Has alcanzado el límite de consultas. Espera antes de volver a enviar.", 429, admission.retryAfter);
+  if (!admission.allowed) return localizedError("Has alcanzado el límite de consultas. Espera antes de volver a enviar.", 429, admission.retryAfter);
   const abort = new AbortController();
   const onDisconnect = () => abort.abort();
   request.signal.addEventListener("abort", onDisconnect, { once: true });
@@ -37,16 +42,16 @@ export async function POST(request: Request) {
   try {
     let messages;
     try { messages = parseMessages(await readBoundedJson(request)); }
-    catch { return error("La pregunta es demasiado larga o la solicitud no es válida.", 400); }
-    if (!messages) return error("Escribe una pregunta de hasta 800 caracteres.", 400);
-    if (abort.signal.aborted) return error(unavailable, 503);
-    const text = mode === "local" ? localAnswer(messages) : await generateAnswer(key!, messages, abort.signal);
-    if (abort.signal.aborted) return error(unavailable, 503);
+    catch { return localizedError("La pregunta es demasiado larga o la solicitud no es válida.", 400); }
+    if (!messages) return localizedError("Escribe una pregunta de hasta 800 caracteres.", 400);
+    if (abort.signal.aborted) return localizedError(unavailable, 503);
+    const text = mode === "local" ? localAnswer(messages, t) : await generateAnswer(key!, messages, abort.signal, locale, t);
+    if (abort.signal.aborted) return localizedError(unavailable, 503);
     return answer(text);
   } catch (failure) {
     // Do not expose upstream text, traces, headers, keys, drafts or reasoning.
-    if (failure instanceof ProviderError && failure.status === 429) return error("El asistente ha alcanzado su cuota gratuita. Inténtalo más tarde.", 429, failure.retryAfter);
-    return error(unavailable, 503);
+    if (failure instanceof ProviderError && failure.status === 429) return localizedError("El asistente ha alcanzado su cuota gratuita. Inténtalo más tarde.", 429, failure.retryAfter);
+    return localizedError(unavailable, 503);
   } finally {
     clearTimeout(timeout);
     request.signal.removeEventListener("abort", onDisconnect);

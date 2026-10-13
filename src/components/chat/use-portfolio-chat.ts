@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "@/components/i18n/language-provider";
 import { MAX_ANSWER_LENGTH, MAX_HISTORY_MESSAGES, MAX_QUESTION_LENGTH, type ChatMessage } from "@/lib/chat/contracts";
 import { createTextReveal } from "@/lib/chat/text-reveal";
 
@@ -8,6 +9,7 @@ export type ConversationMessage = ChatMessage & { id: string; complete: boolean 
 type Status = "idle" | "thinking" | "streaming";
 
 export function usePortfolioChat() {
+  const { t } = useTranslations();
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
@@ -34,7 +36,7 @@ export function usePortfolioChat() {
     const content = question.trim();
     if (active.current || Date.now() < retryAt) return false;
     if (!content || content.length > MAX_QUESTION_LENGTH) {
-      setError("Escribe una pregunta de entre 1 y 800 caracteres.");
+      setError(t("Escribe una pregunta de entre 1 y 800 caracteres."));
       return false;
     }
     const abort = new AbortController();
@@ -46,7 +48,7 @@ export function usePortfolioChat() {
     setMessages((previous) => [...previous.slice(-18), { id: crypto.randomUUID(), role: "user", content, complete: true }, { id: answerId, role: "assistant", content: "", complete: false }]);
     setError("");
     setStatus("thinking");
-    setAnnouncement("El asistente está preparando una respuesta.");
+    setAnnouncement(t("El asistente está preparando una respuesta."));
     let answer = "";
     let displayed = "";
     let complete = false;
@@ -73,7 +75,7 @@ export function usePortfolioChat() {
         const failure: unknown = await response.json().catch(() => null);
         throw new Error(failure && typeof failure === "object" && "error" in failure && typeof failure.error === "string" ? failure.error : "No se ha podido enviar. Inténtalo más tarde o contacta con Bruno.");
       }
-      if (!response.body) throw new Error("No se ha recibido una respuesta. Vuelve a intentarlo.");
+      if (!response.body) throw new Error(t("No se ha recibido una respuesta. Vuelve a intentarlo."));
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
@@ -81,20 +83,20 @@ export function usePortfolioChat() {
         while (true) {
           const { value, done } = await reader.read();
           buffer += done ? decoder.decode() : decoder.decode(value, { stream: true });
-          if (buffer.length > 32_768) throw new Error("La respuesta es demasiado larga.");
+          if (buffer.length > 32_768) throw new Error(t("La respuesta es demasiado larga."));
           let newline: number;
           while ((newline = buffer.indexOf("\n")) !== -1) {
             const line = buffer.slice(0, newline); buffer = buffer.slice(newline + 1);
             if (!line) continue;
             const event: unknown = JSON.parse(line);
-            if (!event || typeof event !== "object" || !("type" in event)) throw new Error("La respuesta no es válida. Vuelve a intentarlo.");
-            if (receivedDone) throw new Error("La respuesta no es válida.");
-            if (event.type !== "delta" && event.type !== "done" && event.type !== "error") throw new Error("La respuesta no es válida.");
+            if (!event || typeof event !== "object" || !("type" in event)) throw new Error(t("La respuesta no es válida. Vuelve a intentarlo."));
+            if (receivedDone) throw new Error(t("La respuesta no es válida."));
+            if (event.type !== "delta" && event.type !== "done" && event.type !== "error") throw new Error(t("La respuesta no es válida."));
             if (event.type === "error") throw new Error("message" in event && typeof event.message === "string" ? event.message : "La respuesta se ha interrumpido.");
             if (event.type === "done") { receivedDone = true; }
             if (event.type === "delta" && "text" in event && typeof event.text === "string") {
               answer += event.text;
-              if (answer.length > MAX_ANSWER_LENGTH) throw new Error("La respuesta es demasiado larga.");
+              if (answer.length > MAX_ANSWER_LENGTH) throw new Error(t("La respuesta es demasiado larga."));
               setStatus("streaming");
               reveal.append(event.text);
             }
@@ -102,17 +104,17 @@ export function usePortfolioChat() {
           if (done) break;
         }
       } finally { void reader.cancel().catch(() => {}); reader.releaseLock(); }
-      if (!receivedDone || !answer) throw new Error("La respuesta se ha interrumpido. Vuelve a enviar tu pregunta.");
+      if (!receivedDone || !answer) throw new Error(t("La respuesta se ha interrumpido. Vuelve a enviar tu pregunta."));
       clearTimeout(timer);
       await reveal.finish();
-      if (abort.signal.aborted) throw new Error("cancelled");
+      if (abort.signal.aborted) throw new Error(t("cancelled"));
       complete = true;
       history.current = [...pending, { role: "assistant" as const, content: answer }].slice(-8);
       setMessages((previous) => previous.map((message) => message.id === answerId ? { ...message, complete: true } : message));
-      setAnnouncement(`El asistente ha respondido: ${answer}`);
+      setAnnouncement(t("El asistente ha respondido: {0}", [answer]));
     } catch (failure) {
       const message = abort.signal.aborted ? (timedOut ? "La respuesta ha tardado demasiado. Vuelve a intentarlo." : "Respuesta detenida. Puedes enviar otra pregunta.") : failure instanceof Error ? failure.message : "No se ha podido responder. Vuelve a intentarlo.";
-      setError(message); setAnnouncement("");
+      setError(t(message)); setAnnouncement("");
       if (!displayed) setMessages((previous) => previous.filter((message) => message.id !== answerId));
     } finally {
       clearTimeout(timer); reveal.stop(); abort.signal.removeEventListener("abort", stopReveal); active.current = null; setStatus("idle");
@@ -122,7 +124,7 @@ export function usePortfolioChat() {
 
   function reset() {
     if (active.current) return;
-    history.current = []; setMessages([]); setError(""); setAnnouncement("Conversación reiniciada.");
+    history.current = []; setMessages([]); setError(""); setAnnouncement(t("Conversación reiniciada."));
   }
 
   return { messages, status, error, announcement, cooldown, send, reset, stop: () => active.current?.abort() };
