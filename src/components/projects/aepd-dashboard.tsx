@@ -266,7 +266,7 @@ export function AepdDashboard() {
         )}
         <p className="sr-only" role="status">
           {t(validPeriod
-            ? t("Informe actualizado. {0}. {1} visitas. Modelo {2}.", [country, formatCount(data.visits, locale), model])
+            ? t("Informe actualizado. {0}. {1} visitas. Modelo {2}.", [t(country), formatCount(data.visits, locale), model])
             : "Intervalo de fechas no válido.")}
         </p>
       </div>

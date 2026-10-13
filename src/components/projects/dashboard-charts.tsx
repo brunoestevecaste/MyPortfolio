@@ -144,7 +144,7 @@ export function HorizontalBars({ data }: { data: ChartDatum[] }) {
 }
 
 export function VerticalBars({ data }: { data: ChartDatum[] }) {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   return (
     <>
       <ChartFrame height={240} label={t("Visitas por contenido")}>
@@ -179,7 +179,7 @@ export function VerticalBars({ data }: { data: ChartDatum[] }) {
               offset={10}
               fill="var(--ink)"
               fontSize={12}
-              formatter={(value) => compactCount(Number(value))}
+              formatter={(value) => compactCount(Number(value), locale)}
             />
           </Bar>
         </BarChart>
@@ -260,7 +260,7 @@ function FaqCell({
         <text x={x + 10} y={y + 23} fill="var(--on-signal)" fontSize={12}>
           <tspan>{t(name)}</tspan>
           <tspan x={x + 10} y={y + height - 13}>
-            {t(compactCount(value))}
+            {compactCount(value, locale)}
           </tspan>
         </text>
       )}
