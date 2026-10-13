@@ -1,62 +1,64 @@
+import { getTranslations } from "@/lib/i18n/server";
 import { illustrativeTraffic } from "@/data/aepd";
 import { TrafficPlot } from "@/components/projects/traffic-figure";
 import styles from "./project-architecture.module.css";
 
-const number = new Intl.NumberFormat("es-ES");
 
-export function AepdTrafficFigure() {
+export async function AepdTrafficFigure() {
+  const { t, locale } = await getTranslations();
+  const number = new Intl.NumberFormat(locale === "en" ? "en-GB" : "es-ES", {});
   return (
     <figure className={styles.figure} aria-labelledby="aepd-figure-title">
       <div className={styles.figureHeader}>
-        <p id="aepd-figure-title">Predicción horaria frente a demanda observada</p>
-        <span>Validación sobre periodo futuro con modelo XGBoost / Horas 00:00 – 22:00</span>
+        <p id="aepd-figure-title">{t("Predicción horaria frente a demanda observada")}</p>
+        <span>{t("Validación sobre periodo futuro con modelo XGBoost / Horas 00:00 – 22:00")}</span>
       </div>
 
       <TrafficPlot />
 
       <div className={styles.legend}>
-        <span className={styles.proposal}>Demanda observada</span>
-        <span className={styles.reference}>Estimación del modelo (XGBoost)</span>
+        <span className={styles.proposal}>{t("Demanda observada")}</span>
+        <span className={styles.reference}>{t("Estimación del modelo (XGBoost)")}</span>
       </div>
 
       <dl className={styles.comparison}>
         <div>
-          <dt>Visitas pico registradas</dt>
+          <dt>{t("Visitas pico registradas")}</dt>
           <dd>
-            462 <small>visitas/h</small>
+            462 <small>{t("visitas/h")}</small>
           </dd>
         </div>
         <div>
-          <dt>Error medio relativo (MAPE)</dt>
+          <dt>{t("Error medio relativo (MAPE)")}</dt>
           <dd>
-            &lt;8.5% <small style={{ color: "#16a34a" }}>(Alta precisión)</small>
+            {t("<8.5% ")}<small style={{ color: "#16a34a" }}>{t("(Alta precisión)")}</small>
           </dd>
         </div>
         <div>
-          <dt>Horizonte de predicción</dt>
+          <dt>{t("Horizonte de predicción")}</dt>
           <dd>
-            24 h <small>anticipación</small>
+            {t("24 h ")}<small>{t("anticipación")}</small>
           </dd>
         </div>
       </dl>
 
       <details className={styles.figureDetails}>
-        <summary>Consultar los valores detallados del gráfico</summary>
+        <summary>{t("Consultar los valores detallados del gráfico")}</summary>
         <table>
-          <caption className="sr-only">Demanda horaria observada y estimada en la AEPD</caption>
+          <caption className="sr-only">{t("Demanda horaria observada y estimada en la AEPD")}</caption>
           <thead>
             <tr>
-              <th scope="col">Hora</th>
-              <th scope="col">Visitas observadas</th>
-              <th scope="col">Estimación del modelo</th>
+              <th scope="col">{t("Hora")}</th>
+              <th scope="col">{t("Visitas observadas")}</th>
+              <th scope="col">{t("Estimación del modelo")}</th>
             </tr>
           </thead>
           <tbody>
             {illustrativeTraffic.map((row) => (
               <tr key={row.hour}>
-                <th scope="row">{row.hour}</th>
-                <td>{number.format(row.visits)}</td>
-                <td>{number.format(row.estimate)}</td>
+                <th scope="row">{t(row.hour)}</th>
+                <td>{t(number.format(row.visits))}</td>
+                <td>{t(number.format(row.estimate))}</td>
               </tr>
             ))}
           </tbody>
