@@ -121,7 +121,7 @@ export function NextPlanDashboard() {
     } else if (cityMatch) {
       reason = t("Por coincidencia con tu ciudad habitual ({0})", [candidateEvent.city]);
     } else if (!isOwnCluster) {
-      reason = t("Descubrimiento afín desde {0}", [clusterSource]);
+      reason = t("Descubrimiento afín desde {0}", [t(clusterSource)]);
     }
 
     return {
@@ -309,7 +309,7 @@ export function NextPlanDashboard() {
                     {interactionHistory.map((item) => (
                       <li key={item.id}>
                         <span>
-                          <strong>[{t(item.action.toUpperCase())}]</strong> {t(item.eventName.slice(0, 26))}...
+                          <strong>[{t(item.action.toUpperCase())}]</strong> {t(item.eventName).slice(0, 26)}...
                         </span>
                         <span>{item.dwellMs}{t("ms")}</span>
                       </li>
@@ -341,7 +341,7 @@ export function NextPlanDashboard() {
                     >
                       <strong>{t(profile.name)}</strong>
                       <p>
-                        {t("Categoría: ")}{t(profile.primaryCategory)} {t(" · Ciudad:")}{t(profile.homeCity)}
+                        {t("Categoría: ")}{t(profile.primaryCategory)}{t(" · Ciudad: ")}{t(profile.homeCity)}
                       </p>
                       <ul style={{ paddingLeft: "1.1rem", margin: "0.4rem 0 0 0", fontSize: "0.72rem", color: "var(--muted)" }}>
                         {profile.traits.map((trait) => (
