@@ -14,13 +14,13 @@ export async function ProjectPagination({ slug }: { slug: string }) {
     <nav className={styles.pagination} aria-label={t("Navegación entre proyectos")}>
       {previous ? (
         <Link href={`/projects/${previous.slug}`}>
-          <span>{t("Proyecto anterior /")}{t(previous.organization)}</span>
+          <span>{t("Proyecto anterior / ")}{t(previous.organization)}</span>
           <strong>{t(previous.title)}</strong>
         </Link>
       ) : null}
       {next ? (
         <Link href={`/projects/${next.slug}`}>
-          <span>{t("Siguiente proyecto /")}{t(next.organization)}</span>
+          <span>{t("Siguiente proyecto / ")}{t(next.organization)}</span>
           <strong>{t(next.title)}</strong>
         </Link>
       ) : null}

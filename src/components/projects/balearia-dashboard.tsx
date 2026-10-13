@@ -159,7 +159,7 @@ function OperationsView({ voyage }: { voyage: BaleariaDashboardVoyage }) {
           <div>
             <dt>{t("Recorrido")}</dt>
             <dd>
-              {t(voyage.origin)} {t(" a")}{t(voyage.destination)}
+              {t(voyage.origin)}{t(" a ")}{t(voyage.destination)}
             </dd>
           </div>
           <div>
@@ -169,7 +169,7 @@ function OperationsView({ voyage }: { voyage: BaleariaDashboardVoyage }) {
           <div>
             <dt>{t("Condición del mar")}</dt>
             <dd>
-              {t("Beaufort ")}{voyage.beaufort}{t(", Douglas")}{voyage.douglas}
+              {t("Beaufort ")}{voyage.beaufort}{t(", Douglas ")}{voyage.douglas}
             </dd>
           </div>
         </dl>
@@ -232,7 +232,7 @@ function CrewView({
       <Panel title={t("Recomendación en navegación")} className={styles.livePanel}>
         <Recommendation voyage={voyage} compact />
         <p className={styles.liveResult} aria-live="polite">
-          {t("Simulación ")}{calculationRound + 1}{t(": velocidad propuesta")}{t(formatDashboardMeasure(recalculatedSpeed, "kn", 1, locale))}.
+          {t("Simulación ")}{calculationRound + 1}{t(": velocidad propuesta ")}{t(formatDashboardMeasure(recalculatedSpeed, "kn", 1, locale))}.
         </p>
         <button type="button" className={styles.calculateButton} onClick={onCalculate}>
           {t("Recalcular simulación")}</button>
@@ -397,7 +397,7 @@ export function BaleariaDashboard() {
 
         <div className={styles.contextBar}>
           <p>
-            {t(voyage.vessel)} / {t(voyage.origin)} {t(" a")}{t(voyage.destination)}
+            {t(voyage.vessel)} / {t(voyage.origin)}{t(" a ")}{t(voyage.destination)}
           </p>
           <p>{t(formatDashboardDate(voyage.date, locale))}</p>
         </div>
