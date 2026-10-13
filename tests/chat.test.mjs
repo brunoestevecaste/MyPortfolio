@@ -65,6 +65,21 @@ test("production fails closed until canonical origin and protection are configur
   assert.equal(protectionConfigured(), false);
 }));
 
+test("language cookies localize errors without bypassing request protections", () => isolated(async () => {
+  let calls = 0;
+  globalThis.fetch = async () => { calls++; throw new Error("Provider must not be called"); };
+  const denied = await POST(request({}, { origin: "https://attacker.example", cookie: "portfolio-language=en" }));
+  assert.equal(denied.status, 403);
+  assert.deepEqual(await denied.json(), { error: "Request not allowed." });
+  const invalidType = await POST(request({}, { "content-type": "text/plain", cookie: "portfolio-language=en" }));
+  assert.equal(invalidType.status, 415);
+  assert.deepEqual(await invalidType.json(), { error: "The request must contain JSON." });
+  const unsupported = await POST(request({}, { origin: "https://attacker.example", cookie: "portfolio-language=../../secrets" }));
+  assert.equal(unsupported.status, 403);
+  assert.deepEqual(await unsupported.json(), { error: "Solicitud no permitida." });
+  assert.equal(calls, 0);
+}));
+
 test("limiter permits follow-ups after eight seconds and two independent visitors at once", () => {
   const limiter = new ChatLimiter(), start = 1_000_000;
   const first = limiter.acquire("a", start); assert.equal(first.allowed, true);

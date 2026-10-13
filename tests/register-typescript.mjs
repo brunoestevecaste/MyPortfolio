@@ -15,7 +15,7 @@ registerHooks({
     else if (specifier.startsWith(".") && context.parentURL?.startsWith("file:")) candidate = fileURLToPath(new URL(specifier, context.parentURL));
     if (candidate) {
       for (const filename of [candidate, `${candidate}.ts`, `${candidate}.tsx`]) {
-        if (/\.tsx?$/.test(filename) && existsSync(filename)) return { url: pathToFileURL(filename).href, shortCircuit: true };
+        if (/\.(?:tsx?|json)$/.test(filename) && existsSync(filename)) return { url: pathToFileURL(filename).href, shortCircuit: true };
       }
     }
     return nextResolve(specifier, context);
