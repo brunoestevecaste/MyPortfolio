@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import { useMemo, useState, type ReactNode } from "react";
 import {
   demoEvents,
@@ -20,9 +21,10 @@ function Panel({
   children: ReactNode;
   className?: string;
 }) {
+  const { t } = useTranslations();
   return (
-    <section className={`${styles.panel} ${className}`} aria-label={title}>
-      <h4>{title}</h4>
+    <section className={`${styles.panel} ${className}`} aria-label={t(title)}>
+      <h4>{t(title)}</h4>
       {children}
     </section>
   );
@@ -37,6 +39,7 @@ type SwipeActionRecord = {
 };
 
 export function NextPlanDashboard() {
+  const { t } = useTranslations();
   const [view, setView] = useState<NextPlanView>("swipes");
 
   // VISTA 1: SWIPES
@@ -114,11 +117,11 @@ export function NextPlanDashboard() {
     // Generar recommendation_reason explicable según lógica del backend
     let reason = "Recomendado por afinidad a tu clúster de gustos";
     if (cityMatch && urgencyBoost > 0.02) {
-      reason = `Plan destacado en ${candidateEvent.city} para este fin de semana`;
+      reason = t("Plan destacado en {0} para este fin de semana", [candidateEvent.city]);
     } else if (cityMatch) {
-      reason = `Por coincidencia con tu ciudad habitual (${candidateEvent.city})`;
+      reason = t("Por coincidencia con tu ciudad habitual ({0})", [candidateEvent.city]);
     } else if (!isOwnCluster) {
-      reason = `Descubrimiento afín desde ${clusterSource}`;
+      reason = t("Descubrimiento afín desde {0}", [clusterSource]);
     }
 
     return {
@@ -132,7 +135,7 @@ export function NextPlanDashboard() {
       reason,
       cityMatch,
     };
-  }, [candidateEvent, selectedClusterId, activeProfile, forceSameCity, urgencyDays]);
+  }, [candidateEvent, selectedClusterId, activeProfile, forceSameCity, urgencyDays, t]);
 
   // VISTA 3: AGENTE IA & RAG
   const [selectedScenarioId, setSelectedScenarioId] = useState<string>("scenario-01");
@@ -159,31 +162,28 @@ export function NextPlanDashboard() {
         {/* CABECERA Y SELECTOR DE VISTAS */}
         <header className={styles.toolbar}>
           <div>
-            <p>Demostrador interactivo · NextPlan</p>
-            <h3>Plataforma de Recomendación de Eventos</h3>
+            <p>{t("Demostrador interactivo · NextPlan")}</p>
+            <h3>{t("Plataforma de Recomendación de Eventos")}</h3>
           </div>
-          <nav className={styles.viewSwitch} aria-label="Modos de demostración">
+          <nav className={styles.viewSwitch} aria-label={t("Modos de demostración")}>
             <button
               type="button"
               aria-pressed={view === "swipes"}
               onClick={() => setView("swipes")}
             >
-              1. Explorador & Swipes
-            </button>
+              {t("1. Explorador & Swipes")}</button>
             <button
               type="button"
               aria-pressed={view === "clustering"}
               onClick={() => setView("clustering")}
             >
-              2. Clustering & Scoring
-            </button>
+              {t("2. Clustering & Scoring")}</button>
             <button
               type="button"
               aria-pressed={view === "planner"}
               onClick={() => setView("planner")}
             >
-              3. Agente IA & RAG
-            </button>
+              {t("3. Agente IA & RAG")}</button>
           </nav>
         </header>
 
@@ -192,23 +192,22 @@ export function NextPlanDashboard() {
           <span>
             {view === "swipes" && (
               <>
-                Modo: <strong>Captura asíncrona de swipes en tiempo real hacia Pub/Sub</strong>
+                {t("Modo: ")}<strong>{t("Captura asíncrona de swipes en tiempo real hacia Pub/Sub")}</strong>
               </>
             )}
             {view === "clustering" && (
               <>
-                Modo: <strong>Materialización de candidatos en BigQuery con scoring multivariable</strong>
+                {t("Modo: ")}<strong>{t("Materialización de candidatos en BigQuery con scoring multivariable")}</strong>
               </>
             )}
             {view === "planner" && (
               <>
-                Modo: <strong>Orquestación RAG en dos fases con Google ADK sobre Vertex AI</strong>
+                {t("Modo: ")}<strong>{t("Orquestación RAG en dos fases con Google ADK sobre Vertex AI")}</strong>
               </>
             )}
           </span>
           <button type="button" onClick={resetAll} className={styles.resetButton}>
-            Reiniciar simulador
-          </button>
+            {t("Reiniciar simulador")}</button>
         </div>
 
         <div className={styles.contentArea}>
@@ -221,45 +220,43 @@ export function NextPlanDashboard() {
               <div className={styles.eventCard}>
                 <div className={styles.badgeRow}>
                   <span className={`${styles.badge} ${styles.badgeSignal}`}>
-                    {currentEvent.category}
+                    {t(currentEvent.category)}
                   </span>
-                  <span className={styles.badge}>{currentEvent.city}</span>
-                  <span className={styles.badge}>{currentEvent.indoorOutdoor}</span>
-                  <span className={styles.badge}>{currentEvent.timeSlot}</span>
-                  <span className={styles.badge}>{currentEvent.priceRange}</span>
+                  <span className={styles.badge}>{t(currentEvent.city)}</span>
+                  <span className={styles.badge}>{t(currentEvent.indoorOutdoor)}</span>
+                  <span className={styles.badge}>{t(currentEvent.timeSlot)}</span>
+                  <span className={styles.badge}>{t(currentEvent.priceRange)}</span>
                 </div>
 
-                <h4 className={styles.eventTitle}>{currentEvent.name}</h4>
+                <h4 className={styles.eventTitle}>{t(currentEvent.name)}</h4>
                 <p style={{ color: "var(--muted)", margin: 0 }}>
-                  {currentEvent.description}
+                  {t(currentEvent.description)}
                 </p>
 
                 <dl className={styles.eventMetaGrid}>
                   <div>
-                    <dt>Recinto</dt>
-                    <dd>{currentEvent.venue}</dd>
+                    <dt>{t("Recinto")}</dt>
+                    <dd>{t(currentEvent.venue)}</dd>
                   </div>
                   <div>
-                    <dt>Fecha</dt>
-                    <dd>{currentEvent.date}</dd>
+                    <dt>{t("Fecha")}</dt>
+                    <dd>{t(currentEvent.date)}</dd>
                   </div>
                   <div>
-                    <dt>Vibe inferido (Gemini)</dt>
-                    <dd>{currentEvent.vibe}</dd>
+                    <dt>{t("Vibe inferido (Gemini)")}</dt>
+                    <dd>{t(currentEvent.vibe)}</dd>
                   </div>
                   <div>
-                    <dt>Ocasión idónea</dt>
-                    <dd>{currentEvent.occasionTags.join(" · ")}</dd>
+                    <dt>{t("Ocasión idónea")}</dt>
+                    <dd>{currentEvent.occasionTags.map((tag) => t(tag)).join(" · ")}</dd>
                   </div>
                 </dl>
 
                 <div>
                   <span style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", color: "var(--muted)" }}>
-                    Prompt de dirección de arte (ia_motor_imagenes)
-                  </span>
+                    {t("Prompt de dirección de arte (ia_motor_imagenes)")}</span>
                   <div className={styles.artPromptBox}>
-                    &ldquo;{currentEvent.artPrompt}&rdquo;
-                  </div>
+                    {"“"}{t(currentEvent.artPrompt)}{"”"}</div>
                 </div>
 
                 {/* Acciones de swipe */}
@@ -268,62 +265,58 @@ export function NextPlanDashboard() {
                     type="button"
                     className={`${styles.swipeBtn} ${styles.swipeBtnDislike}`}
                     onClick={() => handleSwipe("dislike")}
-                    aria-label="Descartar evento"
+                    aria-label={t("Descartar evento")}
                   >
-                    ✕ Descartar
-                  </button>
+                    {t("✕ Descartar")}</button>
                   <button
                     type="button"
                     className={styles.swipeBtn}
                     onClick={() => handleSwipe("saved")}
-                    aria-label="Guardar en favoritos"
+                    aria-label={t("Guardar en favoritos")}
                   >
-                    ★ Guardar
-                  </button>
+                    {t("★ Guardar")}</button>
                   <button
                     type="button"
                     className={`${styles.swipeBtn} ${styles.swipeBtnLike}`}
                     onClick={() => handleSwipe("like")}
-                    aria-label="Me gusta este plan"
+                    aria-label={t("Me gusta este plan")}
                   >
-                    ♥ Me interesa
-                  </button>
+                    {t("♥ Me interesa")}</button>
                 </div>
               </div>
 
               {/* Panel lateral: Telemetría y dbt staging */}
               <div className={styles.swipeTelemetry}>
-                <Panel title="Telemetría de interacción (Pub/Sub → BigQuery)">
+                <Panel title={t("Telemetría de interacción (Pub/Sub → BigQuery)")}>
                   <div className={styles.telemetryStats}>
                     <div className={styles.statBox}>
                       <div className={styles.statNumber}>{swipeStats.total}</div>
-                      <div className={styles.statLabel}>Swipes sesión</div>
+                      <div className={styles.statLabel}>{t("Swipes sesión")}</div>
                     </div>
                     <div className={styles.statBox}>
                       <div className={styles.statNumber}>{swipeStats.likeRate}%</div>
-                      <div className={styles.statLabel}>Tasa de Like</div>
+                      <div className={styles.statLabel}>{t("Tasa de Like")}</div>
                     </div>
                     <div className={styles.statBox}>
-                      <div className={styles.statNumber}>{swipeStats.avgDwell} ms</div>
-                      <div className={styles.statLabel}>Dwell time medio</div>
+                      <div className={styles.statNumber}>{swipeStats.avgDwell} {t(" ms")}</div>
+                      <div className={styles.statLabel}>{t("Dwell time medio")}</div>
                     </div>
                   </div>
                 </Panel>
 
-                <Panel title="Event Stream Reciente (stg_swipes)">
-                  <ul className={styles.interactionLog} aria-label="Histórico de interacciones">
+                <Panel title={t("Event Stream Reciente (stg_swipes)")}>
+                  <ul className={styles.interactionLog} aria-label={t("Histórico de interacciones")}>
                     {interactionHistory.map((item) => (
                       <li key={item.id}>
                         <span>
-                          <strong>[{item.action.toUpperCase()}]</strong> {item.eventName.slice(0, 26)}...
+                          <strong>[{t(item.action.toUpperCase())}]</strong> {t(item.eventName.slice(0, 26))}...
                         </span>
-                        <span>{item.dwellMs}ms</span>
+                        <span>{item.dwellMs}{t("ms")}</span>
                       </li>
                     ))}
                   </ul>
                   <p style={{ fontSize: "0.72rem", color: "var(--muted)", margin: 0 }}>
-                    Los eventos se emiten a Pub/Sub (`swipe-events`) con envelope JSON que incluye dwell_ms y snapshot contextual para dbt.
-                  </p>
+                    {t("Los eventos se emiten a Pub/Sub (`swipe-events`) con envelope JSON que incluye dwell_ms y snapshot contextual para dbt.")}</p>
                 </Panel>
               </div>
             </div>
@@ -335,8 +328,8 @@ export function NextPlanDashboard() {
           {view === "clustering" && (
             <div className={styles.clusterLayout}>
               {/* Selector de perfil / cluster */}
-              <Panel title="1. Selección de Clúster de Usuario (K-Means)">
-                <div className={styles.profileSelector} role="radiogroup" aria-label="Perfiles de clúster">
+              <Panel title={t("1. Selección de Clúster de Usuario (K-Means)")}>
+                <div className={styles.profileSelector} role="radiogroup" aria-label={t("Perfiles de clúster")}>
                   {Object.values(demoProfiles).map((profile) => (
                     <button
                       key={profile.id}
@@ -346,13 +339,13 @@ export function NextPlanDashboard() {
                       className={styles.profileOption}
                       onClick={() => setSelectedClusterId(profile.id)}
                     >
-                      <strong>{profile.name}</strong>
+                      <strong>{t(profile.name)}</strong>
                       <p>
-                        Categoría: {profile.primaryCategory} · Ciudad: {profile.homeCity}
+                        {t("Categoría: ")}{t(profile.primaryCategory)} {t(" · Ciudad:")}{t(profile.homeCity)}
                       </p>
                       <ul style={{ paddingLeft: "1.1rem", margin: "0.4rem 0 0 0", fontSize: "0.72rem", color: "var(--muted)" }}>
-                        {profile.traits.map((t) => (
-                          <li key={t}>{t}</li>
+                        {profile.traits.map((trait) => (
+                          <li key={trait}>{t(trait)}</li>
                         ))}
                       </ul>
                     </button>
@@ -360,17 +353,16 @@ export function NextPlanDashboard() {
                 </div>
 
                 <div style={{ marginTop: "0.5rem", fontSize: "0.75rem", color: "var(--muted)" }}>
-                  <strong>Vecindad de Clúster:</strong> Vecino 1 ({activeProfile.neighborWeights.neighbor1.name}) = 60%, Vecino 2 ({activeProfile.neighborWeights.neighbor2.name}) = 40%, Vecino 3 ({activeProfile.neighborWeights.neighbor3.name}) = 25%.
+                  <strong>{t("Vecindad de Clúster:")}</strong> {t(" Vecino 1 (")}{t(activeProfile.neighborWeights.neighbor1.name)}{t(") = 60%, Vecino 2 (")}{t(activeProfile.neighborWeights.neighbor2.name)}{t(") = 40%, Vecino 3 (")}{t(activeProfile.neighborWeights.neighbor3.name)}) = 25%.
                 </div>
               </Panel>
 
               {/* Calculadora de Scoring */}
-              <Panel title="2. Motor de Scoring Multivariable (BigQuery Serving)">
+              <Panel title={t("2. Motor de Scoring Multivariable (BigQuery Serving)")}>
                 <div className={styles.scoringCalculator}>
                   <div>
                     <label style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase" }}>
-                      Seleccionar Evento Candidato:
-                    </label>
+                      {t("Seleccionar Evento Candidato:")}</label>
                     <select
                       value={selectedCandidateIndex}
                       onChange={(e) => setSelectedCandidateIndex(Number(e.target.value))}
@@ -385,7 +377,7 @@ export function NextPlanDashboard() {
                     >
                       {demoEvents.map((evt, idx) => (
                         <option key={evt.id} value={idx}>
-                          {evt.name} ({evt.category} · {evt.city})
+                          {t(evt.name)} ({t(evt.category)} · {t(evt.city)})
                         </option>
                       ))}
                     </select>
@@ -395,8 +387,7 @@ export function NextPlanDashboard() {
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
                     <div>
                       <label style={{ fontSize: "0.72rem", color: "var(--muted)", textTransform: "uppercase", display: "block" }}>
-                        Coincidencia de ciudad
-                      </label>
+                        {t("Coincidencia de ciudad")}</label>
                       <button
                         type="button"
                         onClick={() => setForceSameCity(!forceSameCity)}
@@ -411,14 +402,13 @@ export function NextPlanDashboard() {
                           cursor: "pointer",
                         }}
                       >
-                        {forceSameCity ? "Sí (+0.08 Boost)" : "No (+0.00 Boost)"}
+                        {t(forceSameCity ? "Sí (+0.08 Boost)" : "No (+0.00 Boost)")}
                       </button>
                     </div>
 
                     <div>
                       <label style={{ fontSize: "0.72rem", color: "var(--muted)", textTransform: "uppercase", display: "block" }}>
-                        Días restantes al evento ({urgencyDays}d)
-                      </label>
+                        {t("Días restantes al evento (")}{urgencyDays}{t("d)")}</label>
                       <input
                         type="range"
                         min="0"
@@ -433,28 +423,27 @@ export function NextPlanDashboard() {
                   {/* Fórmula visual */}
                   <div className={styles.formulaDisplay}>
                     <code>
-                      Score = (PesoClúster × AfinidadBase) + HomeCityBoost + UrgencyBoost
-                    </code>
+                      {t("Score = (PesoClúster × AfinidadBase) + HomeCityBoost + UrgencyBoost")}</code>
                     <div className={styles.formulaTerms}>
                       <div className={styles.termBox}>
                         <div className={styles.termValue}>
                           {scoringBreakdown.baseContribution}
                         </div>
                         <div className={styles.termLabel}>
-                          Base ({scoringBreakdown.clusterWeight} × {scoringBreakdown.baseAffinity})
+                          {t("Base (")}{scoringBreakdown.clusterWeight} × {scoringBreakdown.baseAffinity})
                         </div>
                       </div>
                       <div className={styles.termBox}>
                         <div className={styles.termValue}>
-                          +{scoringBreakdown.homeCityBoost.toFixed(2)}
+                          +{t(scoringBreakdown.homeCityBoost.toFixed(2))}
                         </div>
-                        <div className={styles.termLabel}>Ciudad Boost</div>
+                        <div className={styles.termLabel}>{t("Ciudad Boost")}</div>
                       </div>
                       <div className={styles.termBox}>
                         <div className={styles.termValue}>
-                          +{scoringBreakdown.urgencyBoost.toFixed(3)}
+                          +{t(scoringBreakdown.urgencyBoost.toFixed(3))}
                         </div>
-                        <div className={styles.termLabel}>Urgencia Boost</div>
+                        <div className={styles.termLabel}>{t("Urgencia Boost")}</div>
                       </div>
                     </div>
                   </div>
@@ -463,18 +452,18 @@ export function NextPlanDashboard() {
                   <div className={styles.candidateCard}>
                     <div className={styles.candidateHeader}>
                       <div>
-                        <span className={styles.candidateRank}>Puntuación Final</span>
+                        <span className={styles.candidateRank}>{t("Puntuación Final")}</span>
                         <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>
-                          Fuente: {scoringBreakdown.clusterSource}
+                          {t("Fuente: ")}{t(scoringBreakdown.clusterSource)}
                         </div>
                       </div>
                       <div className={styles.candidateScore}>
-                        {(scoringBreakdown.totalScore * 100).toFixed(1)} / 100
+                        {t((scoringBreakdown.totalScore * 100).toFixed(1))} / 100
                       </div>
                     </div>
 
                     <div className={styles.reasonBadge}>
-                      Motivo explicable: <strong>{scoringBreakdown.reason}</strong>
+                      {t("Motivo explicable: ")}<strong>{t(scoringBreakdown.reason)}</strong>
                     </div>
                   </div>
                 </div>
@@ -488,7 +477,7 @@ export function NextPlanDashboard() {
           {view === "planner" && (
             <div className={styles.agentLayout}>
               {/* Selector de Escenarios */}
-              <Panel title="1. Escenarios de Consulta de Usuario">
+              <Panel title={t("1. Escenarios de Consulta de Usuario")}>
                 <div className={styles.scenarioList}>
                   {demoAgentScenarios.map((scen) => (
                     <button
@@ -499,29 +488,27 @@ export function NextPlanDashboard() {
                       onClick={() => setSelectedScenarioId(scen.id)}
                     >
                       <span className={styles.scenarioTag}>
-                        {scen.id === "scenario-03" ? "Defensivo / Inyección" : "Consulta Natural"}
+                        {t(scen.id === "scenario-03" ? "Defensivo / Inyección" : "Consulta Natural")}
                       </span>
-                      <strong>&ldquo;{scen.userPrompt}&rdquo;</strong>
+                      <strong>“{t(scen.userPrompt)}”</strong>
                     </button>
                   ))}
                 </div>
                 <p style={{ fontSize: "0.72rem", color: "var(--muted)", margin: "0.5rem 0 0 0" }}>
-                  Google ADK ejecuta un pipeline en dos etapas: primero extrae parámetros normalizados y luego llama a herramientas vectoriales RAG en BigQuery.
-                </p>
+                  {t("Google ADK ejecuta un pipeline en dos etapas: primero extrae parámetros normalizados y luego llama a herramientas vectoriales RAG en BigQuery.")}</p>
               </Panel>
 
               {/* Ejecución del Agente */}
               <div className={styles.agentExecution}>
-                <Panel title="2. Arquitectura de Ejecución en Dos Fases">
+                <Panel title={t("2. Arquitectura de Ejecución en Dos Fases")}>
                   <div className={styles.twoStepFlow}>
                     {/* Paso 1: Extractor */}
                     <div>
                       <div className={styles.stepHeader}>
                         <span className={styles.stepCircle}>1</span>
-                        LlmAgent Extractor (Esquema UserQueryExtract)
-                      </div>
+                        {t("LlmAgent Extractor (Esquema UserQueryExtract)")}</div>
                       <pre className={styles.jsonBox}>
-                        {JSON.stringify(currentScenario.extractedQuery, null, 2)}
+                        {t(JSON.stringify(currentScenario.extractedQuery, null, 2))}
                       </pre>
                     </div>
 
@@ -530,19 +517,18 @@ export function NextPlanDashboard() {
                       <div>
                         <div className={styles.stepHeader}>
                           <span className={styles.stepCircle}>2</span>
-                          Tool buscar_eventos (BigQuery VECTOR_SEARCH)
-                        </div>
+                          {t("Tool buscar_eventos (BigQuery VECTOR_SEARCH)")}</div>
                         <div className={styles.searchResultsList}>
                           {currentScenario.vectorSearchResults.map((res, i) => (
                             <div key={i} className={styles.searchResultItem}>
                               <div>
-                                <strong>{res.eventName}</strong>
+                                <strong>{t(res.eventName)}</strong>
                                 <div style={{ color: "var(--muted)", fontSize: "0.72rem" }}>
-                                  {res.venue} · {res.sessions.join(", ")}
+                                  {t(res.venue)} · {t(res.sessions.join(", "))}
                                 </div>
                               </div>
                               <span className={styles.searchDistance}>
-                                dist: {res.cosineDistance}
+                                {t("dist: ")}{res.cosineDistance}
                               </span>
                             </div>
                           ))}
@@ -550,16 +536,15 @@ export function NextPlanDashboard() {
                       </div>
                     ) : (
                       <div className="editorial-surface" style={{ padding: "0.75rem", background: "var(--surface)", fontSize: "0.75rem", color: "var(--muted)" }}>
-                        Filtro de seguridad activado: no se invoca ninguna tool RAG ante peticiones fuera de dominio o intentos de manipulación de instrucciones.
-                      </div>
+                        {t("Filtro de seguridad activado: no se invoca ninguna tool RAG ante peticiones fuera de dominio o intentos de manipulación de instrucciones.")}</div>
                     )}
                   </div>
                 </Panel>
 
                 {/* Respuesta del Agente */}
                 <div className={styles.chatBalloon}>
-                  <strong>Respuesta Final Generada por el Asistente</strong>
-                  <p style={{ margin: 0 }}>{currentScenario.agentFinalResponse}</p>
+                  <strong>{t("Respuesta Final Generada por el Asistente")}</strong>
+                  <p style={{ margin: 0 }}>{t(currentScenario.agentFinalResponse)}</p>
                 </div>
               </div>
             </div>
