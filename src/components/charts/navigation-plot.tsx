@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import { Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
 import { illustrativeNavigation } from "@/data/balearia";
 import { axisStyle, ChartFrame, EditorialTooltip } from "./editorial-chart";
@@ -22,10 +23,11 @@ export function NavigationPlot({
 }: {
   interactive?: boolean;
 }) {
+  const { t } = useTranslations();
   return (
     <ChartFrame
       height={240}
-      label="Velocidad en nudos por tramo, perfiles de referencia y propuesta"
+      label={t("Velocidad en nudos por tramo, perfiles de referencia y propuesta")}
     >
       <LineChart
         data={profile}
@@ -52,7 +54,7 @@ export function NavigationPlot({
           <Tooltip
             content={(props) => <EditorialTooltip {...props} unit=" kn" />}
             labelFormatter={(value) =>
-              `Tramo ${illustrativeNavigation[Math.min(Math.floor(Number(value)), 5)].segment}`
+              t("Tramo {0}", [illustrativeNavigation[Math.min(Math.floor(Number(value)), 5)].segment])
             }
             cursor={false}
             isAnimationActive={false}
@@ -61,7 +63,7 @@ export function NavigationPlot({
         <Line
           type="stepAfter"
           dataKey="reference"
-          name="Referencia"
+          name={t("Referencia")}
           stroke="var(--muted)"
           strokeWidth={1.5}
           strokeDasharray="6 5"
@@ -72,7 +74,7 @@ export function NavigationPlot({
         <Line
           type="stepAfter"
           dataKey="proposal"
-          name="Propuesta"
+          name={t("Propuesta")}
           stroke="var(--signal)"
           strokeWidth={2.5}
           dot={false}
