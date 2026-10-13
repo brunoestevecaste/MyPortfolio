@@ -147,6 +147,10 @@ select {
   font: inherit;
 }
 
+button.header-language-button {
+  font-size: 0.75rem;
+}
+
 img,
 picture,
 svg {
@@ -280,6 +284,11 @@ a:focus-visible .image-hover {
     font-weight: 700;
   }
 
+  .header-language-button {
+    color: var(--accent-ink);
+    white-space: nowrap;
+  }
+
   @media (min-width: 40rem) {
     .header-menu-items {
       display: flex;
@@ -317,7 +326,7 @@ a:focus-visible .image-hover {
     .header-menu-items {
       width: 100%;
       justify-content: space-between;
-      gap: clamp(1rem, 2.5vw, 3rem);
+      gap: clamp(0.5rem, 1.5vw, 2rem);
     }
   }
 

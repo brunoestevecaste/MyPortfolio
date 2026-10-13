@@ -1,8 +1,10 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import { changeLanguage } from "@/lib/i18n/actions";
 
 interface NavigationItem {
   id: string;
@@ -39,6 +41,9 @@ const SECTION_ITEMS: NavigationItem[] = [
 ];
 
 export function SiteHeader() {
+  const { locale, t } = useTranslations();
+  const [isChangingLanguage, startLanguageTransition] = useTransition();
+  const [languageError, setLanguageError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [activeSectionId, setActiveSectionId] = useState<string>("hero");
   const [activeProjectSection, setActiveProjectSection] = useState<NavigationItem>({
@@ -49,6 +54,7 @@ export function SiteHeader() {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
   const pathname = usePathname();
+  const isHome = pathname === "/";
   const isProject = pathname.startsWith("/projects/");
 
   // Dynamic active item determination
@@ -140,7 +146,20 @@ export function SiteHeader() {
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("resize", scheduleUpdate);
     };
-  }, [isProject, pathname]);
+  }, [isProject, pathname, locale]);
+
+  function switchLanguage() {
+    setLanguageError(false);
+    startLanguageTransition(async () => {
+      try {
+        await changeLanguage(locale === "es" ? "en" : "es");
+        setIsOpen(false);
+        buttonRef.current?.focus({ preventScroll: true });
+      } catch {
+        setLanguageError(true);
+      }
+    });
+  }
 
   const handleNavClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -245,29 +264,31 @@ export function SiteHeader() {
                 className="inline-flex min-h-11 items-center font-mono text-xs font-normal uppercase tracking-wider text-ink transition-colors hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent md:tracking-widest"
                 href={activeItem.href}
                 onClick={(e) => handleNavClick(e, activeItem.href)}
-                aria-label={`Sección activa: ${activeItem.label}. Ir a ${activeItem.label}`}
+                aria-label={t("Sección activa: {0}. Ir a {1}", [t(activeItem.label), t(activeItem.label)])}
               >
-                {activeItem.label}
+                {t(activeItem.label)}
               </Link>
             </div>
 
-            {isProject ? (
+            <div className="flex items-center gap-3 justify-self-end">
+            {isProject && (
               <Link
                 href="/#work"
-                aria-label="Volver a proyectos"
+                aria-label={t("Volver a proyectos")}
                 className="inline-flex min-h-11 min-w-11 items-center justify-end justify-self-end text-ink transition-colors hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent"
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                   <path d="M20 12H4m7-7-7 7 7 7" />
                 </svg>
               </Link>
-            ) : (
+            )}
+              {isHome && (
               <button
                 ref={buttonRef}
                 type="button"
                 aria-expanded={isOpen}
                 aria-controls="site-header-menu"
-                aria-label={isOpen ? "Cerrar menú" : "Abrir menú de apartados"}
+                aria-label={t(isOpen ? "Cerrar menú" : "Abrir menú de apartados")}
                 onClick={() => setIsOpen((prev) => !prev)}
                 className="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-end justify-self-end text-ink transition-colors hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent"
               >
@@ -287,13 +308,14 @@ export function SiteHeader() {
                   />
                 </span>
               </button>
-            )}
+              )}
+            </div>
           </div>
 
-          {!isProject && (
+          {isHome && (
             <div className="header-menu" id="site-header-menu" inert={!isOpen}>
               <div className="header-menu-clip">
-                <nav className="header-menu-nav" aria-label="Navegación de apartados">
+                <nav className="header-menu-nav" aria-label={t("Navegación de apartados")}>
                   <ul className="header-menu-items">
                     {SECTION_ITEMS.map((item) => (
                       <li key={item.id}>
@@ -303,11 +325,26 @@ export function SiteHeader() {
                           aria-current={activeItem.id === item.id ? "location" : undefined}
                           className="header-menu-link inline-flex min-h-11 items-center font-mono text-xs uppercase transition-colors hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent"
                         >
-                          {item.label}
+                          {t(item.label)}
                         </Link>
                       </li>
                     ))}
+                    <li>
+                      <button
+                        type="button"
+                        onClick={switchLanguage}
+                        disabled={isChangingLanguage}
+                        aria-busy={isChangingLanguage}
+                        aria-label={locale === "es" ? "Cambiar el idioma a inglés" : "Switch language to Spanish"}
+                        className="header-menu-link header-language-button inline-flex min-h-11 cursor-pointer items-center font-mono text-xs uppercase transition-colors hover:text-accent-ink focus-visible:outline-2 focus-visible:outline-accent disabled:cursor-wait disabled:opacity-60"
+                      >
+                        {isChangingLanguage
+                          ? (locale === "es" ? "Cambiando…" : "Switching…")
+                          : <span lang={locale === "es" ? "en" : "es"}>{locale === "es" ? "English" : "Español"}</span>}
+                      </button>
+                    </li>
                   </ul>
+                  {languageError && <p role="alert" className="text-xs text-accent-ink">{locale === "es" ? "No se pudo cambiar el idioma. Inténtalo de nuevo." : "Could not change the language. Try again."}</p>}
                 </nav>
               </div>
             </div>
