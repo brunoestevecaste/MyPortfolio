@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import { useMemo, useState, type ReactNode } from "react";
 import {
   countries,
@@ -28,15 +29,17 @@ function Panel({
   children: ReactNode;
   className?: string;
 }) {
+  const { t } = useTranslations();
   return (
-    <section className={`${styles.panel} ${className}`} aria-label={title}>
-      <h4>{title}</h4>
+    <section className={`${styles.panel} ${className}`} aria-label={t(title)}>
+      <h4>{t(title)}</h4>
       {children}
     </section>
   );
 }
 
 export function AepdDashboard() {
+  const { t, locale } = useTranslations();
   const [country, setCountry] = useState("Todos");
   const [start, setStart] = useState(dashboardPeriod.start);
   const [end, setEnd] = useState(dashboardPeriod.end);
@@ -64,27 +67,25 @@ export function AepdDashboard() {
       <div
         className={styles.dashboard}
         role="region"
-        aria-label="Cuadro de mandos interactivo del portal institucional"
+        aria-label={t("Cuadro de mandos interactivo del portal institucional")}
       >
         <header className={styles.toolbar}>
-          <h3>Portal Institucional</h3>
+          <h3>{t("Portal Institucional")}</h3>
           <div className={styles.filters}>
             <label htmlFor="dashboard-country">
-              País
-              <select
+              {t("País")}<select
                 id="dashboard-country"
                 value={country}
                 onChange={(event) => setCountry(event.target.value)}
               >
-                <option>Todos</option>
+                <option value="Todos">{t("Todos")}</option>
                 {countries.map((item) => (
-                  <option key={item}>{item}</option>
+                  <option key={item} value={item}>{t(item)}</option>
                 ))}
               </select>
             </label>
             <label htmlFor="dashboard-start">
-              Desde
-              <input
+              {t("Desde")}<input
                 id="dashboard-start"
                 type="date"
                 min={dashboardPeriod.start}
@@ -98,8 +99,7 @@ export function AepdDashboard() {
               />
             </label>
             <label htmlFor="dashboard-end">
-              Hasta
-              <input
+              {t("Hasta")}<input
                 id="dashboard-end"
                 type="date"
                 min={dashboardPeriod.start}
@@ -115,43 +115,39 @@ export function AepdDashboard() {
           </div>
         </header>
         <div className={styles.dashboardActions}>
-          <p>Filtra por país y periodo para explorar el informe.</p>
+          <p>{t("Filtra por país y periodo para explorar el informe.")}</p>
           <button type="button" onClick={reset}>
-            Restablecer filtros
-          </button>
+            {t("Restablecer filtros")}</button>
         </div>
         {!validPeriod ? (
           <p id="dashboard-date-error" className={styles.empty} role="alert">
-            Selecciona un intervalo entre el 1 y el 28 de febrero de 2026. La
-            fecha inicial debe ser anterior o igual a la final.
-          </p>
+            {t("Selecciona un intervalo entre el 1 y el 28 de febrero de 2026. La fecha inicial debe ser anterior o igual a la final.")}</p>
         ) : (
           <>
-            <dl className={styles.kpis} aria-label="Indicadores del portal">
+            <dl className={styles.kpis} aria-label={t("Indicadores del portal")}>
               <div>
-                <dt>Núm. visitas totales</dt>
-                <dd data-kpi="visits">{formatCount(data.visits)}</dd>
+                <dt>{t("Núm. visitas totales")}</dt>
+                <dd data-kpi="visits">{t(formatCount(data.visits, locale))}</dd>
               </div>
               <div>
-                <dt>Núm. visitantes únicos</dt>
-                <dd data-kpi="unique">{formatCount(data.unique)}</dd>
+                <dt>{t("Núm. visitantes únicos")}</dt>
+                <dd data-kpi="unique">{t(formatCount(data.unique, locale))}</dd>
               </div>
               <div>
-                <dt>Núm. descargas únicas</dt>
-                <dd data-kpi="downloads">{formatCount(data.downloads)}</dd>
+                <dt>{t("Núm. descargas únicas")}</dt>
+                <dd data-kpi="downloads">{t(formatCount(data.downloads, locale))}</dd>
               </div>
             </dl>
             <div className={styles.chartGrid}>
               <Panel
-                title="Resultados de las predicciones"
+                title={t("Resultados de las predicciones")}
                 className={styles.predictions}
               >
                 <div className={styles.predictionLayout}>
                   <PredictionChart series={data.series} />
                   <div className={styles.modelPanel}>
                     <label htmlFor="dashboard-model">
-                      Modelo
-                      <select
+                      {t("Modelo")}<select
                         id="dashboard-model"
                         value={model}
                         onChange={(event) =>
@@ -159,63 +155,58 @@ export function AepdDashboard() {
                         }
                       >
                         {models.map((item) => (
-                          <option key={item}>{item}</option>
+                          <option key={item} value={item}>{t(item)}</option>
                         ))}
                       </select>
                     </label>
-                    <h5>Métricas de error</h5>
+                    <h5>{t("Métricas de error")}</h5>
                     <dl className={styles.metrics}>
                       <div>
                         <dt>
-                          <abbr title="Error absoluto medio, en visitas por hora">
-                            MAE
-                          </abbr>
+                          <abbr title={t("Error absoluto medio, en visitas por hora")}>
+                            {t("MAE")}</abbr>
                         </dt>
                         <dd data-metric="mae">
-                          {formatMetric(data.metrics.mae)}
+                          {t(formatMetric(data.metrics.mae, locale))}
                         </dd>
                       </div>
                       <div>
                         <dt>
-                          <abbr title="Error absoluto porcentual medio">
-                            MAPE
-                          </abbr>
+                          <abbr title={t("Error absoluto porcentual medio")}>
+                            {t("MAPE")}</abbr>
                         </dt>
-                        <dd>{formatMetric(data.metrics.mape)} %</dd>
+                        <dd>{t(formatMetric(data.metrics.mape, locale))} %</dd>
                       </div>
                       <div>
                         <dt>
-                          <abbr title="Raíz del error cuadrático medio, en visitas por hora">
-                            RMSE
-                          </abbr>
+                          <abbr title={t("Raíz del error cuadrático medio, en visitas por hora")}>
+                            {t("RMSE")}</abbr>
                         </dt>
-                        <dd>{formatMetric(data.metrics.rmse)}</dd>
+                        <dd>{t(formatMetric(data.metrics.rmse, locale))}</dd>
                       </div>
                     </dl>
                   </div>
                 </div>
               </Panel>
               <Panel
-                title="Nº descargas únicas por categoría"
+                title={t("Nº descargas únicas por categoría")}
                 className={styles.downloads}
               >
                 <DownloadDonut data={data.downloadCategories} />
               </Panel>
               <Panel
-                title="Informe de visitas por tipo de solicitud"
+                title={t("Informe de visitas por tipo de solicitud")}
                 className={styles.requestTable}
               >
                 <table>
                   <caption className="sr-only">
-                    Visitas y visitantes únicos por tipo de solicitud
-                  </caption>
+                    {t("Visitas y visitantes únicos por tipo de solicitud")}</caption>
                   <thead>
                     <tr>
-                      <th scope="col">Tipo de solicitud</th>
-                      <th scope="col">Visitas</th>
-                      <th scope="col" aria-label="Visitantes únicos">
-                        Únicos
-                      </th>
+                      <th scope="col">{t("Tipo de solicitud")}</th>
+                      <th scope="col">{t("Visitas")}</th>
+                      <th scope="col" aria-label={t("Visitantes únicos")}>
+                        {t("Únicos")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -223,23 +214,23 @@ export function AepdDashboard() {
                       .sort((a, b) => b.visits - a.visits)
                       .map((request) => (
                         <tr key={request.label}>
-                          <th scope="row">{request.label}</th>
-                          <td>{formatCount(request.visits)}</td>
-                          <td>{formatCount(request.unique)}</td>
+                          <th scope="row">{t(request.label)}</th>
+                          <td>{t(formatCount(request.visits, locale))}</td>
+                          <td>{t(formatCount(request.unique, locale))}</td>
                         </tr>
                       ))}
                   </tbody>
                   <tfoot>
                     <tr>
-                      <th scope="row">Total</th>
-                      <td>{formatCount(data.visits)}</td>
-                      <td>{formatCount(data.unique)}</td>
+                      <th scope="row">{t("Total")}</th>
+                      <td>{t(formatCount(data.visits, locale))}</td>
+                      <td>{t(formatCount(data.unique, locale))}</td>
                     </tr>
                   </tfoot>
                 </table>
               </Panel>
               <Panel
-                title="Nº de visitas totales por tipo de solicitud"
+                title={t("Nº de visitas totales por tipo de solicitud")}
               >
                 <HorizontalBars
                   data={data.requests.map((request) => ({
@@ -249,7 +240,7 @@ export function AepdDashboard() {
                 />
               </Panel>
               <Panel
-                title="Nº de visitantes únicos por tipo de solicitud"
+                title={t("Nº de visitantes únicos por tipo de solicitud")}
               >
                 <HorizontalBars
                   data={data.requests.map((request) => ({
@@ -258,14 +249,14 @@ export function AepdDashboard() {
                   }))}
                 />
               </Panel>
-              <Panel title="Top 6 blogs más visitados">
+              <Panel title={t("Top 6 blogs más visitados")}>
                 <VerticalBars data={data.blogs} />
               </Panel>
-              <Panel title="Top 6 FAQs más visitadas">
+              <Panel title={t("Top 6 FAQs más visitadas")}>
                 <FaqTreemap data={data.faqs} />
               </Panel>
               <Panel
-                title="Top 6 notas de prensa más visitadas"
+                title={t("Top 6 notas de prensa más visitadas")}
                 className={styles.press}
               >
                 <VerticalBars data={data.press} />
@@ -274,9 +265,9 @@ export function AepdDashboard() {
           </>
         )}
         <p className="sr-only" role="status">
-          {validPeriod
-            ? `Informe actualizado. ${country}. ${formatCount(data.visits)} visitas. Modelo ${model}.`
-            : "Intervalo de fechas no válido."}
+          {t(validPeriod
+            ? t("Informe actualizado. {0}. {1} visitas. Modelo {2}.", [country, formatCount(data.visits, locale), model])
+            : "Intervalo de fechas no válido.")}
         </p>
       </div>
     </div>
