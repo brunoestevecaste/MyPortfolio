@@ -219,7 +219,7 @@ export function AlinaDashboard() {
             {t("Vacante: ")}<strong>{t(currentJob.role)}</strong> · {t(currentJob.company)} ({t(currentJob.location)})
           </p>
           <p>
-            {t("Modalidad oferta: ")}<strong>{t(currentJob.modality)}</strong> {t(" · Salario:")}{t(currentJob.salary)}
+            {t("Modalidad oferta: ")}<strong>{t(currentJob.modality)}</strong>{t(" · Salario: ")}{t(currentJob.salary)}
           </p>
         </div>
 
@@ -385,7 +385,7 @@ export function AlinaDashboard() {
                       </>
                     ) : (
                       <>
-                        {t("No se aplica bonus de modalidad (")}{t(currentJob.modality)} {t(" frente a tu preferencia en")}{t(candidateModality)}).
+                        {t("No se aplica bonus de modalidad (")}{t(currentJob.modality)}{t(" frente a tu preferencia en ")}{t(candidateModality)}).
                       </>
                     )}
                   </p>
@@ -524,7 +524,7 @@ export function AlinaDashboard() {
                     </div>
                     <textarea
                       readOnly
-                      value={currentInterviewTurn.candidateResponses[responseQuality].text}
+                      value={t(currentInterviewTurn.candidateResponses[responseQuality].text)}
                       aria-label={t("Texto de la respuesta del candidato")}
                     />
                   </div>
@@ -621,7 +621,7 @@ export function AlinaDashboard() {
                     <article key={item.headline} className={styles.newsCard}>
                       <h6 className={styles.newsHeadline}>{t(item.headline)}</h6>
                       <div className={styles.newsMeta}>
-                        {t("Fuente: ")}{t(item.source)} {t(" · Fecha:")}{t(item.date)}
+                        {t("Fuente: ")}{t(item.source)}{t(" · Fecha: ")}{t(item.date)}
                       </div>
                       <p className={styles.newsSummary}>{t(item.summary)}</p>
                     </article>
