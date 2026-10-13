@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +10,7 @@ import { useProjectTransition } from "./project-transition-context";
 import styles from "./projects.module.css";
 
 export function ProjectIndex() {
+  const { t } = useTranslations();
   const router = useRouter();
   const { transitionToProject, prefetchProject, isTransitioning, activeProjectSlug } =
     useProjectTransition();
@@ -96,7 +98,7 @@ export function ProjectIndex() {
         className={`${styles.delicateScrollRail} ${
           isTransitioning ? styles.railFading : ""
         }`}
-        aria-label="Progreso de proyectos"
+        aria-label={t("Progreso de proyectos")}
       >
         <div className={styles.railInner}>
           <div
@@ -120,8 +122,8 @@ export function ProjectIndex() {
       <div className={styles.projectsStaggeredGrid}>
         {projects.map((project, index) => {
           const displayTitle = project.productName
-            ? `${project.productName}: ${project.title}`
-            : project.title;
+            ? `${project.productName}: ${t(project.title)}`
+            : t(project.title);
           const isEven = index % 2 === 0;
           const isTarget = isTransitioning && activeProjectSlug === project.slug;
           const isOtherFading =
@@ -139,9 +141,9 @@ export function ProjectIndex() {
             >
               {/* Number above/adjacent to image */}
               <div className={styles.projectNumberHeader}>
-                <span className={styles.prominentNumber} data-motion="mask">({project.number})</span>
+                <span className={styles.prominentNumber} data-motion="mask">({t(project.number)})</span>
                 <span className={styles.prominentMeta} data-motion="mask">
-                  {project.year} · {project.organization}
+                  {t(project.year)} · {t(project.organization)}
                 </span>
               </div>
 
@@ -151,14 +153,14 @@ export function ProjectIndex() {
                 onPointerEnter={() => prefetchProject(project)}
                 onFocus={() => prefetchProject(project)}
                 className={styles.projectImageLink}
-                aria-label={`Ver proyecto (${project.number}): ${displayTitle}`}
+                aria-label={t("Ver proyecto ({0}): {1}", [t(project.number), t(displayTitle)])}
                 data-cursor-label="VIEW CASE!"
               >
                 {/* Characteristic project image frame */}
                 <div className={`image-hover ${styles.imageFrame}`} data-motion-image="pixels">
                   <Image
                     src={project.image}
-                    alt={project.title}
+                    alt={t(project.title)}
                     width={800}
                     height={600}
                     className={styles.projectImage}
@@ -172,7 +174,7 @@ export function ProjectIndex() {
 
               {/* Subtle text: Only project title in site's body typography */}
               <div className={styles.subtleTextWrapper}>
-                <h3 className={styles.subtleProjectTitle} data-motion="mask">{displayTitle}</h3>
+                <h3 className={styles.subtleProjectTitle} data-motion="mask">{t(displayTitle)}</h3>
               </div>
             </article>
           );

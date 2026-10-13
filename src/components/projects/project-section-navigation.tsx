@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import { useEffect, useState } from "react";
 import type { CaseSection } from "@/data/projects";
 import styles from "./projects.module.css";
@@ -11,6 +12,7 @@ export function ProjectSectionNavigation({
 }: {
   sections: readonly NavigationSection[];
 }) {
+  const { t } = useTranslations();
   const [activeSection, setActiveSection] = useState(sections[0]?.id);
 
   useEffect(() => {
@@ -42,8 +44,8 @@ export function ProjectSectionNavigation({
   }, [sections]);
 
   return (
-    <nav className={styles.caseNav} aria-label="Índice del caso de estudio">
-      <p>En este caso</p>
+    <nav className={styles.caseNav} aria-label={t("Índice del caso de estudio")}>
+      <p>{t("En este caso")}</p>
       <ol>
         {sections.map((section) => (
           <li key={section.id}>
@@ -52,7 +54,7 @@ export function ProjectSectionNavigation({
               aria-current={activeSection === section.id ? "location" : undefined}
               className={activeSection === section.id ? styles.caseNavActive : undefined}
             >
-              {section.label}
+              {t(section.label)}
             </a>
           </li>
         ))}

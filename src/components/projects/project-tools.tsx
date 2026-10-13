@@ -1,3 +1,6 @@
+"use client";
+
+import { useTranslations } from "@/components/i18n/language-provider";
 import type { JSX } from "react";
 import { TechIcon } from "@/components/ui/tech-icon";
 import styles from "./projects.module.css";
@@ -15,6 +18,7 @@ export function ProjectTools({
   ariaLabel = "Herramientas utilizadas",
   size = "default",
 }: ProjectToolsProps): JSX.Element {
+  const { t } = useTranslations();
   if (!tools || tools.length === 0) {
     return <></>;
   }
@@ -24,7 +28,7 @@ export function ProjectTools({
   return (
     <ul
       className={`${isLarge ? styles.toolsListLarge : styles.toolsList} ${className ?? ""}`.trim()}
-      aria-label={ariaLabel}
+      aria-label={t(ariaLabel)}
     >
       {tools.map((tool) => (
         <li

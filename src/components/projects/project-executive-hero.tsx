@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import Image from "next/image";
 import { useLayoutEffect, useRef, useState } from "react";
 import type { ProjectSummary } from "@/data/projects";
@@ -22,6 +23,7 @@ export function ProjectExecutiveHero({
   scope,
   grade,
 }: ProjectExecutiveHeroProps) {
+  const { t } = useTranslations();
   const { activeProjectSlug, registerHero } = useProjectTransition();
   const isTransitionTarget = activeProjectSlug === project.slug;
   const heroRef = useRef<HTMLElement>(null);
@@ -61,11 +63,11 @@ export function ProjectExecutiveHero({
   return (
     <section
       id="resumen"
-      data-project-section="Resumen"
+      data-project-section={t("Resumen")}
       ref={heroRef}
       data-project-entering={isTransitionTarget || undefined}
       className={heroClass}
-      aria-label={`Resumen ejecutivo de ${project.title}`}
+      aria-label={t("Resumen ejecutivo de {0}", [t(project.title)])}
     >
       {/* Split layout: Photo on left, Executive Summary on right */}
       <div className={styles.executiveSplitGrid}>
@@ -79,7 +81,7 @@ export function ProjectExecutiveHero({
             >
               <Image
                 src={project.image}
-                alt={`Fotografía característica del proyecto: ${project.title}`}
+                alt={t("Fotografía característica del proyecto: {0}", [t(project.title)])}
                 width={1200}
                 height={900}
                 className={styles.characteristicImage}
@@ -88,41 +90,41 @@ export function ProjectExecutiveHero({
               />
             </div>
             <figcaption className={styles.photoCaption} data-project-reveal data-motion="mask">
-              {project.number} · {project.organization} — {project.title}
+              {t(project.number)} · {t(project.organization)} — {t(project.title)}
             </figcaption>
           </figure>
         </div>
 
         {/* Right column: Executive Summary */}
         <div className={summaryColClass}>
-          <p data-motion="mask" className={styles.caseEyebrow} data-project-reveal>{resolvedEyebrow}</p>
-          <h1 className={styles.caseTitle} data-project-reveal data-motion="scramble">{project.title}</h1>
+          <p data-motion="mask" className={styles.caseEyebrow} data-project-reveal>{t(resolvedEyebrow)}</p>
+          <h1 key={t(project.title)} className={styles.caseTitle} data-project-reveal data-motion="scramble">{t(project.title)}</h1>
 
           {/* Lead executive overview */}
           <p data-motion="mask" className={styles.executiveLead} data-project-reveal>
-            {project.executiveSummary.lead}
+            {t(project.executiveSummary.lead)}
           </p>
 
           {/* Structured Executive Takeaways */}
           <div className={styles.executivePointsList} data-project-reveal>
             <div className={styles.executivePointCard}>
-              <strong data-motion="mask" className={styles.executivePointTitle}>01 / Reto de negocio</strong>
+              <strong data-motion="mask" className={styles.executivePointTitle}>{t("01 / Reto de negocio")}</strong>
               <p data-motion="mask" className={styles.executivePointText}>
-                {project.executiveSummary.challenge}
+                {t(project.executiveSummary.challenge)}
               </p>
             </div>
 
             <div className={styles.executivePointCard}>
-              <strong data-motion="mask" className={styles.executivePointTitle}>02 / Solución técnica e IA</strong>
+              <strong data-motion="mask" className={styles.executivePointTitle}>{t("02 / Solución técnica e IA")}</strong>
               <p data-motion="mask" className={styles.executivePointText}>
-                {project.executiveSummary.solution}
+                {t(project.executiveSummary.solution)}
               </p>
             </div>
 
             <div className={styles.executivePointCard}>
-              <strong data-motion="mask" className={styles.executivePointTitle}>03 / Impacto y validación</strong>
+              <strong data-motion="mask" className={styles.executivePointTitle}>{t("03 / Impacto y validación")}</strong>
               <p data-motion="mask" className={styles.executivePointText}>
-                {project.executiveSummary.impact}
+                {t(project.executiveSummary.impact)}
               </p>
             </div>
           </div>
@@ -130,37 +132,37 @@ export function ProjectExecutiveHero({
           {/* Key Facts Summary */}
           <dl className={styles.executiveFacts} data-project-reveal>
             <div>
-              <dt data-motion="mask">Organización</dt>
-              <dd data-motion="mask">{project.organization}</dd>
+              <dt data-motion="mask">{t("Organización")}</dt>
+              <dd data-motion="mask">{t(project.organization)}</dd>
             </div>
             <div>
-              <dt data-motion="mask">Mi aportación</dt>
-              <dd data-motion="mask">{project.role}</dd>
+              <dt data-motion="mask">{t("Mi aportación")}</dt>
+              <dd data-motion="mask">{t(project.role)}</dd>
             </div>
             {resolvedFramework && (
               <div>
-                <dt data-motion="mask">Marco académico</dt>
-                <dd data-motion="mask">{resolvedFramework}</dd>
+                <dt data-motion="mask">{t("Marco académico")}</dt>
+                <dd data-motion="mask">{t(resolvedFramework)}</dd>
               </div>
             )}
             {resolvedScope && (
               <div>
-                <dt data-motion="mask">Alcance</dt>
-                <dd data-motion="mask">{resolvedScope}</dd>
+                <dt data-motion="mask">{t("Alcance")}</dt>
+                <dd data-motion="mask">{t(resolvedScope)}</dd>
               </div>
             )}
             {resolvedGrade && (
               <div>
-                <dt data-motion="mask">Calificación</dt>
-                <dd data-motion="mask" className={styles.grade}>{resolvedGrade}</dd>
+                <dt data-motion="mask">{t("Calificación")}</dt>
+                <dd data-motion="mask" className={styles.grade}>{t(resolvedGrade)}</dd>
               </div>
             )}
           </dl>
 
           {/* Technologies used */}
           <div className={styles.executiveTechRow} data-project-reveal>
-            <span className={styles.executiveTechLabel}>Herramientas:</span>
-            <ProjectTools tools={project.technologies} ariaLabel="Herramientas destacadas" />
+            <span className={styles.executiveTechLabel}>{t("Herramientas:")}</span>
+            <ProjectTools tools={project.technologies} ariaLabel={t("Herramientas destacadas")} />
           </div>
 
           {/* Scroll down prompt to view the full case study */}
@@ -170,7 +172,7 @@ export function ProjectExecutiveHero({
               onClick={scrollToCaseStudy}
               className={styles.scrollDownButton}
             >
-              <span>Ver caso de estudio completo</span>
+              <span>{t("Ver caso de estudio completo")}</span>
               <span className={styles.scrollArrowIcon} aria-hidden="true">
                 ↓
               </span>
