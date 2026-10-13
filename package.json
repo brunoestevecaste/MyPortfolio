@@ -7,6 +7,7 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
+    "test:i18n": "node --import ./tests/register-typescript.mjs --test tests/i18n.test.mjs",
     "test:chat": "node --import ./tests/register-typescript.mjs --test tests/chat.test.mjs",
     "test:chat:live": "node --env-file-if-exists=.env.local --import ./tests/register-typescript.mjs scripts/check-chat-live.mjs"
   },
