@@ -1,3 +1,4 @@
+import { getTranslations } from "@/lib/i18n/server";
 import type { Metadata } from "next";
 import { CaseSection } from "@/components/projects/case-section";
 import { NextPlanArchitecture } from "@/components/projects/nextplan-architecture";
@@ -18,7 +19,7 @@ import archStyles from "@/components/projects/project-architecture.module.css";
 
 const path = `/projects/${nextplanProject.slug}`;
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   description: nextplanProject.summary,
   alternates: { canonical: path },
   openGraph: {
@@ -31,23 +32,39 @@ export const metadata: Metadata = {
   },
 };
 
-export default function NextPlanCaseStudy() {
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale, t } = await getTranslations();
+  const openGraph = baseMetadata.openGraph;
+  return {
+    ...baseMetadata,
+    description: t(baseMetadata.description ?? ""),
+    openGraph: openGraph ? {
+      ...openGraph,
+      title: t(typeof openGraph.title === "string" ? openGraph.title : ""),
+      description: t(openGraph.description ?? ""),
+      locale: locale === "en" ? "en_GB" : "es_ES",
+    } : undefined,
+  };
+}
+
+export default async function NextPlanCaseStudy() {
+  const { t } = await getTranslations();
   return (
     <main data-motion-page id="main-content" tabIndex={-1} className="site-container flex-1">
       <article>
         {/* Split Hero: Characteristic Photo + Executive Summary */}
         <ProjectExecutiveHero
           project={nextplanProject}
-          eyebrow="NextPlan / Proyecto de Máster en IA"
-          academicFramework="EDEM Escuela de Empresarios · Máster en IA / 2026"
-          scope="Plataforma integral en GCP (Dataflow + BigQuery + dbt + Vertex AI + React)"
+          eyebrow={t("NextPlan / Proyecto de Máster en IA")}
+          academicFramework={t("EDEM Escuela de Empresarios · Máster en IA / 2026")}
+          scope={t("Plataforma integral en GCP (Dataflow + BigQuery + dbt + Vertex AI + React)")}
         />
 
         {/* Full In-Depth Case Study on Scroll */}
         <div id="case-study" className={styles.caseStudyFull}>
-          <aside className={styles.privacy} aria-label="Marco del proyecto">
-            <strong data-motion="mask">Un proyecto integral de máster, producto e ingeniería de datos e IA.</strong>
-            <p data-motion="mask">{nextplanCase.confidentiality}</p>
+          <aside className={styles.privacy} aria-label={t("Marco del proyecto")}>
+            <strong data-motion="mask">{t("Un proyecto integral de máster, producto e ingeniería de datos e IA.")}</strong>
+            <p data-motion="mask">{t(nextplanCase.confidentiality)}</p>
           </aside>
 
           <div className={styles.caseLayout}>
@@ -63,9 +80,9 @@ export default function NextPlanCaseStudy() {
                 <ul className={archStyles.decisions}>
                   {nextplanDecisions.map((decision) => (
                     <li key={decision.title}>
-                      <h3>{decision.title}</h3>
+                      <h3>{t(decision.title)}</h3>
                       {decision.paragraphs.map((paragraph) => (
-                        <p key={paragraph}>{paragraph}</p>
+                        <p key={paragraph}>{t(paragraph)}</p>
                       ))}
                     </li>
                   ))}
@@ -84,15 +101,15 @@ export default function NextPlanCaseStudy() {
 
               <section
                 id="herramientas"
-                data-project-section="Herramientas"
+                data-project-section={t("Herramientas")}
                 aria-labelledby="herramientas-title"
                 className={styles.caseSection}
               >
-                <h2 id="herramientas-title" data-motion="mask">Herramientas y tecnologías</h2>
+                <h2 id="herramientas-title" data-motion="mask">{t("Herramientas y tecnologías")}</h2>
                 <ProjectTools
                   tools={nextplanTools}
                   size="large"
-                  ariaLabel="Herramientas y tecnologías utilizadas"
+                  ariaLabel={t("Herramientas y tecnologías utilizadas")}
                 />
               </section>
 

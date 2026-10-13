@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import { axisStyle, ChartFrame } from "./editorial-chart";
 
@@ -11,10 +12,11 @@ const clusterDiscoveryData = [
 ];
 
 export function NextPlanPlot() {
+  const { t } = useTranslations();
   return (
     <ChartFrame
       height={240}
-      label="Ponderación y afinidad de eventos por nivel de proximidad de clúster K-Means"
+      label={t("Ponderación y afinidad de eventos por nivel de proximidad de clúster K-Means")}
     >
       <BarChart
         data={clusterDiscoveryData}
@@ -36,14 +38,14 @@ export function NextPlanPlot() {
         />
         <Bar
           dataKey="afinidad"
-          name="Afinidad observada"
+          name={t("Afinidad observada")}
           fill="var(--muted)"
           radius={[2, 2, 0, 0]}
           isAnimationActive={false}
         />
         <Bar
           dataKey="peso"
-          name="Peso de recomendación"
+          name={t("Peso de recomendación")}
           fill="var(--signal)"
           radius={[2, 2, 0, 0]}
           isAnimationActive={false}
