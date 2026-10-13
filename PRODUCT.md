@@ -74,19 +74,11 @@ Soy un analista de datos e ingeniero de IA creando soluciones digitales.
 
 **Descripción, columna 1**
 
-En nuestro día a día dejamos pequeñas huellas sin darnos cuenta: rutinas,
-elecciones y costumbres que se repiten una y otra vez. Siempre he visto los datos
-como historias de cómo vivimos. Me fascina la tecnología por su capacidad para
-encontrar sentido en el ruido cotidiano y descubrir qué necesitamos realmente
-como personas.
+Todo comenzó en las calles de Valencia, la ciudad donde he vivido toda mi vida y donde di mis primeros pasos con un balón en los pies. Desde niño encontré en el fútbol sala mi gran pasión: un espacio que empezó como un simple juego y que con los años se convirtió en mi mejor escuela para entender el valor de la constancia, el esfuerzo y el trabajo en equipo. Con el tiempo,
 
 **Descripción, columna 2**
 
-Uno los datos y la IA para crear soluciones útiles desde el primer momento. La
-creatividad está en mirar la información desde otra perspectiva e idear respuestas
-originales a necesidades reales. Me mueve convertir patrones cotidianos en
-herramientas intuitivas que resuelvan dudas, ahorren tiempo y acerquen la
-tecnología a las personas.
+esa curiosidad por aprender cosas nuevas y entender cómo funciona el mundo encontró su verdadero hogar en la tecnología. Me fascina explorar ideas distintas y resolver problemas cotidianos; por eso, mi mayor ilusión hoy en día es seguir ampliando conocimientos y probar herramientas que me permitan dar vida a todo tipo de proyectos y experiencias digitales.
 
 **Retrato**
 
