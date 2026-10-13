@@ -14,16 +14,16 @@ registerHooks({
     if (specifier.startsWith("@/")) candidate = path.join(root, "src", specifier.slice(2));
     else if (specifier.startsWith(".") && context.parentURL?.startsWith("file:")) candidate = fileURLToPath(new URL(specifier, context.parentURL));
     if (candidate) {
-      for (const filename of [candidate, `${candidate}.ts`]) {
-        if (filename.endsWith(".ts") && existsSync(filename)) return { url: pathToFileURL(filename).href, shortCircuit: true };
+      for (const filename of [candidate, `${candidate}.ts`, `${candidate}.tsx`]) {
+        if (/\.tsx?$/.test(filename) && existsSync(filename)) return { url: pathToFileURL(filename).href, shortCircuit: true };
       }
     }
     return nextResolve(specifier, context);
   },
   load(url, context, nextLoad) {
-    if (url.startsWith("file:") && url.endsWith(".ts")) {
+    if (url.startsWith("file:") && /\.tsx?$/.test(url)) {
       const source = ts.transpileModule(readFileSync(fileURLToPath(url), "utf8"), {
-        compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+        compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX },
       }).outputText;
       return { format: "module", source, shortCircuit: true };
     }
