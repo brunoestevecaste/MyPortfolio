@@ -1,14 +1,16 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import { Line, LineChart, YAxis } from "recharts";
 import { illustrativeTraffic } from "@/data/projects";
 import { ChartFrame } from "@/components/charts/editorial-chart";
 
 export function TrafficPlot() {
+  const { t } = useTranslations();
   return (
     <ChartFrame
       height={240}
-      label="La actividad aumenta por la mañana y baja al final del día. La estimación sigue una evolución similar, con diferencias puntuales."
+      label={t("La actividad aumenta por la mañana y baja al final del día. La estimación sigue una evolución similar, con diferencias puntuales.")}
     >
       <LineChart
         data={illustrativeTraffic}

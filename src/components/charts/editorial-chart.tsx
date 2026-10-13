@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import type { ReactNode } from "react";
 import { ResponsiveContainer, type TooltipContentProps } from "recharts";
 import styles from "./editorial-chart.module.css";
@@ -11,12 +12,11 @@ export const axisStyle = {
   tickMargin: 10,
 } as const;
 
-const count = new Intl.NumberFormat("es-ES");
-const compact = new Intl.NumberFormat("es-ES", {
-  notation: "compact",
-  maximumFractionDigits: 1,
-});
-export const compactCount = (value: number) => compact.format(value);
+const compactFormats = {
+  es: new Intl.NumberFormat("es-ES", { notation: "compact", maximumFractionDigits: 1 }),
+  en: new Intl.NumberFormat("en-GB", { notation: "compact", maximumFractionDigits: 1 }),
+};
+export const compactCount = (value: number, locale: "es" | "en" = "es") => compactFormats[locale].format(value);
 
 export function ChartFrame({
   children,
@@ -27,12 +27,13 @@ export function ChartFrame({
   height?: number;
   label: string;
 }) {
+  const { t } = useTranslations();
   return (
     <div
       className={styles.frame}
       style={{ height }}
       role="group"
-      aria-label={label}
+      aria-label={t(label)}
     >
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
         {children}
@@ -48,21 +49,23 @@ export function EditorialTooltip({
   labelFormatter,
   unit = "",
 }: TooltipContentProps & { unit?: string }) {
+  const { t, locale } = useTranslations();
+  const count = new Intl.NumberFormat(locale === "en" ? "en-GB" : "es-ES");
   if (!active || !payload.length) return null;
   return (
     <div className={styles.tooltip}>
       {label != null && (
-        <p>{labelFormatter ? labelFormatter(label, payload) : label}</p>
+        <p>{labelFormatter ? labelFormatter(label, payload) : t(String(label))}</p>
       )}
       <dl>
         {payload.map((item, index) => (
           <div key={`${item.dataKey}-${index}`}>
-            <dt>{item.name}</dt>
+            <dt>{t(String(item.name ?? ""))}</dt>
             <dd>
-              {typeof item.value === "number"
+              {t(typeof item.value === "number"
                 ? count.format(item.value)
-                : String(item.value ?? "—")}
-              {unit}
+                : String(item.value ?? "—"))}
+              {t(unit)}
             </dd>
           </div>
         ))}
@@ -76,14 +79,16 @@ export function ChartValues({
 }: {
   data: readonly { label: string; value: number }[];
 }) {
+  const { t, locale } = useTranslations();
+  const count = new Intl.NumberFormat(locale === "en" ? "en-GB" : "es-ES");
   return (
     <details className={styles.values}>
-      <summary>Consultar valores</summary>
+      <summary>{t("Consultar valores")}</summary>
       <dl>
         {data.map((item) => (
           <div key={item.label}>
-            <dt>{item.label}</dt>
-            <dd>{count.format(item.value)}</dd>
+            <dt>{t(item.label)}</dt>
+            <dd>{t(count.format(item.value))}</dd>
           </div>
         ))}
       </dl>

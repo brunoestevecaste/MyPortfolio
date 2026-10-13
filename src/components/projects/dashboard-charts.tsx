@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import { useId, useState } from "react";
 import {
   Bar,
@@ -52,6 +53,7 @@ function RequestTick({
   y?: number;
   payload?: { value: string };
 }) {
+  const { t } = useTranslations();
   return (
     <Text
       x={x - 8}
@@ -62,7 +64,7 @@ function RequestTick({
       fill="var(--muted)"
       fontSize={12}
     >
-      {payload?.value}
+      {t(payload?.value)}
     </Text>
   );
 }
@@ -76,6 +78,7 @@ function CategoryTick({
   y?: number;
   payload?: { value: string };
 }) {
+  const { t } = useTranslations();
   return (
     <Text
       x={x}
@@ -86,16 +89,17 @@ function CategoryTick({
       fill="var(--muted)"
       fontSize={12}
     >
-      {payload?.value}
+      {t(payload?.value)}
     </Text>
   );
 }
 
 export function HorizontalBars({ data }: { data: ChartDatum[] }) {
+  const { t, locale } = useTranslations();
   const sorted = [...data].sort((a, b) => b.value - a.value).slice(0, 6);
   return (
     <>
-      <ChartFrame height={264} label="Comparación por tipo de solicitud">
+      <ChartFrame height={264} label={t("Comparación por tipo de solicitud")}>
         <BarChart
           data={sorted}
           layout="vertical"
@@ -118,7 +122,7 @@ export function HorizontalBars({ data }: { data: ChartDatum[] }) {
           />
           <Bar
             dataKey="value"
-            name="Total"
+            name={t("Total")}
             fill="var(--signal)"
             barSize={10}
             isAnimationActive={false}
@@ -129,7 +133,7 @@ export function HorizontalBars({ data }: { data: ChartDatum[] }) {
               offset={8}
               fill="var(--ink)"
               fontSize={12}
-              formatter={(value) => formatCount(Number(value))}
+              formatter={(value) => formatCount(Number(value), locale)}
             />
           </Bar>
         </BarChart>
@@ -140,9 +144,10 @@ export function HorizontalBars({ data }: { data: ChartDatum[] }) {
 }
 
 export function VerticalBars({ data }: { data: ChartDatum[] }) {
+  const { t } = useTranslations();
   return (
     <>
-      <ChartFrame height={240} label="Visitas por contenido">
+      <ChartFrame height={240} label={t("Visitas por contenido")}>
         <BarChart
           data={data}
           margin={{ left: 0, right: 0, top: 28, bottom: 0 }}
@@ -163,7 +168,7 @@ export function VerticalBars({ data }: { data: ChartDatum[] }) {
           />
           <Bar
             dataKey="value"
-            name="Visitas"
+            name={t("Visitas")}
             fill="var(--signal)"
             maxBarSize={18}
             isAnimationActive={false}
@@ -185,6 +190,7 @@ export function VerticalBars({ data }: { data: ChartDatum[] }) {
 }
 
 export function DownloadDonut({ data }: { data: ChartDatum[] }) {
+  const { t, locale } = useTranslations();
   const colored = data.map((item, index) => ({
     ...item,
     fill: chartColors[index % chartColors.length],
@@ -194,7 +200,7 @@ export function DownloadDonut({ data }: { data: ChartDatum[] }) {
     <div className={styles.donutLayout}>
       <ChartFrame
         height={260}
-        label={`Distribución de ${formatCount(total)} descargas por categoría`}
+        label={t("Distribución de {0} descargas por categoría", [t(formatCount(total, locale))])}
       >
         <PieChart accessibilityLayer>
           <Pie
@@ -217,8 +223,8 @@ export function DownloadDonut({ data }: { data: ChartDatum[] }) {
           <li key={item.label}>
             <i style={{ background: item.fill }} aria-hidden="true" />
             <span>
-              {item.label}
-              <strong>{formatCount(item.value)}</strong>
+              {t(item.label)}
+              <strong>{t(formatCount(item.value, locale))}</strong>
             </span>
           </li>
         ))}
@@ -237,6 +243,7 @@ function FaqCell({
   name,
   value,
 }: TreemapNode) {
+  const { t, locale } = useTranslations();
   if (depth !== 1) return <g />;
   // Dark greys keep light labels readable. Small cells are described in the values list.
   return (
@@ -248,12 +255,12 @@ function FaqCell({
         height={height}
         fill={chartColors[index % 4]}
       />
-      <title>{`${name}: ${formatCount(value)}`}</title>
+      <title>{t("{0}: {1}", [t(name), t(formatCount(value, locale))])}</title>
       {width >= 64 && height >= 58 && (
         <text x={x + 10} y={y + 23} fill="var(--on-signal)" fontSize={12}>
-          <tspan>{name}</tspan>
+          <tspan>{t(name)}</tspan>
           <tspan x={x + 10} y={y + height - 13}>
-            {compactCount(value)}
+            {t(compactCount(value))}
           </tspan>
         </text>
       )}
@@ -262,9 +269,10 @@ function FaqCell({
 }
 
 export function FaqTreemap({ data }: { data: ChartDatum[] }) {
+  const { t } = useTranslations();
   return (
     <>
-      <ChartFrame height={240} label="FAQs por número de visitas">
+      <ChartFrame height={240} label={t("FAQs por número de visitas")}>
         <Treemap
           data={data}
           dataKey="value"
@@ -282,27 +290,26 @@ export function FaqTreemap({ data }: { data: ChartDatum[] }) {
 }
 
 export function PredictionChart({ series }: { series: HourlyPoint[] }) {
+  const { t, locale } = useTranslations();
   const [selectedHour, setSelectedHour] = useState(0);
   const [exploring, setExploring] = useState(false);
   const hourId = useId();
   const index = Math.min(selectedHour, series.length - 1);
   const selected = series[index];
-  if (!selected) return <p>No hay valores para este periodo.</p>;
+  if (!selected) return <p>{t("No hay valores para este periodo.")}</p>;
   return (
     <div>
       <div className={styles.plotLegend}>
         <span>
           <i aria-hidden="true" />
-          Visitas observadas
-        </span>
+          {t("Visitas observadas")}</span>
         <span>
           <i aria-hidden="true" />
-          Modelo seleccionado
-        </span>
+          {t("Modelo seleccionado")}</span>
       </div>
       <ChartFrame
         height={340}
-        label="Comparación de visitas por hora y predicción del modelo seleccionado"
+        label={t("Comparación de visitas por hora y predicción del modelo seleccionado")}
       >
         <LineChart
           data={series}
@@ -319,19 +326,19 @@ export function PredictionChart({ series }: { series: HourlyPoint[] }) {
             {...axisStyle}
             domain={[0, "auto"]}
             tickCount={4}
-            tickFormatter={compactCount}
+            tickFormatter={(value: number) => compactCount(value, locale)}
             width={46}
           />
           <Tooltip
             content={EditorialTooltip}
-            labelFormatter={(label) => `${formatMoment(String(label))} UTC`}
+            labelFormatter={(label) => `${formatMoment(String(label), locale)} UTC`}
             cursor={{ stroke: "var(--muted)", strokeDasharray: "2 4" }}
             isAnimationActive={false}
           />
           <Line
             type="linear"
             dataKey="visits"
-            name="Visitas observadas"
+            name={t("Visitas observadas")}
             stroke="var(--signal)"
             strokeWidth={1.8}
             dot={false}
@@ -341,7 +348,7 @@ export function PredictionChart({ series }: { series: HourlyPoint[] }) {
           <Line
             type="linear"
             dataKey="prediction"
-            name="Modelo seleccionado"
+            name={t("Modelo seleccionado")}
             stroke="var(--muted)"
             strokeWidth={1.5}
             strokeDasharray="5 4"
@@ -361,15 +368,15 @@ export function PredictionChart({ series }: { series: HourlyPoint[] }) {
         </LineChart>
       </ChartFrame>
       <div className={styles.plotDates}>
-        <span>{formatMoment(series[0].date)}</span>
-        <span>{formatMoment(series[series.length - 1].date)}</span>
+        <span>{t(formatMoment(series[0].date, locale))}</span>
+        <span>{t(formatMoment(series[series.length - 1].date, locale))}</span>
       </div>
       <details
         className={styles.pointExplorer}
         onToggle={(event) => setExploring(event.currentTarget.open)}
       >
-        <summary>Consultar valores por hora</summary>
-        <label htmlFor={hourId}>Hora consultada (UTC)</label>
+        <summary>{t("Consultar valores por hora")}</summary>
+        <label htmlFor={hourId}>{t("Hora consultada (UTC)")}</label>
         <input
           id={hourId}
           type="range"
@@ -377,13 +384,13 @@ export function PredictionChart({ series }: { series: HourlyPoint[] }) {
           max={series.length - 1}
           value={index}
           onChange={(event) => setSelectedHour(Number(event.target.value))}
-          aria-valuetext={`${formatMoment(selected.date)}, visitas ${selected.visits}, predicción ${selected.prediction}`}
+          aria-valuetext={t("{0}, visitas {1}, predicción {2}", [formatMoment(selected.date, locale), selected.visits, selected.prediction])}
         />
         <output htmlFor={hourId}>
-          {formatMoment(selected.date)}
+          {t(formatMoment(selected.date, locale))}
           <br />
-          Visitas: {formatCount(selected.visits)} / Predicción:{" "}
-          {formatCount(selected.prediction)}
+          {t("Visitas: ")}{t(formatCount(selected.visits, locale))} {t(" / Predicción:")}{t(" ")}
+          {t(formatCount(selected.prediction, locale))}
         </output>
       </details>
     </div>

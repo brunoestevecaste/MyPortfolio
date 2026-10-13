@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/i18n/shared";
+
 // Synthetic demo generated independently of all AEPD documents and records.
 // These deterministic series illustrate the UI; they are not trained model outputs.
 export const dashboardPeriod = { start: "2026-02-01", end: "2026-02-28" };
@@ -167,15 +169,15 @@ export function getDashboardData(filters: DashboardFilters) {
   };
 }
 
-export const formatCount = (value: number) =>
-  new Intl.NumberFormat("es-ES", { useGrouping: true }).format(value);
-export const formatMetric = (value: number) =>
-  new Intl.NumberFormat("es-ES", {
+export const formatCount = (value: number, locale: Locale = "es") =>
+  new Intl.NumberFormat(locale === "en" ? "en-GB" : "es-ES", { useGrouping: true }).format(value);
+export const formatMetric = (value: number, locale: Locale = "es") =>
+  new Intl.NumberFormat(locale === "en" ? "en-GB" : "es-ES", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(value);
-export const formatMoment = (date: string) =>
-  new Intl.DateTimeFormat("es-ES", {
+export const formatMoment = (date: string, locale: Locale = "es") =>
+  new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "es-ES", {
     day: "2-digit",
     month: "short",
     hour: "2-digit",
