@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import { useMemo, useState, type ReactNode } from "react";
 import {
   baleariaDashboardVessels,
@@ -26,35 +27,36 @@ function Panel({
   children: ReactNode;
   className?: string;
 }) {
+  const { t } = useTranslations();
   return (
-    <section className={`${styles.panel} ${className}`} aria-label={title}>
-      <h4>{title}</h4>
+    <section className={`${styles.panel} ${className}`} aria-label={t(title)}>
+      <h4>{t(title)}</h4>
       {children}
     </section>
   );
 }
 
 function ValuesTable({ voyage }: { voyage: BaleariaDashboardVoyage }) {
+  const { t, locale } = useTranslations();
   return (
     <details className={styles.values}>
-      <summary>Consultar velocidades por tramo</summary>
+      <summary>{t("Consultar velocidades por tramo")}</summary>
       <table>
         <caption className="sr-only">
-          Velocidad observada y recomendada por tramo
-        </caption>
+          {t("Velocidad observada y recomendada por tramo")}</caption>
         <thead>
           <tr>
-            <th scope="col">Tramo</th>
-            <th scope="col">Observada</th>
-            <th scope="col">Recomendada</th>
+            <th scope="col">{t("Tramo")}</th>
+            <th scope="col">{t("Observada")}</th>
+            <th scope="col">{t("Recomendada")}</th>
           </tr>
         </thead>
         <tbody>
           {voyage.speedProfile.map((point) => (
             <tr key={point.segment}>
-              <th scope="row">{point.segment}</th>
-              <td>{formatDashboardMeasure(point.observed, "kn")}</td>
-              <td>{formatDashboardMeasure(point.recommended, "kn")}</td>
+              <th scope="row">{t(point.segment)}</th>
+              <td>{t(formatDashboardMeasure(point.observed, "kn", 1, locale))}</td>
+              <td>{t(formatDashboardMeasure(point.recommended, "kn", 1, locale))}</td>
             </tr>
           ))}
         </tbody>
@@ -70,103 +72,104 @@ function Recommendation({
   voyage: BaleariaDashboardVoyage;
   compact?: boolean;
 }) {
+  const { t, locale } = useTranslations();
   const recommendation = voyage.recommendation;
   return (
     <div className={styles.recommendation}>
       <div className={styles.recommendationHeader}>
         <div>
-          <span>Modelo de demostración</span>
-          <strong translate="no">{voyage.model}</strong>
+          <span>{t("Modelo de demostración")}</span>
+          <strong translate="no">{t(voyage.model)}</strong>
         </div>
-        <p>{recommendation.action}</p>
+        <p>{t(recommendation.action)}</p>
       </div>
       <dl className={styles.recommendationMetrics}>
         <div>
-          <dt>Velocidad actual</dt>
-          <dd>{formatDashboardMeasure(recommendation.currentSpeedKn, "kn")}</dd>
+          <dt>{t("Velocidad actual")}</dt>
+          <dd>{t(formatDashboardMeasure(recommendation.currentSpeedKn, "kn", 1, locale))}</dd>
         </div>
         <div>
-          <dt>Velocidad recomendada</dt>
-          <dd>{formatDashboardMeasure(recommendation.recommendedSpeedKn, "kn")}</dd>
+          <dt>{t("Velocidad recomendada")}</dt>
+          <dd>{t(formatDashboardMeasure(recommendation.recommendedSpeedKn, "kn", 1, locale))}</dd>
         </div>
         <div>
-          <dt>Energía estimada</dt>
-          <dd>{formatDashboardMeasure(recommendation.estimatedEnergyMwh, "MWh")}</dd>
+          <dt>{t("Energía estimada")}</dt>
+          <dd>{t(formatDashboardMeasure(recommendation.estimatedEnergyMwh, "MWh", 1, locale))}</dd>
         </div>
         <div>
-          <dt>Margen ETA</dt>
-          <dd>{`${voyage.etaMarginMinutes}\u00a0min`}</dd>
+          <dt>{t("Margen ETA")}</dt>
+          <dd>{t("{0} min", [voyage.etaMarginMinutes])}</dd>
         </div>
       </dl>
       <div className={styles.recommendationNote}>
         <p>
-          Confianza <strong>{recommendation.confidence}</strong>
+          {t("Confianza ")}<strong>{t(recommendation.confidence)}</strong>
         </p>
-        {!compact ? <p>{recommendation.reason}</p> : null}
+        {!compact ? <p>{t(recommendation.reason)}</p> : null}
       </div>
     </div>
   );
 }
 
 function OperationsView({ voyage }: { voyage: BaleariaDashboardVoyage }) {
+  const { t, locale } = useTranslations();
   return (
     <div className={styles.dashboardGrid}>
-      <Panel title="Perfil observado frente a recomendado" className={styles.profilePanel}>
+      <Panel title={t("Perfil observado frente a recomendado")} className={styles.profilePanel}>
         <SpeedProfileChart data={voyage.speedProfile} />
         <ValuesTable voyage={voyage} />
       </Panel>
-      <Panel title="Recomendación del viaje" className={styles.recommendationPanel}>
+      <Panel title={t("Recomendación del viaje")} className={styles.recommendationPanel}>
         <Recommendation voyage={voyage} />
       </Panel>
-      <Panel title="Energía acumulada por sistema" className={styles.energyPanel}>
+      <Panel title={t("Energía acumulada por sistema")} className={styles.energyPanel}>
         <EnergySeriesChart data={voyage.energySeries} />
         <details className={styles.values}>
-          <summary>Consultar serie energética</summary>
+          <summary>{t("Consultar serie energética")}</summary>
           <table>
             <caption className="sr-only">
-              Energía acumulada simulada por sistema y hora
-            </caption>
+              {t("Energía acumulada simulada por sistema y hora")}</caption>
             <thead>
               <tr>
-                <th scope="col">Hora</th>
-                <th scope="col">Propulsión</th>
-                <th scope="col">Auxiliares</th>
-                <th scope="col">Eje</th>
+                <th scope="col">{t("Hora")}</th>
+                <th scope="col">{t("Propulsión")}</th>
+                <th scope="col">{t("Auxiliares")}</th>
+                <th scope="col">{t("Eje")}</th>
               </tr>
             </thead>
             <tbody>
               {voyage.energySeries.map((point) => (
                 <tr key={point.time}>
-                  <th scope="row">{point.time}</th>
-                  <td>{formatDashboardMeasure(point.propulsion, "MWh")}</td>
-                  <td>{formatDashboardMeasure(point.auxiliary, "MWh")}</td>
-                  <td>{formatDashboardMeasure(point.shaft, "MWh")}</td>
+                  <th scope="row">{t(point.time)}</th>
+                  <td>{t(formatDashboardMeasure(point.propulsion, "MWh", 1, locale))}</td>
+                  <td>{t(formatDashboardMeasure(point.auxiliary, "MWh", 1, locale))}</td>
+                  <td>{t(formatDashboardMeasure(point.shaft, "MWh", 1, locale))}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </details>
       </Panel>
-      <Panel title="Lectura operativa" className={styles.summaryPanel}>
+      <Panel title={t("Lectura operativa")} className={styles.summaryPanel}>
         <dl className={styles.summaryList}>
           <div>
-            <dt>Viaje</dt>
-            <dd>{voyage.route}</dd>
+            <dt>{t("Viaje")}</dt>
+            <dd>{t(voyage.route)}</dd>
           </div>
           <div>
-            <dt>Recorrido</dt>
+            <dt>{t("Recorrido")}</dt>
             <dd>
-              {voyage.origin} a {voyage.destination}
+              {t(voyage.origin)} {t(" a")}{t(voyage.destination)}
             </dd>
           </div>
           <div>
-            <dt>Duración</dt>
-            <dd>{formatDashboardDuration(voyage.durationMinutes)}</dd>
+            <dt>{t("Duración")}</dt>
+            <dd>{t(formatDashboardDuration(voyage.durationMinutes))}</dd>
           </div>
           <div>
-            <dt>Condición del mar</dt>
+            <dt>{t("Condición del mar")}</dt>
             <dd>
-              Beaufort {voyage.beaufort}, Douglas {voyage.douglas}
+              {t("Beaufort ")}{voyage.beaufort}{t(", Douglas")}{voyage.douglas}
             </dd>
           </div>
         </dl>
@@ -184,21 +187,22 @@ function CrewView({
   calculationRound: number;
   onCalculate: () => void;
 }) {
+  const { t, locale } = useTranslations();
   const recalculatedSpeed =
     voyage.recommendation.recommendedSpeedKn + (calculationRound % 2) * 0.1;
   return (
     <div className={styles.dashboardGrid}>
-      <Panel title="Posición y progreso del viaje" className={styles.routePanel}>
+      <Panel title={t("Posición y progreso del viaje")} className={styles.routePanel}>
         <div className={styles.routeDiagram}>
           <div className={styles.routeMeta}>
             <div>
-              <span>Origen</span>
-              <strong>{voyage.origin}</strong>
+              <span>{t("Origen")}</span>
+              <strong>{t(voyage.origin)}</strong>
             </div>
-            <p>{voyage.progress} % completado</p>
+            <p>{voyage.progress} {t(" % completado")}</p>
             <div>
-              <span>Destino</span>
-              <strong>{voyage.destination}</strong>
+              <span>{t("Destino")}</span>
+              <strong>{t(voyage.destination)}</strong>
             </div>
           </div>
           <div className={styles.routeTrack} aria-hidden="true">
@@ -207,72 +211,70 @@ function CrewView({
           </div>
           <dl className={styles.routeConditions}>
             <div>
-              <dt>Viento</dt>
-              <dd>{`${voyage.windKn}\u00a0kn`}</dd>
+              <dt>{t("Viento")}</dt>
+              <dd>{t("{0} kn", [voyage.windKn])}</dd>
             </div>
             <div>
-              <dt>Oleaje</dt>
-              <dd>{formatDashboardMeasure(voyage.swellM, "m")}</dd>
+              <dt>{t("Oleaje")}</dt>
+              <dd>{t(formatDashboardMeasure(voyage.swellM, "m", 1, locale))}</dd>
             </div>
             <div>
-              <dt>Beaufort</dt>
+              <dt>{t("Beaufort")}</dt>
               <dd>{voyage.beaufort}</dd>
             </div>
             <div>
-              <dt>Douglas</dt>
+              <dt>{t("Douglas")}</dt>
               <dd>{voyage.douglas}</dd>
             </div>
           </dl>
         </div>
       </Panel>
-      <Panel title="Recomendación en navegación" className={styles.livePanel}>
+      <Panel title={t("Recomendación en navegación")} className={styles.livePanel}>
         <Recommendation voyage={voyage} compact />
         <p className={styles.liveResult} aria-live="polite">
-          Simulación {calculationRound + 1}: velocidad propuesta {formatDashboardMeasure(recalculatedSpeed, "kn")}.
+          {t("Simulación ")}{calculationRound + 1}{t(": velocidad propuesta")}{t(formatDashboardMeasure(recalculatedSpeed, "kn", 1, locale))}.
         </p>
         <button type="button" className={styles.calculateButton} onClick={onCalculate}>
-          Recalcular simulación
-        </button>
+          {t("Recalcular simulación")}</button>
       </Panel>
-      <Panel title="Potencia simulada en navegación" className={styles.telemetryPanel}>
+      <Panel title={t("Potencia simulada en navegación")} className={styles.telemetryPanel}>
         <TelemetryChart data={voyage.telemetry} />
       </Panel>
-      <Panel title="Contexto de guardia" className={styles.watchPanel}>
+      <Panel title={t("Contexto de guardia")} className={styles.watchPanel}>
         <dl className={styles.watchMetrics}>
           <div>
-            <dt>Tripulación</dt>
+            <dt>{t("Tripulación")}</dt>
             <dd>{voyage.crewCount}</dd>
           </div>
           <div>
-            <dt>Velocidad media</dt>
-            <dd>{formatDashboardMeasure(voyage.averageSpeedKn, "kn")}</dd>
+            <dt>{t("Velocidad media")}</dt>
+            <dd>{t(formatDashboardMeasure(voyage.averageSpeedKn, "kn", 1, locale))}</dd>
           </div>
           <div>
-            <dt>Margen de llegada</dt>
-            <dd>{`${voyage.etaMarginMinutes}\u00a0min`}</dd>
+            <dt>{t("Margen de llegada")}</dt>
+            <dd>{t("{0} min", [voyage.etaMarginMinutes])}</dd>
           </div>
         </dl>
       </Panel>
-      <Panel title="Lecturas de sensores" className={styles.sensorPanel}>
+      <Panel title={t("Lecturas de sensores")} className={styles.sensorPanel}>
         <table className={styles.sensorTable}>
           <caption className="sr-only">
-            Lecturas sintéticas de los sistemas del buque
-          </caption>
+            {t("Lecturas sintéticas de los sistemas del buque")}</caption>
           <thead>
             <tr>
-              <th scope="col">Sistema</th>
-              <th scope="col">Lectura</th>
-              <th scope="col">Referencia</th>
-              <th scope="col">Estado</th>
+              <th scope="col">{t("Sistema")}</th>
+              <th scope="col">{t("Lectura")}</th>
+              <th scope="col">{t("Referencia")}</th>
+              <th scope="col">{t("Estado")}</th>
             </tr>
           </thead>
           <tbody>
             {voyage.sensors.map((sensor) => (
               <tr key={sensor.system}>
-                <th scope="row">{sensor.system}</th>
-                <td>{sensor.reading}</td>
-                <td>{sensor.reference}</td>
-                <td>{sensor.state}</td>
+                <th scope="row">{t(sensor.system)}</th>
+                <td>{t(sensor.reading)}</td>
+                <td>{t(sensor.reference)}</td>
+                <td>{t(sensor.state)}</td>
               </tr>
             ))}
           </tbody>
@@ -283,6 +285,7 @@ function CrewView({
 }
 
 export function BaleariaDashboard() {
+  const { t, locale } = useTranslations();
   const [view, setView] = useState<DashboardView>("operations");
   const [vesselId, setVesselId] = useState("all");
   const [voyageId, setVoyageId] = useState(baleariaDashboardVoyages[0].id);
@@ -325,53 +328,49 @@ export function BaleariaDashboard() {
       <div
         className={styles.dashboard}
         role="region"
-        aria-label="Demostración interactiva del dashboard de eficiencia marítima"
+        aria-label={t("Demostración interactiva del dashboard de eficiencia marítima")}
       >
         <header className={styles.toolbar}>
           <div>
-            <p>Centro de control</p>
-            <h3>Eficiencia marítima</h3>
+            <p>{t("Centro de control")}</p>
+            <h3>{t("Eficiencia marítima")}</h3>
           </div>
-          <div className={styles.viewSwitch} aria-label="Vista del dashboard">
+          <div className={styles.viewSwitch} aria-label={t("Vista del dashboard")}>
             <button
               type="button"
               aria-pressed={view === "operations"}
               onClick={() => setView("operations")}
             >
-              Operaciones
-            </button>
+              {t("Operaciones")}</button>
             <button
               type="button"
               aria-pressed={view === "crew"}
               onClick={() => setView("crew")}
             >
-              Tripulación
-            </button>
+              {t("Tripulación")}</button>
           </div>
         </header>
 
         <div className={styles.filterBar}>
           <div className={styles.filters}>
             <label htmlFor="balearia-vessel">
-              Buque
-              <select
+              {t("Buque")}<select
                 id="balearia-vessel"
                 name="balearia-vessel"
                 autoComplete="off"
                 value={vesselId}
                 onChange={(event) => changeVessel(event.target.value)}
               >
-                <option value="all">Todas las unidades</option>
+                <option value="all">{t("Todas las unidades")}</option>
                 {baleariaDashboardVessels.map((item) => (
                   <option key={item.id} value={item.id}>
-                    {item.label}
+                    {t(item.label)}
                   </option>
                 ))}
               </select>
             </label>
             <label htmlFor="balearia-voyage">
-              Viaje
-              <select
+              {t("Viaje")}<select
                 id="balearia-voyage"
                 name="balearia-voyage"
                 autoComplete="off"
@@ -383,43 +382,42 @@ export function BaleariaDashboard() {
               >
                 {availableVoyages.map((item) => (
                   <option key={item.id} value={item.id}>
-                    {formatDashboardDate(item.date)} / {item.route}
+                    {t(formatDashboardDate(item.date, locale))} / {t(item.route)}
                   </option>
                 ))}
               </select>
             </label>
           </div>
           <div className={styles.filterActions}>
-            <span>Datos ficticios</span>
+            <span>{t("Datos ficticios")}</span>
             <button type="button" onClick={reset}>
-              Restablecer
-            </button>
+              {t("Restablecer")}</button>
           </div>
         </div>
 
         <div className={styles.contextBar}>
           <p>
-            {voyage.vessel} / {voyage.origin} a {voyage.destination}
+            {t(voyage.vessel)} / {t(voyage.origin)} {t(" a")}{t(voyage.destination)}
           </p>
-          <p>{formatDashboardDate(voyage.date)}</p>
+          <p>{t(formatDashboardDate(voyage.date, locale))}</p>
         </div>
 
-        <dl className={styles.kpis} aria-label="Indicadores del viaje seleccionado">
+        <dl className={styles.kpis} aria-label={t("Indicadores del viaje seleccionado")}>
           <div>
-            <dt>Distancia</dt>
-            <dd>{formatDashboardMeasure(voyage.distanceNm, "nm")}</dd>
+            <dt>{t("Distancia")}</dt>
+            <dd>{t(formatDashboardMeasure(voyage.distanceNm, "nm", 1, locale))}</dd>
           </div>
           <div>
-            <dt>Velocidad media</dt>
-            <dd>{formatDashboardMeasure(voyage.averageSpeedKn, "kn")}</dd>
+            <dt>{t("Velocidad media")}</dt>
+            <dd>{t(formatDashboardMeasure(voyage.averageSpeedKn, "kn", 1, locale))}</dd>
           </div>
           <div>
-            <dt>Energía estimada</dt>
-            <dd>{formatDashboardMeasure(voyage.energyMwh, "MWh")}</dd>
+            <dt>{t("Energía estimada")}</dt>
+            <dd>{t(formatDashboardMeasure(voyage.energyMwh, "MWh", 1, locale))}</dd>
           </div>
           <div>
-            <dt>Margen ETA</dt>
-            <dd>{`${voyage.etaMarginMinutes}\u00a0min`}</dd>
+            <dt>{t("Margen ETA")}</dt>
+            <dd>{t("{0} min", [voyage.etaMarginMinutes])}</dd>
           </div>
         </dl>
 
@@ -434,7 +432,7 @@ export function BaleariaDashboard() {
         )}
 
         <p className="sr-only" role="status">
-          Vista {view === "operations" ? "Operaciones" : "Tripulación"}. {voyage.vessel}, {voyage.route}.
+          {t("Vista ")}{t(view === "operations" ? "Operaciones" : "Tripulación")}. {t(voyage.vessel)}, {t(voyage.route)}.
         </p>
       </div>
     </div>

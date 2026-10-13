@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import {
   CartesianGrid,
   Line,
@@ -25,12 +26,13 @@ function ChartLegend({
 }: {
   items: readonly { label: string; className: string }[];
 }) {
+  const { t } = useTranslations();
   return (
-    <div className={styles.chartLegend} aria-label="Leyenda del gráfico">
+    <div className={styles.chartLegend} aria-label={t("Leyenda del gráfico")}>
       {items.map((item) => (
         <span key={item.label}>
           <i className={item.className} aria-hidden="true" />
-          {item.label}
+          {t(item.label)}
         </span>
       ))}
     </div>
@@ -38,6 +40,7 @@ function ChartLegend({
 }
 
 export function SpeedProfileChart({ data }: { data: SpeedPoint[] }) {
+  const { t } = useTranslations();
   return (
     <>
       <ChartLegend
@@ -48,7 +51,7 @@ export function SpeedProfileChart({ data }: { data: SpeedPoint[] }) {
       />
       <ChartFrame
         height={320}
-        label="Comparación de velocidad observada y recomendada por tramo"
+        label={t("Comparación de velocidad observada y recomendada por tramo")}
       >
         <LineChart
           data={data}
@@ -75,7 +78,7 @@ export function SpeedProfileChart({ data }: { data: SpeedPoint[] }) {
           <Line
             type="stepAfter"
             dataKey="observed"
-            name="Observada"
+            name={t("Observada")}
             stroke="var(--chart-1)"
             strokeWidth={2}
             dot={false}
@@ -85,7 +88,7 @@ export function SpeedProfileChart({ data }: { data: SpeedPoint[] }) {
           <Line
             type="stepAfter"
             dataKey="recommended"
-            name="Recomendada"
+            name={t("Recomendada")}
             stroke="var(--chart-3)"
             strokeWidth={1.75}
             strokeDasharray="6 4"
@@ -100,6 +103,7 @@ export function SpeedProfileChart({ data }: { data: SpeedPoint[] }) {
 }
 
 export function EnergySeriesChart({ data }: { data: EnergyPoint[] }) {
+  const { t } = useTranslations();
   return (
     <>
       <ChartLegend
@@ -109,7 +113,7 @@ export function EnergySeriesChart({ data }: { data: EnergyPoint[] }) {
           { label: "Generación de eje", className: styles.lineDotted },
         ]}
       />
-      <ChartFrame height={280} label="Energía acumulada por sistema y hora">
+      <ChartFrame height={280} label={t("Energía acumulada por sistema y hora")}>
         <LineChart
           data={data}
           margin={{ top: 12, right: 12, bottom: 8, left: 0 }}
@@ -130,7 +134,7 @@ export function EnergySeriesChart({ data }: { data: EnergyPoint[] }) {
           <Line
             type="linear"
             dataKey="propulsion"
-            name="Propulsión"
+            name={t("Propulsión")}
             stroke="var(--chart-1)"
             strokeWidth={2}
             dot={false}
@@ -139,7 +143,7 @@ export function EnergySeriesChart({ data }: { data: EnergyPoint[] }) {
           <Line
             type="linear"
             dataKey="auxiliary"
-            name="Auxiliares"
+            name={t("Auxiliares")}
             stroke="var(--chart-3)"
             strokeWidth={1.75}
             strokeDasharray="6 4"
@@ -149,7 +153,7 @@ export function EnergySeriesChart({ data }: { data: EnergyPoint[] }) {
           <Line
             type="linear"
             dataKey="shaft"
-            name="Generación de eje"
+            name={t("Generación de eje")}
             stroke="var(--chart-5)"
             strokeWidth={1.5}
             strokeDasharray="2 4"
@@ -163,6 +167,7 @@ export function EnergySeriesChart({ data }: { data: EnergyPoint[] }) {
 }
 
 export function TelemetryChart({ data }: { data: TelemetryPoint[] }) {
+  const { t } = useTranslations();
   return (
     <>
       <ChartLegend
@@ -171,7 +176,7 @@ export function TelemetryChart({ data }: { data: TelemetryPoint[] }) {
           { label: "Auxiliares", className: styles.lineDashed },
         ]}
       />
-      <ChartFrame height={286} label="Potencia simulada por sistema y hora">
+      <ChartFrame height={286} label={t("Potencia simulada por sistema y hora")}>
         <LineChart
           data={data}
           margin={{ top: 12, right: 12, bottom: 8, left: 0 }}
@@ -192,7 +197,7 @@ export function TelemetryChart({ data }: { data: TelemetryPoint[] }) {
           <Line
             type="linear"
             dataKey="propulsion"
-            name="Propulsión"
+            name={t("Propulsión")}
             stroke="var(--chart-1)"
             strokeWidth={2}
             dot={false}
@@ -201,7 +206,7 @@ export function TelemetryChart({ data }: { data: TelemetryPoint[] }) {
           <Line
             type="linear"
             dataKey="auxiliary"
-            name="Auxiliares"
+            name={t("Auxiliares")}
             stroke="var(--chart-3)"
             strokeWidth={1.75}
             strokeDasharray="6 4"

@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/i18n/shared";
+
 // Synthetic demonstration data created for this portfolio.
 // It does not reproduce Baleària vessels, routes, records, thresholds or results.
 
@@ -239,14 +241,14 @@ export const baleariaDashboardVessels = [
   { id: "unit-02", label: "Unidad 02" },
 ] as const;
 
-export const formatDashboardNumber = (value: number, digits = 1) =>
-  new Intl.NumberFormat("es-ES", {
+export const formatDashboardNumber = (value: number, digits = 1, locale: Locale = "es") =>
+  new Intl.NumberFormat(locale === "en" ? "en-GB" : "es-ES", {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   }).format(value);
 
-export const formatDashboardDate = (value: string) =>
-  new Intl.DateTimeFormat("es-ES", {
+export const formatDashboardDate = (value: string, locale: Locale = "es") =>
+  new Intl.DateTimeFormat(locale === "en" ? "en-GB" : "es-ES", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -257,7 +259,8 @@ export const formatDashboardMeasure = (
   value: number,
   unit: string,
   digits = 1,
-) => `${formatDashboardNumber(value, digits)}\u00a0${unit}`;
+  locale: Locale = "es",
+) => `${formatDashboardNumber(value, digits, locale)}\u00a0${unit}`;
 
 export function formatDashboardDuration(minutes: number) {
   const hours = Math.floor(minutes / 60);
