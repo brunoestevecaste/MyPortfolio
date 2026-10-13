@@ -1,10 +1,12 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import Image from "next/image";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { MAX_QUESTION_LENGTH } from "@/lib/chat/contracts";
 import { usePortfolioChat } from "./use-portfolio-chat";
 import { ConversationScrollbar } from "./conversation-scrollbar";
+import { ChatResponse } from "./chat-response";
 import styles from "./portfolio-chat.module.css";
 
 const suggestions = ["¿Qué proyectos de IA has desarrollado?", "¿Cuál es tu experiencia profesional?", "¿Cómo conectas datos y negocio?"];
@@ -21,6 +23,8 @@ function Avatar({ visitor = false }: { visitor?: boolean }) {
 }
 
 export function PortfolioChat({ generative = true }: { generative?: boolean }) {
+  const { t } = useTranslations();
+  const assistantName = generative ? "Bruno · asistente de IA" : "Bruno · asistente";
   const chat = usePortfolioChat();
   const [draft, setDraft] = useState("");
   const transcript = useRef<HTMLDivElement>(null);
@@ -42,23 +46,25 @@ export function PortfolioChat({ generative = true }: { generative?: boolean }) {
   }
 
   return (
-    <section className={styles.layout} aria-label="Chat con el asistente de Bruno">
+    <section className={styles.layout} aria-label={t("Chat con el asistente de Bruno")}>
       <div className={styles.chat}>
         <div className={styles.scrollArea}>
-          <div ref={transcript} id="portfolio-conversation" className={styles.transcript} role="log" aria-label="Conversación con el asistente de Bruno" aria-live="off" tabIndex={0}
+          <div ref={transcript} id="portfolio-conversation" className={styles.transcript} role="log" aria-label={t("Conversación con el asistente de Bruno")} aria-live="off" tabIndex={0}
             onScroll={() => { const element = transcript.current; if (element) followsEnd.current = element.scrollHeight - element.scrollTop - element.clientHeight < 80; }}>
             <div>
               <div className={styles.message}>
                 <Avatar />
-                <div className={styles.bubble}><span className={styles.speaker}>Asistente de Bruno</span><p>Hola. Soy el asistente {generative ? "de IA " : ""}del portfolio de Bruno. Puedo contarte en qué ha trabajado, qué ha estudiado y cómo aborda sus proyectos. ¿Por dónde empezamos?</p></div>
+                <div className={styles.bubble}><span className={styles.speaker}>{t(assistantName)}</span><p>{t("Hola. Puedes preguntarme por mi experiencia, mi formación o los proyectos en los que he trabajado. ¿Por dónde empezamos?")}</p></div>
               </div>
               {chat.messages.map((message) => (
                 <div key={message.id} className={`${styles.message} ${message.role === "user" ? styles.outgoing : ""}`}>
                   <Avatar visitor={message.role === "user"} />
                   <div className={styles.bubble}>
-                    <span className={styles.speaker}>{message.role === "user" ? "Tú" : "Asistente de Bruno"}</span>
-                    <p>{message.content || "Escribiendo…"}</p>
-                    {message.role === "assistant" && message.content && !message.complete && !busy ? <span className={styles.partial}>Respuesta incompleta</span> : null}
+                    <span className={styles.speaker}>{t(message.role === "user" ? "Tú" : assistantName)}</span>
+                    {message.role === "assistant"
+                      ? <ChatResponse text={message.content || t("Escribiendo…")} className={styles.response} />
+                      : <p>{message.content}</p>}
+                    {message.role === "assistant" && message.content && !message.complete && !busy ? <span className={styles.partial}>{t("Respuesta incompleta")}</span> : null}
                   </div>
                 </div>
               ))}
@@ -66,22 +72,22 @@ export function PortfolioChat({ generative = true }: { generative?: boolean }) {
           </div>
           <ConversationScrollbar target={transcript} />
         </div>
-        {!chat.messages.length ? <div className={styles.suggestions} aria-label="Preguntas para empezar">
-          {suggestions.map((question) => <button key={question} type="button" onClick={() => { followsEnd.current = true; void chat.send(question); }} disabled={busy || chat.cooldown > 0}>{question}</button>)}
+        {!chat.messages.length ? <div className={styles.suggestions} aria-label={t("Preguntas para empezar")}>
+          {suggestions.map((question) => <button key={question} type="button" onClick={() => { followsEnd.current = true; void chat.send(t(question)); }} disabled={busy || chat.cooldown > 0}>{t(question)}</button>)}
         </div> : null}
-        {chat.messages.length ? <button type="button" className={styles.reset} onClick={chat.reset} disabled={busy}>Reiniciar</button> : null}
+        {chat.messages.length ? <button type="button" className={styles.reset} onClick={chat.reset} disabled={busy}>{t("Reiniciar")}</button> : null}
         <form className={styles.form} onSubmit={submit}>
-          <label htmlFor="portfolio-question">Tu pregunta</label>
+          <label htmlFor="portfolio-question">{t("Tu pregunta")}</label>
           <div className={styles.composer}>
-            <textarea ref={input} id="portfolio-question" name="question" rows={2} autoComplete="off" maxLength={MAX_QUESTION_LENGTH} readOnly={busy} placeholder="Por ejemplo, ¿qué hiciste en Alina?…" value={draft} onChange={(event) => setDraft(event.target.value)} aria-describedby="chat-feedback" aria-invalid={Boolean(chat.error)}
+            <textarea ref={input} id="portfolio-question" name="question" rows={2} autoComplete="off" maxLength={MAX_QUESTION_LENGTH} readOnly={busy} placeholder={t("Por ejemplo, ¿qué hiciste en Alina?…")} value={draft} onChange={(event) => setDraft(event.target.value)} aria-describedby="chat-feedback" aria-invalid={Boolean(chat.error)}
               onKeyDown={(event) => { if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); event.currentTarget.form?.requestSubmit(); } }} />
-            {busy ? <button key="stop" className={styles.send} type="button" onClick={(event) => { event.preventDefault(); chat.stop(); }}>Detener</button> : <button key="send" className={styles.send} type="submit" disabled={chat.cooldown > 0}>{chat.cooldown > 0 ? "Espera" : "Enviar"}</button>}
+            {busy ? <button key="stop" className={styles.send} type="button" onClick={(event) => { event.preventDefault(); chat.stop(); }}>{t("Detener")}</button> : <button key="send" className={styles.send} type="submit" disabled={chat.cooldown > 0}>{t(chat.cooldown > 0 ? "Espera" : "Enviar")}</button>}
           </div>
           <div className={styles.feedback} id="chat-feedback" role="status" aria-live="polite">
-            {chat.error || (busy ? "Escribiendo…" : "")}{chat.cooldown > 0 ? ` Puedes volver a enviar en ${chat.cooldown} s.` : ""}
+            {t(chat.error || (busy ? "Escribiendo…" : ""))}{t(chat.cooldown > 0 ? t(" Puedes volver a enviar en {0} s.", [chat.cooldown]) : "")}
           </div>
         </form>
-        <p className="sr-only" aria-live="polite" aria-atomic="true">{chat.announcement}</p>
+        <p className="sr-only" aria-live="polite" aria-atomic="true">{t(chat.announcement)}</p>
       </div>
     </section>
   );

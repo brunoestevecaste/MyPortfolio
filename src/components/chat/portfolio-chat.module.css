@@ -33,6 +33,13 @@
 .message .avatar { width: 36px; height: 36px; flex-basis: 36px; }
 .bubble { position: relative; max-width: min(86%, 72ch); min-width: 0; padding: 1rem 1.125rem; background: var(--chat-surface); border-radius: var(--radius-editorial); }
 .bubble p { margin: 0; font-size: 0.8125rem; line-height: 1.7; overflow-wrap: anywhere; white-space: pre-wrap; }
+.response { display: grid; gap: var(--space-2); min-width: 0; font-size: 0.875rem; line-height: 1.7; overflow-wrap: anywhere; }
+.response p { font-size: inherit; line-height: inherit; white-space: pre-line; }
+.response ul, .response ol { margin: 0; padding-inline-start: 1.5em; }
+.response ul { list-style: disc; }
+.response ol { list-style: decimal; }
+.response li + li { margin-block-start: 0.375rem; }
+.response strong { font-weight: 700; }
 .speaker { display: block; margin-bottom: 0.375rem; font-size: 0.75rem; color: var(--muted); }
 .outgoing { flex-direction: row-reverse; }
 .outgoing .bubble { background: var(--ink); color: var(--canvas); border-radius: var(--radius-editorial); }

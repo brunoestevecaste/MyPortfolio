@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { setTimeout as delay } from "node:timers/promises";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { ChatResponse } from "../src/components/chat/chat-response.tsx";
 import { parseMessages, MAX_BODY_BYTES } from "../src/lib/chat/contracts.ts";
 import { ChatLimiter, sameOrigin, clientKey, protectionConfigured, readBoundedJson } from "../src/lib/chat/security.ts";
 import { CHAT_MODEL, requestStructured, ProviderError } from "../src/lib/chat/provider.ts";
@@ -310,6 +313,21 @@ test("text reveal supports Unicode, cancellation and reduced motion", async () =
   reveal.append("IA🙂"); await reveal.finish(); assert.deepEqual(frames, ["I", "IA", "IA🙂"]);
   const count = frames.length; reveal.append(" cancelado"); const draining = reveal.finish(); reveal.stop(); await draining; await delay(10); assert.equal(frames.length, count);
   const reduced = []; const immediate = createTextReveal((text) => reduced.push(text), true); immediate.append("Sin animación"); assert.deepEqual(reduced, ["Sin animación"]);
+});
+
+test("chat answers render paragraphs, emphasis and semantic lists with original numbering", () => {
+  const text = "Bruno trabajó en **Alina**.\n\nSu contribución:\n- Arquitectura de **IA**.\n- Preparación de datos.\n\n3. Prototipo.\n4. Validación.";
+  const html = renderToStaticMarkup(createElement(ChatResponse, { text }));
+  assert.match(html, /<p>Bruno trabajó en <strong>Alina<\/strong>\.<\/p>/);
+  assert.match(html, /<p>Su contribución:<\/p><ul><li>Arquitectura de <strong>IA<\/strong>\.<\/li><li>Preparación de datos\.<\/li><\/ul>/);
+  assert.match(html, /<ol start="3"><li value="3">Prototipo\.<\/li><li value="4">Validación\.<\/li><\/ol>/);
+});
+
+test("chat formatting escapes HTML, never creates links and preserves incomplete reveal markers", () => {
+  const html = renderToStaticMarkup(createElement(ChatResponse, { text: '**<script>alert(1)</script>**\n\n[Enlace](javascript:alert(1))' }));
+  assert.ok(html.includes("&lt;script&gt;")); assert.ok(!/<script|<a\b|href=/i.test(html));
+  const partial = renderToStaticMarkup(createElement(ChatResponse, { text: "Bruno trabajó en **Ali" }));
+  assert.ok(partial.includes("Bruno trabajó en **Ali")); assert.ok(!partial.includes("<strong>"));
 });
 
 test("local answers omit source footers and case routes while keeping public contact details", () => {
