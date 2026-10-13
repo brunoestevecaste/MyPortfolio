@@ -4,6 +4,7 @@ import { MAX_BODY_BYTES } from "./contracts";
 
 const MINUTE = 60_000;
 const DAY = 86_400_000;
+const GENERATIVE_LIMITS = { actorDaily: 100, processMinute: 10, processDaily: 400 };
 type Bucket = { minute: number; daily: number; active: number; requests: number[]; last: number };
 
 // Ephemeral counters only: no questions, answers or raw IPs are stored.
@@ -29,11 +30,12 @@ export class ChatLimiter {
     if (bucket.active || global.active >= (this.local ? 20 : 2)) wait = 8_000;
     if (bucket.last && now - bucket.last < 8_000) wait = Math.max(wait, 8_000 - (now - bucket.last));
     if (bucket.requests.length >= 4) wait = Math.max(wait, MINUTE - (now - bucket.requests[0]));
-    // Each generated answer uses up to TWO model calls (draft + review).
-    // These counters are per process; provider quotas remain authoritative.
-    if (global.requests.length >= (this.local ? 120 : 1)) wait = Math.max(wait, MINUTE - (now - global.requests[0]));
-    if (bucket.daily >= (this.local ? 200 : 20)) wait = Math.max(wait, bucket.minute + DAY - now);
-    if (global.daily >= (this.local ? 5_000 : 40)) wait = Math.max(wait, global.minute + DAY - now);
+    // Count chat requests, not model calls: each answer uses up to two calls.
+    // Leave room for follow-ups and other visitors; provider quotas, including
+    // token limits, remain authoritative and may be reached before these caps.
+    if (global.requests.length >= (this.local ? 120 : GENERATIVE_LIMITS.processMinute)) wait = Math.max(wait, MINUTE - (now - global.requests[0]));
+    if (bucket.daily >= (this.local ? 200 : GENERATIVE_LIMITS.actorDaily)) wait = Math.max(wait, bucket.minute + DAY - now);
+    if (global.daily >= (this.local ? 5_000 : GENERATIVE_LIMITS.processDaily)) wait = Math.max(wait, global.minute + DAY - now);
     if (wait > 0) return { allowed: false, retryAfter: Math.max(1, Math.ceil(wait / 1_000)) };
     this.actors.set(actor, bucket);
     for (const item of [bucket, global]) {

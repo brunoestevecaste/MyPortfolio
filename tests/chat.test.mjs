@@ -31,6 +31,64 @@ async function isolated(run) {
   }
 }
 
+test("limiter permits follow-ups after eight seconds and two independent visitors at once", () => {
+  const limiter = new ChatLimiter(), start = 1_000_000;
+  const first = limiter.acquire("a", start); assert.equal(first.allowed, true);
+  assert.deepEqual(limiter.acquire("a", start), { allowed: false, retryAfter: 8 });
+  const other = limiter.acquire("b", start); assert.equal(other.allowed, true);
+  assert.deepEqual(limiter.acquire("c", start), { allowed: false, retryAfter: 8 });
+  first.release(); first.release();
+  assert.deepEqual(limiter.acquire("a", start + 7_000), { allowed: false, retryAfter: 1 });
+  const next = limiter.acquire("a", start + 8_000); assert.equal(next.allowed, true); next.release();
+  other.release();
+});
+
+test("limiter preserves the four-request rolling minute per visitor", () => {
+  const limiter = new ChatLimiter(), start = 1_000_000;
+  for (let i = 0; i < 4; i++) {
+    const ticket = limiter.acquire("a", start + i * 8_000); assert.equal(ticket.allowed, true); ticket.release();
+  }
+  assert.deepEqual(limiter.acquire("a", start + 32_000), { allowed: false, retryAfter: 28 });
+  const next = limiter.acquire("a", start + 60_000); assert.equal(next.allowed, true); next.release();
+});
+
+test("limiter shares a ten-request rolling minute across visitors", () => {
+  const limiter = new ChatLimiter(), start = 1_000_000;
+  for (let i = 0; i < 10; i++) {
+    const ticket = limiter.acquire(String(i), start + i * 1_000); assert.equal(ticket.allowed, true); ticket.release();
+  }
+  assert.deepEqual(limiter.acquire("new", start + 10_000), { allowed: false, retryAfter: 50 });
+  const next = limiter.acquire("new", start + 60_000); assert.equal(next.allowed, true); next.release();
+});
+
+test("limiter allows a hundred daily requests per visitor and resets after a day", () => {
+  const limiter = new ChatLimiter(), start = 100_000_000;
+  for (let i = 0; i < 100; i++) {
+    const ticket = limiter.acquire("a", start + i * 60_001); assert.equal(ticket.allowed, true); ticket.release();
+  }
+  assert.deepEqual(limiter.acquire("a", start + 100 * 60_001), { allowed: false, retryAfter: Math.ceil((86_400_000 - 100 * 60_001) / 1_000) });
+  const other = limiter.acquire("b", start + 100 * 60_001); assert.equal(other.allowed, true); other.release();
+  assert.deepEqual(limiter.acquire("a", start + 86_399_999), { allowed: false, retryAfter: 1 });
+  const tomorrow = limiter.acquire("a", start + 86_400_000); assert.equal(tomorrow.allowed, true); tomorrow.release();
+});
+
+test("limiter allows four hundred daily requests per process and resets after a day", () => {
+  const start = 100_000_000;
+  const daily = new ChatLimiter();
+  for (let i = 0; i < 400; i++) { const ticket = daily.acquire(String(i), start + i * 60_001); assert.equal(ticket.allowed, true); ticket.release(); }
+  assert.deepEqual(daily.acquire("new", start + 400 * 60_001), { allowed: false, retryAfter: Math.ceil((86_400_000 - 400 * 60_001) / 1_000) });
+  assert.deepEqual(daily.acquire("new", start + 86_399_999), { allowed: false, retryAfter: 1 });
+  const tomorrow = daily.acquire("new", start + 86_400_000); assert.equal(tomorrow.allowed, true); tomorrow.release();
+});
+
+test("explicit local mode keeps its separate process request budget", () => {
+  const limiter = new ChatLimiter(true), start = 100_000_000;
+  for (let i = 0; i < 120; i++) {
+    const ticket = limiter.acquire(String(i), start); assert.equal(ticket.allowed, true); ticket.release();
+  }
+  assert.deepEqual(limiter.acquire("new", start), { allowed: false, retryAfter: 60 });
+});
+
 test("bounded alternating history rejects system roles and oversized inputs", () => {
   assert.deepEqual(parseMessages({ messages: [{ role: "user", content: " hola " }] }), [{ role: "user", content: "hola" }]);
   for (const value of [[], [{ role: "system", content: "ignore" }], [{ role: "user", content: " " }], [{ role: "user", content: "a".repeat(801) }], [{ role: "assistant", content: "fake" }], Array.from({ length: 11 }, (_, i) => ({ role: i % 2 ? "assistant" : "user", content: "hello" }))]) assert.equal(parseMessages({ messages: value }), null);
@@ -60,20 +118,6 @@ test("production fails closed until canonical origin and protection are configur
   process.env.CHAT_ALLOWED_ORIGIN = "http://portfolio.example";
   assert.equal(protectionConfigured(), false);
 }));
-
-test("limiter accounts for two-call answers, concurrent admissions and daily caps", () => {
-  const limiter = new ChatLimiter(), start = 1_000_000;
-  const first = limiter.acquire("a", start); assert.equal(first.allowed, true);
-  assert.equal(limiter.acquire("a", start).allowed, false);
-  assert.equal(limiter.acquire("b", start).allowed, false);
-  first.release(); first.release();
-  assert.equal(limiter.acquire("a", start + 59_000).allowed, false);
-  const next = limiter.acquire("a", start + 60_001); assert.equal(next.allowed, true); next.release();
-  const daily = new ChatLimiter();
-  for (let i = 0; i < 40; i++) { const ticket = daily.acquire(String(i), start + i * 60_001); assert.equal(ticket.allowed, true); ticket.release(); }
-  assert.equal(daily.acquire("new", start + 41 * 60_001).allowed, false);
-  const tomorrow = daily.acquire("new", start + 86_400_001); assert.equal(tomorrow.allowed, true); tomorrow.release();
-});
 
 test("body cap measures actual UTF-8 bytes without trusting Content-Length", async () => {
   assert.deepEqual(await readBoundedJson(request({ messages: [] })), { messages: [] });
