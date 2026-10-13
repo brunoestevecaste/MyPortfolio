@@ -6,6 +6,8 @@ import { Kursor } from "@/components/ui/kursor";
 import { ProjectTransitionProvider } from "@/components/projects/project-transition-context";
 import { PageMotion } from "@/components/motion/page-motion";
 import { MotionBootstrap } from "@/components/motion/motion-bootstrap";
+import { LanguageProvider } from "@/components/i18n/language-provider";
+import { getClientMessages, getTranslations } from "@/lib/i18n/server";
 import "./globals.css";
 import "@/components/motion/motion.css";
 import "@/styles/kursor.css";
@@ -29,7 +31,7 @@ const spaceMono = Space_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   title: "Bruno Esteve",
   description:
     "Portfolio de Bruno Esteve Castellano, Data Analyst y AI Engineer especializado en analítica, inteligencia artificial y sistemas de datos.",
@@ -42,14 +44,27 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale } = await getTranslations();
+  return {
+    ...baseMetadata,
+    description: locale === "en"
+      ? "Bruno Esteve Castellano's portfolio. Data Analyst and AI Engineer specialising in analytics, artificial intelligence and data systems."
+      : baseMetadata.description,
+  };
+}
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { locale, t } = await getTranslations();
+  const messages = await getClientMessages(locale);
   return (
-    <html lang="es" data-scroll-behavior="smooth" className={`${archivo.variable} ${bricolageGrotesque.variable} ${spaceMono.variable}`}>
+    <html lang={locale} data-scroll-behavior="smooth" className={`${archivo.variable} ${bricolageGrotesque.variable} ${spaceMono.variable}`}>
       <head><MotionBootstrap /></head>
       <body className="flex min-h-dvh flex-col antialiased">
+        <LanguageProvider locale={locale} messages={messages}>
         <Kursor />
         <a className="skip-link" href="#main-content">
-          Saltar al contenido
+          {t("Saltar al contenido")}
         </a>
         <SiteHeader />
         <ProjectTransitionProvider>
@@ -57,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <PageMotion />
         </ProjectTransitionProvider>
         <SiteFooter />
+        </LanguageProvider>
       </body>
     </html>
   );
