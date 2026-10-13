@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "@/components/i18n/language-provider";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import { axisStyle, ChartFrame } from "./editorial-chart";
 
@@ -10,10 +11,11 @@ const performanceData = [
 ];
 
 export function AlinaPlot() {
+  const { t } = useTranslations();
   return (
     <ChartFrame
       height={240}
-      label="Comparativa de eficiencia relativa entre prompt monolítico y arquitectura desacoplada en dos fases"
+      label={t("Comparativa de eficiencia relativa entre prompt monolítico y arquitectura desacoplada en dos fases")}
     >
       <BarChart
         data={performanceData}

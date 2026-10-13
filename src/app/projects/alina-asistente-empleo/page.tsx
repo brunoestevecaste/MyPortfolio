@@ -1,3 +1,4 @@
+import { getTranslations } from "@/lib/i18n/server";
 import type { Metadata } from "next";
 import { CaseSection } from "@/components/projects/case-section";
 import { AlinaArchitecture } from "@/components/projects/alina-architecture";
@@ -16,7 +17,7 @@ import styles from "@/components/projects/projects.module.css";
 
 const path = `/projects/${alinaProject.slug}`;
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   description: alinaProject.summary,
   alternates: { canonical: path },
   openGraph: {
@@ -29,26 +30,42 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AlinaCaseStudy() {
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale, t } = await getTranslations();
+  const openGraph = baseMetadata.openGraph;
+  return {
+    ...baseMetadata,
+    description: t(baseMetadata.description ?? ""),
+    openGraph: openGraph ? {
+      ...openGraph,
+      title: t(typeof openGraph.title === "string" ? openGraph.title : ""),
+      description: t(openGraph.description ?? ""),
+      locale: locale === "en" ? "en_GB" : "es_ES",
+    } : undefined,
+  };
+}
+
+export default async function AlinaCaseStudy() {
+  const { t } = await getTranslations();
   return (
     <main data-motion-page id="main-content" tabIndex={-1} className="site-container flex-1">
       <article>
         {/* Split Hero: Characteristic Photo + Executive Summary */}
         <ProjectExecutiveHero
           project={alinaProject}
-          eyebrow="Alina / Proyecto de Máster en IA"
-          academicFramework="EDEM Escuela de Empresarios · Máster en IA / 2026"
-          scope="Prototipo funcional (FastAPI + Google ADK + Gemini + React)"
+          eyebrow={t("Alina / Proyecto de Máster en IA")}
+          academicFramework={t("EDEM Escuela de Empresarios · Máster en IA / 2026")}
+          scope={t("Prototipo funcional (FastAPI + Google ADK + Gemini + React)")}
         />
 
         {/* Full In-Depth Case Study on Scroll */}
         <div id="case-study" className={styles.caseStudyFull}>
           <aside
             className={styles.privacy}
-            aria-label="Marco del proyecto"
+            aria-label={t("Marco del proyecto")}
           >
-            <strong data-motion="mask">Un proyecto de máster, ingeniería de IA aplicada.</strong>
-            <p data-motion="mask">{alinaCase.confidentiality}</p>
+            <strong data-motion="mask">{t("Un proyecto de máster, ingeniería de IA aplicada.")}</strong>
+            <p data-motion="mask">{t(alinaCase.confidentiality)}</p>
           </aside>
 
           <div className={styles.caseLayout}>
@@ -75,15 +92,15 @@ export default function AlinaCaseStudy() {
 
               <section
                 id="herramientas"
-                data-project-section="Herramientas"
+                data-project-section={t("Herramientas")}
                 aria-labelledby="herramientas-title"
                 className={styles.caseSection}
               >
-                <h2 id="herramientas-title" data-motion="mask">Herramientas y tecnologías</h2>
+                <h2 id="herramientas-title" data-motion="mask">{t("Herramientas y tecnologías")}</h2>
                 <ProjectTools
                   tools={alinaTools}
                   size="large"
-                  ariaLabel="Herramientas y tecnologías utilizadas"
+                  ariaLabel={t("Herramientas y tecnologías utilizadas")}
                 />
               </section>
 
