@@ -2,6 +2,8 @@
 
 Revisión de fuentes oficiales: 12 de octubre de 2026. Esta guía sustituye la recomendación anterior de usar respuestas locales como modo principal.
 
+Actualización de los límites de consultas: 13 de octubre de 2026.
+
 ## Decisión
 
 **GPT-OSS-120B, servido por Groq en su Free Plan.** El modo predeterminado es `groq`. La IA redacta cada respuesta con fuentes del portfolio y una segunda llamada revisa el borrador antes de mostrarlo. No se sustituye silenciosamente por respuestas prefijadas cuando falta la clave o se agota la cuota.
@@ -31,9 +33,18 @@ Los valores pueden cambiar y la página Limits de tu cuenta prevalece. La inteli
 
 **1.000 llamadas al día no significan 1.000 conversaciones.** El límite de tokens suele agotarse primero. Una respuesta aceptada usa dos llamadas: generación y revisión. Un rechazo puede usar una; los intentos de inyección más evidentes no llegan a Groq.
 
-El contexto recuperado se limita a 6.000 caracteres completos y hasta dos preguntas de 800 caracteres; las respuestas se limitan a 1.600 caracteres más referencias. Generación: máximo 1.024 tokens de salida, incluidos los de razonamiento; revisión: 512. No son medidas exactas del consumo: lo determina el tokenizador del proveedor.
+El contexto recuperado se limita a 6.000 caracteres completos y hasta dos preguntas de 800 caracteres; las respuestas se limitan a 1.600 caracteres, sin un bloque visible de referencias. Generación y revisión: máximo 1.024 tokens de salida cada una, incluidos los de razonamiento. El revisor también recibe el conjunto de fuentes recuperadas para poder corregir omisiones. No son medidas exactas del consumo: lo determina el tokenizador del proveedor.
 
-Como ejemplo de planificación, con 4.000 tokens totales por respuesta (las dos llamadas), 200.000 TPD equivalen a unas 50 respuestas/día. No es una medición ni una garantía. La aplicación empieza conservadoramente con 1 consulta/minuto y 40/día por proceso; por visitante, 20/día. El aviso de espera evita reintentos continuos. Es una limitación visible de esta configuración gratuita con doble revisión, no capacidad ilimitada. Ajustar estos umbrales requiere medir consumo real; no aumentar a ciegas hasta 30 consultas/minuto.
+Como ejemplo de planificación, con 4.000 tokens totales por respuesta (las dos llamadas), 200.000 TPD equivalen a unas 50 respuestas/día. No es una medición ni una garantía. Los límites de la aplicación permiten consultas de seguimiento y varios visitantes sin imponer una espera global de un minuto:
+
+| Ámbito | Consultas/minuto | Consultas/24 h | Generaciones simultáneas |
+| --- | ---: | ---: | ---: |
+| Identificador del visitante | 4 | 100 | 1 |
+| Proceso del servidor | 10 | 400 | 2 |
+
+Entre solicitudes admitidas del mismo identificador deben pasar al menos 8 segundos y la generación anterior debe haber terminado. El límite por minuto usa una ventana móvil; cada periodo diario dura 24 horas. Los intentos admitidos fallidos, inválidos o cancelados también consumen consultas; los rechazados por el limitador no. Sin una cabecera de IP de un proxy de confianza, todos los visitantes comparten el mismo identificador y sus límites.
+
+Los topes locales cuentan consultas al chat, no llamadas ni tokens del proveedor: diez respuestas aprobadas necesitan hasta veinte llamadas. **400 consultas/día es un máximo de la aplicación, no una capacidad garantizada del plan Free.** Groq puede bloquear antes por tokens o por otros usos de la organización; la interfaz respeta su `429` y `Retry-After` sin reintentos automáticos. Consulta el consumo real en Groq antes de cambiar estos topes. Los límites técnicos y el modo no generativo `local` se detallan en [portfolio-chat.md](portfolio-chat.md).
 
 En serverless esos contadores no son un presupuesto distribuido: cada instancia/reinicio tiene los suyos. La regla WAF protege por IP entre instancias y Groq impone la cuota global de su organización. Un ataque distribuido todavía podría agotar la cuota y dejar temporalmente el chat sin servicio. No se promete disponibilidad garantizada.
 
@@ -42,11 +53,11 @@ Para mantener coste cero: conserva **Groq Free** y **Vercel Hobby**, no actives 
 ## Qué se ha implementado
 
 1. `provider.ts`: modelo fijo `openai/gpt-oss-120b`, endpoint fijo, salida estructurada estricta, sin herramientas ni redirecciones. Sin SDK o dependencia adicional.
-2. `context.ts`: índice de datos públicos preparado una vez por proceso. Recupera textos completos, prioriza el proyecto mencionado, incluye sus notas y contribución individual y ofrece un índice compacto de los cuatro proyectos. No lee documentos privados ni `.env` como conocimiento.
+2. `context.ts`: índice de datos públicos preparado una vez por proceso. Recupera textos completos, prioriza el tema de la pregunta actual, incluye la presentación pública, las notas de los proyectos y la contribución individual y ofrece un índice compacto de los cuatro proyectos. Un cambio a experiencia o estudios deja de heredar el proyecto anterior; las continuaciones elípticas lo conservan. No lee documentos privados ni `.env` como conocimiento.
 3. `guardrails.ts`: detección preliminar de algunas inyecciones, validación de estructura, longitud y fuentes; rechaza URLs generadas, HTML y patrones de claves. Estos patrones son una capa adicional, no un detector universal.
-4. `answer.ts`: genera un borrador, comprueba que cite fuentes permitidas y solicita una revisión separada. El revisor ve fuentes citadas y notas del proyecto padre. Si no aprueba, se muestra una respuesta fija de falta de evidencia. Rechazos temáticos y datos desconocidos nunca reutilizan el texto libre devuelto por el modelo.
+4. `answer.ts`: genera un borrador y comprueba sus identificadores de fuentes permitidas. El revisor recibe todas las fuentes recuperadas y puede corregir el borrador o reconsiderar un `unknown` inicial. Devuelve una respuesta final estructurada que vuelve a validarse en código, sin bibliografía ni rutas de casos. Sólo un `unknown` final produce el mensaje fijo de falta de evidencia; un formato inválido produce un fallo de generación. Rechazos temáticos y datos desconocidos nunca reutilizan el texto libre devuelto por el modelo.
 5. `route.ts`: no entrega tokens del borrador al navegador. Solo envía la respuesta final después de revisar. La interfaz conserva la aparición gradual del texto; ya no es streaming directo del modelo. Un fallo del revisor bloquea la respuesta completa.
-6. Interfaz: identifica al asistente como IA y explica que las consultas se envían a Groq. Se conserva el modo `local` únicamente como alternativa explícita, no como sustitución automática.
+6. Interfaz: la etiqueta «Bruno · asistente de IA» identifica al asistente generativo. Las respuestas y el saludo usan la primera persona del singular de Bruno («trabajo», «estudié», «mi contribución»), con párrafos cortos, listas semánticas y negritas moderadas, texto de 14 px y separación entre bloques. Generación y revisión comparten esa voz autorizada, sin afirmar que Bruno escriba en directo, inventar anécdotas o apropiarse del trabajo del equipo. No muestran «Fuentes del portfolio» ni enlaces de procedencia; los identificadores de evidencia quedan en el servidor. Las preguntas del visitante se muestran literalmente. Se conserva el modo `local` únicamente como alternativa explícita, con la misma voz y sin sustitución automática; también omite rutas de casos y mantiene los datos de contacto solicitados.
 7. Pruebas: contratos, límites, configuración, recuperación, historial manipulado, JSON malformado, borradores rechazados, errores del proveedor y cancelación. `test:chat:live` permite comprobar después una generación y revisión reales sin imprimir secretos.
 
 ## Medidas de seguridad y límites honestos
@@ -54,9 +65,9 @@ Para mantener coste cero: conserva **Groq Free** y **Vercel Hobby**, no actives 
 - **Clave en servidor:** `GROQ_API_KEY` solo se lee en servidor. No es una variable `NEXT_PUBLIC_`, no se incluye en el prompt, en HTML, en logs de la aplicación ni en respuestas. Los errores externos se sustituyen por mensajes genéricos.
 - **Conocimiento autorizado:** únicamente datos editoriales ya publicados. No se envían CV privados, documentos fuente, archivos de configuración ni perfiles ficticios de los demostradores.
 - **Historial no fiable:** el navegador no puede introducir mensajes de sistema; las respuestas del asistente aportadas por el cliente no se reenvían al modelo. Se usan como máximo las dos últimas preguntas para referencias como «¿y su arquitectura?», nunca como evidencia de hechos.
-- **Ámbito y fidelidad:** prompt restrictivo, salida estructurada, fuentes verificadas en código y segundo pase semántico. Peticiones generales o mixtas deben rechazarse. JSON estricto garantiza formato, no veracidad. Ambos pases usan el mismo modelo y pueden compartir errores: no son verificadores infalibles ni independientes estadísticamente.
+- **Ámbito y fidelidad:** prompt restrictivo, salida estructurada, fuentes verificadas en código y segundo pase semántico que puede corregir errores con información respaldada. Las preguntas generales sobre Bruno y las formuladas en segunda persona son válidas; las tareas ajenas al portfolio o peticiones mixtas deben rechazarse. Una omisión secundaria no invalida un resumen correcto del asunto principal. JSON estricto garantiza formato, no veracidad. Ambos pases usan el mismo modelo y pueden compartir errores: no son verificadores infalibles ni independientes estadísticamente.
 - **Sin capacidad de actuar:** no se habilitan navegación, ejecución de código, herramientas, acceso al sistema de archivos, búsqueda externa ni subida de documentos. Mencionar esas capacidades en la ficha del modelo no las activa en esta aplicación.
-- **Salida:** texto React, sin `dangerouslySetInnerHTML`; las referencias proceden del servidor. No se expone razonamiento interno ni metadatos del proveedor.
+- **Salida:** elementos React limitados a párrafos, listas y negritas, sin `dangerouslySetInnerHTML` ni librería adicional de Markdown. HTML y enlaces se muestran como texto escapado, sin ejecutarlos. No se expone razonamiento interno, identificadores de fuentes ni metadatos del proveedor. Los borradores con URLs, rutas de casos o el bloque «Fuentes del portfolio» se rechazan.
 - **Abuso:** origen exacto, JSON obligatorio, cuerpo máximo de 16 KiB reales, pregunta de 800 caracteres, historial de nueve mensajes y 10.000 caracteres. Tiempo de lectura de cinco segundos; presupuesto de 30 segundos para la petición completa; cancelación al desconectar.
 - **Infraestructura:** HTTPS en producción, origen canónico sin rutas ni credenciales, limitación por IP de confianza y WAF para Vercel. `Origin` se puede falsificar desde un cliente externo: no es autenticación. Los hashes de IP en memoria no constituyen anonimización absoluta.
 
@@ -78,7 +89,7 @@ Groq documenta retención excepcional de entradas/salidas para errores o abuso, 
 4. Copia `.env.example` a `.env.local` **solo si no tienes ya ese archivo**. Si existe, edita únicamente las variables del chat. No pongas la clave real en `.env.example`.
 5. En `.env.local`, establece `CHAT_MODE=groq` y pega la clave real como valor de `GROQ_API_KEY`. Deja `CHAT_ALLOWED_ORIGIN`, `CHAT_PROTECTION_MODE` y `CHAT_TRUSTED_IP_HEADER` vacíos para `npm run dev`.
 6. Verifica que el archivo está excluido con `git check-ignore .env.local`. Debe mostrar su nombre; no muestra el contenido. Si el archivo hubiese sido versionado antes, ignorarlo no lo retira del historial: revoca cualquier clave expuesta y elimina ese archivo del seguimiento antes de publicar.
-7. Ejecuta `npm run dev` y abre la dirección que indique la terminal. Ve a «Hablemos» y pregunta por Alina o Baleària. Deja pasar al menos un minuto entre consultas con esta configuración conservadora.
+7. Ejecuta `npm run dev` y abre la dirección que indique la terminal. Ve a «Hablemos» y pregunta por Alina o Baleària. Puedes enviar una continuación cuando la anterior termine y hayan pasado 8 segundos desde su envío, dentro de las cuatro consultas por minuto del identificador compartido local. Si aparece un `429`, respeta la espera indicada.
 8. Ejecuta `npm run test:chat:live` una sola vez para probar conexión, generación y revisión reales. Consume hasta dos llamadas a Groq y solo imprime el resultado, no la clave ni las respuestas. No ejecutes esta prueba en paralelo con consultas del navegador.
 9. Prueba manualmente una pregunta fuera de tema («Escribe una receta»), una solicitud de clave, una pregunta sin evidencia («¿Cuál es el salario de Bruno?»), una comparación entre proyectos y una continuación. Revisa que rechace, no invente y conserve atribuciones colectivas.
 
@@ -93,12 +104,12 @@ Si cambias `.env.local`, reinicia el servidor. No publiques `.env.local` ni lo s
 3. En Settings → Environment Variables, añade `CHAT_MODE=groq` y `GROQ_API_KEY` con el valor real desde el panel. Márcala Sensitive cuando el panel lo permita. Limítala a Production si no necesitas IA en previews. No compartas capturas con el valor visible.
 4. Realiza un primer despliegue para obtener la URL pública. El chatbot estará bloqueado hasta terminar la configuración: es intencionado.
 5. Añade `CHAT_ALLOWED_ORIGIN` con el origen exacto, por ejemplo `https://tu-portfolio.vercel.app`, sin rutas, query ni fragmentos. Un único origen; si usas dominio propio, usa ese y redirige allí el resto.
-6. Configura **Firewall → Configure → New Rule**: nombre `portfolio-chat`; condición Path equals `/api/chat`; acción Rate Limit; clave de conteo IP; ventana fija de 60 segundos; límite de **1 petición por IP**; acción de mitigación Deny. No filtres únicamente por método: así se limita también el abuso sobre otros métodos de esa ruta.
+6. Configura **Firewall → Configure → New Rule**: nombre `portfolio-chat`; condición Path equals `/api/chat`; acción Rate Limit; clave de conteo IP; ventana fija de 60 segundos; límite de **4 peticiones por IP**; acción de mitigación Deny. Si ya publicaste la regla anterior de una petición por minuto, edítala a cuatro y vuelve a publicarla; cambiar el código no actualiza el firewall. No filtres únicamente por método: así se limita también el abuso sobre otros métodos de esa ruta.
 7. Guarda, revisa y pulsa **Publish** para activar la regla. Comprueba que la regla usa la inclusión de Hobby, sin activar un plan de pago. La documentación consultada incluye 1 regla y 1.000.000 de peticiones permitidas en Hobby. Si tu panel muestra condiciones distintas o ya utilizas la única regla, resuelve eso antes de activar el chat.
 8. Solo después, añade `CHAT_PROTECTION_MODE=edge`. Esta variable declara que has configurado la protección; no la crea ni comprueba su existencia.
 9. Deja `CHAT_TRUSTED_IP_HEADER` vacío: en Vercel se utiliza el encabezado gestionado por la plataforma.
 10. Vuelve a desplegar. Es necesario porque el aviso del modo se compila en la página y las variables nuevas deben aplicarse al despliegue.
-11. Prueba desde la URL canónica. Envía dos consultas seguidas y verifica el bloqueo en Firewall/Logs. Comprueba primero generación correcta, rechazo temático y datos desconocidos, esperando a la siguiente ventana entre consultas. Una regla WAF puede devolver su propia página de bloqueo; la interfaz muestra un error genérico sin exponerla.
+11. Prueba desde la URL canónica. Comprueba generación correcta y una continuación, dejando al menos 8 segundos entre envíos y esperando a que termine la respuesta anterior. El limitador de la aplicación admite hasta cuatro consultas por identificador en una ventana móvil de un minuto; una quinta debe bloquearse hasta recuperar capacidad. Verifica también rechazo temático, datos desconocidos y los bloqueos en Firewall/Logs. La regla WAF tiene su propia ventana fija de 60 segundos y puede devolver una página de bloqueo; la interfaz muestra un error genérico sin exponerla.
 12. Controla Usage en Vercel y Limits en Groq. La cuota de IA se comparte con otros usos de tu organización: dedica una organización/proyecto cuando proceda. En previews, mantén el chat sin clave o configura explícitamente origen y protección; no abras comodines de origen.
 
 Fuentes: [reglas y cuota WAF](https://vercel.com/docs/vercel-firewall/vercel-waf/rate-limiting), [uso y precios WAF](https://vercel.com/docs/vercel-firewall/vercel-waf/usage-and-pricing), [encabezados de IP](https://vercel.com/docs/headers/request-headers).
@@ -109,15 +120,19 @@ Fuentes: [reglas y cuota WAF](https://vercel.com/docs/vercel-firewall/vercel-waf
 - 400: formato o tamaño de pregunta no válido.
 - 429: espera local, regla WAF o cuota de Groq. No hagas reintentos automáticos en bucle.
 - 503: clave/configuración ausente o errónea, modelo no disponible, timeout o fallo en cualquiera de los dos pases. Consulta el panel del proveedor sin registrar claves ni cuerpos de conversaciones.
-- Respuesta de falta de evidencia: fuentes insuficientes, salida no válida o revisión rechazada; no significa necesariamente caída del proveedor.
+- Respuesta de falta de evidencia: requiere un `unknown` final del revisor. Una salida
+  mal formada produce `503`; un borrador corregible se revisa con las fuentes y
+  puede devolverse corregido. Para una regresión concreta usa
+  `npm run test:chat:live -- experience` (también `education`, `projects`,
+  `followup`, `unknown` o `scope`), un caso cada vez para respetar la cuota.
 
 `CHAT_MODE=local` activa explícitamente el modo antiguo de extractos si alguna vez lo necesitas. No cumple el objetivo de IA generativa y no es el modo recomendado ahora.
 
 Antes de publicar: `npm run test:chat`, `npm run lint`, `npm run build` y `npm run test:chat:live` con tu clave. Las pruebas automáticas normales simulan al proveedor: comprueban el código, no prueban que el modelo sea inmune a ataques. Revisa ejemplos reales en español y otros idiomas de tus visitantes antes de abrir el chat al público.
 
-No se ha encontrado una clave de Groq configurada en este entorno. No se ha creado ni mostrado ninguna clave, ni llamado realmente a Groq, ni publicado la web. La conexión real y la configuración del firewall deben validarse al seguir estos pasos.
+En la revisión inicial del 12 de octubre no se encontró una clave de Groq configurada en el entorno. No se creó ni mostró ninguna clave, ni se llamó realmente a Groq, ni se publicó la web. La conexión real y la configuración del firewall deben validarse al seguir estos pasos.
 
-## Resultado de validación de esta implementación
+## Resultado de validación inicial · 12 de octubre de 2026
 
 - `npm run test:chat`: 15 pruebas aprobadas con proveedor simulado.
 - `npm run lint` y `npm run build`: correctos.
@@ -126,4 +141,67 @@ No se ha encontrado una clave de Groq configurada en este entorno. No se ha crea
 - Navegador a 375×812 y 1440×1000: aviso de IA, envío por teclado, fallo seguro sin credenciales, reinicio y ausencia de desbordamiento horizontal.
 - `npm run test:chat:live`: no completado por ausencia de clave; se comprobó que explica cómo configurarla sin imprimir secretos.
 
+## Validación de la actualización de límites · 13 de octubre de 2026
+
+- `npm run test:chat`: 20 pruebas aprobadas con proveedor simulado, incluidos
+  seguimiento tras 8 segundos en el endpoint, concurrencia entre visitantes,
+  límites por minuto y por día, `Retry-After`, reinicio diario y modo `local`.
+- `npm run lint` y `npm run build`: correctos.
+- `git diff --check`: sin errores.
+- Revisión visual en móvil y escritorio: pendiente; no hay navegador conectado
+  disponible en esta sesión. No se modificó la interfaz.
+- No se ejecutó la prueba real de Groq ni se cambió el firewall o el despliegue.
+  La regla WAF existente debe actualizarse y publicarse por separado si aún
+  limita a una petición por minuto.
+
 La recuperación de fuentes es léxica, sin embeddings ni base vectorial para mantener la sencillez. Una paráfrasis compleja o una pregunta muy amplia puede no recuperar toda la evidencia relevante y producir una negativa prudente. No es una búsqueda semántica exhaustiva. La revisión adicional aumenta la latencia y puede rechazar respuestas correctas; conviene evaluar ambos tipos de error cuando configures la clave.
+
+## Validación del formato de respuestas · 13 de octubre de 2026
+
+- `npm run test:chat`: 23 pruebas aprobadas, incluida la comprobación de fuentes
+  en el revisor sin referencias visibles, párrafos, listas, negritas, numeración,
+  escape de HTML y marcas incompletas durante la escritura progresiva.
+- `npm run lint`, `npm run build` y `git diff --check`: correctos.
+- `npm run test:chat:live`: generación y revisión reales completadas con Groq;
+  la respuesta pasó la comprobación sin bloque de fuentes ni rutas de casos.
+  No se imprimieron claves, borradores ni respuestas.
+- Revisión de código: bloques semánticos y texto escapado, estilos con saltos
+  de línea y ajuste de palabras largas, sin nuevas interacciones ni dependencias.
+- Revisión visual en móvil y escritorio: pendiente; no hay navegador conectado
+  disponible en esta sesión.
+
+## Validación de la revisión correctiva · 13 de octubre de 2026
+
+- Diagnóstico real: una pregunta de experiencia produjo un borrador con fuentes
+  válidas, pero el revisor binario lo rechazó. El mismo mensaje de falta de
+  información también se utilizaba para borradores de formato inválido.
+- Corrección general: revisión con todas las fuentes recuperadas, posibilidad
+  de corregir el borrador y reconsiderar un `unknown` inicial, prioridades de
+  tema actual y separación entre fallo técnico y falta de datos.
+- `npm run test:chat`: 28 pruebas aprobadas. Incluyen cambios de tema,
+  recuperación de negativos iniciales en varios temas, borradores corregidos,
+  salidas inválidas y conservación de las negativas de ámbito y conocimiento.
+- `npm run lint`, `npm run build` y `git diff --check`: correctos.
+- Pruebas reales de Groq: `experience`, `education`, `projects` y `followup`
+  respondieron sin negativa genérica; `unknown` mantuvo la negativa sobre el
+  salario no publicado y `scope` rechazó la receta. No se imprimieron claves ni
+  respuestas. No es una garantía para todas las paráfrasis posibles.
+- Se conservan dos llamadas por respuesta. La revisión puede consumir más
+  tokens al recibir todas las fuentes recuperadas y disponer de hasta 1.024
+  tokens de salida; siguen vigentes las cuotas de Groq y el límite de 30 segundos.
+- No se modificó la interfaz en esta corrección. No se repitió una revisión
+  visual en móvil y escritorio, al no haber navegador conectado disponible.
+
+## Validación de la voz en primera persona · 13 de octubre de 2026
+
+- Saludo, generación, revisión, respuestas fijas y modo `local` usan la voz de
+  Bruno en primera persona. La etiqueta del modo generativo sigue identificando
+  al asistente como IA; se conserva la atribución del trabajo del equipo.
+- El límite de tres fuentes internas se declara también en el esquema JSON
+  con `maxItems: 3`, para evitar respuestas rechazadas por exceder ese límite.
+- `npm run test:chat`: 28 pruebas aprobadas; `npm run lint`, `npm run build`
+  y `git diff --check`: correctos.
+- Groq real: `experience`, `education` y `alina` pasaron las comprobaciones
+  de contenido y de señales de primera persona, sin imprimir las respuestas.
+- Revisión visual en móvil y escritorio pendiente: no hay navegador conectado
+  disponible en esta sesión.
