@@ -296,13 +296,15 @@ jerarquía tipográfica débil.
 
 - Fondo blanco puro (`#FFFFFF`), texto en rojo `--accent` y Bricolage Grotesque
   800, en una sola línea centrada verticalmente.
-- Se escribe `PRESENTED BY` letra a letra con cursor de ordenador, se borra
-  desde el final y se escribe `</BRUNO ESTEVE>`.
+- Se escribe `PRESENTED BY` letra a letra con cursor de ordenador ocupando el 100% del ancho.
+- Se incorporan los corchetes y la barra (`</` y `>`) deslizándose desde los extremos con una readaptación suave de la escala tipográfica para que `</PRESENTED BY>` ocupe todo el ancho.
+- Los corchetes se cierran simétricamente hacia el centro ocultando `PRESENTED BY` hasta converger en «</>» en el centro.
+- Desde ese «</>» central, los corchetes se separan hacia los bordes descubriendo `</BRUNO ESTEVE>` a pantalla completa.
 - Cada frase completa ocupa el ancho de la pantalla con márgenes mínimos de
   `clamp(12px, 1.4vw, 28px)`. Su tamaño se calcula para la frase completa y
-  permanece estable durante la escritura y el borrado, también en móvil.
-- Tras una pausa breve, el nombre crece desde el centro hasta desbordar el
-  viewport y desaparecer. El fondo blanco se desvanece y revela la Home.
+  permanece estable en móvil y escritorio.
+- Tras una pausa breve, el nombre completo crece en zoom desde el centro hasta
+  desbordar el viewport y desvanecerse. El fondo blanco se desvanece y revela la Home.
 - No muestra un botón para saltarla y pulsar la pantalla no la interrumpe.
   Conserva la omisión por teclado. La repetición manual reinicia la secuencia
   completa. Se reproduce una vez por sesión, conserva la

@@ -20,8 +20,15 @@
   transition: opacity 280ms ease-out;
 }
 
+.introOverlay[data-phase="revealing"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .textStage {
   position: relative;
+  display: grid;
+  align-items: center;
   flex: 1;
   min-width: 0;
   margin-inline: max(clamp(12px, 1.4vw, 28px), env(safe-area-inset-left))
@@ -34,6 +41,7 @@
   white-space: pre;
 }
 
+/* Spans invisibles para medición precisa */
 .measure {
   position: absolute;
   top: 0;
@@ -45,23 +53,7 @@
   pointer-events: none;
 }
 
-.zoomStage {
-  display: block;
-  transform-origin: center;
-}
-
-.typedLine {
-  display: block;
-  width: 100%;
-  min-height: 1em;
-  font-size: var(--presented-size, 12.5vw);
-  letter-spacing: var(--tracking-heading-display);
-}
-
-.typedLine[data-line="signature"] {
-  font-size: var(--signature-size, 10vw);
-}
-
+/* Cursor parpadeante durante la escritura */
 .caret {
   display: inline-block;
   width: 0.035em;
@@ -72,21 +64,197 @@
   animation: blink 720ms step-end infinite;
 }
 
+/* ========================================================
+   FASE 1, 2 Y 3: PRESENTED BY -> </PRESENTED BY> -> CIERRE
+   ======================================================== */
+.presentedLine {
+  grid-area: 1 / 1;
+  display: block;
+  width: 100%;
+  font-size: var(--pres-size, 12.5vw);
+  line-height: 1;
+  letter-spacing: var(--tracking-heading-display);
+  white-space: pre;
+  transition: font-size 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Al añadir corchetes, el tamaño del texto se readapta suavemente a --tagged-size */
+.introOverlay[data-phase="tag-added"] .presentedLine,
+.introOverlay[data-phase="tag-hold"] .presentedLine,
+.introOverlay[data-phase="closing-to-center"] .presentedLine {
+  font-size: var(--tagged-size, 10vw);
+}
+
+.tagBracketOpen,
+.tagBracketClose {
+  display: inline-block;
+  vertical-align: top;
+}
+
+/* Durante la escritura y el reposo de PRESENTED BY, los corchetes están fuera del flujo */
+.introOverlay[data-phase="typing"] .tagBracketOpen,
+.introOverlay[data-phase="presented-hold"] .tagBracketOpen,
+.introOverlay[data-phase="typing"] .tagBracketClose,
+.introOverlay[data-phase="presented-hold"] .tagBracketClose {
+  display: none;
+}
+
+/* En fase tag-added: aparecen deslizándose suavemente desde los extremos */
+.introOverlay[data-phase="tag-added"] .tagBracketOpen {
+  animation: tagOpenIn 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.introOverlay[data-phase="tag-added"] .tagBracketClose {
+  animation: tagCloseIn 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tagInner {
+  display: inline-block;
+  vertical-align: top;
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 560ms cubic-bezier(0.76, 0, 0.24, 1), opacity 360ms ease-in;
+}
+
+/* FASE 3: CIERRE HACIA EL CENTRO OCULTANDO PRESENTED BY */
+.introOverlay[data-phase="closing-to-center"] .tagBracketOpen {
+  transform: translateX(var(--half-tagged, 0));
+  transition: transform 560ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.introOverlay[data-phase="closing-to-center"] .tagBracketClose {
+  transform: translateX(calc(var(--half-tagged, 0) * -1));
+  transition: transform 560ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.introOverlay[data-phase="closing-to-center"] .tagInner {
+  clip-path: inset(0 50% 0 50%);
+  opacity: 0;
+}
+
+/* Cuando ya estamos en el centro o en Bruno Esteve, la línea 1 se retira */
+.introOverlay[data-phase="center-hold"] .presentedLine,
+.introOverlay[data-phase="expand-signature"] .presentedLine,
+.introOverlay[data-phase="signature-hold"] .presentedLine,
+.introOverlay[data-phase="zooming"] .presentedLine,
+.introOverlay[data-phase="revealing"] .presentedLine {
+  display: none;
+}
+
+/* ========================================================
+   FASE 4 Y 5: </BRUNO ESTEVE> DESDE </> AL CENTRO Y ZOOM
+   ======================================================== */
+.zoomStage {
+  grid-area: 1 / 1;
+  display: block;
+  width: 100%;
+  transform-origin: center;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.introOverlay[data-phase="center-hold"] .zoomStage,
+.introOverlay[data-phase="expand-signature"] .zoomStage,
+.introOverlay[data-phase="signature-hold"] .zoomStage,
+.introOverlay[data-phase="zooming"] .zoomStage,
+.introOverlay[data-phase="revealing"] .zoomStage {
+  opacity: 1;
+}
+
+.signatureLine {
+  display: block;
+  width: 100%;
+  font-size: var(--sig-size, 10vw);
+  letter-spacing: var(--tracking-heading-display);
+  white-space: pre;
+  line-height: 1;
+}
+
+.sigBracketOpen,
+.sigBracketClose,
+.sigInner {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.sigBracketOpen {
+  transform-origin: 100% 50%;
+  transform: translateX(var(--half-sig, 0));
+  transition: transform 780ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.sigBracketClose {
+  transform-origin: 0% 50%;
+  transform: translateX(calc(var(--half-sig, 0) * -1));
+  transition: transform 780ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.sigInner {
+  clip-path: inset(0 50% 0 50%);
+  transition: clip-path 780ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* Fase center-hold: </> visible en el centro */
+.introOverlay[data-phase="center-hold"] .sigBracketOpen {
+  transform: translateX(var(--half-sig, 0));
+}
+
+.introOverlay[data-phase="center-hold"] .sigBracketClose {
+  transform: translateX(calc(var(--half-sig, 0) * -1));
+}
+
+.introOverlay[data-phase="center-hold"] .sigInner {
+  clip-path: inset(0 50% 0 50%);
+}
+
+/* Fase expand-signature, signature-hold, zooming, revealing: apertura hacia los bordes */
+.introOverlay[data-phase="expand-signature"] .sigBracketOpen,
+.introOverlay[data-phase="signature-hold"] .sigBracketOpen,
+.introOverlay[data-phase="zooming"] .sigBracketOpen,
+.introOverlay[data-phase="revealing"] .sigBracketOpen {
+  transform: translateX(0);
+}
+
+.introOverlay[data-phase="expand-signature"] .sigBracketClose,
+.introOverlay[data-phase="signature-hold"] .sigBracketClose,
+.introOverlay[data-phase="zooming"] .sigBracketClose,
+.introOverlay[data-phase="revealing"] .sigBracketClose {
+  transform: translateX(0);
+}
+
+.introOverlay[data-phase="expand-signature"] .sigInner,
+.introOverlay[data-phase="signature-hold"] .sigInner,
+.introOverlay[data-phase="zooming"] .sigInner,
+.introOverlay[data-phase="revealing"] .sigInner {
+  clip-path: inset(0 0 0 0);
+}
+
+/* Fase zooming: zoomThrough hacia la cámara */
 .introOverlay[data-phase="zooming"] .zoomStage,
 .introOverlay[data-phase="revealing"] .zoomStage {
   animation: zoomThrough 1100ms cubic-bezier(0.7, 0, 0.84, 0) forwards;
   will-change: transform, opacity;
 }
 
-.introOverlay[data-phase="zooming"] .caret,
-.introOverlay[data-phase="revealing"] .caret {
-  visibility: hidden;
-  animation: none;
+@keyframes tagOpenIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-0.4em);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-.introOverlay[data-phase="revealing"] {
-  opacity: 0;
-  pointer-events: none;
+@keyframes tagCloseIn {
+  0% {
+    opacity: 0;
+    transform: translateX(0.4em);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes blink {
@@ -102,5 +270,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .introOverlay { display: none; transition: none; }
-  .zoomStage, .caret { animation: none !important; }
+  .zoomStage, .caret, .tagBracketOpen, .tagBracketClose, .tagInner, .sigBracketOpen, .sigBracketClose, .sigInner, .presentedLine {
+    animation: none !important;
+    transition: none !important;
+  }
 }
