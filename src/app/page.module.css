@@ -42,7 +42,7 @@
 .introduction,
 .approach {
   grid-row: 1;
-  max-width: 34ch;
+  max-width: 32ch;
   margin: 0 0 clamp(0rem, 2svh, 1rem);
   font-size: clamp(0.8125rem, 0.95vw, 0.9375rem);
   line-height: 1.45;
