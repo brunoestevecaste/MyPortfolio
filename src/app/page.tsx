@@ -6,7 +6,19 @@ import { ExperienceSection } from "@/components/sections/experience";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ProjectIndex } from "@/components/projects/project-index";
 import { IntroSequence } from "@/components/intro/intro-sequence";
+import { site } from "@/data/site";
+import { createPageMetadata } from "@/lib/seo";
 import styles from "./page.module.css";
+
+export async function generateMetadata() {
+  const { locale } = await getTranslations();
+  return createPageMetadata({
+    title: site.title,
+    description: site.description[locale],
+    path: "/",
+    locale,
+  });
+}
 
 export default async function Home() {
   const { t } = await getTranslations();
