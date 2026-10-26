@@ -1,5 +1,6 @@
 import { getTranslations } from "@/lib/i18n/server";
-import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/seo";
+import { site } from "@/data/site";
 import { CaseSection } from "@/components/projects/case-section";
 import { AlinaArchitecture } from "@/components/projects/alina-architecture";
 import { AlinaDashboard } from "@/components/projects/alina-dashboard";
@@ -15,34 +16,20 @@ import {
 } from "@/data/alina";
 import styles from "@/components/projects/projects.module.css";
 
-const path = `/projects/${alinaProject.slug}`;
-
-const baseMetadata: Metadata = {
-  description: alinaProject.summary,
-  alternates: { canonical: path },
-  openGraph: {
-    title: "Alina: asistente de empleo con agentes de IA",
-    description:
-      "Arquitectura multi-agente con Google ADK y Gemini para transformar la búsqueda de empleo: matching explicable, simulación de entrevistas y optimización de latencia.",
-    type: "article",
-    locale: "es_ES",
-    url: path,
-  },
-};
-
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() {
   const { locale, t } = await getTranslations();
-  const openGraph = baseMetadata.openGraph;
-  return {
-    ...baseMetadata,
-    description: t(baseMetadata.description ?? ""),
-    openGraph: openGraph ? {
-      ...openGraph,
-      title: t(typeof openGraph.title === "string" ? openGraph.title : ""),
-      description: t(openGraph.description ?? ""),
-      locale: locale === "en" ? "en_GB" : "es_ES",
-    } : undefined,
-  };
+  const title = t("Alina: asistente de empleo con agentes de IA");
+  return createPageMetadata({
+    title: `${title} | ${site.name}`,
+    description: t("Arquitectura multi-agente con Google ADK y Gemini para transformar la búsqueda de empleo: matching explicable, simulación de entrevistas y optimización de latencia."),
+    path: `/projects/${alinaProject.slug}`,
+    locale,
+    type: "article",
+    image: `/social/${alinaProject.slug}.jpg`,
+    imageAlt: locale === "en"
+      ? `Editorial illustration: ${title}`
+      : `Ilustración editorial: ${title}`,
+  });
 }
 
 export default async function AlinaCaseStudy() {
