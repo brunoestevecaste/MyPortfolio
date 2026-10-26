@@ -8,6 +8,8 @@ import { PageMotion } from "@/components/motion/page-motion";
 import { MotionBootstrap } from "@/components/motion/motion-bootstrap";
 import { LanguageProvider } from "@/components/i18n/language-provider";
 import { getClientMessages, getTranslations } from "@/lib/i18n/server";
+import { profile } from "@/data/profile";
+import { site } from "@/data/site";
 import "./globals.css";
 import "@/components/motion/motion.css";
 import "@/styles/kursor.css";
@@ -32,9 +34,11 @@ const spaceMono = Space_Mono({
 });
 
 const baseMetadata: Metadata = {
-  title: "Bruno Esteve",
-  description:
-    "Portfolio de Bruno Esteve Castellano, Data Analyst y AI Engineer especializado en analítica, inteligencia artificial y sistemas de datos.",
+  metadataBase: new URL(site.url),
+  title: site.title,
+  authors: [{ name: profile.name, url: site.url }],
+  creator: profile.name,
+  robots: { index: true, follow: true },
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
@@ -48,9 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const { locale } = await getTranslations();
   return {
     ...baseMetadata,
-    description: locale === "en"
-      ? "Bruno Esteve Castellano's portfolio. Data Analyst and AI Engineer specialising in analytics, artificial intelligence and data systems."
-      : baseMetadata.description,
+    description: site.description[locale],
   };
 }
 
