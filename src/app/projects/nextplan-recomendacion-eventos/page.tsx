@@ -1,5 +1,6 @@
 import { getTranslations } from "@/lib/i18n/server";
-import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/seo";
+import { site } from "@/data/site";
 import { CaseSection } from "@/components/projects/case-section";
 import { NextPlanArchitecture } from "@/components/projects/nextplan-architecture";
 import { NextPlanDashboard } from "@/components/projects/nextplan-dashboard";
@@ -17,34 +18,20 @@ import {
 import styles from "@/components/projects/projects.module.css";
 import archStyles from "@/components/projects/project-architecture.module.css";
 
-const path = `/projects/${nextplanProject.slug}`;
-
-const baseMetadata: Metadata = {
-  description: nextplanProject.summary,
-  alternates: { canonical: path },
-  openGraph: {
-    title: "NextPlan: plataforma de recomendación de eventos con IA",
-    description:
-      "Plataforma completa en Google Cloud para descubrir eventos en España: mapa interactivo, swipes de afinidad, asistente RAG con Google ADK y clustering K-Means para recomendaciones personalizadas.",
-    type: "article",
-    locale: "es_ES",
-    url: path,
-  },
-};
-
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() {
   const { locale, t } = await getTranslations();
-  const openGraph = baseMetadata.openGraph;
-  return {
-    ...baseMetadata,
-    description: t(baseMetadata.description ?? ""),
-    openGraph: openGraph ? {
-      ...openGraph,
-      title: t(typeof openGraph.title === "string" ? openGraph.title : ""),
-      description: t(openGraph.description ?? ""),
-      locale: locale === "en" ? "en_GB" : "es_ES",
-    } : undefined,
-  };
+  const title = t("NextPlan: plataforma de recomendación de eventos con IA");
+  return createPageMetadata({
+    title: `${title} | ${site.name}`,
+    description: t("Plataforma completa en Google Cloud para descubrir eventos en España: mapa interactivo, swipes de afinidad, asistente RAG con Google ADK y clustering K-Means para recomendaciones personalizadas."),
+    path: `/projects/${nextplanProject.slug}`,
+    locale,
+    type: "article",
+    image: `/social/${nextplanProject.slug}.jpg`,
+    imageAlt: locale === "en"
+      ? `Editorial illustration: ${title}`
+      : `Ilustración editorial: ${title}`,
+  });
 }
 
 export default async function NextPlanCaseStudy() {
