@@ -6,6 +6,7 @@ import { ExperienceSection } from "@/components/sections/experience";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { ProjectIndex } from "@/components/projects/project-index";
 import { IntroSequence } from "@/components/intro/intro-sequence";
+import { PortfolioStructuredData } from "@/components/seo/portfolio-structured-data";
 import { site } from "@/data/site";
 import { createPageMetadata } from "@/lib/seo";
 import styles from "./page.module.css";
@@ -21,9 +22,10 @@ export async function generateMetadata() {
 }
 
 export default async function Home() {
-  const { t } = await getTranslations();
+  const { locale, t } = await getTranslations();
   return (
     <>
+      <PortfolioStructuredData locale={locale} />
       <IntroSequence />
       <noscript><style>{"[data-intro-active] { display: none; }"}</style></noscript>
       <main className="flex-1" id="main-content" tabIndex={-1} data-motion-page>
