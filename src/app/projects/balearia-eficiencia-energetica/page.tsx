@@ -1,5 +1,6 @@
 import { getTranslations } from "@/lib/i18n/server";
-import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/seo";
+import { site } from "@/data/site";
 import { CaseSection } from "@/components/projects/case-section";
 import { BaleariaArchitecture } from "@/components/projects/balearia-architecture";
 import { BaleariaDashboard } from "@/components/projects/balearia-dashboard";
@@ -18,34 +19,20 @@ import {
 import styles from "@/components/projects/projects.module.css";
 import baleariaStyles from "@/components/projects/balearia.module.css";
 
-const path = `/projects/${baleariaProject.slug}`;
-
-const baseMetadata: Metadata = {
-  description: baleariaProject.summary,
-  alternates: { canonical: path },
-  openGraph: {
-    title: "Baleària: optimización energética de rutas navieras",
-    description:
-      "TFM de IA y optimización desplegado en Google Cloud. Metodología del proyecto y ejemplos con datos ficticios.",
-    type: "article",
-    locale: "es_ES",
-    url: path,
-  },
-};
-
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() {
   const { locale, t } = await getTranslations();
-  const openGraph = baseMetadata.openGraph;
-  return {
-    ...baseMetadata,
-    description: t(baseMetadata.description ?? ""),
-    openGraph: openGraph ? {
-      ...openGraph,
-      title: t(typeof openGraph.title === "string" ? openGraph.title : ""),
-      description: t(openGraph.description ?? ""),
-      locale: locale === "en" ? "en_GB" : "es_ES",
-    } : undefined,
-  };
+  const title = t("Baleària: optimización energética de rutas navieras");
+  return createPageMetadata({
+    title: `${title} | ${site.name}`,
+    description: t("TFM de IA y optimización desplegado en Google Cloud. Metodología del proyecto y ejemplos con datos ficticios."),
+    path: `/projects/${baleariaProject.slug}`,
+    locale,
+    type: "article",
+    image: `/social/${baleariaProject.slug}.jpg`,
+    imageAlt: locale === "en"
+      ? `Editorial illustration: ${title}`
+      : `Ilustración editorial: ${title}`,
+  });
 }
 
 export default async function BaleariaCaseStudy() {
