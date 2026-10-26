@@ -1,5 +1,6 @@
 import { getTranslations } from "@/lib/i18n/server";
-import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/seo";
+import { site } from "@/data/site";
 import { CaseSection } from "@/components/projects/case-section";
 import { AepdArchitecture } from "@/components/projects/aepd-architecture";
 import { AepdTrafficFigure } from "@/components/projects/aepd-traffic-figure";
@@ -16,34 +17,20 @@ import {
 } from "@/data/aepd";
 import styles from "@/components/projects/projects.module.css";
 
-const path = `/projects/${aepdProject.slug}`;
-
-const baseMetadata: Metadata = {
-  description: aepdProject.summary,
-  alternates: { canonical: path },
-  openGraph: {
-    title: "AEPD: analítica y predicción de tráfico web",
-    description:
-      "Un TFG de datos, BI y Machine Learning con calificación 10/10, llevado a producción y utilizado por la AEPD.",
-    type: "article",
-    locale: "es_ES",
-    url: path,
-  },
-};
-
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata() {
   const { locale, t } = await getTranslations();
-  const openGraph = baseMetadata.openGraph;
-  return {
-    ...baseMetadata,
-    description: t(baseMetadata.description ?? ""),
-    openGraph: openGraph ? {
-      ...openGraph,
-      title: t(typeof openGraph.title === "string" ? openGraph.title : ""),
-      description: t(openGraph.description ?? ""),
-      locale: locale === "en" ? "en_GB" : "es_ES",
-    } : undefined,
-  };
+  const title = t("AEPD: analítica y predicción de tráfico web");
+  return createPageMetadata({
+    title: `${title} | ${site.name}`,
+    description: t("Un TFG de datos, BI y Machine Learning con calificación 10/10, llevado a producción y utilizado por la AEPD."),
+    path: `/projects/${aepdProject.slug}`,
+    locale,
+    type: "article",
+    image: `/social/${aepdProject.slug}.jpg`,
+    imageAlt: locale === "en"
+      ? `Editorial illustration: ${title}`
+      : `Ilustración editorial: ${title}`,
+  });
 }
 
 export default async function AepdCaseStudy() {
